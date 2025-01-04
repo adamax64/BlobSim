@@ -1,3 +1,4 @@
 /.vscode
 /bcs_database.db
+/bcs_database_debug.db
 **/__pycache__/*

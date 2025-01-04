@@ -31,3 +31,5 @@ The following requirements should be met to run the application on your device:
 To start the app, just run `start.bat`. This starts main.py using the local python interpreter of your device. 
 
 For developing purposes there is a `debug.bat`, which runs the application in a smaller window and pauses the batch script if the python app crashes for some reason, so the user/developer can read the error message and stack before the window closes. 
+
+If you use `debug.bat`, make sure to duplicate the database file and rename it to `bcs_database_debug.db`.

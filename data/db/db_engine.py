@@ -4,9 +4,13 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import inspect
+import sys
 
-# Create the engine
-engine = create_engine('sqlite:///bcs_database.db')
+# Determine the database based on the argument parameter
+if 'debug' in sys.argv:
+    engine = create_engine('sqlite:///bcs_database_debug.db')
+else:
+    engine = create_engine('sqlite:///bcs_database.db')
 
 # Create the base class for declarative models
 Base = declarative_base()
