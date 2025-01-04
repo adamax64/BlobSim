@@ -23,7 +23,7 @@ def show_intro_view():
     if width >= 31 and height >= 17:
         vertical_padding = _get_vertical_padding(height)
 
-        for i in range(vertical_padding):
+        for _ in range(vertical_padding):
             print()
 
         logo_padding = ' ' * _get_padding_size(width, 31)
@@ -31,13 +31,13 @@ def show_intro_view():
         for line in logo:
             print(f'{logo_padding}{line}')
 
-        for i in range(vertical_padding):
+        for _ in range(vertical_padding):
             print()
 
     title_padding = ' ' * _get_padding_size(width, 24)
     print(f'{title_padding}BLOB CHAMPIONSHIP SYSTEM')
-    version_padding = ' ' * _get_padding_size(width, 6)
-    print(f'{version_padding}v1.0.2')
+    version_padding = ' ' * _get_padding_size(width, 4)
+    print(f'{version_padding}v1.1')
     copyright_padding = ' ' * _get_padding_size(width, 22)
     print(f'{copyright_padding}by Adamax-works © 2025')
     print()
