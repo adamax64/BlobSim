@@ -41,8 +41,8 @@ def show_competition_view(live: Live):
 
         for index, record in enumerate(event_records):
             position = index + 1
-            eliminated = is_eliminated(quarter, field_size, position)
-            scores = [display_score(record.quarters[i], eliminated and not ended) for i in range(4)]
+            eliminated = is_eliminated(min(quarter, 4), field_size, position) and not ended
+            scores = [display_score(record.quarters[i], eliminated) for i in range(4)]
             table.add_row(
                 color_by_position(position, position) if ended else (
                     f'[bright_black]{str(position)}[/bright_black]' if eliminated else str(position)
