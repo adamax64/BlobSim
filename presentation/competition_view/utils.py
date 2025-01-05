@@ -54,11 +54,3 @@ def get_quarter_ends(field_size: int, event_type: EventTypeDto) -> List[int]:
 
 def get_eliminations(field_size: int) -> int:
     return int((field_size - 3) / 3)
-
-
-def get_event_name(event_type: EventTypeDto) -> str:
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
-        return 'Quartered two-shot high jump'
-    if event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING:
-        return 'Quartered one-shot high jump'
-    return 'Unknown event type'

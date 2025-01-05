@@ -6,6 +6,7 @@ from typing import Any
 import keyboard
 
 from domain.utils.constants import CYCLES_PER_EON, CYCLES_PER_EPOCH, CYCLES_PER_SEASON, EPOCHS_PER_SEASON
+from domain.dtos.event_dto import EventTypeDto
 from presentation.constants import APP_NAME, BRONZE_FORMAT, GOLD_FORMAT, SILVER_FORMAT
 
 
@@ -59,3 +60,13 @@ def capture_keypress() -> str | None:
         return key.name
     else:
         return None
+
+
+def get_text_by_key(key: str) -> str:
+    """ Returns a string assigned to a specified translation key. Used to translate enum values to readable text. """
+
+    if key == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
+        return 'Quartered two-shot high jump'
+    if key == EventTypeDto.QUARTERED_ONE_SHOT_SCORING:
+        return 'Quartered one-shot high jump'
+    return 'Unknown key'

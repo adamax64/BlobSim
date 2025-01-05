@@ -28,4 +28,4 @@ class Blob(Base):
     championships = Column(Integer, default=0)
     grandmasters = Column(Integer, default=0)
     league_id = Column(Integer, ForeignKey('leagues.id'))
-    league = relationship('League', backref='blobs', overlaps='blobs,league')
+    league = relationship('League', backref='blobs', overlaps='blobs,league', viewonly=True)
