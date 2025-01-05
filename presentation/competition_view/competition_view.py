@@ -11,11 +11,11 @@ from domain.dtos.event_dto import EventDto
 from domain.dtos.save_action_dto import SaveActionDto
 from domain.dtos.event_record_dto import ScoreDto, QuarteredEventRecordDto
 from presentation.competition_view.utils import (
-    display_blob, display_score, get_eliminations, get_event_name, get_quarter_ends, is_eliminated
+    display_blob, display_score, get_eliminations, get_quarter_ends, is_eliminated
 )
 from presentation.constants import KEY_ESCAPE, KEY_SPACE
 from presentation.standings_view.standings_view import render_eon, render_season
-from presentation.utils import capture_keypress, color_by_position
+from presentation.utils import capture_keypress, color_by_position, get_text_by_key
 
 
 def show_competition_view(live: Live):
@@ -55,7 +55,7 @@ def show_competition_view(live: Live):
 
         return Panel(
             table,
-            title=f'{event.league.name} Season {event.season} Round {event.round}, {get_event_name(event.type)}',
+            title=f'{event.league.name} Season {event.season} Round {event.round}, {get_text_by_key(event.type)}',
             title_align='left'
         )
 

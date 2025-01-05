@@ -29,7 +29,7 @@ def conclude_calendar_event(session: Session):
 @transactional
 def get_season_calendar(session: Session) -> CalendarDto:
     calendar = get_calendar(session).values()
-    return [CalendarDto(event.date, event.league.name, event.concluded) for event in calendar]
+    return [CalendarDto(event.date, event.league.name, event.concluded, event.event_type) for event in calendar]
 
 
 @transactional
