@@ -1,16 +1,20 @@
 from contextlib import contextmanager
 from functools import wraps
-from sqlalchemy import create_engine, Column, Integer, String, DateTime
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import inspect
 import sys
 
+
+PROD_DB_URL = 'sqlite:///bcs_database.db'
+DEBUG_DB_URL = 'sqlite:///bcs_database_debug.db'
+
 # Determine the database based on the argument parameter
 if 'debug' in sys.argv:
-    engine = create_engine('sqlite:///bcs_database_debug.db')
+    engine = create_engine(DEBUG_DB_URL)
 else:
-    engine = create_engine('sqlite:///bcs_database.db')
+    engine = create_engine(PROD_DB_URL)
 
 # Create the base class for declarative models
 Base = declarative_base()
@@ -28,15 +32,7 @@ class User(Base):
     password = Column(String)
 
 
-class DatabaseChangelog(Base):
-    __tablename__ = 'database_changelog'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    date = Column(DateTime)
-
-
-from data.model import action, blob, calendar, event, event_type, league, result, sim_data  # noqa: F401
+from data.model import action, blob, calendar, event, event_type, league, result, sim_data, name_suggestion  # noqa: F401, E402
 
 
 def create_session():

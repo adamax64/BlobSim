@@ -5,9 +5,10 @@ from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.persistence.blob_reposiotry import get_all_living_blobs, save_all_blobs, save_blob
 from data.persistence.league_repository import get_queue
+from data.persistence.name_suggestion_repository import delete_suggestion, get_oldest_name
 from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.enums.activity_type import ActivityType
-from domain.sim_data_service import get_current_calendar, get_sim_time, reset_factory_progress
+from domain.sim_data_service import get_current_calendar, get_sim_time, is_blob_created, reset_factory_progress
 from domain.utils.activity_utils import choose_free_activity
 from domain.utils.constants import (
     COMPETITION_EFFECT, CYCLES_PER_SEASON, INITIAL_INTEGRITY, LABOUR_SALARY,
@@ -31,6 +32,18 @@ def get_all_blobs(session) -> List[BlobStatsDto]:
         grandmasters=blob.grandmasters,
         league_name=blob.league.name if blob.league else 'None'
     ) for blob in blobs]
+
+
+@transactional
+def check_blob_created(session) -> str | bool:
+    if is_blob_created(session):
+        name_suggestion = get_oldest_name(session)
+        if name_suggestion is None:
+            return True
+        create_blob(session, name_suggestion.name)
+        delete_suggestion(session, name_suggestion)
+        return name_suggestion.name
+    return False
 
 
 @transactional

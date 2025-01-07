@@ -6,13 +6,14 @@ from rich.live import Live
 from rich import box
 import time
 
-from domain.sim_data_service import get_sim_time, is_blob_created, is_unconcluded_event_today
+from domain.blob_service import check_blob_created
+from domain.sim_data_service import get_sim_time, is_unconcluded_event_today
 from domain.utils.sim_time_utils import is_season_start
 from presentation.blobs_view import show_blobs_view
 from presentation.calendar_view import show_calendar_view
 from presentation.competition_view.competition_view import show_competition_view
 from presentation.constants import KEY_DOWN, KEY_ENTER, KEY_ESCAPE, KEY_UP
-from presentation.create_blob_view import show_create_blob
+from presentation.blob_naming import show_add_name_suggestion, show_create_blob
 from presentation.simulate_view import show_simulation_progress
 from presentation.standings_view.league_selector_view import show_league_selector_view
 from presentation.utils import capture_keypress, format_sim_time
@@ -34,7 +35,8 @@ def show_main_menu():
     generic_options = [
         Option('View Blobs', show_blobs_view),
         Option('View standings', show_league_selector_view),
-        Option('View Calendar', show_calendar_view)
+        Option('View Calendar', show_calendar_view),
+        Option('Add blob name suggestion', show_add_name_suggestion)
         # Option('View previous events', None)
     ]
     current_row = 0
@@ -95,7 +97,10 @@ def get_event_specific_options() -> Dict[str, Option]:
 
     if is_unconcluded_event_today():
         options['EVENT'] = Option('Proceed to event', show_competition_view)
-    if is_blob_created():
+    created_blob_check = check_blob_created()
+    if isinstance(created_blob_check, str):
+        options['BLOB_CREATED_AND_NAMED'] = Option('', None)
+    elif created_blob_check:
         options['BLOB_CREATED'] = Option('Create new blob', show_create_blob)
     if len(options) == 0:
         options['CONTINUE'] = Option('Proceed to next day', show_simulation_progress)
@@ -103,10 +108,13 @@ def get_event_specific_options() -> Dict[str, Option]:
     return options
 
 
+# TODO option key related logic need to be refactored in the future
 def print_status_text(option_keys: List[str], current_date: int) -> str:
     if 'EVENT' in option_keys:
         return '[green]There is a championship event today![/green]'
     elif 'BLOB_CREATED' in option_keys:
+        return '[blue]A new blob has been created![/blue]'
+    elif 'BLOB_CREATED_AND_NAMED' in option_keys:
         return '[blue]A new blob has been created![/blue]'
     elif is_season_start(current_date):
         return '[yellow]A new season has started![/yellow]'
