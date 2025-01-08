@@ -36,8 +36,8 @@ def show_intro_view():
 
     title_padding = ' ' * _get_padding_size(width, 24)
     print(f'{title_padding}BLOB CHAMPIONSHIP SYSTEM')
-    version_padding = ' ' * _get_padding_size(width, 4)
-    print(f'{version_padding}v1.2')
+    version_padding = ' ' * _get_padding_size(width, 6)
+    print(f'{version_padding}v1.2.1')
     copyright_padding = ' ' * _get_padding_size(width, 22)
     print(f'{copyright_padding}by Adamax-works © 2025')
     disclaimer_padding = ' ' * _get_padding_size(width, 120) if width > 120 else ''

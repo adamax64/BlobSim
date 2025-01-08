@@ -102,3 +102,17 @@ At the end of the event the top three are highlighted by colors resemble bronze,
     - After choosing a league a table is shown with the standings of the current season. Here the user can navigate to other season standings by pressing the left and right arrow buttons
 
 - The "_View Calendar_" option navigates to a screen that lists all of the championship events in the current season, where the next event is highlighted
+
+## Changelog for newer versions
+
+### 1.2
+
+- New main menu option: "_Add blob name suggestion_"
+    - Here the user can add a name to the name suggestions list
+    - When a new blob is created and the name suggestions list is not empty, it takes the oldest record of the list and applies the name to the blob thus the simulation is not blobked
+    - If the name suggestions list is empty the blob creation is the same as in previous versions
+- Enhanced prompt for entering blob name: a dialog window appears with a textbox
+
+### 1.2.1
+
+- App crash at the end of the last league event of season fixed

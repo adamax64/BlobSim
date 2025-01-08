@@ -57,7 +57,6 @@ def save_event_results(session, event: EventDto, event_records: List[QuarteredEv
     save_all_blobs(session, [res.blob for res in saved_results])
 
     conclude_calendar_event(session)
-    # TODO check for season end
 
 
 def _map_records_to_results(event_records: List[QuarteredEventRecordDto], event_id: int) -> List[Result]:

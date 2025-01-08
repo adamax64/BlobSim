@@ -44,7 +44,7 @@ def end_season_if_over(league: LeagueDto, season: int, session) -> List[Standing
             blob.season_victories += 1
             blob.money += CHAMPION_PRIZE
 
-    save_all_blobs(session, [blobs.values()])
+    save_all_blobs(session, list(blobs.values()))
     return standings
 
 
