@@ -32,7 +32,7 @@ def manage_league_transfers(session: Session, current_season: int):
 
 def _correct_contract_of_inactive_leagues(session, leagues: list[League]):
     for league in leagues:
-        if len(league.players) >= 5:
+        if league.level == QUEUE_LEVEL or league.players is None or len(league.players) >= 5:
             continue
         blobs: list[Blob] = league.players
         for blob in blobs:
