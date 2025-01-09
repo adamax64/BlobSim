@@ -1,4 +1,5 @@
 import os
+import sys
 
 from domain.startup_service import startup
 from presentation.intro_view import show_intro_view
@@ -8,7 +9,7 @@ from presentation.utils import clear_console
 
 
 if __name__ == "__main__":
-    os.system(f'title {APP_NAME}')
+    os.system(f"title {APP_NAME}{' debug mode' if 'debug' in sys.argv else ''}")
     startup()
     clear_console()
     show_intro_view()

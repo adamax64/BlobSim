@@ -116,3 +116,10 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 1.2.1
 
 - App crash at the end of the last league event of season fixed
+
+### 1.2.2
+
+- Fixed the contract problem in inactive leagues at the end of season
+- Fixed calendar creation at the end of season
+- Debug mode window title extended with "_debug mode_"
+- Started removing types of the typing library from the code as newer python versions provide native list and dict types
