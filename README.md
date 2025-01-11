@@ -117,3 +117,7 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 
 - Changed disclaimer text on intro screen
 - Visual representation of a blob is created in vector image format
+
+### 1.2.4
+
+- Fixed standings sorting on score ties

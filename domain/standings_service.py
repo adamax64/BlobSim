@@ -30,7 +30,7 @@ def get_standings(league_id: int, season: int, session) -> List[StandingsDTO]:
 
         standings.append(StandingsDTO(blob_id=blob.id, name=blob.name, results=standing_results, total_points=total_points))
 
-    standings.sort(key=lambda x: x.total_points, reverse=True)
+    standings.sort(key=_sort_by_position(len(standings)), reverse=True)
     return standings
 
 
@@ -87,3 +87,9 @@ def _flatmap_results(standings: List[StandingsDTO]) -> List[StandingsResultDTO]:
 
 def _count_by_position(results: List[StandingsResultDTO], position: int) -> int:
     return len([result for result in results if result.position == position])
+
+
+def _sort_by_position(field_size: int):
+    return lambda x: (
+        x.total_points, *(_count_by_position(x.results, i + 1) for i in range(field_size))
+    )
