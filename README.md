@@ -1,17 +1,6 @@
 # Blob Championship System
                         
-```
-             ▄▄▄▄▄▄▄▄▄▄          
-         ▄▄▀▀          ▀▀▄▄      
-      ▄█▀                  ▀█▄   
-    █▀                        ▀█ 
-   █        █          █        █
-   █                            █
-   █                            █
-   █                            █
-    ▀█▄                      ▄█▀ 
-       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀    
-```
+<img src="./assets/blob.svg" alt="Blob Image" width="250"/>
 
 This is a simulation software that simulates the life of fictional entities called the blobs and their competitions in a championships consists of multiple leagues throughout several seasons.
 
@@ -123,3 +112,8 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 - Fixed calendar creation at the end of season
 - Debug mode window title extended with "_debug mode_"
 - Started removing types of the typing library from the code as newer python versions provide native list and dict types
+
+### 1.2.3
+
+- Changed disclaimer text on intro screen
+- Visual representation of a blob is created in vector image format

@@ -20,7 +20,7 @@ LOGO = (
 def show_intro_view():
     width = get_console_width()
     height = get_console_height()
-    if width >= 31 and height >= 17:
+    if width >= 31 and height >= 18:
         vertical_padding = _get_vertical_padding(height)
 
         for _ in range(vertical_padding):
@@ -34,20 +34,25 @@ def show_intro_view():
         for _ in range(vertical_padding):
             print()
 
-    title_padding = ' ' * _get_padding_size(width, 24)
-    print(f'{title_padding}BLOB CHAMPIONSHIP SYSTEM')
-    version_padding = ' ' * _get_padding_size(width, 6)
-    print(f'{version_padding}v1.2.2')
-    copyright_padding = ' ' * _get_padding_size(width, 22)
-    print(f'{copyright_padding}by Adamax-works © 2025')
-    disclaimer_padding = ' ' * _get_padding_size(width, 120) if width > 120 else ''
-    print(f'{disclaimer_padding}Disclaimer: this is a simulation of fictional creatures, '
-          f'every name matching with real persons are just mere coincidence')
+    _print_text_centered("BLOB CHAMPIONSHIP SYSTEM", width)
+    _print_text_centered("v1.2.3", width)
+    _print_text_centered("by Adamax-works © 2025", width)
+    _print_text_centered(
+        "Disclaimer: this is a simulation of fictional creatures, every name matching with real persons, "
+        "fictional characters from other franchises",
+        width
+    )
+    _print_text_centered("or brands of products are just mere coincidence", width)
     print()
-    start_padding = ' ' * _get_padding_size(width, 22)
-    print(f'{start_padding}Press any key to start')
+    _print_text_centered("Press any key to start", width)
     capture_keypress()
     clear_console()
+
+
+def _print_text_centered(text: str, console_width: int):
+    text_length = len(text)
+    padding = ' ' * _get_padding_size(console_width, text_length) if console_width > text_length else ''
+    print(f'{padding}{text}')
 
 
 def _get_vertical_padding(console_height: int) -> int:
