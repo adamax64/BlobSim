@@ -3,3 +3,4 @@ sqlalchemy
 alembic
 rich
 tkinter
+pytest

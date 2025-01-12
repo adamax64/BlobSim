@@ -121,3 +121,7 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 1.2.4
 
 - Fixed standings sorting on score ties
+
+### 1.2.5
+
+- Created unit test environment, writing tests for league service

@@ -91,8 +91,8 @@ def _promote_dropout_winner_if_possibble(session, leagues: list[League], dropout
     if dropout_winner is not None:
         leagues_by_id = {league.id: league for league in leagues}
         result_record = get_most_recent_real_league_result_of_blob(dropout_winner.id, session)
-        promotee_league = leagues_by_id[result_record.event.league.id]
-        if len(promotee_league.players) > MAX_FIELD_SIZE or any([player.contract == current_season for player in promotee_league.players]):
+        promotee_league = leagues_by_id[int(result_record.event.league.id)]
+        if len(promotee_league.players) < MAX_FIELD_SIZE or any([player.contract == current_season for player in promotee_league.players]):
             dropout_winner.league_id = promotee_league.id
             dropout_winner.contract = current_season + 3
             session.commit()
@@ -139,7 +139,7 @@ def _get_blobs_by_standings_order(session, league: League, current_season: int) 
 
     standings = (
         _get_most_recent_standings(session, league.id, current_season)
-        if league.level > 0     # we don't need older standings for Dropout league
+        if int(league.level) > 0     # we don't need older standings for Dropout league
         else get_standings(league.id, current_season, session)
     )
     if len(standings) == 0:
