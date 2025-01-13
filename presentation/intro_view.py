@@ -35,7 +35,7 @@ def show_intro_view():
             print()
 
     _print_text_centered("BLOB CHAMPIONSHIP SYSTEM", width)
-    _print_text_centered("v1.2.5", width)
+    _print_text_centered("v1.2.6", width)
     _print_text_centered("by Adamax-works © 2025", width)
     _print_text_centered(
         "Disclaimer: this is a simulation of fictional creatures, every name matching with real persons, "

@@ -10,7 +10,7 @@ from domain.dtos.standings_result_dto import StandingsResultDTO
 
 
 @transactional
-def get_standings(league_id: int, season: int, session) -> List[StandingsDTO]:
+def get_standings(league_id: int, season: int, current_season: int, session) -> List[StandingsDTO]:
     results = get_results_of_league_by_season(league_id, season, session)
     print(results)
     if len(results) == 0:
@@ -28,7 +28,14 @@ def get_standings(league_id: int, season: int, session) -> List[StandingsDTO]:
             total_points += result.points
             standing_results.append(StandingsResultDTO(position=result.position, points=result.points))
 
-        standings.append(StandingsDTO(blob_id=blob.id, name=blob.name, results=standing_results, total_points=total_points))
+        contract_ending = season == current_season and blob.contract == current_season
+        standings.append(StandingsDTO(
+            blob_id=blob.id,
+            name=blob.name,
+            results=standing_results,
+            total_points=total_points,
+            is_contract_ending=contract_ending
+        ))
 
     standings.sort(key=_sort_by_position(len(standings)), reverse=True)
     return standings

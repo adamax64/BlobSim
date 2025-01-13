@@ -19,6 +19,7 @@ def end_eon_if_over(season: int, league: LeagueDto, session) -> List[Grandmaster
     grandmaster = get_blob_by_id(session, grandmaster_standings[0].blob_id)
     grandmaster.grandmasters += 1
     grandmaster.money += GRANDMASTER_PRIZE
+    grandmaster.contract += 1
     if grandmaster.integrity < CYCLES_PER_EON:
         grandmaster.integrity = CYCLES_PER_EON
     save_blob(session, grandmaster)

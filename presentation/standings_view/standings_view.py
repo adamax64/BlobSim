@@ -18,7 +18,7 @@ from presentation.utils import capture_keypress, color_by_position
 
 def show_standings_view(live: Live, league: LeagueDto | None):
     current_season = get_season(get_sim_time())
-    season = current_season - (current_season % 4) + 1 if league is None else current_season
+    season = _get_eon_start(current_season) if league is None else current_season
     step = 4 if league is None else 1
 
     standing_records = _get_standings_by_league(season, league, current_season)
@@ -79,7 +79,9 @@ def render_season(standing_records: List[StandingsDTO], league: LeagueDto, seaso
         position = i + 1
         table.add_row(
             color_by_position(position, position) if is_ended else str(position),
-            color_by_position(position, standing.name) if is_ended else standing.name,
+            color_by_position(position, standing.name) if is_ended else (
+                f"[orange4]{standing.name}[/orange4]" if standing.is_contract_ending else standing.name
+            ),
             *rounds,
             color_by_position(position, standing.total_points) if is_ended else str(standing.total_points)
         )
@@ -134,9 +136,14 @@ def render_eon(standing_records: List[GrandmasterStandingsDTO], eon: int | None)
 def _get_standings_by_league(
     season: int, league: LeagueDto | None, current_season: int
 ) -> List[StandingsDTO] | List[GrandmasterStandingsDTO]:
-    return get_grandmaster_standings(season, current_season) if league is None else get_standings(league.id, season)
+    return get_grandmaster_standings(season, current_season) if league is None else get_standings(league.id, season, current_season)
 
 
 def _get_results_list(results, num_of_rounds) -> List[str]:
     str_list = [color_by_position(result.position, result.points) for result in results]
     return str_list + [''] * (num_of_rounds - len(str_list))
+
+
+def _get_eon_start(current_season: int) -> int:
+    season = current_season - (current_season % 4 if current_season % 4 > 1 else 4)
+    return season if season > 0 else 1
