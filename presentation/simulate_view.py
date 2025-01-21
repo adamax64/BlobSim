@@ -1,17 +1,32 @@
 from rich.live import Live
-from rich.progress import Progress
+from tkinter import Tk, ttk, Label
 
 from domain.blob_service import update_blobs
 from domain.sim_data_service import progress_simulation
 
 
 def show_simulation_progress(live: Live):
-    progress = Progress()
+    root = Tk()
+    root.title("Simulation Progress")
 
-    task = progress.add_task("Updating blobs...", total=100)
+    live.update("Updating blobs...", refresh=True)
 
-    for percent in update_blobs():
-        progress.update(task, progress=percent)
-        live.update(progress, refresh=True)
+    progress = ttk.Progressbar(root, orient="horizontal", length=300, mode="determinate")
+    progress.pack(pady=5)
 
-    progress_simulation()
+    percent_label = Label(root, text="0%")
+    percent_label.pack(pady=5)
+
+    def update_progress():
+        for percent in update_blobs():
+            progress['value'] = percent
+            percent_label.config(text=f"{percent}%")
+            root.update_idletasks()
+
+        live.update("Updating simulation data...", refresh=True)
+
+        progress_simulation()
+        root.destroy()
+
+    root.after(100, update_progress)
+    root.mainloop()

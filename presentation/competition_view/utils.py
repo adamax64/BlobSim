@@ -53,4 +53,4 @@ def get_quarter_ends(field_size: int, event_type: EventTypeDto) -> List[int]:
 
 
 def get_eliminations(field_size: int) -> int:
-    return int((field_size - 3) / 3)
+    return int((field_size - 3) / 3) if field_size < 15 else field_size / 4

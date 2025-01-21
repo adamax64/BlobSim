@@ -125,3 +125,15 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 1.2.5
 
 - Created unit test environment, writing tests for league service
+
+### 1.2.6
+
+- Fixed bug: empty grandmasters standings table appears for next eon when season is dividable by 4
+- On the league standings for current season blob names are colored when their contract is ending this season
+- Grandmaster winners get 1 extra season for their contract 
+- Wrote tests for championship service
+
+### 1.2.7
+
+- For larger field sizes the elimination count calculation changed to align with the rules
+- Improving the progress simulation view by adding a GUI window to show the progress of the process 
