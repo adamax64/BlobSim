@@ -7,7 +7,7 @@ from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import save_all_results
 from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import QuarteredEventRecordDto
+from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto
 from domain.dtos.save_action_dto import SaveActionDto
 from domain.event_service import get_or_start_event
 from domain.sim_data_service import get_current_calendar
@@ -31,7 +31,7 @@ def create_action(session, action: SaveActionDto):
 
 
 @transactional
-def save_event_results(session, event: EventDto, event_records: List[QuarteredEventRecordDto]):
+def save_event_results(session, event: EventDto, event_records: List[EventRecordDto]):
     results = _map_records_to_results(event_records, event.id)
     saved_results = save_all_results(session, results)
 
@@ -59,10 +59,10 @@ def save_event_results(session, event: EventDto, event_records: List[QuarteredEv
     conclude_calendar_event(session)
 
 
-def _map_records_to_results(event_records: List[QuarteredEventRecordDto], event_id: int) -> List[Result]:
+def _map_records_to_results(event_records: List[EventRecordDto], event_id: int) -> List[Result]:
     results = []
     for i, record in enumerate(event_records):
-        bonus_points = sum(1 for quarter in record.quarters if quarter.best is True)
+        bonus_points = _calculate_bonus_points(record, i + 1)
         results.append(Result(
             event_id=event_id,
             blob_id=record.blob.id,
@@ -79,3 +79,10 @@ def _calculate_points(position: int, field_size: int, bonus_points: int) -> int:
     if field_size < 7 and position == 1:
         base += 1
     return base + bonus_points
+
+
+def _calculate_bonus_points(record: EventRecordDto, position: int) -> int:
+    if isinstance(record, QuarteredEventRecordDto):
+        return sum(1 for quarter in record.quarters if quarter.best is True)
+    else:
+        return 1 if position == 1 else 0

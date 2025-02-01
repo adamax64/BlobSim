@@ -47,7 +47,7 @@ def recreate_calendar_for_next_season(session: Session, next_season: int):
             calendar.append(_create_calendar_record(next_season, 6, cycle, league.id))
             calendar.append(_create_calendar_record(next_season, 13, cycle, league.id, EventType.QUARTERED_ONE_SHOT_SCORING))
             calendar.append(_create_calendar_record(next_season, 21, cycle, league.id, EventType.QUARTERED_TWO_SHOT_SCORING))
-            calendar.append(_create_calendar_record(next_season, 28, cycle, league.id))
+            calendar.append(_create_calendar_record(next_season, 28, cycle, league.id, EventType.ENDURANCE_RACE))
         if rounds >= SHORT_SEASON:      # epochs 3, 10, 18, 25
             calendar.append(_create_calendar_record(next_season, 3, cycle, league.id))
             calendar.append(_create_calendar_record(next_season, 10, cycle, league.id))
