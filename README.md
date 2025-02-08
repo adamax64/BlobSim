@@ -137,3 +137,7 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 
 - For larger field sizes the elimination count calculation changed to align with the rules
 - Improving the progress simulation view by adding a GUI window to show the progress of the process 
+
+### 1.3
+
+- Added new race event format: endurance race event

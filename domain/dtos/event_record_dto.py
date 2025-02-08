@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from dataclasses import field
 
 
 @dataclass
@@ -14,6 +15,17 @@ class ScoreDto():
 
 
 @dataclass
-class QuarteredEventRecordDto():
+class EventRecordDto():
     blob: BlobCompetitorDto
+
+
+@dataclass
+class QuarteredEventRecordDto(EventRecordDto):
     quarters: List[ScoreDto]
+
+
+@dataclass
+class RaceEventRecordDto(EventRecordDto):
+    distance_records: List[float] = field(default_factory=list)
+    time_records: List[float] = field(default_factory=list)
+    previous_position: int = 1
