@@ -3,3 +3,4 @@
 /bcs_database_debug.db
 **/__pycache__/*
 *.png
+**/node_modules/*
