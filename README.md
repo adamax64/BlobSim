@@ -11,30 +11,67 @@ This is a simulation software that simulates the life of fictional entities call
 The following requirements should be met to run the application on your device:
 
 - Python 3.10 or newer
+- Node 20.17.0 or newer
+- npm 10.8.2 or newer
 
 ### Installation
 
+#### Automatic instalation
+
+Run `setup.bat` on Windows systems or `setup.sh` on Linux systems to setup the app .If you do not have permission to execute the script on Linux, open a terminal in the root folder of the project and give permission by running `chmod +x setup.sh` (you may need to add this permission to other scripts). This will create a virtual python environment where the backend will run, install the required python libraries. Then it will install the frontend dependencies and build the app for production as well. If you want to install the application manually, do the following steps below.
+
+#### Backend
+
 1. Open a terminal in the root folder of the app
 
-2. Install the required packages:
+2. Create a python virtual environment
+
+    ```sh
+    python -m venv .venv
+    ```
+
+3. Activate the environment
+
+    - Windows:
+    ```sh
+    call venv\Scripts\activate
+    ```
+    -Linux
+    ```sh
+    source venv/bin/activate
+    ```
+
+4. Install the required packages:
 
     ```sh
     pip install -r requirements.txt
     ```
 
-3. Set up database an populate it with initial data:
+5. Set up database an populate it with initial data:
 
     ```sh
     alembic upgrade head
     ```
 
+#### Frontend
+
+1. Go into folder `web-ui`
+
+2. Run `npm install` to install node packages
+
+3. If you want to run the app in production mode, run `npm run build` to build the production app
+
 ## Running the application
 
-To start the app, just run `start.bat`. This starts main.py using the local python interpreter of your device. 
+To start the app, just run `start.bat` on Windows systems or `start.sh` on Linux systems. This activates the virtual python environment, starts the backend, the frontend, and opens the frontend app on the system default browser. This opens three console windows, one for the frontend, one for the backend, and one for the main thread that started the application. 
 
-For developing purposes there is a `debug.bat`, which runs the application in a smaller window and pauses the batch script if the python app crashes for some reason, so the user/developer can read the error message and stack before the window closes. 
+The application may need some time to load, so the opened browser tab may show that the page cannot be loaded. Wait for a few seconds in this case for the subsystem to start up properly.
 
-If you use `debug.bat`, make sure to duplicate the database file and rename it to `bcs_database_debug.db`.
+The main thread waits for user input. When any key is pressed there (or enter on Linux), the script closes the frontend and backend server.
+
+DISCLAIMER: closing the application result in killing ALL python and node processes!
+
+For developing purposes there is a `debug.bat` (or `debug.sh` for Linux), which runs the application in development mode. If you use development mode, make sure to duplicate the database file and rename it to `bcs_database_debug.db`.
 
 ## Using the application
 
@@ -66,7 +103,7 @@ The user can progress the simulation by choosing the "_Proceed to next day_" opt
 This process can be blocked from time to time by the following cases:
 
 - Championship event
-- Creation of a new blob
+- Creation of a new blob (only if there is no name suggestions the system can use to name new blobs)
 
 If one of those cases are occuring, the user cannot proceed to the next day, they have to
 
@@ -141,3 +178,18 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 1.3
 
 - Added new race event format: endurance race event
+
+
+### 2.0
+
+- Migrates UI to a web based frontend application
+  - The UI consists of a main area where the contents of the different pages are rendered and menu bar on the left to navigate between these pages
+  - the pages follow a similar structure to the previous Console UI
+  - The pages are the following:
+    - Dashboard
+    - Blobs
+    - Calendar 
+- Adjusted application setup and startup logic
+  - A `setup` script is added which installs the backend and frontend dependencies
+  - The `start` and `debug` scripts start the backend and frontend as well in production and development mode respectively
+  - Added possibility to run the app on Linux distributions 

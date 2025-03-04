@@ -2,5 +2,5 @@
 sqlalchemy
 alembic
 rich
-tkinter
 pytest
+fastapi[standard]

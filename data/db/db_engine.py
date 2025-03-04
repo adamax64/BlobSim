@@ -1,17 +1,17 @@
 from contextlib import contextmanager
 from functools import wraps
+import os
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import inspect
-import sys
 
 
 PROD_DB_URL = 'sqlite:///bcs_database.db'
 DEBUG_DB_URL = 'sqlite:///bcs_database_debug.db'
 
 # Determine the database based on the argument parameter
-if 'debug' in sys.argv:
+if os.environ.get("MODE", "dev") == "dev":
     engine = create_engine(DEBUG_DB_URL)
 else:
     engine = create_engine(PROD_DB_URL)

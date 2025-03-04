@@ -1,6 +1,9 @@
-/.vscode
-/bcs_database.db
-/bcs_database_debug.db
+**/.vscode
+/*.db
 **/__pycache__/*
 *.png
 **/node_modules/*
+/.pytest_cache
+/.venv
+/venv
+/logs
