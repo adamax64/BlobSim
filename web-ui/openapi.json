@@ -1,0 +1,87 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/sim_data/sim_time": {
+      "get": {
+        "tags": [
+          "sim_data"
+        ],
+        "summary": "Get Sim Time",
+        "operationId": "get_sim_time_sim_data_sim_time_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "title": "Response Get Sim Time Sim Data Sim Time Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/general_infos/news": {
+      "get": {
+        "tags": [
+          "general_infos"
+        ],
+        "summary": "Get Event Specific Options",
+        "operationId": "get_event_specific_options_general_infos_news_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/News"
+                  },
+                  "type": "array",
+                  "title": "Response Get Event Specific Options General Infos News Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "News": {
+        "properties": {
+          "news_type": {
+            "$ref": "#/components/schemas/NewsType"
+          },
+          "additional_info": {
+            "type": "string",
+            "title": "Additional Info"
+          }
+        },
+        "type": "object",
+        "required": [
+          "news_type"
+        ],
+        "title": "News"
+      },
+      "NewsType": {
+        "type": "string",
+        "enum": [
+          "EVENT",
+          "BLOB_CREATED_AND_NAMED",
+          "BLOB_CREATED",
+          "SEASON_START",
+          "CONTINUE"
+        ],
+        "title": "NewsType"
+      }
+    }
+  }
+}

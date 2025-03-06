@@ -16,5 +16,6 @@ alembic upgrade head
 
 cd web-ui
 npm install
+npm run generate-api
 npm run build
 cd ..

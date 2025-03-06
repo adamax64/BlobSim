@@ -4,6 +4,5 @@
 *.png
 **/node_modules/*
 /.pytest_cache
-/.venv
 /venv
-/logs
+**/generated/*
