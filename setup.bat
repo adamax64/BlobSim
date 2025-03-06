@@ -7,6 +7,7 @@ alembic upgrade head
 
 cd web-ui
 call npm install
+call npm run generate-api
 call npm run build
 cd ..
 pause

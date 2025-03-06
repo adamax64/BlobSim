@@ -38,7 +38,7 @@ export function RootLayout() {
             </Drawer>
             <Box
                 component="main"
-                sx={{ flexGrow: 1 }}
+                sx={{ flexGrow: 1, padding: "0.5rem" }}
             >
                 <Outlet />
                 <TanStackRouterDevtools position="bottom-right" />
