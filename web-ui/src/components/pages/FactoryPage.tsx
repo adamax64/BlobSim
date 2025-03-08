@@ -3,7 +3,7 @@ import { FactoryApi, NameSuggestionDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { PageTitleCard } from '../common/PageTitleCard';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import { AddCircle } from '@mui/icons-material';
+import { BlobNamingDialog } from '../common/BlobNamingDialog';
 
 const FactoryProgressBar = styled(LinearProgress)({
   height: 16,
@@ -24,6 +25,8 @@ const FactoryProgressBar = styled(LinearProgress)({
 });
 
 export function FactoryPage() {
+  const [open, setOpen] = useState(false);
+
   const factoryApi = new FactoryApi(defaultConfig);
 
   const {
@@ -44,6 +47,8 @@ export function FactoryPage() {
     fetchNameSuggestions();
   }, []);
 
+  const progressValue = (factoryProgress ?? 0) * 100 > 100 ? 100 : (factoryProgress ?? 0) * 100;
+
   return (
     <PageFrame>
       <PageTitleCard title="Blob Factory" center />
@@ -52,8 +57,9 @@ export function FactoryPage() {
           <Box display="flex" flexDirection="column" gap={1}>
             <Typography variant="h6">Factory Progress</Typography>
             <FactoryProgressBar
+              color={(factoryProgress ?? 0 > 1) ? 'success' : 'primary'}
               variant={isFactoryProgressLoading ? 'query' : 'determinate'}
-              value={(factoryProgress ?? 0) * 100}
+              value={progressValue}
             />
           </Box>
         </CardContent>
@@ -62,8 +68,8 @@ export function FactoryPage() {
         <CardContent>
           <Box display="flex" alignItems="flex-start" flexDirection="column" gap={1}>
             <Typography variant="h6">Blob name suggestions</Typography>
-            <Button variant="contained" onClick={() => {}} endIcon={<AddCircle />}>
-              Add name suggestiond
+            <Button variant="contained" onClick={() => setOpen(true)} endIcon={<AddCircle />}>
+              Add name suggestion
             </Button>
             {isLoadingNames ? (
               <Box display="flex" justifyContent="center" p={1}>
@@ -74,6 +80,7 @@ export function FactoryPage() {
             )}
           </Box>
         </CardContent>
+        <BlobNamingDialog open={open} onClose={() => setOpen(false)} mode="add" />
       </Card>
     </PageFrame>
   );
