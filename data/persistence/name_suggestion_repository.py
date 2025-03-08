@@ -11,6 +11,11 @@ def save_suggestion(session: Session, name: NameSuggestion):
 
 
 @transactional
+def get_all_name_suggestions(session: Session) -> list[NameSuggestion]:
+    return session.query(NameSuggestion).order_by(NameSuggestion.created).all()
+
+
+@transactional
 def get_oldest_name(session: Session) -> NameSuggestion:
     return session.query(NameSuggestion).order_by(NameSuggestion.created).first()
 

@@ -4,6 +4,7 @@ import { BlobsPage } from '../components/pages/BlobsPage'
 import { StandingsPage } from '../components/pages/StandingsPage'
 import { RootLayout } from '../components/RootLayout'
 import { CalendarPage } from '../components/pages/CalendarPage'
+import { FactoryPage } from '../components/pages/FactoryPage'
 
 const RootRoute = createRootRoute({
   component: RootLayout,
@@ -23,6 +24,11 @@ export const routeTree = RootRoute.addChildren([
   createRoute({
     path: '/blobs',
     component: BlobsPage,
+    getParentRoute: () => RootRoute,
+  }),
+  createRoute({
+    path: '/factory',
+    component: FactoryPage,
     getParentRoute: () => RootRoute,
   }),
   createRoute({

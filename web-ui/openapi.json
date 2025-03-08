@@ -114,6 +114,53 @@
           }
         }
       }
+    },
+    "/factory/progress": {
+      "get": {
+        "tags": [
+          "factory"
+        ],
+        "summary": "Get Factory Progress",
+        "operationId": "get_factory_progress_factory_progress_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "title": "Response Get Factory Progress Factory Progress Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/factory/name-suggestions": {
+      "get": {
+        "tags": [
+          "factory"
+        ],
+        "summary": "Get Name Suggestions",
+        "operationId": "get_name_suggestions_factory_name_suggestions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NameSuggestionDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get Name Suggestions Factory Name Suggestions Get"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -210,6 +257,30 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "NameSuggestionDto": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "created"
+        ],
+        "title": "NameSuggestionDto"
       },
       "News": {
         "properties": {
