@@ -6,6 +6,7 @@ import { GeneralInfosApi, News, NewsType, SimDataApi } from "../../generated";
 import { useEffect, useMemo } from "react";
 import { AddCircle, SkipNext, Stadium } from "@mui/icons-material";
 import { PageTitleCard } from "./PageTitleCard";
+import { PageFrame } from "./PageFrame";
 
 function isDigit(char: string) {
   return char >= '0' && char <= '9'
@@ -31,7 +32,7 @@ export function DashboardPage() {
   const generalApi = new GeneralInfosApi(defaultConfig);
 
   const { data: simTime, mutate: getSimTime } = useMutation<string, Error>({ mutationFn: () => simDataApi.getSimTimeSimDataSimTimeGet() })
-  const { data: news, mutate: getNews } = useMutation<News[], Error>({ mutationFn: () => generalApi.getEventSpecificOptionsGeneralInfosNewsGet() })
+  const { data: news, mutate: getNews } = useMutation<News[], Error>({ mutationFn: () => generalApi.getNewsGeneralInfosNewsGet() })
 
   useEffect(() => {
     getSimTime()
@@ -41,7 +42,7 @@ export function DashboardPage() {
   const newsTypes: NewsType[] = useMemo(() => news?.map(newsItem => newsItem.newsType) || [], [news])
 
   return (
-    <Box display="flex" flexDirection="column" gap={2} className="p-2">
+    <PageFrame>
       <PageTitleCard title="Blob Championship System - Dashboard" />
       <Card>
         <CardContent>
@@ -71,6 +72,6 @@ export function DashboardPage() {
         {newsTypes.includes(NewsType.BlobCreated) && <Button variant="contained" color="primary" endIcon={<AddCircle />}>Create new Blob</Button>}
         {newsTypes.includes(NewsType.Continue) && <Button variant="contained" color="primary" endIcon={<SkipNext />}>Proceed to next day</Button>}
       </Box>
-    </Box>
+    </PageFrame>
   )
 }

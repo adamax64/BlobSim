@@ -27,13 +27,13 @@
         }
       }
     },
-    "/general_infos/news": {
+    "/general-infos/news": {
       "get": {
         "tags": [
-          "general_infos"
+          "general-infos"
         ],
-        "summary": "Get Event Specific Options",
-        "operationId": "get_event_specific_options_general_infos_news_get",
+        "summary": "Get News",
+        "operationId": "get_news_general_infos_news_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -44,7 +44,70 @@
                     "$ref": "#/components/schemas/News"
                   },
                   "type": "array",
-                  "title": "Response Get Event Specific Options General Infos News Get"
+                  "title": "Response Get News General Infos News Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blobs/all": {
+      "get": {
+        "tags": [
+          "blobs"
+        ],
+        "summary": "Get All",
+        "operationId": "get_all_blobs_all_get",
+        "parameters": [
+          {
+            "name": "name_search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Name Search"
+            }
+          },
+          {
+            "name": "show_dead",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Show Dead"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlobStatsDto"
+                  },
+                  "title": "Response Get All Blobs All Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -55,6 +118,99 @@
   },
   "components": {
     "schemas": {
+      "BlobStatsDto": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "born": {
+            "type": "string",
+            "title": "Born"
+          },
+          "debut": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Debut"
+          },
+          "contract": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract"
+          },
+          "podiums": {
+            "type": "integer",
+            "title": "Podiums"
+          },
+          "wins": {
+            "type": "integer",
+            "title": "Wins"
+          },
+          "championships": {
+            "type": "integer",
+            "title": "Championships"
+          },
+          "grandmasters": {
+            "type": "integer",
+            "title": "Grandmasters"
+          },
+          "league_name": {
+            "type": "string",
+            "title": "League Name"
+          },
+          "at_risk": {
+            "type": "boolean",
+            "title": "At Risk",
+            "default": false
+          },
+          "is_dead": {
+            "type": "boolean",
+            "title": "Is Dead",
+            "default": false
+          },
+          "is_retired": {
+            "type": "boolean",
+            "title": "Is Retired",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "born",
+          "podiums",
+          "wins",
+          "championships",
+          "grandmasters",
+          "league_name"
+        ],
+        "title": "BlobStatsDto"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
       "News": {
         "properties": {
           "news_type": {
@@ -81,6 +237,39 @@
           "CONTINUE"
         ],
         "title": "NewsType"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
       }
     }
   }

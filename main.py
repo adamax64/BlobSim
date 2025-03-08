@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from controllers import sim_data_router, general_info_router
+from controllers import blobs_router, sim_data_router, general_info_router
 from domain.startup_service import startup
 
 app = FastAPI()
@@ -26,3 +26,4 @@ startup()
 
 app.include_router(sim_data_router.router)
 app.include_router(general_info_router.router)
+app.include_router(blobs_router.router)

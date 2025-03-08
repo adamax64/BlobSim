@@ -1,4 +1,5 @@
 from typing import Dict, List
+from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
@@ -6,8 +7,19 @@ from data.model.blob import Blob
 
 
 @transactional
-def get_all_living_blobs(session: Session) -> List[Blob]:
-    result = session.query(Blob).filter(Blob.integrity > 0).all()
+def get_all_blobs_by_name(
+    session: Session, name_search: str = None, show_dead: bool = False
+) -> List[Blob]:
+    result = (
+        session.query(Blob)
+        .filter(
+            and_(
+                name_search is None or Blob.name.contains(name_search),
+                or_(show_dead, Blob.integrity > 0),
+            )
+        )
+        .all()
+    )
     return result
 
 
