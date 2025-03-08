@@ -1,9 +1,9 @@
 import { createRootRoute, createRoute, redirect } from '@tanstack/react-router'
-import { DashboardPage } from '../components/DashboardPage'
-import { BlobsPage } from '../components/BlobsPage'
-import { StandingsPage } from '../components/StandingsPage'
+import { DashboardPage } from '../components/pages/DashboardPage'
+import { BlobsPage } from '../components/pages/BlobsPage'
+import { StandingsPage } from '../components/pages/StandingsPage'
 import { RootLayout } from '../components/RootLayout'
-import { CalendarPage } from '../components/CalendarPage'
+import { CalendarPage } from '../components/pages/CalendarPage'
 
 const RootRoute = createRootRoute({
   component: RootLayout,
