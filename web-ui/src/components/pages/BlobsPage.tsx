@@ -1,11 +1,11 @@
-import { Box, CircularProgress, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { DataGrid, GridRowClassNameParams } from '@mui/x-data-grid';
-import { PageFrame } from "./PageFrame";
-import { PageTitleCard } from "./PageTitleCard";
+import { PageFrame } from "../common/PageFrame";
+import { PageTitleCard } from "../common/PageTitleCard";
 import { Search } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { BlobsApi, BlobStatsDto } from "../../generated";
-import defaultConfig from "../default-config";
+import { BlobsApi, BlobStatsDto } from "../../../generated";
+import defaultConfig from "../../default-config";
 import { useMutation } from "@tanstack/react-query";
 
 const columns = [

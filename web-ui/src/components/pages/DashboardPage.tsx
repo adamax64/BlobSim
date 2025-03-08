@@ -1,12 +1,12 @@
 import { Box, Button, Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { BlobIcon } from "./BlobIcon";
+import { BlobIcon } from "../icons/BlobIcon";
 import { useMutation } from "@tanstack/react-query";
-import defaultConfig from "../default-config";
-import { GeneralInfosApi, News, NewsType, SimDataApi } from "../../generated";
+import defaultConfig from "../../default-config";
+import { GeneralInfosApi, News, NewsType, SimDataApi } from "../../../generated";
 import { useEffect, useMemo } from "react";
 import { AddCircle, SkipNext, Stadium } from "@mui/icons-material";
-import { PageTitleCard } from "./PageTitleCard";
-import { PageFrame } from "./PageFrame";
+import { PageTitleCard } from "../common/PageTitleCard";
+import { PageFrame } from "../common/PageFrame";
 
 function isDigit(char: string) {
   return char >= '0' && char <= '9'

@@ -1,5 +1,5 @@
 import { Box, Card, CardHeader } from "@mui/material";
-import { BlobIcon } from "./BlobIcon";
+import { BlobIcon } from "../icons/BlobIcon";
 import { useMemo } from "react";
 
 interface PageTitleCardProps {
