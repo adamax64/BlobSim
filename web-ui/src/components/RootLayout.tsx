@@ -1,10 +1,10 @@
 import { Box, Drawer, List, ListItem } from "@mui/material";
 import { Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { CalendarMonth, Dashboard, EmojiEvents } from "@mui/icons-material";
+import { CalendarMonth, Dashboard, EmojiEvents, Factory } from "@mui/icons-material";
 import { BlobPiktogram } from "./icons/BlobPiktogram";
 
-const pages = ['Dashboard', 'Blobs', 'Standings', 'Calendar'];
+const pages = ['Dashboard', 'Blobs', 'Factory', 'Standings', 'Calendar'];
 
 const drawerWidth = 240;
 
@@ -14,6 +14,8 @@ function getMenuIcon(page: string) {
       return <Dashboard />;
     case 'Blobs':
       return <BlobPiktogram size={24} color="#222222" />;
+    case 'Factory':
+      return <Factory />;
     case 'Standings':
       return <EmojiEvents />;
     case 'Calendar':
