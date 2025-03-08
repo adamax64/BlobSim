@@ -20,10 +20,12 @@
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.2",
     "prettier": "^3.5.3",
+    "sass-embedded": "^1.85.1",
     "vite": "^6.0.3"
   },
   "dependencies": {
     "@mui/icons-material": "^6.4.7",
+    "@mui/x-data-grid": "^7.27.3",
     "@tanstack/react-query": "^5.67.1",
     "@tanstack/react-query-devtools": "^5.67.1",
     "@tanstack/react-router": "^1.109.2",

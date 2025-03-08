@@ -20,7 +20,7 @@ class News(BaseModel):
     additional_info: str = None
 
 
-router = APIRouter(prefix="/general_infos", tags=["general_infos"])
+router = APIRouter(prefix="/general-infos", tags=["general-infos"])
 
 
 @router.get("/news")
