@@ -8,7 +8,7 @@ class Blob(Base):
     __tablename__ = 'blobs'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     strength = Column(Double)
     learning = Column(Double)
     integrity = Column(Integer)

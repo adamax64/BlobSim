@@ -34,19 +34,26 @@ export function DashboardPage() {
   const simDataApi = new SimDataApi(defaultConfig);
   const generalApi = new GeneralInfosApi(defaultConfig);
 
-  const { data: simTime, mutate: getSimTime } = useMutation<string, Error>({
+  const { data: simTime, mutate: fetchSimTime } = useMutation<string, Error>({
     mutationFn: () => simDataApi.getSimTimeSimDataSimTimeGet(),
   });
-  const { data: news, mutate: getNews } = useMutation<News[], Error>({
+  const { data: news, mutate: fetchNews } = useMutation<News[], Error>({
     mutationFn: () => generalApi.getNewsGeneralInfosNewsGet(),
   });
 
   useEffect(() => {
-    getSimTime();
-    getNews();
+    fetchSimTime();
+    fetchNews();
   }, []);
 
   const newsTypes: NewsType[] = useMemo(() => news?.map((newsItem) => newsItem.newsType) || [], [news]);
+
+  function handleDialogClose(update?: boolean) {
+    setOpen(false);
+    if (update) {
+      fetchNews();
+    }
+  }
 
   return (
     <PageFrame>
@@ -104,7 +111,7 @@ export function DashboardPage() {
           </Button>
         )}
       </Box>
-      <BlobNamingDialog open={open} onClose={() => setOpen(false)} mode="create" />
+      <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
     </PageFrame>
   );
 }

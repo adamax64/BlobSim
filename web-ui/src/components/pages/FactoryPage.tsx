@@ -47,6 +47,13 @@ export function FactoryPage() {
     fetchNameSuggestions();
   }, []);
 
+  function handleDialogClose(update?: boolean) {
+    setOpen(false);
+    if (update) {
+      fetchNameSuggestions();
+    }
+  }
+
   const progressValue = (factoryProgress ?? 0) * 100 > 100 ? 100 : (factoryProgress ?? 0) * 100;
 
   return (
@@ -57,7 +64,7 @@ export function FactoryPage() {
           <Box display="flex" flexDirection="column" gap={1}>
             <Typography variant="h6">Factory Progress</Typography>
             <FactoryProgressBar
-              color={(factoryProgress ?? 0 > 1) ? 'success' : 'primary'}
+              color={(factoryProgress ?? 0) > 1 ? 'success' : 'primary'}
               variant={isFactoryProgressLoading ? 'query' : 'determinate'}
               value={progressValue}
             />
@@ -80,7 +87,7 @@ export function FactoryPage() {
             )}
           </Box>
         </CardContent>
-        <BlobNamingDialog open={open} onClose={() => setOpen(false)} mode="add" />
+        <BlobNamingDialog open={open} onClose={handleDialogClose} mode="add" />
       </Card>
     </PageFrame>
   );

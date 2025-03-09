@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from enum import Enum
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from domain.blob_service import check_blob_created
 from domain.sim_data_service import get_sim_time, is_unconcluded_event_today
@@ -51,3 +51,4 @@ def get_news() -> list[News]:
         return options
     except Exception as e:
         print(str(e.with_traceback(None)))
+        raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

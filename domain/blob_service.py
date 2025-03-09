@@ -1,4 +1,6 @@
+from logging import warning
 import random
+from sqlalchemy.exc import IntegrityError
 from typing import List
 
 from data.db.db_engine import transactional
@@ -15,6 +17,7 @@ from data.persistence.name_suggestion_repository import (
 )
 from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.enums.activity_type import ActivityType
+from domain.exceptions.name_occupied_exception import NameOccupiedException
 from domain.sim_data_service import (
     get_current_calendar,
     get_sim_time,
@@ -68,12 +71,7 @@ def get_all_blobs(
 @transactional
 def check_blob_created(session) -> str | bool:
     if is_blob_created(session):
-        name_suggestion = get_oldest_name(session)
-        if name_suggestion is None:
-            return True
-        create_blob(session, name_suggestion.name)
-        delete_suggestion(session, name_suggestion)
-        return name_suggestion.name
+        return _create_with_name_suggestion(session)
     return False
 
 
@@ -86,18 +84,21 @@ def create_blob(session, name: str):
     current_time = get_sim_time(session)
     queue = get_queue(session)
 
-    save_blob(
-        session,
-        Blob(
-            name=name,
-            strength=strength,
-            learning=learning,
-            integrity=INITIAL_INTEGRITY,
-            born=current_time,
-            league_id=queue.id,
-        ),
-    )
-    reset_factory_progress(session)
+    try:
+        save_blob(
+            session,
+            Blob(
+                name=name,
+                strength=strength,
+                learning=learning,
+                integrity=INITIAL_INTEGRITY,
+                born=current_time,
+                league_id=queue.id,
+            ),
+        )
+        reset_factory_progress(session)
+    except IntegrityError:
+        raise NameOccupiedException()
 
 
 @transactional
@@ -153,6 +154,24 @@ def _update_blob_strength(blob: Blob, multiplyer: float) -> float:
         - atrophy
         + multiplyer * blob.learning * (blob.integrity / INITIAL_INTEGRITY)
     )
+
+
+@transactional
+def _create_with_name_suggestion(session) -> str | bool:
+    """Try to create new blob with suggested names. Retry if there is already a blob with suggested name"""
+
+    name_suggestion = get_oldest_name(session)
+    if name_suggestion is None:
+        return True
+    try:
+        create_blob(session, name_suggestion.name)
+        delete_suggestion(session, name_suggestion)
+        return name_suggestion.name
+    except NameOccupiedException:
+        session.close()
+        warning("There already exists a blob with suggested name, retrying creating blob...")
+        delete_suggestion(name=name_suggestion)
+        return _create_with_name_suggestion()
 
 
 def _terminate_blob(blob: Blob, current_time: int):
