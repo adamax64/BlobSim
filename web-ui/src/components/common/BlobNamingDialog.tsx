@@ -1,6 +1,19 @@
 import { AddCircle, Close } from '@mui/icons-material';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
-import { useState } from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Snackbar,
+  TextField,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { BlobsApi, FactoryApi, ResponseError } from '../../../generated';
+import defaultConfig from '../../default-config';
+import { useMutation } from '@tanstack/react-query';
+import { closeSnackbar, useSnackbar } from 'notistack';
 
 enum NameValidationError {
   NotConsistsOfTwoNames = 'NotConsistsOfTwoNames',
@@ -20,7 +33,7 @@ function getValidationErrorMessage(validationError: NameValidationError | undefi
 
 interface BlobNamingDialogProps {
   open: boolean;
-  onClose: () => void;
+  onClose: (update?: boolean) => void;
   mode: 'create' | 'add';
 }
 
@@ -28,14 +41,49 @@ export function BlobNamingDialog({ open, onClose, mode }: BlobNamingDialogProps)
   const [name, setName] = useState<string>();
   const [validationError, setValidationError] = useState<NameValidationError | undefined>();
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  const factoryApi = new FactoryApi(defaultConfig);
+  const blobsApi = new BlobsApi(defaultConfig);
+
+  const { mutate: saveNameSuggestion } = useMutation<void, ResponseError>({
+    mutationFn: () => factoryApi.saveNameSuggestionFactorySaveNameSuggestionPost({ name: name! }),
+  });
+
+  const { mutate: createBlob } = useMutation<void, ResponseError>({
+    mutationFn: () => blobsApi.createBlobBlobsCreatePost({ name: name! }),
+  });
+
+  const responseHandler = {
+    onSuccess: () => {
+      setName(undefined);
+      onClose(true);
+    },
+    onError: (error: ResponseError) => {
+      error.response.json().then((errorBody) => {
+        if (errorBody.detail === 'NAME_ALREADY_OCCUPIED') {
+          enqueueSnackbar('Name already exists in suggestions list', {
+            key: errorBody.detail,
+            variant: 'error',
+            autoHideDuration: 6000,
+            anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+            action: (key) => (
+              <IconButton onClick={() => closeSnackbar(key)} color="inherit">
+                <Close />
+              </IconButton>
+            ),
+          });
+        }
+      });
+    },
+  };
+
   function handleCreate() {
-    console.log('Create');
-    onClose();
+    createBlob(undefined, responseHandler);
   }
 
   function handleAdd() {
-    console.log('Add');
-    onClose();
+    saveNameSuggestion(undefined, responseHandler);
   }
 
   function setAndValidateName(value: string) {
@@ -53,10 +101,10 @@ export function BlobNamingDialog({ open, onClose, mode }: BlobNamingDialogProps)
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={() => onClose()}>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', padding: '1.2rem', paddingBottom: 0 }}>
         {mode == 'create' ? 'Create new blob' : 'Add name suggestion'}{' '}
-        <IconButton aria-label="close" onClick={onClose}>
+        <IconButton aria-label="close" onClick={() => onClose()}>
           <Close />
         </IconButton>
       </DialogTitle>

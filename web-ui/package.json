@@ -30,6 +30,7 @@
     "@tanstack/react-query-devtools": "^5.67.1",
     "@tanstack/react-router": "^1.109.2",
     "@tanstack/router-devtools": "^1.109.2",
+    "notistack": "^3.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }

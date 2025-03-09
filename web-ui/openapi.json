@@ -7,9 +7,7 @@
   "paths": {
     "/sim_data/sim_time": {
       "get": {
-        "tags": [
-          "sim_data"
-        ],
+        "tags": ["sim_data"],
         "summary": "Get Sim Time",
         "operationId": "get_sim_time_sim_data_sim_time_get",
         "responses": {
@@ -29,9 +27,7 @@
     },
     "/general-infos/news": {
       "get": {
-        "tags": [
-          "general-infos"
-        ],
+        "tags": ["general-infos"],
         "summary": "Get News",
         "operationId": "get_news_general_infos_news_get",
         "responses": {
@@ -54,9 +50,7 @@
     },
     "/blobs/all": {
       "get": {
-        "tags": [
-          "blobs"
-        ],
+        "tags": ["blobs"],
         "summary": "Get All",
         "operationId": "get_all_blobs_all_get",
         "parameters": [
@@ -115,11 +109,47 @@
         }
       }
     },
+    "/blobs/create": {
+      "post": {
+        "tags": ["blobs"],
+        "summary": "Create Blob",
+        "operationId": "create_blob_blobs_create_post",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/factory/progress": {
       "get": {
-        "tags": [
-          "factory"
-        ],
+        "tags": ["factory"],
         "summary": "Get Factory Progress",
         "operationId": "get_factory_progress_factory_progress_get",
         "responses": {
@@ -139,9 +169,7 @@
     },
     "/factory/name-suggestions": {
       "get": {
-        "tags": [
-          "factory"
-        ],
+        "tags": ["factory"],
         "summary": "Get Name Suggestions",
         "operationId": "get_name_suggestions_factory_name_suggestions_get",
         "responses": {
@@ -155,6 +183,44 @@
                   },
                   "type": "array",
                   "title": "Response Get Name Suggestions Factory Name Suggestions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/factory/save-name-suggestion": {
+      "post": {
+        "tags": ["factory"],
+        "summary": "Save Name Suggestion",
+        "operationId": "save_name_suggestion_factory_save_name_suggestion_post",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -234,15 +300,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "born",
-          "podiums",
-          "wins",
-          "championships",
-          "grandmasters",
-          "league_name"
-        ],
+        "required": ["name", "born", "podiums", "wins", "championships", "grandmasters", "league_name"],
         "title": "BlobStatsDto"
       },
       "HTTPValidationError": {
@@ -275,11 +333,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "created"
-        ],
+        "required": ["id", "name", "created"],
         "title": "NameSuggestionDto"
       },
       "News": {
@@ -293,20 +347,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "news_type"
-        ],
+        "required": ["news_type"],
         "title": "News"
       },
       "NewsType": {
         "type": "string",
-        "enum": [
-          "EVENT",
-          "BLOB_CREATED_AND_NAMED",
-          "BLOB_CREATED",
-          "SEASON_START",
-          "CONTINUE"
-        ],
+        "enum": ["EVENT", "BLOB_CREATED_AND_NAMED", "BLOB_CREATED", "SEASON_START", "CONTINUE"],
         "title": "NewsType"
       },
       "ValidationError": {
@@ -335,11 +381,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "title": "ValidationError"
       }
     }
