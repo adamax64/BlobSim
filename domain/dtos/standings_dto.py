@@ -1,4 +1,3 @@
-from typing import List
 from dataclasses import dataclass
 
 from domain.dtos.standings_result_dto import StandingsResultDTO
@@ -9,5 +8,6 @@ class StandingsDTO:
     blob_id: int
     name: str
     is_contract_ending: bool
-    results: List[StandingsResultDTO]
+    results: list[StandingsResultDTO]
+    num_of_rounds: int
     total_points: int

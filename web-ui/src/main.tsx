@@ -3,6 +3,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routes/routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
+import { SimTimeProvider } from './context/SimTimeContext';
 
 // Set up a Router instance
 const router = createRouter({
@@ -26,7 +27,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider>
-        <RouterProvider router={router} />
+        <SimTimeProvider>
+          <RouterProvider router={router} />
+        </SimTimeProvider>
       </SnackbarProvider>
     </QueryClientProvider>,
   );

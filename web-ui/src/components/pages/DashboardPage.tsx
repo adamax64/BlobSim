@@ -1,17 +1,13 @@
-import { Box, Button, Card, CardContent, CardHeader, Typography } from '@mui/material';
-import { BlobIcon } from '../icons/BlobIcon';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import defaultConfig from '../../default-config';
-import { GeneralInfosApi, News, NewsType, SimDataApi } from '../../../generated';
+import { GeneralInfosApi, News, NewsType } from '../../../generated';
 import { useEffect, useMemo, useState } from 'react';
 import { AddCircle, SkipNext, Stadium } from '@mui/icons-material';
 import { PageTitleCard } from '../common/PageTitleCard';
 import { PageFrame } from '../common/PageFrame';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
-
-function isDigit(char: string) {
-  return char >= '0' && char <= '9';
-}
+import { SimTimeDisplay } from '../common/SimTimeDisplay';
 
 function getNewsText(news: News) {
   switch (news.newsType) {
@@ -31,18 +27,12 @@ function getNewsText(news: News) {
 export function DashboardPage() {
   const [open, setOpen] = useState(false);
 
-  const simDataApi = new SimDataApi(defaultConfig);
   const generalApi = new GeneralInfosApi(defaultConfig);
-
-  const { data: simTime, mutate: fetchSimTime } = useMutation<string, Error>({
-    mutationFn: () => simDataApi.getSimTimeSimDataSimTimeGet(),
-  });
   const { data: news, mutate: fetchNews } = useMutation<News[], Error>({
     mutationFn: () => generalApi.getNewsGeneralInfosNewsGet(),
   });
 
   useEffect(() => {
-    fetchSimTime();
     fetchNews();
   }, []);
 
@@ -62,21 +52,7 @@ export function DashboardPage() {
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>
             <Typography variant="h6">Date</Typography>
-            <Box display="flex" gap={0}>
-              {simTime
-                ? simTime.split('').map((char, index) =>
-                    isDigit(char) ? (
-                      <Card key={index} className="p-2" sx={{ fontWeight: '600' }}>
-                        {char}
-                      </Card>
-                    ) : (
-                      <Box key={index} className="p-1 pt-2" sx={{ fontWeight: '600' }}>
-                        {char}
-                      </Box>
-                    ),
-                  )
-                : 'Loading...'}
-            </Box>
+            <SimTimeDisplay />
           </Box>
         </CardContent>
       </Card>

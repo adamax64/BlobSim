@@ -1,4 +1,3 @@
-from typing import List, Tuple
 from collections import defaultdict
 
 from data.db.db_engine import transactional
@@ -7,12 +6,13 @@ from data.persistence.result_repository import get_results_of_league_by_season
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.standings_dto import StandingsDTO
 from domain.dtos.standings_result_dto import StandingsResultDTO
+from domain.utils.league_utils import get_number_of_rounds_by_size
 
 
 @transactional
-def get_standings(league_id: int, season: int, current_season: int, session) -> List[StandingsDTO]:
+def get_standings(league_id: int, season: int, current_season: int, session) -> list[StandingsDTO]:
     results = get_results_of_league_by_season(league_id, season, session)
-    print(results)
+
     if len(results) == 0:
         return []
 
@@ -20,10 +20,12 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
     for result in results:
         results_by_blob[result.blob].append(result)
 
+    num_of_rounds = get_number_of_rounds_by_size(len(results_by_blob))
+
     standings = []
     for blob, results in results_by_blob.items():
         total_points = 0
-        standing_results = []
+        standing_results: list[StandingsResultDTO] = []
         for result in results:
             total_points += result.points
             standing_results.append(StandingsResultDTO(position=result.position, points=result.points))
@@ -33,6 +35,7 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
             blob_id=blob.id,
             name=blob.name,
             results=standing_results,
+            num_of_rounds=num_of_rounds,
             total_points=total_points,
             is_contract_ending=contract_ending
         ))
@@ -42,7 +45,7 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
 
 
 @transactional
-def get_grandmaster_standings(start_season: int, current_season: int, session) -> List[GrandmasterStandingsDTO]:
+def get_grandmaster_standings(start_season: int, current_season: int, session) -> list[GrandmasterStandingsDTO]:
     end_season = current_season if start_season + 4 > current_season else start_season + 3
     standings = [get_standings(1, season, session) for season in range(start_season, end_season + 1)]
 
@@ -76,7 +79,7 @@ def get_grandmaster_standings(start_season: int, current_season: int, session) -
     return grandmaster_standings
 
 
-def _get_standings_by_name(standings: List[List[StandingsDTO]], champions: List[Tuple[str, int]]) -> dict[str, List[StandingsDTO]]:
+def _get_standings_by_name(standings: list[list[StandingsDTO]], champions: list[tuple[str, int]]) -> dict[str, list[StandingsDTO]]:
     standings_by_name = {}
     for standing_record in standings:
         for standing in standing_record:
@@ -88,11 +91,11 @@ def _get_standings_by_name(standings: List[List[StandingsDTO]], champions: List[
     return standings_by_name
 
 
-def _flatmap_results(standings: List[StandingsDTO]) -> List[StandingsResultDTO]:
+def _flatmap_results(standings: list[StandingsDTO]) -> list[StandingsResultDTO]:
     return [result for standing in standings for result in standing.results]
 
 
-def _count_by_position(results: List[StandingsResultDTO], position: int) -> int:
+def _count_by_position(results: list[StandingsResultDTO], position: int) -> int:
     return len([result for result in results if result.position == position])
 
 
