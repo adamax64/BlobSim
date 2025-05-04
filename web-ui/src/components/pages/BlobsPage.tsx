@@ -1,12 +1,23 @@
-import { Box, FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Paper,
+  Switch,
+} from '@mui/material';
 import { DataGrid, GridRowClassNameParams } from '@mui/x-data-grid';
-import { PageFrame } from "../common/PageFrame";
-import { PageTitleCard } from "../common/PageTitleCard";
-import { Search } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import { BlobsApi, BlobStatsDto } from "../../../generated";
-import defaultConfig from "../../default-config";
-import { useMutation } from "@tanstack/react-query";
+import { PageFrame } from '../common/PageFrame';
+import { PageTitleCard } from '../common/PageTitleCard';
+import { Search } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import { BlobsApi, BlobStatsDto } from '../../../generated';
+import defaultConfig from '../../default-config';
+import { useMutation } from '@tanstack/react-query';
+import { BlobState } from '../../utils/BlobStateUtils';
 
 const columns = [
   { field: 'name', headerName: 'Name', flex: 1, resizable: false },
@@ -18,32 +29,36 @@ const columns = [
   { field: 'championships', headerName: 'Championships', flex: 1, resizable: false },
   { field: 'grandmasters', headerName: 'Grandmasters', flex: 1, resizable: false },
   { field: 'leagueName', headerName: 'League', flex: 1, resizable: false },
-]
+];
 
 function getRowClass(params: GridRowClassNameParams<BlobStatsDto>) {
   if (params.row.atRisk) {
-    return 'row-at-risk'
+    return BlobState.AT_RISK;
   }
   if (params.row.isDead) {
-    return 'row-dead'
+    return BlobState.DEAD;
   }
   if (params.row.isRetired) {
-    return 'row-retired'
+    return BlobState.RETIRED;
   }
-  return ''
+  return '';
 }
 
 export function BlobsPage() {
-  const [nameSearch, setNameSearch] = useState<string | undefined>()
-  const [showDead, setShowDead] = useState<boolean>(false)
+  const [nameSearch, setNameSearch] = useState<string | undefined>();
+  const [showDead, setShowDead] = useState<boolean>(false);
 
-  const blobsApi = new BlobsApi(defaultConfig)
+  const blobsApi = new BlobsApi(defaultConfig);
 
-  const { data: blobs, isPending, mutate: getAllBlobs } = useMutation<BlobStatsDto[], Error>({ mutationFn: () => blobsApi.getAllBlobsAllGet({ nameSearch, showDead }) })
+  const {
+    data: blobs,
+    isPending,
+    mutate: getAllBlobs,
+  } = useMutation<BlobStatsDto[], Error>({ mutationFn: () => blobsApi.getAllBlobsAllGet({ nameSearch, showDead }) });
 
   useEffect(() => {
-    getAllBlobs()
-  }, [showDead])
+    getAllBlobs();
+  }, [showDead]);
 
   return (
     <PageFrame>
@@ -52,20 +67,26 @@ export function BlobsPage() {
         <Box display="flex" gap={3} p={2}>
           <FormControl variant="outlined">
             <InputLabel htmlFor="search-by-name">Search by name</InputLabel>
-            <OutlinedInput id="search-by-name" type="text" endAdornment={
-              <InputAdornment position="end">
-                <IconButton onClick={() => getAllBlobs()}>
-                  <Search />
-                </IconButton>
-              </InputAdornment>
-            }
+            <OutlinedInput
+              id="search-by-name"
+              type="text"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => getAllBlobs()}>
+                    <Search />
+                  </IconButton>
+                </InputAdornment>
+              }
               value={nameSearch}
               onChange={(e) => setNameSearch(e.target.value.length > 0 ? e.target.value : undefined)}
               onKeyDown={(e) => e.key === 'Enter' && getAllBlobs()}
               label="Search by name"
             />
           </FormControl>
-          <FormControlLabel control={<Switch value={showDead} onChange={e => setShowDead(e.target.checked)} />} label="Show dead" />
+          <FormControlLabel
+            control={<Switch value={showDead} onChange={(e) => setShowDead(e.target.checked)} />}
+            label="Show dead"
+          />
         </Box>
         <Box display="flex" justifyContent="center">
           <Box width="98%" alignContent="center" pb="1vw">
@@ -84,5 +105,5 @@ export function BlobsPage() {
         </Box>
       </Paper>
     </PageFrame>
-  )
+  );
 }
