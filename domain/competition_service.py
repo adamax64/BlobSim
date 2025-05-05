@@ -10,13 +10,17 @@ from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto
 from domain.dtos.save_action_dto import SaveActionDto
 from domain.event_service import get_or_start_event
+from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar
 from domain.utils.constants import VICTORY_PRIZE
 
 
 @transactional
 def load_competition_data(session) -> EventDto:
+    """ Load the current event data from the database. If no event is found, start a new one. """
     league_id = get_current_calendar(session).league_id
+    if league_id is None:
+        raise NoCurrentEventException()
     return get_or_start_event(session, league_id, False)
 
 

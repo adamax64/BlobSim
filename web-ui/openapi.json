@@ -370,10 +370,77 @@
           }
         }
       }
+    },
+    "/competition/current": {
+      "get": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Get Current Event",
+        "operationId": "get_current_event_competition_current_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "ActionDto": {
+        "properties": {
+          "tick": {
+            "type": "integer",
+            "title": "Tick"
+          },
+          "blob_id": {
+            "type": "integer",
+            "title": "Blob Id"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tick",
+          "blob_id",
+          "score"
+        ],
+        "title": "ActionDto"
+      },
+      "BlobCompetitorDto": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "strength": {
+            "type": "number",
+            "title": "Strength"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "strength"
+        ],
+        "title": "BlobCompetitorDto"
+      },
       "BlobStatsDto": {
         "properties": {
           "name": {
@@ -453,6 +520,62 @@
           "league_name"
         ],
         "title": "BlobStatsDto"
+      },
+      "EventDto": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "competitors": {
+            "items": {
+              "$ref": "#/components/schemas/BlobCompetitorDto"
+            },
+            "type": "array",
+            "title": "Competitors"
+          },
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ActionDto"
+            },
+            "type": "array",
+            "title": "Actions"
+          },
+          "league": {
+            "$ref": "#/components/schemas/LeagueDto"
+          },
+          "season": {
+            "type": "integer",
+            "title": "Season"
+          },
+          "round": {
+            "type": "integer",
+            "title": "Round"
+          },
+          "type": {
+            "$ref": "#/components/schemas/EventType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "competitors",
+          "actions",
+          "league",
+          "season",
+          "round",
+          "type"
+        ],
+        "title": "EventDto"
+      },
+      "EventType": {
+        "type": "string",
+        "enum": [
+          "QUARTERED_ONE_SHOT_SCORING",
+          "QUARTERED_TWO_SHOT_SCORING",
+          "ENDURANCE_RACE"
+        ],
+        "title": "EventType"
       },
       "GrandmasterStandingsDTO": {
         "properties": {

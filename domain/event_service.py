@@ -10,6 +10,7 @@ from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
 from domain.dtos.league_dto import LeagueDto
+from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.sim_time_utils import get_season
 
@@ -20,7 +21,7 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
 
     current_calendar_event = get_current_calendar(session)
     if current_calendar_event is None:
-        raise Exception("No event today according to calendar")
+        raise NoCurrentEventException()
     time = get_sim_time(session)
     event = get_event_by_date(session, time)
 
