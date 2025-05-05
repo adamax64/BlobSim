@@ -391,6 +391,45 @@
           }
         }
       }
+    },
+    "/competition/action": {
+      "post": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Create Action",
+        "operationId": "create_action_competition_action_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveActionDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -711,6 +750,34 @@
           "CONTINUE"
         ],
         "title": "NewsType"
+      },
+      "SaveActionDto": {
+        "properties": {
+          "event_id": {
+            "type": "integer",
+            "title": "Event Id"
+          },
+          "tick": {
+            "type": "integer",
+            "title": "Tick"
+          },
+          "blob_id": {
+            "type": "integer",
+            "title": "Blob Id"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_id",
+          "tick",
+          "blob_id",
+          "score"
+        ],
+        "title": "SaveActionDto"
       },
       "SimTime": {
         "properties": {
