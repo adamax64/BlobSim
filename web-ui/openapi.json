@@ -430,6 +430,45 @@
           }
         }
       }
+    },
+    "/competition/quartered-event-results": {
+      "post": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Save Quartered Event Results",
+        "operationId": "save_quartered_event_results_competition_quartered_event_results_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_save_quartered_event_results_competition_quartered_event_results_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -559,6 +598,26 @@
           "league_name"
         ],
         "title": "BlobStatsDto"
+      },
+      "Body_save_quartered_event_results_competition_quartered_event_results_post": {
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/EventDto"
+          },
+          "event_records": {
+            "items": {
+              "$ref": "#/components/schemas/QuarteredEventRecordDto"
+            },
+            "type": "array",
+            "title": "Event Records"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event",
+          "event_records"
+        ],
+        "title": "Body_save_quartered_event_results_competition_quartered_event_results_post"
       },
       "EventDto": {
         "properties": {
@@ -751,6 +810,26 @@
         ],
         "title": "NewsType"
       },
+      "QuarteredEventRecordDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobCompetitorDto"
+          },
+          "quarters": {
+            "items": {
+              "$ref": "#/components/schemas/ScoreDto"
+            },
+            "type": "array",
+            "title": "Quarters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob",
+          "quarters"
+        ],
+        "title": "QuarteredEventRecordDto"
+      },
       "SaveActionDto": {
         "properties": {
           "event_id": {
@@ -778,6 +857,55 @@
           "score"
         ],
         "title": "SaveActionDto"
+      },
+      "ScoreDto": {
+        "properties": {
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "scoring_progress": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scoring Progress"
+          },
+          "best": {
+            "type": "boolean",
+            "title": "Best",
+            "default": false
+          },
+          "personal_best": {
+            "type": "boolean",
+            "title": "Personal Best",
+            "default": false
+          },
+          "latest_score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Score"
+          }
+        },
+        "type": "object",
+        "title": "ScoreDto"
       },
       "SimTime": {
         "properties": {
