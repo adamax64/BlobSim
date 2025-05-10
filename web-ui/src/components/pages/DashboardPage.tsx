@@ -72,7 +72,12 @@ export function DashboardPage() {
       </Card>
       <Box display="flex" gap={1}>
         {newsTypes.includes(NewsType.Event) && (
-          <Button variant="contained" color="primary" endIcon={<Stadium />}>
+          <Button
+            variant="contained"
+            color="primary"
+            endIcon={<Stadium />}
+            onClick={() => (window.location.href = '/event')}
+          >
             Proceed to event
           </Button>
         )}

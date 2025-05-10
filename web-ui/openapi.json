@@ -384,7 +384,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventDto"
+                  "$ref": "#/components/schemas/EventDto-Output"
                 }
               }
             }
@@ -602,7 +602,7 @@
       "Body_save_quartered_event_results_competition_quartered_event_results_post": {
         "properties": {
           "event": {
-            "$ref": "#/components/schemas/EventDto"
+            "$ref": "#/components/schemas/EventDto-Input"
           },
           "event_records": {
             "items": {
@@ -619,7 +619,7 @@
         ],
         "title": "Body_save_quartered_event_results_competition_quartered_event_results_post"
       },
-      "EventDto": {
+      "EventDto-Input": {
         "properties": {
           "id": {
             "type": "integer",
@@ -638,6 +638,20 @@
             },
             "type": "array",
             "title": "Actions"
+          },
+          "event_records": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/QuarteredEventRecordDto"
+                },
+                {
+                  "$ref": "#/components/schemas/RaceEventRecordDto"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Event Records"
           },
           "league": {
             "$ref": "#/components/schemas/LeagueDto"
@@ -659,6 +673,69 @@
           "id",
           "competitors",
           "actions",
+          "event_records",
+          "league",
+          "season",
+          "round",
+          "type"
+        ],
+        "title": "EventDto"
+      },
+      "EventDto-Output": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "competitors": {
+            "items": {
+              "$ref": "#/components/schemas/BlobCompetitorDto"
+            },
+            "type": "array",
+            "title": "Competitors"
+          },
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ActionDto"
+            },
+            "type": "array",
+            "title": "Actions"
+          },
+          "event_records": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/QuarteredEventRecordDto"
+                },
+                {
+                  "$ref": "#/components/schemas/RaceEventRecordDto"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Event Records"
+          },
+          "league": {
+            "$ref": "#/components/schemas/LeagueDto"
+          },
+          "season": {
+            "type": "integer",
+            "title": "Season"
+          },
+          "round": {
+            "type": "integer",
+            "title": "Round"
+          },
+          "type": {
+            "$ref": "#/components/schemas/EventType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "competitors",
+          "actions",
+          "event_records",
           "league",
           "season",
           "round",
@@ -829,6 +906,37 @@
           "quarters"
         ],
         "title": "QuarteredEventRecordDto"
+      },
+      "RaceEventRecordDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobCompetitorDto"
+          },
+          "distance_records": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Distance Records"
+          },
+          "time_records": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Time Records"
+          },
+          "previous_position": {
+            "type": "integer",
+            "title": "Previous Position",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob"
+        ],
+        "title": "RaceEventRecordDto"
       },
       "SaveActionDto": {
         "properties": {
