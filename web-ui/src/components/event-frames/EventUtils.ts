@@ -1,0 +1,31 @@
+import { QuarteredEventRecordDto } from '../../../generated';
+
+export function getEliminations(fieldSize: number): number {
+  return fieldSize < 15 ? Math.floor((fieldSize - 3) / 3) : Math.floor(fieldSize / 4);
+}
+
+export function getQuarterEnds(fieldSize: number, isOneshot: boolean): number[] {
+  const eliminations = getEliminations(fieldSize);
+  const multiplier = isOneshot ? 1 : 2;
+
+  return [
+    multiplier * fieldSize,
+    multiplier * (2 * fieldSize - eliminations),
+    multiplier * (3 * fieldSize - 3 * eliminations),
+    multiplier * (4 * fieldSize - 6 * eliminations),
+  ];
+}
+
+export function getCurrentQuarter(quarterEnds: number[], tick: number): number {
+  for (let i = 0; i < quarterEnds.length; i++) {
+    if (tick < quarterEnds[i]) {
+      return i + 1;
+    }
+  }
+  return 5;
+}
+
+function sortLambda(index: number) {
+  return (a: QuarteredEventRecordDto, b: QuarteredEventRecordDto) =>
+    (a.quarters[index].score ?? -1 > (b.quarters[index].score ?? -1)) ? -1 : 1;
+}

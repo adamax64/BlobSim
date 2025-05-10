@@ -10,6 +10,7 @@ from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
 from domain.dtos.league_dto import LeagueDto
+from domain.event_record_service import get_event_records
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.sim_time_utils import get_season
@@ -44,6 +45,7 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
     return EventDto(
         id=event.id,
         league=LeagueDto(id=event.league_id, name=event.league.name, field_size=len(competitors), level=event.league.level),
+        event_records=get_event_records(actions, competitors, event.type),
         actions=actions,
         competitors=competitors,
         season=event.season,

@@ -1,9 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-import { CompetitionApi, EventDto } from '../../../generated';
+import { CompetitionApi, EventDtoOutput as EventDto, EventType } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { PageTitleCard } from '../common/PageTitleCard';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { Box, Card, CircularProgress } from '@mui/material';
+import { QuarteredEventPage } from '../event-frames/QuarteredEventFrame';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);
@@ -20,9 +22,40 @@ export const EventPage = () => {
     loadEvent();
   }, []);
 
+  const eventContent = useCallback(() => {
+    if (loadingEvent) {
+      return (
+        <Card>
+          <Box display="flex" justifyContent="center" alignItems="center" padding={4}>
+            <CircularProgress size={48} />
+          </Box>
+        </Card>
+      );
+    }
+
+    if (!event) {
+      return (
+        <Card>
+          <Box display="flex" justifyContent="center" alignItems="center" padding={4}>
+            No event data available
+          </Box>
+        </Card>
+      );
+    }
+
+    switch (event.type) {
+      case EventType.QuarteredTwoShotScoring:
+      case EventType.QuarteredOneShotScoring:
+        return <QuarteredEventPage event={event} />;
+      case EventType.EnduranceRace:
+        return <Card>Endurance Race (not yet implemented)</Card>;
+    }
+  }, [loadingEvent, event]);
+
   return (
     <PageFrame>
       <PageTitleCard title={event && `${event.league.name} Season ${event.season} Round ${event.round}`} />
+      {eventContent()}
     </PageFrame>
   );
 };
