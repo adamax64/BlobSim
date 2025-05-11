@@ -14,7 +14,8 @@ import {
 import { EventDtoOutput as EventDto, EventType } from '../../../generated';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getCurrentQuarter, getQuarterEnds } from './EventUtils';
+import { getCurrentQuarter, getQuarterData, getQuarterEnds } from './EventUtils';
+import { ProgressButton } from './ProgressButton';
 
 interface QuarteredEventPageProps {
   event: EventDto;
@@ -36,16 +37,30 @@ export const QuarteredEventPage = ({ event }: QuarteredEventPageProps) => {
 
   const quarter = useMemo(() => getCurrentQuarter(quarterEnds, tick), [quarterEnds, tick]);
 
+  const [currentBlobIndex, isQuarterEnd] = useMemo(
+    () => getQuarterData(quarterEnds, tick - 1, quarter, event.competitors.length),
+    [quarterEnds, tick, quarter, event.competitors.length],
+  );
+
   const highlighByQuarter = useCallback((index: number) => (quarter === index ? 'column-actual' : ''), [quarter]);
 
   return (
     <Card>
       <CardHeader title={translateEventType(event.type)} />
       <CardContent>
+        <Box paddingBottom={2}>
+          <ProgressButton
+            isStart={tick === 0}
+            isEnd={quarter === 5}
+            onClickStart={() => {}}
+            onClickNext={() => {}}
+            onClickEnd={() => {}}
+          />
+        </Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow className={currentBlobIndex === 0 ? 'disable-border-bottom' : ''}>
                 <TableCell align="center" width={60}>
                   #
                 </TableCell>
@@ -66,7 +81,7 @@ export const QuarteredEventPage = ({ event }: QuarteredEventPageProps) => {
             </TableHead>
             <TableBody>
               {event.eventRecords.map((record, index) => (
-                <TableRow key={index}>
+                <TableRow key={index} className={index === currentBlobIndex ? 'row-current' : ''}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell>{record.blob.name}</TableCell>
                   <TableCell align="center" className={highlighByQuarter(1)}>

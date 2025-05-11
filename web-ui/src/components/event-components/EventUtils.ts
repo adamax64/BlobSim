@@ -1,5 +1,8 @@
 import { QuarteredEventRecordDto } from '../../../generated';
 
+/**
+ * Determines the number of contenders eliminated in each quarter based on the field size.
+ */
 export function getEliminations(fieldSize: number): number {
   return fieldSize < 15 ? Math.floor((fieldSize - 3) / 3) : Math.floor(fieldSize / 4);
 }
@@ -23,6 +26,25 @@ export function getCurrentQuarter(quarterEnds: number[], tick: number): number {
     }
   }
   return 5;
+}
+
+/**
+ * Calculates the current competitor's index on the leaderboard and a flag indicating whether it's the end of the current quarter.
+ */
+export function getQuarterData(
+  quarterEnds: number[],
+  tick: number,
+  quarter: number,
+  fieldSize: number,
+): [number, boolean] {
+  const endOfQuarter = quarterEnds.includes(tick + 1);
+  if (quarter === 1) {
+    return [tick % fieldSize, endOfQuarter];
+  } else {
+    const currentFieldSize = fieldSize - (quarter - 1) * getEliminations(fieldSize);
+    const quarterTick = tick - quarterEnds[quarter - 2];
+    return [quarterTick % currentFieldSize, endOfQuarter];
+  }
 }
 
 function sortLambda(index: number) {

@@ -5,7 +5,7 @@ import { PageFrame } from '../common/PageFrame';
 import { PageTitleCard } from '../common/PageTitleCard';
 import { useCallback, useEffect } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
-import { QuarteredEventPage } from '../event-frames/QuarteredEventFrame';
+import { QuarteredEventPage } from '../event-components/QuarteredEventFrame';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);
