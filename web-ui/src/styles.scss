@@ -31,3 +31,29 @@
 .column-actual {
   background-color: #e9f3ff;
 }
+
+.row-current {
+  & > & thead th {
+    border-bottom-width: 0px !important;
+  }
+  td:first-child {
+    border-left-width: 1px;
+    border-left-color: black;
+  }
+  td {
+    border-top-width: 1px;
+    border-top-color: black;
+    border-bottom-width: 1px;
+    border-bottom-color: black;
+  }
+  td:last-child {
+    border-right-width: 1px;
+    border-right-color: black;
+  }
+}
+
+.disable-border-bottom {
+  th {
+    border-bottom-width: 0px;
+  }
+}
