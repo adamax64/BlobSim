@@ -1,14 +1,10 @@
-from typing import List
 from data.db.db_engine import transactional
-from data.model.action import Action
 from data.model.result import Result
-from data.persistence.action_repository import save_action
 from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import save_all_results
 from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto
-from domain.dtos.save_action_dto import SaveActionDto
 from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar
@@ -25,17 +21,7 @@ def load_competition_data(session) -> EventDto:
 
 
 @transactional
-def create_action(session, action: SaveActionDto):
-    save_action(session, Action(
-        event_id=action.event_id,
-        tick=action.tick,
-        blob_id=action.blob_id,
-        score=action.score
-    ))
-
-
-@transactional
-def save_event_results(session, event: EventDto, event_records: List[EventRecordDto]):
+def save_event_results(event: EventDto, event_records: list[EventRecordDto], session):
     results = _map_records_to_results(event_records, event.id)
     saved_results = save_all_results(session, results)
 
@@ -63,7 +49,7 @@ def save_event_results(session, event: EventDto, event_records: List[EventRecord
     conclude_calendar_event(session)
 
 
-def _map_records_to_results(event_records: List[EventRecordDto], event_id: int) -> List[Result]:
+def _map_records_to_results(event_records: list[EventRecordDto], event_id: int) -> list[Result]:
     results = []
     for i, record in enumerate(event_records):
         bonus_points = _calculate_bonus_points(record, i + 1)

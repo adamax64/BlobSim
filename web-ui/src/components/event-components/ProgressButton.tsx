@@ -1,31 +1,50 @@
-import { PlayArrowRounded, SkipNextRounded } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Fab } from '@mui/material';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
+import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 
 interface ProgressButtonProps {
   isStart: boolean;
   isEnd: boolean;
+  isEventFinished: boolean;
   onClickStart: () => void;
   onClickEnd: () => void;
   onClickNext: () => void;
 }
 
-export const ProgressButton = ({ isStart, isEnd, onClickStart, onClickNext, onClickEnd }: ProgressButtonProps) => {
+export const ProgressButton = ({
+  isStart,
+  isEnd,
+  isEventFinished,
+  onClickStart,
+  onClickNext,
+  onClickEnd,
+}: ProgressButtonProps) => {
   return (
     <>
       {isStart && (
-        <Button variant="contained" color="primary" onClick={onClickStart} startIcon={<PlayArrowRounded />}>
+        <Fab variant="extended" color="primary" onClick={onClickStart}>
+          <PlayArrowRounded />
           Start Competition
-        </Button>
+        </Fab>
       )}
       {!isStart && !isEnd && (
-        <Button variant="contained" color="primary" onClick={onClickNext} startIcon={<PlayArrowRounded />}>
+        <Fab variant="extended" color="primary" onClick={onClickNext}>
+          <PlayArrowRounded />
           Next
-        </Button>
+        </Fab>
       )}
-      {isEnd && (
-        <Button variant="contained" color="primary" onClick={onClickEnd} startIcon={<SkipNextRounded />}>
+      {isEnd && !isEventFinished && (
+        <Fab variant="extended" color="primary" onClick={onClickEnd}>
+          <SkipNextRounded />
           Conclude Event
-        </Button>
+        </Fab>
+      )}
+      {isEventFinished && (
+        <Fab variant="extended" color="primary" onClick={() => (window.location.href = '/')}>
+          <ArrowBackIosNewRoundedIcon />
+          Back to Dashboard
+        </Fab>
       )}
     </>
   );

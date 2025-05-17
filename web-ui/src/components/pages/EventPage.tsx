@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { CompetitionApi, EventDtoOutput as EventDto, EventType } from '../../../generated';
+import { CompetitionApi, EventDto, EventType } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { PageTitleCard } from '../common/PageTitleCard';

@@ -91,7 +91,7 @@ def _sort_lambda(index: int):
 
 
 def _is_eliminated(quarter: int, field_size: int, position: int) -> int:
-    eliminations = (quarter - 1) * _get_eliminations(field_size)
+    eliminations = quarter * _get_eliminations(field_size)
     threshold = field_size - eliminations
     return position > threshold
 
@@ -99,8 +99,8 @@ def _is_eliminated(quarter: int, field_size: int, position: int) -> int:
 def _get_quarter_index(quarter_ends: list[int], tick: int, field_size: int) -> int:
     quarter = _get_current_quarter(quarter_ends, tick)
     if quarter == 1:
-        return tick % field_size
+        return tick % field_size if field_size > 0 else 0
     else:
         current_field_size = field_size - (quarter - 1) * _get_eliminations(field_size)
         quarter_tick = tick - quarter_ends[quarter - 2]
-        return quarter_tick % current_field_size
+        return quarter_tick % current_field_size if current_field_size > 0 else 0
