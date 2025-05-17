@@ -5,12 +5,16 @@ import random
 from data.db.db_engine import transactional
 from data.model.event import Event
 from data.persistence.blob_reposiotry import get_all_by_ids
-from data.persistence.event_repository import get_event_by_date, get_previous_event_by_league_id_and_season, save_event
+from data.persistence.event_repository import (
+    get_event_by_date,
+    get_event_by_id as repository_get_event_by_id,
+    get_previous_event_by_league_id_and_season,
+    save_event
+)
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
 from domain.dtos.league_dto import LeagueDto
-from domain.event_record_service import get_event_records
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.sim_time_utils import get_season
@@ -45,7 +49,30 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
     return EventDto(
         id=event.id,
         league=LeagueDto(id=event.league_id, name=event.league.name, field_size=len(competitors), level=event.league.level),
-        event_records=get_event_records(actions, competitors, event.type),
+        actions=actions,
+        competitors=competitors,
+        season=event.season,
+        round=event.round,
+        type=event.type
+    )
+
+
+@transactional
+def get_event_by_id(event_id: int, session: Session) -> EventDto:
+    """ Get event by id """
+    event = repository_get_event_by_id(session, event_id)
+    if event is None:
+        raise NoCurrentEventException()
+    actions = [ActionDto(
+        blob_id=action.blob_id,
+        tick=action.tick,
+        score=action.score
+    ) for action in event.actions]
+
+    competitors = _get_competitors(session, event, False)
+    return EventDto(
+        id=event.id,
+        league=LeagueDto(id=event.league_id, name=event.league.name, field_size=len(competitors), level=event.league.level),
         actions=actions,
         competitors=competitors,
         season=event.season,

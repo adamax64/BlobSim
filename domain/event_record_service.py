@@ -4,7 +4,7 @@ from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, ScoreDto
 
 
-def get_event_records(actions: ActionDto, competitors: BlobCompetitorDto, event_type: EventTypeDto) -> list[EventRecordDto]:
+def get_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto], event_type: EventTypeDto) -> list[EventRecordDto]:
     if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING:
         return get_quartered_event_records(actions, competitors, event_type)
     else:
@@ -12,8 +12,8 @@ def get_event_records(actions: ActionDto, competitors: BlobCompetitorDto, event_
 
 
 def get_quartered_event_records(
-    actions: ActionDto,
-    competitors: BlobCompetitorDto,
+    actions: list[ActionDto],
+    competitors: list[BlobCompetitorDto],
     event_type: EventTypeDto
 ) -> list[QuarteredEventRecordDto]:
     quarter_ends = _get_quarter_ends(len(competitors), event_type)
@@ -22,20 +22,39 @@ def get_quartered_event_records(
     quarter = 1
     for action in actions:
         quarter = _get_current_quarter(quarter_ends, action.tick)
-        print(quarter)
         score = records[action.blob_id].quarters[quarter - 1]
+
+        if action.tick == len(actions) - 1 and score.score is not None and score.score >= action.score:
+            score.latest_score = action.score
+
         if score.score is None or score.score < action.score:
             score.score = action.score
+            if action.tick == len(actions) - 1:
+                score.personal_best = True
+
+    if len(actions) > 0:
+        current_quarter = _get_current_quarter(quarter_ends, len(actions))
+
+        latest_action = actions[-1]
+        current_record = records[latest_action.blob_id]
+        current_record.current = True
 
     result_records = list(records.values())
 
     if len(actions) > 0:
         current_quarter = _get_current_quarter(quarter_ends, len(actions))
+
         for q in range(current_quarter - 1):
             result_records.sort(key=_sort_lambda(q), reverse=True)
             result_records[0].quarters[q].best = True
+            for index, record in enumerate(result_records):
+                record.eliminated = _is_eliminated(q + 1, len(competitors), index + 1)
         if current_quarter == quarter:
             result_records.sort(key=_sort_lambda(quarter - 1), reverse=True)
+
+    next_index = _get_quarter_index(quarter_ends, len(actions), len(competitors))
+    if len(result_records) > next_index >= 0:
+        result_records[next_index].next = True
 
     return result_records
 
@@ -69,3 +88,19 @@ def _sort_lambda(index: int):
                     x.quarters[index].score is not None,
                     x.quarters[index].score if x.quarters[index] is not None else -1
                 )
+
+
+def _is_eliminated(quarter: int, field_size: int, position: int) -> int:
+    eliminations = (quarter - 1) * _get_eliminations(field_size)
+    threshold = field_size - eliminations
+    return position > threshold
+
+
+def _get_quarter_index(quarter_ends: list[int], tick: int, field_size: int) -> int:
+    quarter = _get_current_quarter(quarter_ends, tick)
+    if quarter == 1:
+        return tick % field_size
+    else:
+        current_field_size = field_size - (quarter - 1) * _get_eliminations(field_size)
+        quarter_tick = tick - quarter_ends[quarter - 2]
+        return quarter_tick % current_field_size
