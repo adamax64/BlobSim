@@ -1,6 +1,6 @@
 export enum BlobState {
   AT_RISK = 'row-at-risk',
-  DEAD = 'row-dead',
+  DEAD = 'row-inactive',
   RETIRED = 'row-retired',
   FIRST = 'row-gold',
   SECOND = 'row-silver',
@@ -12,7 +12,7 @@ export function getClassNameForBlobState(state: BlobState): string {
     case BlobState.AT_RISK:
       return 'row-at-risk';
     case BlobState.DEAD:
-      return 'row-dead';
+      return 'row-inactive';
     case BlobState.RETIRED:
       return 'row-retired';
     case BlobState.FIRST:

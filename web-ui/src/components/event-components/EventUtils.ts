@@ -1,5 +1,3 @@
-import { QuarteredEventRecordDto } from '../../../generated';
-
 /**
  * Determines the number of contenders eliminated in each quarter based on the field size.
  */
@@ -26,24 +24,6 @@ export function getCurrentQuarter(quarterEnds: number[], tick: number): number {
     }
   }
   return 5;
-}
-
-/**
- * Calculates the current competitor's index on the leaderboard
- */
-export function getBlobIndex(quarterEnds: number[], tick: number, quarter: number, fieldSize: number): number {
-  if (quarter === 1) {
-    return tick % fieldSize;
-  } else {
-    const currentFieldSize = fieldSize - (quarter - 1) * getEliminations(fieldSize);
-    const quarterTick = tick - quarterEnds[quarter - 2];
-    return quarterTick % currentFieldSize;
-  }
-}
-
-export function sortLambda(index: number) {
-  return (a: QuarteredEventRecordDto, b: QuarteredEventRecordDto) =>
-    (a.quarters[index].score ?? -1 > (b.quarters[index].score ?? -1)) ? -1 : 1;
 }
 
 export function roundToThreeDecimals(value?: number | null): number | undefined {

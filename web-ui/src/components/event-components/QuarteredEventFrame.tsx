@@ -19,10 +19,11 @@ import {
   EventRecordsApi,
   EventType,
   QuarteredEventRecordDto as EventRecordDto,
+  CompetitionApi,
 } from '../../../generated';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getCurrentQuarter, getBlobIndex, getQuarterEnds, roundToThreeDecimals } from './EventUtils';
+import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './EventUtils';
 import { ProgressButton } from './ProgressButton';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
@@ -47,6 +48,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
 
   const actionApi = new ActionsApi(defaultConfig);
   const eventRecordsApi = new EventRecordsApi(defaultConfig);
+  const competitionApi = new CompetitionApi(defaultConfig);
 
   const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error>({
     mutationFn: () => eventRecordsApi.getByEventEventRecordsGet({ eventId: event.id }),
@@ -63,6 +65,16 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
     onSuccess: (_) => {
       setTick((prev) => prev + 1);
       getEventRecords();
+    },
+  });
+
+  const { mutate: finishEvent } = useMutation<void, Error>({
+    mutationFn: () =>
+      competitionApi.saveQuarteredEventResultsCompetitionQuarteredEventResultsPost({
+        bodySaveQuarteredEventResultsCompetitionQuarteredEventResultsPost: { event, eventRecords: eventRecords ?? [] },
+      }),
+    onSuccess: () => {
+      setIsEventFinished(true);
     },
   });
 
@@ -90,6 +102,18 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
       createAction({ contender: eventRecords[nextBlobIndex].blob });
     }
   }, [createAction, eventRecords, nextBlobIndex]);
+
+  // Add key listener for spacebar to trigger progressEvent
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' || e.key === ' ') {
+        e.preventDefault();
+        progressEvent();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [progressEvent]);
 
   const renderCellContent = useCallback(
     (record: EventRecordDto, quarterIndex: number) => {
@@ -123,20 +147,46 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
         </Box>
       );
     },
-    [quarter, isPerforming],
+    [quarter, isPerforming, isEventFinished],
+  );
+
+  const getRowClass = useCallback(
+    (record: EventRecordDto, index: number) => {
+      if (isEventFinished) {
+        switch (index) {
+          case 0:
+            return 'row-gold';
+          case 1:
+            return 'row-silver';
+          case 2:
+            return 'row-bronze';
+        }
+      } else {
+        if (quarter <= 4 && record.eliminated) {
+          return 'row-inactive';
+        }
+        return index === currentBlobIndex
+          ? 'row-current'
+          : index === currentBlobIndex - 1
+            ? 'disable-border-bottom'
+            : '';
+      }
+    },
+    [currentBlobIndex, isEventFinished, quarter],
   );
 
   return (
     <Card>
       <CardHeader title={translateEventType(event.type)} />
       <CardContent>
-        <Box paddingBottom={2}>
+        <Box position="fixed" right={0} bottom={0} padding={2}>
           <ProgressButton
             isStart={tick === 0}
             isEnd={quarter > 4}
+            isEventFinished={isEventFinished}
             onClickStart={progressEvent}
             onClickNext={progressEvent}
-            onClickEnd={() => setIsEventFinished(true)}
+            onClickEnd={finishEvent}
           />
         </Box>
         <TableContainer component={Paper}>
@@ -163,16 +213,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
             </TableHead>
             <TableBody>
               {eventRecords?.map((record, index) => (
-                <TableRow
-                  key={index}
-                  className={
-                    index === currentBlobIndex
-                      ? 'row-current'
-                      : index === currentBlobIndex - 1
-                        ? 'disable-border-bottom'
-                        : ''
-                  }
-                >
+                <TableRow key={index} className={getRowClass(record, index)}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell>{record.blob.name}</TableCell>
                   <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
