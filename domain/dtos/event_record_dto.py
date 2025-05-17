@@ -8,7 +8,6 @@ from dataclasses import field
 @dataclass
 class ScoreDto():
     score: float | None = None
-    scoring_progress: int | None = None
     best: bool = False
     personal_best: bool = False
     latest_score: int | None = None
@@ -22,6 +21,9 @@ class EventRecordDto():
 @dataclass
 class QuarteredEventRecordDto(EventRecordDto):
     quarters: List[ScoreDto]
+    eliminated: bool = False
+    current: bool = False
+    next: bool = False
 
 
 @dataclass

@@ -29,25 +29,26 @@ export function getCurrentQuarter(quarterEnds: number[], tick: number): number {
 }
 
 /**
- * Calculates the current competitor's index on the leaderboard and a flag indicating whether it's the end of the current quarter.
+ * Calculates the current competitor's index on the leaderboard
  */
-export function getQuarterData(
-  quarterEnds: number[],
-  tick: number,
-  quarter: number,
-  fieldSize: number,
-): [number, boolean] {
-  const endOfQuarter = quarterEnds.includes(tick + 1);
+export function getBlobIndex(quarterEnds: number[], tick: number, quarter: number, fieldSize: number): number {
   if (quarter === 1) {
-    return [tick % fieldSize, endOfQuarter];
+    return tick % fieldSize;
   } else {
     const currentFieldSize = fieldSize - (quarter - 1) * getEliminations(fieldSize);
     const quarterTick = tick - quarterEnds[quarter - 2];
-    return [quarterTick % currentFieldSize, endOfQuarter];
+    return quarterTick % currentFieldSize;
   }
 }
 
-function sortLambda(index: number) {
+export function sortLambda(index: number) {
   return (a: QuarteredEventRecordDto, b: QuarteredEventRecordDto) =>
     (a.quarters[index].score ?? -1 > (b.quarters[index].score ?? -1)) ? -1 : 1;
+}
+
+export function roundToThreeDecimals(value?: number | null): number | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  return Math.round(value * 1000) / 1000;
 }

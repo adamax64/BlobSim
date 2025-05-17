@@ -75,19 +75,15 @@ def show_quartered_high_jump_view(live: Live, event: EventDto, tick: int, field_
 
             current_score = event_records[index].quarters[quarter - 1]
 
-            current_score.scoring_progress = 1
             live.update(render('Blob is currently scoring', current_blob_id), refresh=True)
             time.sleep(0.5)
 
-            current_score.scoring_progress = 2
             live.update(render('Blob is currently scoring', current_blob_id), refresh=True)
             time.sleep(0.5)
 
-            current_score.scoring_progress = 3
             live.update(render('Blob is currently scoring', current_blob_id), refresh=True)
             time.sleep(0.5)
 
-            current_score.scoring_progress = None
             score = current_blob.strength * random.random()
             create_action(action=SaveActionDto(event.id, tick, current_blob.id, score))
             _update_score_and_personal_best(current_score, score)

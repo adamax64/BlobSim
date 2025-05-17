@@ -5,6 +5,11 @@ from data.model.event import Event
 
 
 @transactional
+def get_event_by_id(session: Session, event_id: int) -> Event | None:
+    return session.query(Event).filter(Event.id == event_id).first()
+
+
+@transactional
 def get_event_by_date(session: Session, date: int) -> Event | None:
     return session.query(Event).filter(Event.date == date).first()
 

@@ -53,7 +53,20 @@
 }
 
 .disable-border-bottom {
-  th {
+  th,
+  td {
     border-bottom-width: 0px;
   }
+}
+
+.cell-best {
+  font-weight: bold;
+}
+
+.cell-personal-best {
+  color: #00aa00;
+}
+
+.cell-not-improved {
+  color: #ff9100;
 }

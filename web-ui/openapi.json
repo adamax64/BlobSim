@@ -384,7 +384,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventDto-Output"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               }
             }
@@ -454,6 +454,123 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actions/create": {
+      "post": {
+        "tags": [
+          "actions"
+        ],
+        "summary": "Create Action",
+        "description": "Generate score for contender and save the action for given event.",
+        "operationId": "create_action_actions_create_post",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "tick",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Tick"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlobCompetitorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "title": "Response Create Action Actions Create Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event-records": {
+      "get": {
+        "tags": [
+          "event-records"
+        ],
+        "summary": "Get By Event",
+        "description": "Get event records by actions.",
+        "operationId": "get_by_event_event_records_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/QuarteredEventRecordDto"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RaceEventRecordDto"
+                      }
+                    ]
+                  },
+                  "title": "Response Get By Event Event Records Get"
+                }
               }
             }
           },
@@ -602,7 +719,7 @@
       "Body_save_quartered_event_results_competition_quartered_event_results_post": {
         "properties": {
           "event": {
-            "$ref": "#/components/schemas/EventDto-Input"
+            "$ref": "#/components/schemas/EventDto"
           },
           "event_records": {
             "items": {
@@ -619,7 +736,7 @@
         ],
         "title": "Body_save_quartered_event_results_competition_quartered_event_results_post"
       },
-      "EventDto-Input": {
+      "EventDto": {
         "properties": {
           "id": {
             "type": "integer",
@@ -638,20 +755,6 @@
             },
             "type": "array",
             "title": "Actions"
-          },
-          "event_records": {
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/QuarteredEventRecordDto"
-                },
-                {
-                  "$ref": "#/components/schemas/RaceEventRecordDto"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Event Records"
           },
           "league": {
             "$ref": "#/components/schemas/LeagueDto"
@@ -673,69 +776,6 @@
           "id",
           "competitors",
           "actions",
-          "event_records",
-          "league",
-          "season",
-          "round",
-          "type"
-        ],
-        "title": "EventDto"
-      },
-      "EventDto-Output": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "competitors": {
-            "items": {
-              "$ref": "#/components/schemas/BlobCompetitorDto"
-            },
-            "type": "array",
-            "title": "Competitors"
-          },
-          "actions": {
-            "items": {
-              "$ref": "#/components/schemas/ActionDto"
-            },
-            "type": "array",
-            "title": "Actions"
-          },
-          "event_records": {
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/QuarteredEventRecordDto"
-                },
-                {
-                  "$ref": "#/components/schemas/RaceEventRecordDto"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Event Records"
-          },
-          "league": {
-            "$ref": "#/components/schemas/LeagueDto"
-          },
-          "season": {
-            "type": "integer",
-            "title": "Season"
-          },
-          "round": {
-            "type": "integer",
-            "title": "Round"
-          },
-          "type": {
-            "$ref": "#/components/schemas/EventType"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "competitors",
-          "actions",
-          "event_records",
           "league",
           "season",
           "round",
@@ -898,6 +938,21 @@
             },
             "type": "array",
             "title": "Quarters"
+          },
+          "eliminated": {
+            "type": "boolean",
+            "title": "Eliminated",
+            "default": false
+          },
+          "current": {
+            "type": "boolean",
+            "title": "Current",
+            "default": false
+          },
+          "next": {
+            "type": "boolean",
+            "title": "Next",
+            "default": false
           }
         },
         "type": "object",
@@ -978,17 +1033,6 @@
               }
             ],
             "title": "Score"
-          },
-          "scoring_progress": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Scoring Progress"
           },
           "best": {
             "type": "boolean",

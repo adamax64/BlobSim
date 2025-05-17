@@ -6,8 +6,6 @@ from domain.dtos.event_dto import EventTypeDto
 
 
 def display_score(scoreDto: ScoreDto, is_eliminated: bool = False) -> str:
-    if scoreDto.scoring_progress is not None:
-        return '.' * scoreDto.scoring_progress
     if scoreDto.score is None:
         return ''
     if scoreDto.latest_score is not None:
