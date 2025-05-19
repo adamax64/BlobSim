@@ -33,6 +33,12 @@ def get_most_recent_real_league_result_of_blob(blob_id: int, session: Session) -
 
 
 @transactional
+def get_results_of_event(event_id: int, session: Session) -> List[Result]:
+    results = session.query(Result).filter(Result.event_id == event_id).order_by(Result.position).all()
+    return results
+
+
+@transactional
 def save_all_results(session: Session, results: List[Result]) -> List[Result]:
     session.add_all(results)
     session.commit()

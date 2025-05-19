@@ -16,13 +16,15 @@ function getNewsText(news: News) {
     case NewsType.Event:
       return 'There is a championship event today!';
     case NewsType.BlobCreatedAndNamed:
-      return `A new blob called ${news.additionalInfo} has been created!`;
+      return `A new blob called ${news.blobInfo} has been created!`;
     case NewsType.BlobCreated:
       return 'A new blob has been created!';
     case NewsType.SeasonStart:
       return 'A new season has started!';
     case NewsType.Continue:
       return 'Nothing special happening today';
+    case NewsType.EventEnded:
+      return `${news.eventSummary?.eventName} has ended. The top 3 are: ${news.eventSummary?.winner}, ${news.eventSummary?.runnerUp}, and ${news.eventSummary?.thirdPlace}.`;
   }
 }
 
@@ -108,7 +110,7 @@ export function DashboardPage() {
             Create new Blob
           </Button>
         )}
-        {newsTypes.includes(NewsType.Continue) && (
+        {(newsTypes.includes(NewsType.Continue) || newsTypes.includes(NewsType.EventEnded)) && (
           <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
             Proceed to next day
           </Button>
