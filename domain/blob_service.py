@@ -1,7 +1,6 @@
 from logging import warning
 import random
 from sqlalchemy.exc import IntegrityError
-from typing import List
 
 from data.db.db_engine import transactional
 from data.model.blob import Blob
@@ -40,10 +39,10 @@ from domain.utils.sim_time_utils import format_sim_time_short, get_season
 @transactional
 def get_all_blobs(
     session, name_search: str = None, show_dead: bool = False
-) -> List[BlobStatsDto]:
+) -> list[BlobStatsDto]:
     """Get all living blobs and return them as a list of BlobStatsDto."""
 
-    blobs: List[Blob] = get_all_blobs_by_name(
+    blobs: list[Blob] = get_all_blobs_by_name(
         session=session, name_search=name_search, show_dead=show_dead
     )
 
@@ -114,8 +113,7 @@ def update_blobs(session):
     current_time = get_sim_time(session)
 
     modified_blobs = []
-    total_blobs = len(blobs)
-    for index, blob in enumerate(blobs):
+    for blob in blobs:
         multiplyer = 0
         if blob.league_id == current_event_league_id:
             multiplyer = COMPETITION_EFFECT
@@ -133,8 +131,6 @@ def update_blobs(session):
         _terminate_blob(blob, current_time)
 
         modified_blobs.append(blob)
-
-        yield int((index + 1) / total_blobs * 100)
 
     save_all_blobs(session, modified_blobs)
 

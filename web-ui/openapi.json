@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "FastAPI",
+    "title": "Blob Championship System API",
     "version": "0.1.0"
   },
   "paths": {
@@ -20,6 +20,26 @@
                 "schema": {
                   "$ref": "#/components/schemas/SimTime"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sim_data/simulate": {
+      "post": {
+        "tags": [
+          "sim_data"
+        ],
+        "summary": "Progress",
+        "description": "Simulate the progress of the simulation and update blobs.",
+        "operationId": "progress_sim_data_simulate_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }
@@ -398,6 +418,7 @@
           "competition"
         ],
         "summary": "Save Quartered Event Results",
+        "description": "Save event results for quartered events.",
         "operationId": "save_quartered_event_results_competition_quartered_event_results_post",
         "requestBody": {
           "content": {

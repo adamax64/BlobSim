@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from fastapi import APIRouter, HTTPException
 
 from domain import sim_data_service
+from domain.blob_service import update_blobs
 from domain.utils.constants import CYCLES_PER_EON, CYCLES_PER_EPOCH, CYCLES_PER_SEASON, EPOCHS_PER_SEASON
 
 
@@ -29,3 +30,23 @@ async def get_sim_time() -> SimTime:
     except Exception as e:
         print(e.with_traceback(None))
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
+
+
+@router.post("/simulate")
+def progress():
+    """
+    Simulate the progress of the simulation and update blobs.
+    """
+    try:
+        update_blobs()
+    except Exception as e:
+        print(e.with_traceback(None))
+        raise HTTPException(status_code=500, detail=f"Error while updating blobs: {e.with_traceback(None)}")
+
+    try:
+        sim_data_service.progress_simulation()
+    except Exception as e:
+        print(e.with_traceback(None))
+        raise HTTPException(status_code=500, detail=f"Error while updating simulation progress: {e.with_traceback(None)}")
+
+    return

@@ -15,6 +15,7 @@ from controllers import (
 from domain.startup_service import startup
 
 app = FastAPI()
+app.title = "Blob Championship System API"
 
 origins = [
     "http://localhost",
