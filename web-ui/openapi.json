@@ -18,7 +18,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SimTime"
+                  "$ref": "#/components/schemas/SimTimeDto"
                 }
               }
             }
@@ -568,6 +568,32 @@
           }
         }
       }
+    },
+    "/calendar": {
+      "get": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Get Season Calendar",
+        "description": "Get the season calendar.",
+        "operationId": "get_season_calendar_calendar_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CalendarDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get Season Calendar Calendar Get"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -717,6 +743,42 @@
           "event_records"
         ],
         "title": "Body_save_quartered_event_results_competition_quartered_event_results_post"
+      },
+      "CalendarDto": {
+        "properties": {
+          "date": {
+            "$ref": "#/components/schemas/SimTimeDto"
+          },
+          "league_name": {
+            "type": "string",
+            "title": "League Name"
+          },
+          "is_concluded": {
+            "type": "boolean",
+            "title": "Is Concluded"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "is_next": {
+            "type": "boolean",
+            "title": "Is Next"
+          },
+          "is_current": {
+            "type": "boolean",
+            "title": "Is Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "league_name",
+          "is_concluded",
+          "event_type",
+          "is_next",
+          "is_current"
+        ],
+        "title": "CalendarDto"
       },
       "EventDto": {
         "properties": {
@@ -1045,7 +1107,7 @@
         "type": "object",
         "title": "ScoreDto"
       },
-      "SimTime": {
+      "SimTimeDto": {
         "properties": {
           "eon": {
             "type": "integer",
@@ -1071,7 +1133,7 @@
           "epoch",
           "cycle"
         ],
-        "title": "SimTime"
+        "title": "SimTimeDto"
       },
       "StandingsDTO": {
         "properties": {

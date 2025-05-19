@@ -1,8 +1,22 @@
+from domain.dtos.sim_time_dto import SimTimeDto
 from domain.utils.constants import (
+    CYCLES_PER_EON,
     CYCLES_PER_EPOCH,
     CYCLES_PER_SEASON,
     EPOCHS_PER_SEASON,
 )
+
+
+def convert_to_sim_time(sim_time: int) -> SimTimeDto:
+    """
+    Convert simulation time to a human-readable format.
+    """
+    return SimTimeDto(
+            eon=int(sim_time / CYCLES_PER_EON),
+            season=int(sim_time / CYCLES_PER_SEASON + 1),
+            epoch=int(sim_time / CYCLES_PER_EPOCH) % EPOCHS_PER_SEASON,
+            cycle=sim_time % CYCLES_PER_EPOCH
+        )
 
 
 def get_season(time: int) -> int:
