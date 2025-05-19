@@ -1,13 +1,15 @@
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import defaultConfig from '../../default-config';
-import { GeneralInfosApi, News, NewsType } from '../../../generated';
+import { GeneralInfosApi, News, NewsType, SimDataApi } from '../../../generated';
 import { useEffect, useMemo, useState } from 'react';
 import { AddCircle, SkipNext, Stadium } from '@mui/icons-material';
 import { PageTitleCard } from '../common/PageTitleCard';
 import { PageFrame } from '../common/PageFrame';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { SimTimeDisplay } from '../common/SimTimeDisplay';
+import { useSimTime } from '../../context/SimTimeContext';
+import { LoadingOverlay } from '../common/LoadingOverlay';
 
 function getNewsText(news: News) {
   switch (news.newsType) {
@@ -26,10 +28,25 @@ function getNewsText(news: News) {
 
 export function DashboardPage() {
   const [open, setOpen] = useState(false);
+  const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
+
+  const { refreshSimTime, loading: simTimeLoading } = useSimTime();
 
   const generalApi = new GeneralInfosApi(defaultConfig);
   const { data: news, mutate: fetchNews } = useMutation<News[], Error>({
     mutationFn: () => generalApi.getNewsGeneralInfosNewsGet(),
+    onSuccess: () => {
+      setLoadingOverlayVisible(false);
+    },
+  });
+
+  const simDataApi = new SimDataApi(defaultConfig);
+  const { mutate: progressSimulation } = useMutation({
+    mutationFn: () => simDataApi.progressSimDataSimulatePost(),
+    onSuccess: () => {
+      fetchNews();
+      refreshSimTime();
+    },
   });
 
   useEffect(() => {
@@ -44,6 +61,11 @@ export function DashboardPage() {
       fetchNews();
     }
   }
+
+  const handleProgressClick = () => {
+    setLoadingOverlayVisible(true);
+    progressSimulation();
+  };
 
   return (
     <PageFrame>
@@ -87,12 +109,13 @@ export function DashboardPage() {
           </Button>
         )}
         {newsTypes.includes(NewsType.Continue) && (
-          <Button variant="contained" color="primary" endIcon={<SkipNext />}>
+          <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
             Proceed to next day
           </Button>
         )}
       </Box>
       <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
+      {(loadingOverlayVisible || simTimeLoading) && <LoadingOverlay />}
     </PageFrame>
   );
 }
