@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from controllers import (
     action_router,
     blobs_router,
+    calendar_router,
     competition_router,
     event_record_router,
     factory_router,
@@ -44,3 +45,4 @@ app.include_router(standings_router.router)
 app.include_router(competition_router.router)
 app.include_router(action_router.router)
 app.include_router(event_record_router.router)
+app.include_router(calendar_router.router)

@@ -8,13 +8,14 @@ from data.persistence.calendar_repository import (
     save_all_calendar_records, save_calendar_event
 )
 from data.persistence.league_repository import get_all_real_leagues
+from data.persistence.sim_data_repository import get_sim_data
 from domain.dtos.calendar_dto import CalendarDto
 from domain.utils.event_utils import pick_random_event_type
 from domain.utils.league_utils import (
     HALF_SEASON, INACTIVE_SEASON, LONG_SEASON, MAXIMAL_SEASON, MEDIUM_SEASON,
     MINIMAL_SEASON, SHORT_SEASON, get_epoch_cycle_by_level, get_number_of_rounds_by_size
 )
-from domain.utils.sim_time_utils import get_sim_time_from
+from domain.utils.sim_time_utils import convert_to_sim_time, get_sim_time_from
 
 
 @transactional
@@ -27,9 +28,24 @@ def conclude_calendar_event(session: Session):
 
 
 @transactional
-def get_season_calendar(session: Session) -> CalendarDto:
+def get_season_calendar(session: Session) -> list[CalendarDto]:
     calendar = get_calendar(session).values()
-    return [CalendarDto(event.date, event.league.name, event.concluded, event.event_type) for event in calendar]
+    sim_time = get_sim_data(session).sim_time
+    result = []
+    prev_event_concluded = True
+    for event in calendar:
+        is_next = prev_event_concluded and not event.concluded
+        is_current = event.date == sim_time
+        result.append(CalendarDto(
+            convert_to_sim_time(event.date),
+            event.league.name,
+            event.concluded,
+            event.event_type,
+            is_next,
+            is_current
+        ))
+        prev_event_concluded = event.concluded
+    return result
 
 
 @transactional
