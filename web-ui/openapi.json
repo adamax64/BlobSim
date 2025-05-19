@@ -765,6 +765,34 @@
         ],
         "title": "EventDto"
       },
+      "EventSummaryDTO": {
+        "properties": {
+          "event_name": {
+            "type": "string",
+            "title": "Event Name"
+          },
+          "winner": {
+            "type": "string",
+            "title": "Winner"
+          },
+          "runner_up": {
+            "type": "string",
+            "title": "Runner Up"
+          },
+          "third_place": {
+            "type": "string",
+            "title": "Third Place"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_name",
+          "winner",
+          "runner_up",
+          "third_place"
+        ],
+        "title": "EventSummaryDTO"
+      },
       "EventType": {
         "type": "string",
         "enum": [
@@ -887,9 +915,12 @@
           "news_type": {
             "$ref": "#/components/schemas/NewsType"
           },
-          "additional_info": {
+          "blob_info": {
             "type": "string",
-            "title": "Additional Info"
+            "title": "Blob Info"
+          },
+          "event_summary": {
+            "$ref": "#/components/schemas/EventSummaryDTO"
           }
         },
         "type": "object",
@@ -902,6 +933,7 @@
         "type": "string",
         "enum": [
           "EVENT",
+          "EVENT_ENDED",
           "BLOB_CREATED_AND_NAMED",
           "BLOB_CREATED",
           "SEASON_START",
