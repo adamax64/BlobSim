@@ -1,4 +1,4 @@
-import { Fab } from '@mui/material';
+import { Box, Fab } from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
@@ -21,7 +21,7 @@ export const ProgressButton = ({
   onClickEnd,
 }: ProgressButtonProps) => {
   return (
-    <>
+    <Box position="fixed" right={0} bottom={0} padding={2}>
       {isStart && (
         <Fab variant="extended" color="primary" onClick={onClickStart}>
           <PlayArrowRounded />
@@ -46,6 +46,6 @@ export const ProgressButton = ({
           Back to Dashboard
         </Fab>
       )}
-    </>
+    </Box>
   );
 };

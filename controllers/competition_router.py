@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.competition_service import (
     load_competition_data,
     save_event_results as service_save_event_results,
@@ -32,6 +33,8 @@ async def save_quartered_event_results(event: EventDto, event_records: list[Quar
 
     try:
         service_save_event_results(event, event_records)
+        end_season_if_over(event.league, event.season)
+        end_eon_if_over(event.season, event.league)
     except Exception as e:
         print(e.with_traceback(None))
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
