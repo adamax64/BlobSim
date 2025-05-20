@@ -179,16 +179,14 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
     <Card>
       <CardHeader title={translateEventType(event.type)} />
       <CardContent>
-        <Box position="fixed" right={0} bottom={0} padding={2}>
-          <ProgressButton
-            isStart={tick === 0}
-            isEnd={quarter > 4}
-            isEventFinished={isEventFinished}
-            onClickStart={progressEvent}
-            onClickNext={progressEvent}
-            onClickEnd={finishEvent}
-          />
-        </Box>
+        <ProgressButton
+          isStart={tick === 0}
+          isEnd={quarter > 4}
+          isEventFinished={isEventFinished}
+          onClickStart={progressEvent}
+          onClickNext={progressEvent}
+          onClickEnd={finishEvent}
+        />
         <TableContainer component={Paper}>
           <Table>
             <TableHead>

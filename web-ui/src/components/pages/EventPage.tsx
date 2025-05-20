@@ -6,6 +6,7 @@ import { PageTitleCard } from '../common/PageTitleCard';
 import { useCallback, useEffect } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
+import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);
@@ -48,7 +49,7 @@ export const EventPage = () => {
       case EventType.QuarteredOneShotScoring:
         return <QuarteredEventFrame event={event} />;
       case EventType.EnduranceRace:
-        return <Card>Endurance Race (not yet implemented)</Card>;
+        return <EnduranceRaceEventFrame event={event} />;
     }
   }, [loadingEvent, event]);
 
