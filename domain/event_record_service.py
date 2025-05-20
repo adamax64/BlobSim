@@ -1,17 +1,18 @@
+from collections import defaultdict
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventTypeDto
-from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, ScoreDto
+from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto, ScoreDto
 
 
 def get_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto], event_type: EventTypeDto) -> list[EventRecordDto]:
     if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING:
-        return get_quartered_event_records(actions, competitors, event_type)
+        return _get_quartered_event_records(actions, competitors, event_type)
     else:
-        return []  # TODO: Implement other event types
+        return _get_race_event_records(actions, competitors)
 
 
-def get_quartered_event_records(
+def _get_quartered_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
     event_type: EventTypeDto
@@ -45,12 +46,12 @@ def get_quartered_event_records(
         current_quarter = _get_current_quarter(quarter_ends, len(actions))
 
         for q in range(current_quarter - 1):
-            result_records.sort(key=_sort_lambda(q), reverse=True)
+            result_records.sort(key=_quartered_sort_lambda(q), reverse=True)
             result_records[0].quarters[q].best = True
             for index, record in enumerate(result_records):
                 record.eliminated = _is_eliminated(q + 1, len(competitors), index + 1)
         if current_quarter == quarter:
-            result_records.sort(key=_sort_lambda(quarter - 1), reverse=True)
+            result_records.sort(key=_quartered_sort_lambda(quarter - 1), reverse=True)
 
     next_index = _get_quarter_index(quarter_ends, len(actions), len(competitors))
     if len(result_records) > next_index >= 0:
@@ -83,7 +84,7 @@ def _get_eliminations(field_size: int) -> int:
     return int((field_size - 3) / 3) if field_size < 15 else field_size / 4
 
 
-def _sort_lambda(index: int):
+def _quartered_sort_lambda(index: int):
     return lambda x: (
                     x.quarters[index].score is not None,
                     x.quarters[index].score if x.quarters[index] is not None else -1
@@ -104,3 +105,43 @@ def _get_quarter_index(quarter_ends: list[int], tick: int, field_size: int) -> i
         current_field_size = field_size - (quarter - 1) * _get_eliminations(field_size)
         quarter_tick = tick - quarter_ends[quarter - 2]
         return quarter_tick % current_field_size if current_field_size > 0 else 0
+
+
+def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto]) -> list[RaceEventRecordDto]:
+    actions_by_tick = defaultdict(list[ActionDto])
+    for action in actions:
+        if action.tick not in actions_by_tick:
+            actions_by_tick[action.tick] = []
+        actions_by_tick[action.tick].append(action)
+
+    competitors = {competitor.id: RaceEventRecordDto(blob=competitor) for competitor in competitors}
+
+    for tick in actions_by_tick.keys():
+        actions = actions_by_tick[tick]
+        for action in actions:
+            competitor = competitors[action.blob_id]
+            previous_distance = competitor.distance_records[-1] if len(competitor.distance_records) > 0 else 0
+            competitor.distance_records.append(previous_distance + action.score)
+            _calculate_time_if_crossed_detection_point(competitor, tick)
+
+    sorted_competitors = sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
+    for i, competitor in enumerate(sorted_competitors):
+        competitor.previous_position = i + 1
+    return sorted_competitors
+
+
+def _calculate_time_if_crossed_detection_point(competitor: RaceEventRecordDto, tick: int):
+    distance_n_1 = competitor.distance_records[-2] if len(competitor.distance_records) > 1 else 0
+    distance_n = competitor.distance_records[-1]
+    detection_points = int(distance_n) - int(distance_n_1)
+    if detection_points == 0:
+        return
+
+    for dp in range(int(distance_n_1) + 1, int(distance_n) + 1):
+        velocity_n = distance_n - distance_n_1
+        distance_to_dp = dp - distance_n_1
+        competitor.time_records.append(tick + distance_to_dp / velocity_n)
+
+
+def _race_sort_lambda():
+    return lambda x: x.distance_records[-1] if len(x.distance_records) > 0 else 0
