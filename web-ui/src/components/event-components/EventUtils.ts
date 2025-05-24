@@ -32,3 +32,20 @@ export function roundToThreeDecimals(value?: number | null): number | undefined 
   }
   return Math.round(value * 1000) / 1000;
 }
+
+const TINY_FIELD = 5;
+const SMALL_FIELD = 8;
+const NEAR_HALF_FIELD = 11;
+const MEDIUM_FIELD = 14;
+const LARGE_FIELD = 18;
+const HUGE_FIELD = 22;
+
+export function getRaceDurationBySize(fieldSize: number): number {
+  if (fieldSize >= HUGE_FIELD) return 120;
+  if (fieldSize >= LARGE_FIELD) return 110;
+  if (fieldSize >= MEDIUM_FIELD) return 100;
+  if (fieldSize >= NEAR_HALF_FIELD) return 90;
+  if (fieldSize >= SMALL_FIELD) return 75;
+  if (fieldSize >= TINY_FIELD) return 60;
+  return 0;
+}

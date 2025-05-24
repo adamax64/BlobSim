@@ -123,7 +123,7 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
             competitor = competitors[action.blob_id]
             previous_distance = competitor.distance_records[-1] if len(competitor.distance_records) > 0 else 0
             competitor.distance_records.append(previous_distance + action.score)
-        if tick == previous_distance:
+        if tick == previous_tick:
             sorted_competitors = sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
             for i, competitor in enumerate(sorted_competitors):
                 competitor.previous_position = i + 1
