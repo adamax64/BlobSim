@@ -73,6 +73,13 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
     [standings.length],
   );
 
+  const getPositionClassName = (position: number): string => {
+    if (position === 1) return ' text-gold';
+    if (position === 2) return ' text-silver';
+    if (position === 3) return ' text-bronze';
+    return '';
+  };
+
   return (
     <TableContainer component={Paper} sx={{ margin: 2, width: '97%' }}>
       <Table>
@@ -96,7 +103,10 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
               <TableCell className={getThresholdClassName(index + 1)}>{index + 1}</TableCell>
               <TableCell className={getThresholdClassName(index + 1)}>{standing.name}</TableCell>
               {standing.results.map((result, resultIndex) => (
-                <TableCell key={resultIndex} className={getThresholdClassName(index + 1)}>
+                <TableCell
+                  key={resultIndex}
+                  className={getThresholdClassName(index + 1) + getPositionClassName(result.position)}
+                >
                   {result.points}
                 </TableCell>
               ))}
