@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from domain.dtos.event_record_dto import QuarteredEventRecordDto, RaceEventRecordDto
+from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
 from domain.event_record_service import get_event_records
 from domain.event_service import get_event_by_id
 
@@ -8,11 +8,19 @@ from domain.event_service import get_event_by_id
 router = APIRouter(prefix="/event-records", tags=["event-records"])
 
 
-@router.get("")
-def get_by_event(event_id: int) -> list[QuarteredEventRecordDto | RaceEventRecordDto]:
-    """
-    Get event records by actions.
-    """
+@router.get("/quartered", response_model=list[QuarteredEventRecordDto])
+def get_quartered(event_id: int) -> list[QuarteredEventRecordDto]:
+    """ Get quartered event records by actions. """
+    return _get_event_records(event_id)
+
+
+@router.get("/race", response_model=list[RaceEventRecordDto])
+def get_race(event_id: int) -> list[RaceEventRecordDto]:
+    """ Get race event records by actions. """
+    return _get_event_records(event_id)
+
+
+def _get_event_records(event_id: int) -> list[EventRecordDto]:
     event = None
     try:
         event = get_event_by_id(event_id)

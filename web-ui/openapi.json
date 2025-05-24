@@ -515,14 +515,14 @@
         }
       }
     },
-    "/event-records": {
+    "/event-records/quartered": {
       "get": {
         "tags": [
           "event-records"
         ],
-        "summary": "Get By Event",
-        "description": "Get event records by actions.",
-        "operationId": "get_by_event_event_records_get",
+        "summary": "Get Quartered",
+        "description": "Get quartered event records by actions.",
+        "operationId": "get_quartered_event_records_quartered_get",
         "parameters": [
           {
             "name": "event_id",
@@ -542,16 +542,56 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "anyOf": [
-                      {
-                        "$ref": "#/components/schemas/QuarteredEventRecordDto"
-                      },
-                      {
-                        "$ref": "#/components/schemas/RaceEventRecordDto"
-                      }
-                    ]
+                    "$ref": "#/components/schemas/QuarteredEventRecordDto"
                   },
-                  "title": "Response Get By Event Event Records Get"
+                  "title": "Response Get Quartered Event Records Quartered Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event-records/race": {
+      "get": {
+        "tags": [
+          "event-records"
+        ],
+        "summary": "Get Race",
+        "description": "Get race event records by actions.",
+        "operationId": "get_race_event_records_race_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RaceEventRecordDto"
+                  },
+                  "title": "Response Get Race Event Records Race Get"
                 }
               }
             }
@@ -1050,13 +1090,6 @@
             "type": "array",
             "title": "Distance Records"
           },
-          "time_records": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array",
-            "title": "Time Records"
-          },
           "previous_position": {
             "type": "integer",
             "title": "Previous Position",
@@ -1065,7 +1098,8 @@
         },
         "type": "object",
         "required": [
-          "blob"
+          "blob",
+          "distance_records"
         ],
         "title": "RaceEventRecordDto"
       },
