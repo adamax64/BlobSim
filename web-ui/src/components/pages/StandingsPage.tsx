@@ -1,13 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import {
-  GrandmasterStandingsDTO,
-  LeagueDto,
-  LeaguesApi,
-  SimDataApi,
-  SimTime,
-  StandingsApi,
-  StandingsDTO,
-} from '../../../generated';
+import { GrandmasterStandingsDTO, LeagueDto, LeaguesApi, StandingsApi, StandingsDTO } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { PageFrame } from '../common/PageFrame';
@@ -24,8 +16,8 @@ import {
   TextField,
 } from '@mui/material';
 import { PageTitleCard } from '../common/PageTitleCard';
-import { StandingsTable } from '../common/StandingsTable';
-import { GrandmasterStandingsTable } from '../common/GrandmasterStandingsTable';
+import { StandingsTable } from '../standings/StandingsTable';
+import { GrandmasterStandingsTable } from '../standings/GrandmasterStandingsTable';
 import { useSimTime } from '../../context/SimTimeContext';
 
 interface LeagueOption {

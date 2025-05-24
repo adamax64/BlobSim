@@ -20,7 +20,22 @@
 }
 
 .row-bronze {
-  background-color: #e5c48e; // Brighter bronze
+  background-color: #eccfa0; // Brighter bronze
+}
+
+td.text-gold {
+  font-weight: bolder;
+  color: #8c7300;
+}
+
+td.text-silver {
+  font-weight: bolder;
+  color: #7a7a7a;
+}
+
+td.text-bronze {
+  font-weight: bolder;
+  color: #8c5a1e;
 }
 
 .row-middle {
