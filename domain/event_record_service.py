@@ -122,25 +122,11 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
             competitor = competitors[action.blob_id]
             previous_distance = competitor.distance_records[-1] if len(competitor.distance_records) > 0 else 0
             competitor.distance_records.append(previous_distance + action.score)
-            _calculate_time_if_crossed_detection_point(competitor, tick)
 
     sorted_competitors = sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
     for i, competitor in enumerate(sorted_competitors):
         competitor.previous_position = i + 1
     return sorted_competitors
-
-
-def _calculate_time_if_crossed_detection_point(competitor: RaceEventRecordDto, tick: int):
-    distance_n_1 = competitor.distance_records[-2] if len(competitor.distance_records) > 1 else 0
-    distance_n = competitor.distance_records[-1]
-    detection_points = int(distance_n) - int(distance_n_1)
-    if detection_points == 0:
-        return
-
-    for dp in range(int(distance_n_1) + 1, int(distance_n) + 1):
-        velocity_n = distance_n - distance_n_1
-        distance_to_dp = dp - distance_n_1
-        competitor.time_records.append(tick + distance_to_dp / velocity_n)
 
 
 def _race_sort_lambda():
