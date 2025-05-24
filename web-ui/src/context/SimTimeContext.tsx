@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
-import { SimDataApi, SimTime } from '../../generated';
+import { SimDataApi, SimTimeDto } from '../../generated';
 import defaultConfig from '../default-config';
 import { useMutation } from '@tanstack/react-query';
 
 interface SimTimeContextValue {
-  simTime: SimTime | undefined;
+  simTime: SimTimeDto | undefined;
   loading: boolean;
   refreshSimTime: () => void;
 }
@@ -18,7 +18,7 @@ export const SimTimeProvider = ({ children }: { children: React.ReactNode }) => 
     data: simTime,
     isPending: loading,
     mutate: refreshSimTime,
-  } = useMutation<SimTime, Error>({
+  } = useMutation<SimTimeDto, Error>({
     mutationFn: () => simDataApi.getSimTimeSimDataSimTimeGet(),
   });
 

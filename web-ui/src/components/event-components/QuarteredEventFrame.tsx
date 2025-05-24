@@ -51,18 +51,18 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const competitionApi = new CompetitionApi(defaultConfig);
 
   const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
-    mutationFn: (eventId: number) => eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId: event.id }),
+    mutationFn: (eventId: number) => eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId }),
     onSuccess: () => setIsPerforming(false),
   });
 
-  const { mutate: createAction } = useMutation<number, Error, { contender: BlobCompetitorDto }>({
+  const { mutate: createAction } = useMutation<void, Error, { contender: BlobCompetitorDto }>({
     mutationFn: (params) =>
-      actionApi.createActionActionsCreatePost({
+      actionApi.quarteredActionsCreateQuarteredPost({
         blobCompetitorDto: params.contender,
         tick,
         eventId: event.id,
       }),
-    onSuccess: (_) => {
+    onSuccess: () => {
       setTick((prev) => prev + 1);
       getEventRecords(event.id);
     },
@@ -70,8 +70,8 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
 
   const { mutate: finishEvent } = useMutation<void, Error>({
     mutationFn: () =>
-      competitionApi.saveQuarteredEventResultsCompetitionQuarteredEventResultsPost({
-        bodySaveQuarteredEventResultsCompetitionQuarteredEventResultsPost: { event, eventRecords: eventRecords ?? [] },
+      competitionApi.saveQuarteredCompetitionQuarteredEventResultsPost({
+        bodySaveQuarteredCompetitionQuarteredEventResultsPost: { event, eventRecords: eventRecords ?? [] },
       }),
     onSuccess: () => {
       setIsEventFinished(true);

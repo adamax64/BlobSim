@@ -5,7 +5,7 @@ from domain.competition_service import (
     save_event_results as service_save_event_results,
 )
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import QuarteredEventRecordDto
+from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 
 router = APIRouter(prefix="/competition", tags=["competition"])
@@ -24,10 +24,22 @@ async def get_current_event() -> EventDto:
 
 
 @router.post("/quartered-event-results")
-async def save_quartered_event_results(event: EventDto, event_records: list[QuarteredEventRecordDto]) -> None:
+async def save_quartered(event: EventDto, event_records: list[QuarteredEventRecordDto]) -> None:
     """
     Save event results for quartered events.
     """
+    _save_event_results(event, event_records)
+
+
+@router.post("/race-event-results")
+async def save_race(event: EventDto, event_records: list[RaceEventRecordDto]) -> None:
+    """
+    Save event results for race events.
+    """
+    _save_event_results(event, event_records)
+
+
+def _save_event_results(event: EventDto, event_records: list[EventRecordDto]):
     if event_records is None or len(event_records) == 0:
         raise HTTPException(status_code=400, detail="EVENT_RECORDS_EMPTY")
 

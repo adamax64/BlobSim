@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Divider,
   LinearProgress,
   Paper,
   styled,
@@ -14,17 +15,16 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { EventDto, EventRecordsApi } from '../../../generated';
+import { ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { ProgressButton } from './ProgressButton';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/RaceEventRecordDto';
-import { roundToThreeDecimals } from './EventUtils';
+import { getRaceDurationBySize, roundToThreeDecimals } from './EventUtils';
 import defaultConfig from '../../default-config';
 
 const TickLoadingBar = styled(LinearProgress)({
-  marginBottom: 14,
   height: 8,
   borderRadius: 10,
 });
@@ -34,24 +34,61 @@ interface EnduranceRaceEventFrameProps {
 }
 
 export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps) => {
-  const [tick, setTick] = useState(0);
-  const [isPerforming, setIsPerforming] = useState(false);
+  const [tick, setTick] = useState(Math.max(...event.actions.map((action) => action.tick), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
 
+  const raceDuration = useMemo(() => getRaceDurationBySize(event.competitors.length), [event.competitors.length]);
+
   const eventRecordsApi = new EventRecordsApi(defaultConfig);
+  const actionsApi = new ActionsApi(defaultConfig);
+  const competitionApi = new CompetitionApi(defaultConfig);
 
   const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
     mutationFn: (eventId: number) => eventRecordsApi.getRaceEventRecordsRaceGet({ eventId }),
-    onSuccess: (data) => {
-      setIsPerforming(false);
-      return data;
+    onSuccess: () => setLoadingNextTick(false),
+  });
+
+  const { mutate: createActions } = useMutation<void, Error>({
+    mutationFn: () => actionsApi.raceActionsCreateRacePost({ eventId: event.id, tick: tick }),
+    onSuccess: () => {
+      setTick((prev) => prev + 1);
+      getEventRecords(event.id);
+    },
+  });
+
+  const { mutate: finishEvent } = useMutation<void, Error>({
+    mutationFn: () =>
+      competitionApi.saveRaceCompetitionRaceEventResultsPost({
+        bodySaveRaceCompetitionRaceEventResultsPost: { event, eventRecords: eventRecords ?? [] },
+      }),
+    onSuccess: () => {
+      setIsEventFinished(true);
     },
   });
 
   useEffect(() => {
     getEventRecords(event.id);
   }, [event.id]);
+
+  const progressEvent = useCallback(() => {
+    if (eventRecords && !isEventFinished) {
+      setLoadingNextTick(true);
+      createActions();
+    }
+  }, [eventRecords, isEventFinished]);
+
+  // Add key listener for spacebar to trigger progressEvent
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' || e.key === ' ') {
+        e.preventDefault();
+        progressEvent();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [progressEvent]);
 
   const getDistance = useCallback((record: EventRecordDto) => {
     return roundToThreeDecimals(record.distanceRecords?.[record.distanceRecords?.length - 1]) ?? '-';
@@ -72,35 +109,47 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
   }, []);
 
   const getRowClass = (previousPosition: number, currentPosition: number): string => {
-    if (previousPosition > currentPosition) {
-      return 'cell-overtake';
-    }
-    if (currentPosition > previousPosition) {
-      return 'cell-fell-behind';
+    if (isEventFinished) {
+      switch (currentPosition) {
+        case 1:
+          return 'row-gold';
+        case 2:
+          return 'row-silver';
+        case 3:
+          return 'row-bronze';
+      }
+    } else {
+      if (previousPosition > currentPosition) {
+        return 'cell-overtake';
+      }
+      if (currentPosition > previousPosition) {
+        return 'cell-fell-behind';
+      }
     }
     return '';
   };
 
   return (
-    <Card sx={{ marginBottom: 3 }}>
+    <Card>
       <CardHeader title={translateEventType(event.type)} />
+      <Divider />
       <CardContent>
         <ProgressButton
-          isStart={tick === 0}
-          isEnd={false}
+          isStart={event.actions.length === 0}
+          isEnd={tick >= raceDuration}
           isEventFinished={isEventFinished}
-          onClickStart={() => {}}
-          onClickNext={() => {}}
-          onClickEnd={() => {}}
+          onClickStart={progressEvent}
+          onClickNext={progressEvent}
+          onClickEnd={finishEvent}
         />
         <Typography fontSize={18} fontWeight={600} paddingBottom={2}>
-          Tick: {tick}
+          Tick: {tick} / {raceDuration}
         </Typography>
-        <Box visibility={loadingNextTick ? 'visible' : 'hidden'}>
+        <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={2}>
           <TickLoadingBar />
         </Box>
         <TableContainer component={Paper}>
-          <Table>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell width={60}>#</TableCell>
@@ -125,6 +174,9 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
             </TableBody>
           </Table>
         </TableContainer>
+        <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginTop={2}>
+          <TickLoadingBar />
+        </Box>
       </CardContent>
     </Card>
   );

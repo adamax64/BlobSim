@@ -417,14 +417,54 @@
         "tags": [
           "competition"
         ],
-        "summary": "Save Quartered Event Results",
+        "summary": "Save Quartered",
         "description": "Save event results for quartered events.",
-        "operationId": "save_quartered_event_results_competition_quartered_event_results_post",
+        "operationId": "save_quartered_competition_quartered_event_results_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_save_quartered_event_results_competition_quartered_event_results_post"
+                "$ref": "#/components/schemas/Body_save_quartered_competition_quartered_event_results_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/competition/race-event-results": {
+      "post": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Save Race",
+        "description": "Save event results for race events.",
+        "operationId": "save_race_competition_race_event_results_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_save_race_competition_race_event_results_post"
               }
             }
           },
@@ -811,7 +851,7 @@
         ],
         "title": "BlobStatsDto"
       },
-      "Body_save_quartered_event_results_competition_quartered_event_results_post": {
+      "Body_save_quartered_competition_quartered_event_results_post": {
         "properties": {
           "event": {
             "$ref": "#/components/schemas/EventDto"
@@ -829,7 +869,27 @@
           "event",
           "event_records"
         ],
-        "title": "Body_save_quartered_event_results_competition_quartered_event_results_post"
+        "title": "Body_save_quartered_competition_quartered_event_results_post"
+      },
+      "Body_save_race_competition_race_event_results_post": {
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/EventDto"
+          },
+          "event_records": {
+            "items": {
+              "$ref": "#/components/schemas/RaceEventRecordDto"
+            },
+            "type": "array",
+            "title": "Event Records"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event",
+          "event_records"
+        ],
+        "title": "Body_save_race_competition_race_event_results_post"
       },
       "CalendarDto": {
         "properties": {
