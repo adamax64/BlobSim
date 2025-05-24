@@ -78,3 +78,17 @@
 .current-event {
   background-color: #d4f8e8;
 }
+
+.cell-overtake {
+  background-color: #d4f8e8;
+  td {
+    color: #007700 !important;
+  }
+}
+
+.cell-fell-behind {
+  background-color: #ffe6b3;
+  td {
+    color: #a65c00 !important;
+  }
+}
