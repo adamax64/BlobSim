@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from typing import List
 
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
-from dataclasses import field
 
 
 @dataclass
@@ -20,7 +18,7 @@ class EventRecordDto():
 
 @dataclass
 class QuarteredEventRecordDto(EventRecordDto):
-    quarters: List[ScoreDto]
+    quarters: list[ScoreDto]
     eliminated: bool = False
     current: bool = False
     next: bool = False
@@ -28,6 +26,5 @@ class QuarteredEventRecordDto(EventRecordDto):
 
 @dataclass
 class RaceEventRecordDto(EventRecordDto):
-    distance_records: List[float] = field(default_factory=list)
-    time_records: List[float] = field(default_factory=list)
+    distance_records: list[float]
     previous_position: int = 1

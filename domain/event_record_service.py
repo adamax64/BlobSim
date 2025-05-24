@@ -114,19 +114,25 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
             actions_by_tick[action.tick] = []
         actions_by_tick[action.tick].append(action)
 
-    competitors = {competitor.id: RaceEventRecordDto(blob=competitor) for competitor in competitors}
+    competitors = {competitor.id: RaceEventRecordDto(blob=competitor, distance_records=[]) for competitor in competitors}
 
+    previous_tick = sorted(actions_by_tick.keys(), reverse=True)[1] if len(actions_by_tick.keys()) > 1 else None
     for tick in actions_by_tick.keys():
         actions = actions_by_tick[tick]
         for action in actions:
             competitor = competitors[action.blob_id]
             previous_distance = competitor.distance_records[-1] if len(competitor.distance_records) > 0 else 0
             competitor.distance_records.append(previous_distance + action.score)
+        if tick == previous_distance:
+            sorted_competitors = sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
+            for i, competitor in enumerate(sorted_competitors):
+                competitor.previous_position = i + 1
 
-    sorted_competitors = sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
-    for i, competitor in enumerate(sorted_competitors):
-        competitor.previous_position = i + 1
-    return sorted_competitors
+    if previous_tick is None:
+        for i, competitor in enumerate(competitors.values()):
+            competitor.previous_position = i + 1
+
+    return sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
 
 
 def _race_sort_lambda():
