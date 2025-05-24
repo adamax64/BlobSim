@@ -452,14 +452,14 @@
         }
       }
     },
-    "/actions/create": {
+    "/actions/create/quartered": {
       "post": {
         "tags": [
           "actions"
         ],
-        "summary": "Create Action",
+        "summary": "Quartered",
         "description": "Generate score for contender and save the action for given event.",
-        "operationId": "create_action_actions_create_post",
+        "operationId": "quartered_actions_create_quartered_post",
         "parameters": [
           {
             "name": "event_id",
@@ -495,10 +495,57 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "type": "number",
-                  "title": "Response Create Action Actions Create Post"
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actions/create/race": {
+      "post": {
+        "tags": [
+          "actions"
+        ],
+        "summary": "Race",
+        "description": "Generate score for all contenders and save the actions for given event.",
+        "operationId": "race_actions_create_race_post",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "tick",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Tick"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },

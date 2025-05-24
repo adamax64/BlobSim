@@ -17,6 +17,7 @@ from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
 from domain.dtos.event_summary_dto import EventSummaryDTO
 from domain.dtos.league_dto import LeagueDto
+from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.sim_time_utils import get_season
@@ -60,11 +61,14 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
 
 
 @transactional
-def get_event_by_id(event_id: int, session: Session) -> EventDto:
+def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -> EventDto:
     """ Get event by id """
     event = repository_get_event_by_id(session, event_id)
     if event is None:
+        raise EventNotFoundException()
+    if check_date and event.date < get_sim_time(session):
         raise NoCurrentEventException()
+
     actions = [ActionDto(
         blob_id=action.blob_id,
         tick=action.tick,
