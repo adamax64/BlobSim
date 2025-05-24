@@ -1,5 +1,5 @@
 # Blob Championship System
-                        
+
 <img src="./assets/blob.svg" alt="Blob Image" width="250"/>
 
 This is a simulation software that simulates the life of fictional entities called the blobs and their competitions in a championships consists of multiple leagues throughout several seasons.
@@ -26,32 +26,35 @@ Run `setup.bat` on Windows systems or `setup.sh` on Linux systems to setup the a
 
 2. Create a python virtual environment
 
-    ```sh
-    python -m venv .venv
-    ```
+   ```sh
+   python -m venv .venv
+   ```
 
 3. Activate the environment
 
-    - Windows:
-    ```sh
-    call venv\Scripts\activate
-    ```
-    -Linux
-    ```sh
-    source venv/bin/activate
-    ```
+   - Windows:
+
+   ```sh
+   call venv\Scripts\activate
+   ```
+
+   -Linux
+
+   ```sh
+   source venv/bin/activate
+   ```
 
 4. Install the required packages:
 
-    ```sh
-    pip install -r requirements.txt
-    ```
+   ```sh
+   pip install -r requirements.txt
+   ```
 
 5. Set up database an populate it with initial data:
 
-    ```sh
-    alembic upgrade head
-    ```
+   ```sh
+   alembic upgrade head
+   ```
 
 #### Frontend
 
@@ -63,7 +66,7 @@ Run `setup.bat` on Windows systems or `setup.sh` on Linux systems to setup the a
 
 ## Running the application
 
-To start the app, just run `start.bat` on Windows systems or `start.sh` on Linux systems. This activates the virtual python environment, starts the backend, the frontend, and opens the frontend app on the system default browser. This opens three console windows, one for the frontend, one for the backend, and one for the main thread that started the application. 
+To start the app, just run `start.bat` on Windows systems or `start.sh` on Linux systems. This activates the virtual python environment, starts the backend, the frontend, and opens the frontend app on the system default browser. This opens three console windows, one for the frontend, one for the backend, and one for the main thread that started the application.
 
 The application may need some time to load, so the opened browser tab may show that the page cannot be loaded. Wait for a few seconds in this case for the subsystem to start up properly.
 
@@ -125,7 +128,8 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 - The "_View Blobs_" option navigate to a table that lists all currently living blobs and their carreer stats
 
 - The "_View standings_" option navigates to a menu where the user can choose which league standings do they want to view
-    - After choosing a league a table is shown with the standings of the current season. Here the user can navigate to other season standings by pressing the left and right arrow buttons
+
+  - After choosing a league a table is shown with the standings of the current season. Here the user can navigate to other season standings by pressing the left and right arrow buttons
 
 - The "_View Calendar_" option navigates to a screen that lists all of the championship events in the current season, where the next event is highlighted
 
@@ -134,9 +138,9 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 1.2
 
 - New main menu option: "_Add blob name suggestion_"
-    - Here the user can add a name to the name suggestions list
-    - When a new blob is created and the name suggestions list is not empty, it takes the oldest record of the list and applies the name to the blob thus the simulation is not blobked
-    - If the name suggestions list is empty the blob creation is the same as in previous versions
+  - Here the user can add a name to the name suggestions list
+  - When a new blob is created and the name suggestions list is not empty, it takes the oldest record of the list and applies the name to the blob thus the simulation is not blobked
+  - If the name suggestions list is empty the blob creation is the same as in previous versions
 - Enhanced prompt for entering blob name: a dialog window appears with a textbox
 
 ### 1.2.1
@@ -167,18 +171,17 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 
 - Fixed bug: empty grandmasters standings table appears for next eon when season is dividable by 4
 - On the league standings for current season blob names are colored when their contract is ending this season
-- Grandmaster winners get 1 extra season for their contract 
+- Grandmaster winners get 1 extra season for their contract
 - Wrote tests for championship service
 
 ### 1.2.7
 
 - For larger field sizes the elimination count calculation changed to align with the rules
-- Improving the progress simulation view by adding a GUI window to show the progress of the process 
+- Improving the progress simulation view by adding a GUI window to show the progress of the process
 
 ### 1.3
 
 - Added new race event format: endurance race event
-
 
 ### 2.0
 
@@ -188,8 +191,18 @@ At the end of the event the top three are highlighted by colors resemble bronze,
   - The pages are the following:
     - Dashboard
     - Blobs
-    - Calendar 
+    - Standings
+    - Calendar
+    - Event pages
 - Adjusted application setup and startup logic
   - A `setup` script is added which installs the backend and frontend dependencies
   - The `start` and `debug` scripts start the backend and frontend as well in production and development mode respectively
-  - Added possibility to run the app on Linux distributions 
+  - Added possibility to run the app on Linux distributions
+- New page: Factory
+  - Shows factory progress on a progress bar
+  - Lists blob name suggestions and a button
+  - Clicking the button a dialog appears where the user can add a new name suggestion
+  - The same name validations apply as on the old UI
+- Added new simulation status texts, now called as "news":
+  - When a blob is created and named after a suggested name, that name is displayed
+  - After an event is concluded a sumamry text is shown with the top 3
