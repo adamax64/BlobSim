@@ -16,10 +16,10 @@ import {
   ActionsApi,
   BlobCompetitorDto,
   EventDto,
-  EventRecordsApi,
   EventType,
   QuarteredEventRecordDto as EventRecordDto,
   CompetitionApi,
+  EventRecordsApi,
 } from '../../../generated';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -50,8 +50,8 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const eventRecordsApi = new EventRecordsApi(defaultConfig);
   const competitionApi = new CompetitionApi(defaultConfig);
 
-  const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error>({
-    mutationFn: () => eventRecordsApi.getByEventEventRecordsGet({ eventId: event.id }),
+  const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
+    mutationFn: (eventId: number) => eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId: event.id }),
     onSuccess: () => setIsPerforming(false),
   });
 
@@ -64,7 +64,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
       }),
     onSuccess: (_) => {
       setTick((prev) => prev + 1);
-      getEventRecords();
+      getEventRecords(event.id);
     },
   });
 
@@ -79,7 +79,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   });
 
   useEffect(() => {
-    getEventRecords();
+    getEventRecords(event.id);
   }, [event.id]);
 
   useEffect(() => {
@@ -191,9 +191,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
           <Table>
             <TableHead>
               <TableRow className={currentBlobIndex === 0 ? 'disable-border-bottom' : ''}>
-                <TableCell align="center" width={60}>
-                  #
-                </TableCell>
+                <TableCell width={60}>#</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell align="center" className={highlighByQuarter(1)}>
                   Q1
