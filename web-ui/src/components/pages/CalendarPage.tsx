@@ -4,14 +4,11 @@ import { PageTitleCard } from '../common/PageTitleCard';
 import { useMutation } from '@tanstack/react-query';
 import { CalendarApi, CalendarDto } from '../../../generated';
 import defaultConfig from '../../default-config';
-import { useCallback, useEffect } from 'react';
-import { useSimTime } from '../../context/SimTimeContext';
+import { useEffect } from 'react';
 import { formatToShort } from '../../utils/SimTimeUtils';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
 
 export const CalendarPage = () => {
-  const { simTime } = useSimTime();
-
   const calendarApi = new CalendarApi(defaultConfig);
   const { data: calendar, mutate: loadCalendar } = useMutation<CalendarDto[], Error>({
     mutationFn: () => calendarApi.getSeasonCalendarCalendarGet(),
