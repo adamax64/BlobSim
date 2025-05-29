@@ -14,7 +14,7 @@ def get_all_blobs_by_name(
         session.query(Blob)
         .filter(
             and_(
-                name_search is None or Blob.name.contains(name_search),
+                name_search is None or Blob.first_name.contains(name_search) or Blob.last_name.contains(name_search),
                 or_(show_dead, Blob.integrity > 0),
             )
         )

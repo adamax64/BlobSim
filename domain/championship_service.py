@@ -1,6 +1,9 @@
+from datetime import datetime
 from math import ceil
 from typing import List
+from controllers.factory_router import save_name_suggestion
 from data.db.db_engine import transactional
+from data.model.name_suggestion import NameSuggestion
 from data.persistence.blob_reposiotry import get_all_by_league_order_by_id, get_blob_by_id, save_all_blobs, save_blob
 from data.persistence.calendar_repository import count_unconcluded_for_league
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
@@ -23,6 +26,12 @@ def end_eon_if_over(season: int, league: LeagueDto, session) -> List[Grandmaster
     if grandmaster.integrity < CYCLES_PER_EON:
         grandmaster.integrity = CYCLES_PER_EON
     save_blob(session, grandmaster)
+
+    save_name_suggestion(session, NameSuggestion(
+        last_name=grandmaster.last_name,
+        parent_id=grandmaster.id,
+        created=datetime.now()
+    ))
 
     return grandmaster_standings
 
