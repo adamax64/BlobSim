@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Response, status
 
-from controllers.validations import validate_blob_name
 from domain.blob_service import get_all_blobs, create_blob as service_create_blob
 from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
@@ -21,11 +20,9 @@ def get_all(
 
 
 @router.post("/create")
-def create_blob(name: str) -> Response:
-    validate_blob_name(name)
-
+def create_blob(first_name: str, last_name: str, parent_id: int | None = None) -> Response:
     try:
-        service_create_blob(name=name)
+        service_create_blob(first_name=first_name, last_name=last_name, parent_id=parent_id)
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     except NameOccupiedException:
         raise HTTPException(status_code=409, detail="NAME_ALREADY_OCCUPIED")

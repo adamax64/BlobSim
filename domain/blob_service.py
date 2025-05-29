@@ -6,6 +6,7 @@ from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.persistence.blob_reposiotry import (
     get_all_blobs_by_name,
+    get_blob_by_id,
     save_all_blobs,
     save_blob,
 )
@@ -50,7 +51,7 @@ def get_all_blobs(
 
     return [
         BlobStatsDto(
-            name=blob.name,
+            name=f"{blob.first_name} {blob.last_name}",
             born=format_sim_time_short(blob.born),
             debut=blob.debut,
             contract=blob.contract,
@@ -75,7 +76,7 @@ def check_blob_created(session) -> str | bool:
 
 
 @transactional
-def create_blob(session, name: str):
+def create_blob(session, first_name: str, last_name: str, parent_id: int | None = None):
     """Create a new blob with random stats and add it to the queue."""
 
     strength = 0.9 + random.random() * 0.2
@@ -83,16 +84,23 @@ def create_blob(session, name: str):
     current_time = get_sim_time(session)
     queue = get_queue(session)
 
+    if parent_id is not None:
+        parent = get_blob_by_id(session, parent_id)
+        learning += parent.championships * 0.01
+        strength += parent.grandmasters * 0.01
+
     try:
         save_blob(
             session,
             Blob(
-                name=name,
+                first_name=first_name,
+                last_name=last_name,
                 strength=strength,
                 learning=learning,
                 integrity=INITIAL_INTEGRITY,
                 born=current_time,
                 league_id=queue.id,
+                parent_id=parent_id,
             ),
         )
         reset_factory_progress(session)
