@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from data.db.db_engine import Base
 
 
@@ -7,4 +7,5 @@ class NameSuggestion(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
+    parent_id = Column(Integer, ForeignKey('blobs.id'), default=None)
     created = Column(DateTime)
