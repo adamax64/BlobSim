@@ -29,3 +29,5 @@ class Blob(Base):
     grandmasters = Column(Integer, default=0)
     league_id = Column(Integer, ForeignKey('leagues.id'))
     league = relationship('League', backref='blobs', overlaps='blobs,league', viewonly=True)
+    parent_id = Column(Integer, ForeignKey('blobs.id'))
+    parent = relationship('Blob', backref='children', overlaps='children,parent', viewonly=True)
