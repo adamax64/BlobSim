@@ -17,3 +17,5 @@ generated
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+.vite/*
