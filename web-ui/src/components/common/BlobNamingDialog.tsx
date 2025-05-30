@@ -5,58 +5,56 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormGroup,
   IconButton,
-  Snackbar,
   TextField,
+  Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BlobsApi, FactoryApi, ResponseError } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { closeSnackbar, useSnackbar } from 'notistack';
 
-enum NameValidationError {
-  NotConsistsOfTwoNames = 'NotConsistsOfTwoNames',
-  FirstLetterIsNotCapital = 'FirstLetterIsNotCapital',
-}
-
-function getValidationErrorMessage(validationError: NameValidationError | undefined) {
-  switch (validationError) {
-    case NameValidationError.NotConsistsOfTwoNames:
-      return 'Name must consist of two words';
-    case NameValidationError.FirstLetterIsNotCapital:
-      return 'Each word must start with a capital letter';
-    default:
-      return undefined;
-  }
-}
-
 interface BlobNamingDialogProps {
   open: boolean;
+  prefilledLastName?: string;
+  nameId?: number;
+  parentId?: number;
   onClose: (update?: boolean) => void;
   mode: 'create' | 'add';
 }
 
-export function BlobNamingDialog({ open, onClose, mode }: BlobNamingDialogProps) {
-  const [name, setName] = useState<string>();
-  const [validationError, setValidationError] = useState<NameValidationError | undefined>();
+export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameId, parentId }: BlobNamingDialogProps) {
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>(prefilledLastName ?? '');
+  const [validationError, setValidationError] = useState<string>();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    setLastName(prefilledLastName ?? '');
+  }, [prefilledLastName]);
 
   const factoryApi = new FactoryApi(defaultConfig);
   const blobsApi = new BlobsApi(defaultConfig);
 
   const { mutate: saveNameSuggestion } = useMutation<void, ResponseError>({
-    mutationFn: () => factoryApi.saveNameSuggestionFactorySaveNameSuggestionPost({ name: name! }),
+    mutationFn: () => factoryApi.saveNameSuggestionFactorySaveNameSuggestionPost({ firstName, lastName }),
   });
 
   const { mutate: createBlob } = useMutation<void, ResponseError>({
-    mutationFn: () => blobsApi.createBlobBlobsCreatePost({ name: name! }),
+    mutationFn: () => blobsApi.createBlobBlobsCreatePost({ firstName, lastName, parentId }),
+  });
+
+  const { mutate: updateNameSuggestion } = useMutation<void, ResponseError>({
+    mutationFn: () => factoryApi.updateNameSuggestionFactoryUpdateNameSuggestionPost({ id: nameId!, firstName }),
   });
 
   const responseHandler = {
     onSuccess: () => {
-      setName(undefined);
+      setFirstName('');
+      setLastName('');
       onClose(true);
     },
     onError: (error: ResponseError) => {
@@ -78,27 +76,31 @@ export function BlobNamingDialog({ open, onClose, mode }: BlobNamingDialogProps)
     },
   };
 
-  function handleCreate() {
+  const handleCreate = () => {
     createBlob(undefined, responseHandler);
-  }
+  };
 
-  function handleAdd() {
+  const handleAdd = () => {
     saveNameSuggestion(undefined, responseHandler);
-  }
+  };
 
-  function setAndValidateName(value: string) {
-    setName(value);
+  const handleUpdate = () => {
+    updateNameSuggestion(undefined, responseHandler);
+  };
 
-    const words = value.trim().split(' ');
+  const setAndValidateName = (value: string, isFirstName: boolean) => {
+    if (isFirstName) {
+      setFirstName(value);
+    } else {
+      setLastName(value);
+    }
 
-    if (words.length !== 2) {
-      setValidationError(NameValidationError.NotConsistsOfTwoNames);
-    } else if (words.some((word) => !word[0].match(/[A-Z]/))) {
-      setValidationError(NameValidationError.FirstLetterIsNotCapital);
+    if (!value.match(/[A-Z]/)) {
+      setValidationError('Each word must start with a capital letter');
     } else {
       setValidationError(undefined);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onClose={() => onClose()}>
@@ -108,27 +110,43 @@ export function BlobNamingDialog({ open, onClose, mode }: BlobNamingDialogProps)
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{ display: 'flex', padding: '1.2rem 1.2rem 0 1.2rem  !important' }}>
-        <TextField
-          autoFocus
-          id="name"
-          label="Name"
-          type="text"
-          fullWidth
-          value={name}
-          error={!!validationError}
-          helperText={getValidationErrorMessage(validationError)}
-          onChange={(event) => setAndValidateName(event.target.value)}
-        />
+      <DialogContent sx={{ display: 'flex', flexDirection: 'column', padding: '1.2rem 1.2rem 0 1.2rem  !important' }}>
+        <FormGroup sx={{ flexWrap: 'nowrap', flexDirection: 'row', gap: '1rem' }}>
+          <TextField
+            autoFocus
+            id="first-name"
+            label="First name"
+            type="text"
+            fullWidth
+            value={firstName}
+            error={!!validationError}
+            onChange={(event) => setAndValidateName(event.target.value, true)}
+          />
+          <TextField
+            id="last-name"
+            label="Last name"
+            type="text"
+            fullWidth
+            value={lastName}
+            error={!!validationError}
+            disabled={!!prefilledLastName}
+            onChange={(event) => setAndValidateName(event.target.value, false)}
+          />
+        </FormGroup>
+        {!!validationError && (
+          <Typography variant="caption" marginTop={1} color="error">
+            {validationError}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions>
         <Button
           variant="contained"
           color="primary"
           endIcon={<AddCircle />}
-          onClick={mode == 'create' ? handleCreate : handleAdd}
+          onClick={mode == 'create' ? handleCreate : nameId ? handleUpdate : handleAdd}
           sx={{ margin: '0.5rem' }}
-          disabled={!name || !!validationError}
+          disabled={!firstName || !!validationError}
         >
           {mode == 'create' ? 'Create' : 'Add'}
         </Button>
