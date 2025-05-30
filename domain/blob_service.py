@@ -168,9 +168,9 @@ def _create_with_name_suggestion(session) -> str | bool:
     if name_suggestion is None:
         return True
     try:
-        create_blob(session, name_suggestion.name)
+        create_blob(session, name_suggestion.first_name, name_suggestion.last_name, name_suggestion.parent_id)
         delete_suggestion(session, name_suggestion)
-        return name_suggestion.name
+        return f"{name_suggestion.first_name} {name_suggestion.last_name}"
     except NameOccupiedException:
         session.close()
         warning("There already exists a blob with suggested name, retrying creating blob...")

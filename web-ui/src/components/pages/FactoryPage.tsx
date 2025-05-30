@@ -26,6 +26,8 @@ const FactoryProgressBar = styled(LinearProgress)({
 
 export function FactoryPage() {
   const [open, setOpen] = useState(false);
+  const [selectedNameId, setSelectedNameId] = useState<number>();
+  const [selectedLastName, setSelectedLastName] = useState<string>();
 
   const factoryApi = new FactoryApi(defaultConfig);
 
@@ -47,12 +49,20 @@ export function FactoryPage() {
     fetchNameSuggestions();
   }, []);
 
-  function handleDialogClose(update?: boolean) {
+  const handleDialogClose = (update?: boolean) => {
     setOpen(false);
+    setSelectedNameId(undefined);
+    setSelectedLastName(undefined);
     if (update) {
       fetchNameSuggestions();
     }
-  }
+  };
+
+  const handleAddFirstName = (nameId: number, lastName: string) => {
+    setSelectedNameId(nameId);
+    setSelectedLastName(lastName);
+    setOpen(true);
+  };
 
   const progressValue = (factoryProgress ?? 0) * 100 > 100 ? 100 : (factoryProgress ?? 0) * 100;
 
@@ -83,11 +93,32 @@ export function FactoryPage() {
                 <CircularProgress />
               </Box>
             ) : (
-              <List dense>{nameSuggestions?.map((name, i) => <ListItem key={i}>{name.name}</ListItem>)}</List>
+              <List dense>
+                {nameSuggestions?.map((name, i) => (
+                  <ListItem key={i} sx={{ display: 'flex', gap: 1 }}>
+                    {name.firstName} {name.lastName}{' '}
+                    {!name.firstName && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleAddFirstName(name.id, name.lastName)}
+                      >
+                        Add first name
+                      </Button>
+                    )}
+                  </ListItem>
+                ))}
+              </List>
             )}
           </Box>
         </CardContent>
-        <BlobNamingDialog open={open} onClose={handleDialogClose} mode="add" />
+        <BlobNamingDialog
+          open={open}
+          onClose={handleDialogClose}
+          mode="add"
+          prefilledLastName={selectedLastName}
+          nameId={selectedNameId}
+        />
       </Card>
     </PageFrame>
   );

@@ -143,12 +143,37 @@
         "operationId": "create_blob_blobs_create_post",
         "parameters": [
           {
-            "name": "name",
+            "name": "first_name",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Name"
+              "title": "First Name"
+            }
+          },
+          {
+            "name": "last_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Last Name"
+            }
+          },
+          {
+            "name": "parent_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Parent Id"
             }
           }
         ],
@@ -230,12 +255,71 @@
         "operationId": "save_name_suggestion_factory_save_name_suggestion_post",
         "parameters": [
           {
-            "name": "name",
+            "name": "first_name",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Name"
+              "title": "First Name"
+            }
+          },
+          {
+            "name": "last_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Last Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/factory/update-name-suggestion": {
+      "post": {
+        "tags": [
+          "factory"
+        ],
+        "summary": "Update Name Suggestion",
+        "description": "Updates the first name of a child name suggestion",
+        "operationId": "update_name_suggestion_factory_update_name_suggestion_post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "first_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "First Name"
             }
           }
         ],
@@ -1101,20 +1185,42 @@
             "type": "integer",
             "title": "Id"
           },
-          "name": {
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Name"
+          },
+          "last_name": {
             "type": "string",
-            "title": "Name"
+            "title": "Last Name"
           },
           "created": {
             "type": "string",
             "format": "date-time",
             "title": "Created"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "name",
+          "last_name",
           "created"
         ],
         "title": "NameSuggestionDto"

@@ -116,6 +116,7 @@ export function DashboardPage() {
           </Button>
         )}
       </Box>
+      {/* TODO: handle blob with parent creation */}
       <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
       {(loadingOverlayVisible || simTimeLoading) && <LoadingOverlay />}
     </PageFrame>
