@@ -206,3 +206,12 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 - Added new simulation status texts, now called as "news":
   - When a blob is created and named after a suggested name, that name is displayed
   - After an event is concluded a sumamry text is shown with the top 3
+
+### 2.1
+
+- Blobs now can have children, by becoming grandmaster at the end of each eon
+- Children inherit the last name of the grandmaster
+- On blob creation children get bonuses to initial stats:
+  - +0.01 learning for every championship title of parent
+  - +0.01 strength for every grandmaster title of parent
+  - So if parent is currently 5 times champion and 2 times grandmaster, then their new child gets 0.05 learning and 0.02 strength bonus
