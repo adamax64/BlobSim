@@ -25,6 +25,7 @@ from domain.sim_data_service import (
     reset_factory_progress,
 )
 from domain.utils.activity_utils import choose_free_activity
+from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import (
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
@@ -51,7 +52,7 @@ def get_all_blobs(
 
     return [
         BlobStatsDto(
-            name=f"{blob.first_name} {blob.last_name}",
+            name=format_blob_name(blob),
             born=format_sim_time_short(blob.born),
             debut=blob.debut,
             contract=blob.contract,
@@ -170,7 +171,7 @@ def _create_with_name_suggestion(session) -> str | bool:
     try:
         create_blob(session, name_suggestion.first_name, name_suggestion.last_name, name_suggestion.parent_id)
         delete_suggestion(session, name_suggestion)
-        return f"{name_suggestion.first_name} {name_suggestion.last_name}"
+        return format_blob_name(name_suggestion)
     except NameOccupiedException:
         session.close()
         warning("There already exists a blob with suggested name, retrying creating blob...")

@@ -20,6 +20,7 @@ from domain.dtos.league_dto import LeagueDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import get_current_calendar, get_sim_time
+from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.sim_time_utils import get_season
 
 
@@ -95,11 +96,12 @@ def get_concluded_event_summary(session: Session) -> str | None:
         return None
     event = get_event_by_date(session, current_calendar_event.date)
     results = get_results_of_event(event.id, session)
+
     return EventSummaryDTO(
         event_name=f"{event.league.name}, S{event.season} R{event.round}",
-        winner=f"{results[0].blob.first_name} {results[0].blob.last_name}",
-        runner_up=f"{results[1].blob.first_name} {results[1].blob.last_name}",
-        third_place=f"{results[2].blob.first_name} {results[2].blob.last_name}"
+        winner=format_blob_name(results[0].blob),
+        runner_up=format_blob_name(results[1].blob),
+        third_place=format_blob_name(results[2].blob)
     )
 
 
@@ -107,7 +109,7 @@ def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -
     if not is_event_concluded:
         return [BlobCompetitorDto(
             id=player.id,
-            name=player.name,
+            name=format_blob_name(player),
             strength=player.strength
         ) for player in event.league.players]
     else:
@@ -115,6 +117,6 @@ def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -
         blobs = get_all_by_ids(session, blob_ids)
         return [BlobCompetitorDto(
             id=blob.id,
-            name=blob.name,
+            name=format_blob_name(blob),
             strength=blob.strength
         ) for blob in blobs]
