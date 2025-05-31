@@ -215,3 +215,7 @@ At the end of the event the top three are highlighted by colors resemble bronze,
   - +0.01 learning for every championship title of parent
   - +0.01 strength for every grandmaster title of parent
   - So if parent is currently 5 times champion and 2 times grandmaster, then their new child gets 0.05 learning and 0.02 strength bonus
+
+### 2.1.1
+
+- Fixed missing adjustments related to the name split

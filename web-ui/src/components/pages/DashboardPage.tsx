@@ -110,7 +110,10 @@ export function DashboardPage() {
             Create new Blob
           </Button>
         )}
-        {(newsTypes.includes(NewsType.Continue) || newsTypes.includes(NewsType.EventEnded)) && (
+        {(newsTypes.includes(NewsType.Continue) ||
+          newsTypes.includes(NewsType.EventEnded) ||
+          newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
+          newsTypes.includes(NewsType.SeasonStart)) && (
           <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
             Proceed to next day
           </Button>
