@@ -95,8 +95,12 @@ def get_concluded_event_summary(session: Session) -> str | None:
         return None
     event = get_event_by_date(session, current_calendar_event.date)
     results = get_results_of_event(event.id, session)
-    return EventSummaryDTO(event_name=f"{event.league.name}, S{event.season} R{event.round}", winner=results[0].blob.name,
-                           runner_up=results[1].blob.name, third_place=results[2].blob.name)
+    return EventSummaryDTO(
+        event_name=f"{event.league.name}, S{event.season} R{event.round}",
+        winner=f"{results[0].blob.first_name} {results[0].blob.last_name}",
+        runner_up=f"{results[1].blob.first_name} {results[1].blob.last_name}",
+        third_place=f"{results[2].blob.first_name} {results[2].blob.last_name}"
+    )
 
 
 def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -> List[BlobCompetitorDto]:
