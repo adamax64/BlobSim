@@ -219,3 +219,8 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 2.1.1
 
 - Fixed missing adjustments related to the name split
+
+### 2.1.2
+
+- Fixed error on event record calculation if field size is 15 or larger
+- Cached event records table on quartered event page so it does not disappears for a moment, causing unintended scrollup
