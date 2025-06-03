@@ -39,6 +39,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const [quarter, setQuarter] = useState(0);
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
   const [nextBlobIndex, setNextBlobIndex] = useState(-1);
+  const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
 
   const isOneShot = useMemo(() => event.type === EventType.QuarteredOneShotScoring, [event.type]);
   const quarterEnds = useMemo(
@@ -52,7 +53,11 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
 
   const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
     mutationFn: (eventId: number) => eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId }),
-    onSuccess: () => setIsPerforming(false),
+    onSuccess: (data) => {
+      setIsPerforming(false);
+      setEventRecordsCache(data);
+      return data;
+    },
   });
 
   const { mutate: createAction } = useMutation<void, Error, { contender: BlobCompetitorDto }>({
@@ -208,7 +213,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {eventRecords?.map((record, index) => (
+              {(eventRecords ?? eventRecordsCache).map((record, index) => (
                 <TableRow key={index} className={getRowClass(record, index)}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell>{record.blob.name}</TableCell>

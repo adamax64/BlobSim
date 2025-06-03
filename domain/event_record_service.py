@@ -81,7 +81,7 @@ def _get_quarter_ends(field_size: int, event_type: EventTypeDto) -> list[int]:
 
 
 def _get_eliminations(field_size: int) -> int:
-    return int((field_size - 3) / 3) if field_size < 15 else field_size / 4
+    return int((field_size - 3) / 3) if field_size < 15 else int(field_size / 4)
 
 
 def _quartered_sort_lambda(index: int):
