@@ -224,3 +224,14 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 
 - Fixed error on event record calculation if field size is 15 or larger
 - Cached event records table on quartered event page so it does not disappears for a moment, causing unintended scrollup
+
+### 2.2
+
+- Each blob has a unique color
+- Added blob icons to the blob list
+  - The icon is displayed next to the blob's name
+- Added blob details dialog when clicking on a blob in the blobs page
+  - Shows blob in large
+  - Displays blob's basic information like birthdate, debut, current status
+  - Shows blob's achievements like podiums, wins, championships and grandmaster titles
+- Added copyright text and version to the bottom of the menubar
