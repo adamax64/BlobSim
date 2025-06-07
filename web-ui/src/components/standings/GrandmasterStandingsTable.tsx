@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { GrandmasterStandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
+import { IconName } from '../common/IconName';
 
 function getRowClass(hasEonEnded: boolean, position: number): string {
   return hasEonEnded ? (position === 1 ? getClassNameForBlobState(BlobState.FIRST) : '') : '';
@@ -57,7 +58,9 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
           {standings.map((standing, index) => (
             <TableRow key={index} className={getRowClass(hasEonEnded, index + 1)}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{standing.name}</TableCell>
+              <TableCell>
+                <IconName name={standing.name} color={standing.color} />
+              </TableCell>
               <TableCell>{standing.championships}</TableCell>
               <TableCell>{standing.gold}</TableCell>
               <TableCell>{standing.silver}</TableCell>

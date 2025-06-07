@@ -7,6 +7,7 @@ from domain.dtos.standings_result_dto import StandingsResultDTO
 class StandingsDTO:
     blob_id: int
     name: str
+    color: str
     is_contract_ending: bool
     results: list[StandingsResultDTO]
     num_of_rounds: int

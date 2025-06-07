@@ -27,6 +27,7 @@ import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './Event
 import { ProgressButton } from './ProgressButton';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
+import { IconName } from '../common/IconName';
 
 interface QuarteredEventFrameProps {
   event: EventDto;
@@ -68,7 +69,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
         eventId: event.id,
       }),
     onSuccess: () => {
-      setTick((prev) => prev + 1);
+      setTick((prev: number) => prev + 1);
       getEventRecords(event.id);
     },
   });
@@ -216,7 +217,9 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
               {(eventRecords ?? eventRecordsCache).map((record, index) => (
                 <TableRow key={index} className={getRowClass(record, index)}>
                   <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell>{record.blob.name}</TableCell>
+                  <TableCell>
+                    <IconName name={record.blob.name} color={record.blob.color} />
+                  </TableCell>
                   <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
                     {renderCellContent(record, 0)}
                   </TableCell>

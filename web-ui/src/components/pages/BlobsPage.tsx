@@ -8,8 +8,9 @@ import {
   OutlinedInput,
   Paper,
   Switch,
+  TableCell,
 } from '@mui/material';
-import { DataGrid, GridRowClassNameParams } from '@mui/x-data-grid';
+import { DataGrid, GridRenderCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
 import { PageFrame } from '../common/PageFrame';
 import { PageTitleCard } from '../common/PageTitleCard';
 import { Search } from '@mui/icons-material';
@@ -18,16 +19,23 @@ import { BlobsApi, BlobStatsDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { BlobState } from '../../utils/BlobStateUtils';
+import { IconName } from '../common/IconName';
 
 const columns = [
-  { field: 'name', headerName: 'Name', flex: 1, resizable: false },
+  {
+    field: 'name',
+    headerName: 'Name',
+    flex: 1,
+    resizable: false,
+    renderCell: (params: GridRenderCellParams<BlobStatsDto>) => <Box padding={2}><IconName name={params.row.name} color={params.row.color} /></Box>,
+  },
   { field: 'born', headerName: 'Born', flex: 1, resizable: false },
-  { field: 'debut', headerName: 'Debut', flex: 1, resizable: false },
-  { field: 'contract', headerName: 'Contract', flex: 1, resizable: false },
-  { field: 'podiums', headerName: 'Podiums', flex: 1, resizable: false },
-  { field: 'wins', headerName: 'Wins', flex: 1, resizable: false },
-  { field: 'championships', headerName: 'Championships', flex: 1, resizable: false },
-  { field: 'grandmasters', headerName: 'Grandmasters', flex: 1, resizable: false },
+  { field: 'debut', headerName: 'Debut', resizable: false },
+  { field: 'contract', headerName: 'Contract', resizable: false },
+  { field: 'podiums', headerName: 'Podiums', resizable: false },
+  { field: 'wins', headerName: 'Wins', resizable: false },
+  { field: 'championships', headerName: 'Championships', resizable: false },
+  { field: 'grandmasters', headerName: 'Grandmasters', resizable: false },
   { field: 'leagueName', headerName: 'League', flex: 1, resizable: false },
 ];
 
@@ -93,7 +101,7 @@ export function BlobsPage() {
             <DataGrid
               columns={columns}
               rows={blobs ?? []}
-              getRowId={(blob) => blob.name}
+              getRowId={(blob: BlobStatsDto) => blob.name}
               loading={isPending}
               disableColumnResize
               disableColumnMenu
