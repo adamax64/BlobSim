@@ -20,6 +20,7 @@ import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { BlobState } from '../../utils/BlobStateUtils';
 import { IconName } from '../common/IconName';
+import { BlobDetailsDialog } from '../common/BlobDetailsDialog';
 
 const columns = [
   {
@@ -27,7 +28,7 @@ const columns = [
     headerName: 'Name',
     flex: 1,
     resizable: false,
-    renderCell: (params: GridRenderCellParams<BlobStatsDto>) => <Box padding={2}><IconName name={params.row.name} color={params.row.color} /></Box>,
+    renderCell: (params: GridRenderCellParams<BlobStatsDto>) => <Box padding={2} sx={{ cursor: 'pointer' }}><IconName name={params.row.name} color={params.row.color} /></Box>,
   },
   { field: 'born', headerName: 'Born', flex: 1, resizable: false },
   { field: 'debut', headerName: 'Debut', resizable: false },
@@ -55,6 +56,7 @@ function getRowClass(params: GridRowClassNameParams<BlobStatsDto>) {
 export function BlobsPage() {
   const [nameSearch, setNameSearch] = useState<string | undefined>();
   const [showDead, setShowDead] = useState<boolean>(false);
+  const [selectedBlob, setSelectedBlob] = useState<BlobStatsDto | null>(null);
 
   const blobsApi = new BlobsApi(defaultConfig);
 
@@ -67,6 +69,10 @@ export function BlobsPage() {
   useEffect(() => {
     getAllBlobs();
   }, [showDead]);
+
+  const handleRowClick = (params: any) => {
+    setSelectedBlob(params.row);
+  };
 
   return (
     <PageFrame>
@@ -108,10 +114,18 @@ export function BlobsPage() {
               pageSizeOptions={[10, 25, 50]}
               rowSelection={false}
               getRowClassName={getRowClass}
+              onRowClick={handleRowClick}
             />
           </Box>
         </Box>
       </Paper>
+      {selectedBlob && (
+        <BlobDetailsDialog
+          open={!!selectedBlob}
+          onClose={() => setSelectedBlob(null)}
+          blob={selectedBlob}
+        />
+      )}
     </PageFrame>
   );
 }
