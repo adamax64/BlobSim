@@ -14,4 +14,4 @@ class BlobStatsDto(BaseModel):
     at_risk: bool = False
     is_dead: bool = False
     is_retired: bool = False
-    color: str = "#888888"
+    color: str

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class GrandmasterStandingsDTO:
     blob_id: int
     name: str
+    color: str
     championships: int
     gold: int
     silver: int

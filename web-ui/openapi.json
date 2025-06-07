@@ -845,13 +845,18 @@
           "strength": {
             "type": "number",
             "title": "Strength"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
           }
         },
         "type": "object",
         "required": [
           "id",
           "name",
-          "strength"
+          "strength",
+          "color"
         ],
         "title": "BlobCompetitorDto"
       },
@@ -921,6 +926,10 @@
             "type": "boolean",
             "title": "Is Retired",
             "default": false
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
           }
         },
         "type": "object",
@@ -931,7 +940,8 @@
           "wins",
           "championships",
           "grandmasters",
-          "league_name"
+          "league_name",
+          "color"
         ],
         "title": "BlobStatsDto"
       },
@@ -1105,6 +1115,10 @@
             "type": "string",
             "title": "Name"
           },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          },
           "championships": {
             "type": "integer",
             "title": "Championships"
@@ -1130,6 +1144,7 @@
         "required": [
           "blob_id",
           "name",
+          "color",
           "championships",
           "gold",
           "silver",
@@ -1392,6 +1407,10 @@
             "type": "string",
             "title": "Name"
           },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          },
           "is_contract_ending": {
             "type": "boolean",
             "title": "Is Contract Ending"
@@ -1416,6 +1435,7 @@
         "required": [
           "blob_id",
           "name",
+          "color",
           "is_contract_ending",
           "results",
           "num_of_rounds",

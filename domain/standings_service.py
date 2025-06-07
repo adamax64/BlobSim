@@ -34,6 +34,7 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
         standings.append(StandingsDTO(
             blob_id=blob.id,
             name=f"{blob.first_name} {blob.last_name}",
+            color=blob.color,
             results=standing_results,
             num_of_rounds=num_of_rounds,
             total_points=total_points,
@@ -69,6 +70,7 @@ def get_grandmaster_standings(start_season: int, current_season: int, session) -
         grandmaster_standings.append(GrandmasterStandingsDTO(
             blob_id=champion[1],
             name=champion[0],
+            color=standings_by_name[champion][0].color,
             championships=championships_by_name[champion],
             gold=golds,
             silver=silvers,

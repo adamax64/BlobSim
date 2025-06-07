@@ -15,7 +15,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
+import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { ProgressButton } from './ProgressButton';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -23,6 +23,7 @@ import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/RaceEventRecordDto';
 import { getRaceDurationBySize, roundToThreeDecimals } from './EventUtils';
 import defaultConfig from '../../default-config';
+import { IconName } from '../common/IconName';
 
 const TickLoadingBar = styled(LinearProgress)({
   height: 8,
@@ -34,7 +35,7 @@ interface EnduranceRaceEventFrameProps {
 }
 
 export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps) => {
-  const [tick, setTick] = useState(Math.max(...event.actions.map((action) => action.tick), 0));
+  const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.tick), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
 
@@ -163,7 +164,9 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
               {eventRecords?.map((record, index) => (
                 <TableRow key={index} className={getRowClass(record.previousPosition ?? 0, index + 1)}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{record.blob.name}</TableCell>
+                  <TableCell>
+                    <IconName name={record.blob.name} color={record.blob.color} />
+                  </TableCell>
                   <TableCell align="center">{getDistance(record)}</TableCell>
                   <TableCell align="center">{getDelta(record, eventRecords[0], index)}</TableCell>
                   <TableCell align="center">

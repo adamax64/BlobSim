@@ -10,8 +10,9 @@ import {
 } from '@mui/material';
 import { StandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useSimTime } from '../../context/SimTimeContext';
+import { IconName } from '../common/IconName';
 
 function getRowClass(hasEonEnded: boolean, position: number, atRisk: boolean): string | undefined {
   if (!hasEonEnded) {
@@ -48,6 +49,20 @@ interface StandingsTableProps {
 export function StandingsTable({ loading, standings, leagueName, season, hasSeasonEnded }: StandingsTableProps) {
   const { simTime } = useSimTime();
 
+  const getThresholdClassName = useCallback(
+    (position: number) => {
+      return Math.ceil(standings.length / 2) === position && simTime?.season === season ? 'row-middle' : '';
+    },
+    [standings.length],
+  );
+
+  const getPositionClassName = (position: number): string => {
+    if (position === 1) return ' text-gold';
+    if (position === 2) return ' text-silver';
+    if (position === 3) return ' text-bronze';
+    return '';
+  };
+
   if (loading) {
     return (
       <Paper sx={{ margin: 2, padding: 2, display: 'flex', justifyContent: 'center' }}>
@@ -65,20 +80,6 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
       </Paper>
     );
   }
-
-  const getThresholdClassName = useCallback(
-    (position: number) => {
-      return Math.ceil(standings.length / 2) === position && simTime?.season === season ? 'row-middle' : '';
-    },
-    [standings.length],
-  );
-
-  const getPositionClassName = (position: number): string => {
-    if (position === 1) return ' text-gold';
-    if (position === 2) return ' text-silver';
-    if (position === 3) return ' text-bronze';
-    return '';
-  };
 
   return (
     <TableContainer component={Paper} sx={{ margin: 2, width: '97%' }}>
@@ -101,7 +102,9 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
           {standings.map((standing, index) => (
             <TableRow key={index} className={getRowClass(hasSeasonEnded, index + 1, standing.isContractEnding)}>
               <TableCell className={getThresholdClassName(index + 1)}>{index + 1}</TableCell>
-              <TableCell className={getThresholdClassName(index + 1)}>{standing.name}</TableCell>
+              <TableCell className={getThresholdClassName(index + 1)}>
+                <IconName name={standing.name} color={standing.color} />
+              </TableCell>
               {standing.results.map((result, resultIndex) => (
                 <TableCell
                   key={resultIndex}
