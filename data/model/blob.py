@@ -35,3 +35,4 @@ class Blob(Base):
     league = relationship('League', backref='blobs', overlaps='blobs,league', viewonly=True)
     parent_id = Column(Integer, ForeignKey('blobs.id'))
     parent = relationship('Blob', remote_side=[id], backref='children')
+    color = Column(String, nullable=False, default="#888888")
