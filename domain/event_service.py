@@ -110,7 +110,8 @@ def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -
         return [BlobCompetitorDto(
             id=player.id,
             name=format_blob_name(player),
-            strength=player.strength
+            strength=player.strength,
+            color=player.color
         ) for player in event.league.players]
     else:
         blob_ids = set([action.blob_id for action in event.actions])
@@ -118,5 +119,6 @@ def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -
         return [BlobCompetitorDto(
             id=blob.id,
             name=format_blob_name(blob),
-            strength=blob.strength
+            strength=blob.strength,
+            color=blob.color
         ) for blob in blobs]

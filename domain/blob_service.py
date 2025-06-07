@@ -26,6 +26,7 @@ from domain.sim_data_service import (
 )
 from domain.utils.activity_utils import choose_free_activity
 from domain.utils.blob_name_utils import format_blob_name
+from domain.utils.color_utils import generate_random_color
 from domain.utils.constants import (
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
@@ -64,6 +65,7 @@ def get_all_blobs(
             at_risk=blob.contract == current_season,
             is_dead=blob.terminated is not None,
             is_retired=blob.contract is not None and blob.contract < current_season,
+            color=blob.color,
         )
         for blob in blobs
     ]
@@ -102,6 +104,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
                 born=current_time,
                 league_id=queue.id,
                 parent_id=parent_id,
+                color=generate_random_color(),
             ),
         )
         reset_factory_progress(session)
