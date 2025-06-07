@@ -1,4 +1,4 @@
-import { Box, Drawer, List, ListItem } from "@mui/material";
+import { Box, Drawer, List, ListItem, Typography } from "@mui/material";
 import { Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { CalendarMonth, Dashboard, EmojiEvents, Factory } from "@mui/icons-material";
@@ -57,6 +57,23 @@ export function RootLayout() {
             </ListItem>
           ))}
         </List>
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            padding: '1rem',
+            borderTop: '1px solid #e0e0e0',
+            backgroundColor: 'background.paper',
+          }}
+        >
+          <Typography variant="caption" display="block" color="text.secondary">
+            © 2025 Adamax-Works
+          </Typography>
+          <Typography variant="caption" display="block" color="text.secondary">
+            v2.2
+          </Typography>
+        </Box>
       </Drawer>
       <Box
         component="main"
