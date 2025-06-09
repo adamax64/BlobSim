@@ -235,3 +235,8 @@ At the end of the event the top three are highlighted by colors resemble bronze,
   - Displays blob's basic information like birthdate, debut, current status
   - Shows blob's achievements like podiums, wins, championships and grandmaster titles
 - Added copyright text and version to the bottom of the menubar
+
+### 2.2.1
+
+- Improved UI responsiveness so the UI is more usable on mobile
+- Landscape mode on mobile is still a bit broken, will be refined in future release

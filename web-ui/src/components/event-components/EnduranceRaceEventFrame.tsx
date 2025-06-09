@@ -14,6 +14,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
 import { translateEventType } from '../../utils/EnumTranslationUtils';
@@ -38,6 +40,9 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.tick), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const raceDuration = useMemo(() => getRaceDurationBySize(event.competitors.length), [event.competitors.length]);
 
@@ -156,19 +161,19 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
                 <TableCell width={60}>#</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell align="center">Distance</TableCell>
-                <TableCell align="center">Delta leader</TableCell>
+                {!isMobile && <TableCell align="center">Delta leader</TableCell>}
                 <TableCell align="center">Delta interval</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {eventRecords?.map((record, index) => (
                 <TableRow key={index} className={getRowClass(record.previousPosition ?? 0, index + 1)}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell padding="checkbox">{index + 1}</TableCell>
                   <TableCell>
-                    <IconName name={record.blob.name} color={record.blob.color} />
+                    <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
                   </TableCell>
                   <TableCell align="center">{getDistance(record)}</TableCell>
-                  <TableCell align="center">{getDelta(record, eventRecords[0], index)}</TableCell>
+                  {!isMobile && <TableCell align="center">{getDelta(record, eventRecords[0], index)}</TableCell>}
                   <TableCell align="center">
                     {getDelta(record, eventRecords[index === 0 ? 0 : index - 1], index)}
                   </TableCell>

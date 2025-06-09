@@ -11,6 +11,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import {
   ActionsApi,
@@ -41,6 +43,9 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
   const [nextBlobIndex, setNextBlobIndex] = useState(-1);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const isOneShot = useMemo(() => event.type === EventType.QuarteredOneShotScoring, [event.type]);
   const quarterEnds = useMemo(
@@ -181,6 +186,26 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
     [currentBlobIndex, isEventFinished, quarter],
   );
 
+  const shouldShowQuarter = useCallback(
+    (quarterNum: number) => {
+      if (!isMobile) return true;
+
+      switch (quarterNum) {
+        case 1: // Q1 shows in quarters 1 and 2
+          return quarter <= 2;
+        case 2: // Q2 shows in quarters 1, 2 and 3
+          return quarter <= 3;
+        case 3: // Q3 shows in quarters 3 and 4
+          return quarter >= 3;
+        case 4: // Q4 shows only in quarter 4
+          return quarter >= 4;
+        default:
+          return true;
+      }
+    },
+    [isMobile, quarter],
+  );
+
   return (
     <Card>
       <CardHeader title={translateEventType(event.type)} />
@@ -199,39 +224,57 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
               <TableRow className={currentBlobIndex === 0 ? 'disable-border-bottom' : ''}>
                 <TableCell width={60}>#</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell align="center" className={highlighByQuarter(1)}>
-                  Q1
-                </TableCell>
-                <TableCell align="center" className={highlighByQuarter(2)}>
-                  Q2
-                </TableCell>
-                <TableCell align="center" className={highlighByQuarter(3)}>
-                  Q3
-                </TableCell>
-                <TableCell align="center" className={highlighByQuarter(4)}>
-                  Q4
-                </TableCell>
+                {shouldShowQuarter(1) && (
+                  <TableCell align="center" className={highlighByQuarter(1)}>
+                    Q1
+                  </TableCell>
+                )}
+                {shouldShowQuarter(2) && (
+                  <TableCell align="center" className={highlighByQuarter(2)}>
+                    Q2
+                  </TableCell>
+                )}
+                {shouldShowQuarter(3) && (
+                  <TableCell align="center" className={highlighByQuarter(3)}>
+                    Q3
+                  </TableCell>
+                )}
+                {shouldShowQuarter(4) && (
+                  <TableCell align="center" className={highlighByQuarter(4)}>
+                    Q4
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
               {(eventRecords ?? eventRecordsCache).map((record, index) => (
                 <TableRow key={index} className={getRowClass(record, index)}>
-                  <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell>
-                    <IconName name={record.blob.name} color={record.blob.color} />
+                  <TableCell padding="checkbox" align="center">
+                    {index + 1}
                   </TableCell>
-                  <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
-                    {renderCellContent(record, 0)}
+                  <TableCell sx={isMobile ? { paddingX: 1 } : {}}>
+                    <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
                   </TableCell>
-                  <TableCell padding="none" align="center" className={highlighByQuarter(2)}>
-                    {renderCellContent(record, 1)}
-                  </TableCell>
-                  <TableCell padding="none" align="center" className={highlighByQuarter(3)}>
-                    {renderCellContent(record, 2)}
-                  </TableCell>
-                  <TableCell padding="none" align="center" className={highlighByQuarter(4)}>
-                    {renderCellContent(record, 3)}
-                  </TableCell>
+                  {shouldShowQuarter(1) && (
+                    <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
+                      {renderCellContent(record, 0)}
+                    </TableCell>
+                  )}
+                  {shouldShowQuarter(2) && (
+                    <TableCell padding="none" align="center" className={highlighByQuarter(2)}>
+                      {renderCellContent(record, 1)}
+                    </TableCell>
+                  )}
+                  {shouldShowQuarter(3) && (
+                    <TableCell padding="none" align="center" className={highlighByQuarter(3)}>
+                      {renderCellContent(record, 2)}
+                    </TableCell>
+                  )}
+                  {shouldShowQuarter(4) && (
+                    <TableCell padding="none" align="center" className={highlighByQuarter(4)}>
+                      {renderCellContent(record, 3)}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

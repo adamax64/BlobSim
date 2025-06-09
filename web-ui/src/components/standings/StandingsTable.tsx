@@ -7,6 +7,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { StandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
@@ -48,6 +50,8 @@ interface StandingsTableProps {
 
 export function StandingsTable({ loading, standings, leagueName, season, hasSeasonEnded }: StandingsTableProps) {
   const { simTime } = useSimTime();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const getThresholdClassName = useCallback(
     (position: number) => {
@@ -82,19 +86,24 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
   }
 
   return (
-    <TableContainer component={Paper} sx={{ margin: 2, width: '97%' }}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        margin: 2,
+        width: 'auto',
+      }}
+    >
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>#</TableCell>
+            <TableCell width={25}>#</TableCell>
             <TableCell>Name</TableCell>
-            {standings[0]?.results.map((_, index) => <TableCell key={index}>R{index + 1}</TableCell>)}
-            {Array.from(
-              { length: standings[0]?.numOfRounds - standings[0]?.results.length },
-              (_, index) => index + 1,
-            ).map((index) => (
-              <TableCell key={index}>R{standings[0].results.length + index}</TableCell>
-            ))}
+            {!isMobile && standings[0]?.results.map((_, index) => <TableCell key={index}>R{index + 1}</TableCell>)}
+            {!isMobile &&
+              Array.from(
+                { length: standings[0]?.numOfRounds - standings[0]?.results.length },
+                (_, index) => index + 1,
+              ).map((index) => <TableCell key={index}>R{standings[0].results.length + index}</TableCell>)}
             <TableCell>Sum</TableCell>
           </TableRow>
         </TableHead>
@@ -105,19 +114,19 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
               <TableCell className={getThresholdClassName(index + 1)}>
                 <IconName name={standing.name} color={standing.color} />
               </TableCell>
-              {standing.results.map((result, resultIndex) => (
-                <TableCell
-                  key={resultIndex}
-                  className={getThresholdClassName(index + 1) + getPositionClassName(result.position)}
-                >
-                  {result.points}
-                </TableCell>
-              ))}
-              {Array.from({ length: standing.numOfRounds - standing.results.length }, (_, index) => index + 1).map(
-                (roundIndex) => (
-                  <TableCell key={roundIndex} className={getThresholdClassName(index + 1)} />
-                ),
-              )}
+              {!isMobile &&
+                standing.results.map((result, resultIndex) => (
+                  <TableCell
+                    key={resultIndex}
+                    className={getThresholdClassName(index + 1) + getPositionClassName(result.position)}
+                  >
+                    {result.points}
+                  </TableCell>
+                ))}
+              {!isMobile &&
+                Array.from({ length: standing.numOfRounds - standing.results.length }, (_, index) => index + 1).map(
+                  (roundIndex) => <TableCell key={roundIndex} className={getThresholdClassName(index + 1)} />,
+                )}
               <TableCell className={getThresholdClassName(index + 1)}>{standing.totalPoints}</TableCell>
             </TableRow>
           ))}

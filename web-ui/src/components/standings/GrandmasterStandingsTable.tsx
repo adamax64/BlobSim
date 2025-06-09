@@ -7,6 +7,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { GrandmasterStandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
@@ -24,6 +26,9 @@ interface GrandmasterStandingsTableProps {
 }
 
 export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded }: GrandmasterStandingsTableProps) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   if (loading) {
     return (
       <Paper sx={{ margin: 2, padding: 2, display: 'flex', justifyContent: 'center' }}>
@@ -41,17 +46,17 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
   }
 
   return (
-    <TableContainer component={Paper} sx={{ margin: 2, width: '97%' }}>
+    <TableContainer component={Paper} sx={{ margin: 2, width: 'auto' }}>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>#</TableCell>
             <TableCell>Name</TableCell>
-            <TableCell>Championships</TableCell>
-            <TableCell>Gold</TableCell>
-            <TableCell>Silver</TableCell>
-            <TableCell>Bronze</TableCell>
-            <TableCell>Points</TableCell>
+            <TableCell>{isMobile ? 'Champs.' : 'Championships'}</TableCell>
+            <TableCell>{'Gold'}</TableCell>
+            {!isMobile && <TableCell>{'Silver'}</TableCell>}
+            {!isMobile && <TableCell>{'Bronze'}</TableCell>}
+            {!isMobile && <TableCell>{'Points'}</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -63,9 +68,9 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
               </TableCell>
               <TableCell>{standing.championships}</TableCell>
               <TableCell>{standing.gold}</TableCell>
-              <TableCell>{standing.silver}</TableCell>
-              <TableCell>{standing.bronze}</TableCell>
-              <TableCell>{standing.points}</TableCell>
+              {!isMobile && <TableCell>{standing.silver}</TableCell>}
+              {!isMobile && <TableCell>{standing.bronze}</TableCell>}
+              {!isMobile && <TableCell>{standing.points}</TableCell>}
             </TableRow>
           ))}
         </TableBody>

@@ -132,14 +132,14 @@ export function StandingsPage() {
   return (
     <PageFrame>
       <PageTitleCard title="Blob Championship System - Standings" />
-      <Paper>
+      <Paper sx={{ marginBottom: 4 }}>
         {isFormLoading ? (
           <Box display="flex" justifyContent="center" p={1}>
             <CircularProgress />
           </Box>
         ) : (
           <Box display="flex" gap={3} p={2}>
-            <FormControl variant="outlined" sx={{ minWidth: 250 }}>
+            <FormControl variant="outlined" sx={{ minWidth: 210 }}>
               <InputLabel id="league-select">League</InputLabel>
               <Select labelId="league-select" value={selectedLeague?.id} onChange={handleLeagueChange} label="League">
                 {leagueOptions?.map((league) => (
