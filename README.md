@@ -240,3 +240,11 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 
 - Improved UI responsiveness so the UI is more usable on mobile
 - Landscape mode on mobile is still a bit broken, will be refined in future release
+
+### 2.3
+
+- Added admin authentication
+  - Login page with username and password
+  - Token-based authentication with backend API
+  - Protected endpoints that require authentication
+  - Only admin user is added at the moment, no registration
