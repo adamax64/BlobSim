@@ -6,6 +6,7 @@ import { RootLayout } from '../components/RootLayout';
 import { CalendarPage } from '../components/pages/CalendarPage';
 import { FactoryPage } from '../components/pages/FactoryPage';
 import { EventPage } from '../components/pages/EventPage';
+import { LoginPage } from '../components/pages/LoginPage';
 
 const RootRoute = createRootRoute({
   component: RootLayout,
@@ -15,6 +16,11 @@ export const routeTree = RootRoute.addChildren([
   createRoute({
     path: '/',
     loader: () => redirect({ to: '/dashboard' }),
+    getParentRoute: () => RootRoute,
+  }),
+  createRoute({
+    path: '/login',
+    component: LoginPage,
     getParentRoute: () => RootRoute,
   }),
   createRoute({

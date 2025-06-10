@@ -10,6 +10,8 @@ import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { SimTimeDisplay } from '../common/SimTimeDisplay';
 import { useSimTime } from '../../context/SimTimeContext';
 import { LoadingOverlay } from '../common/LoadingOverlay';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from '@tanstack/react-router';
 
 function getNewsText(news: News) {
   switch (news.newsType) {
@@ -31,6 +33,7 @@ function getNewsText(news: News) {
 export function DashboardPage() {
   const [open, setOpen] = useState(false);
   const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const { refreshSimTime, loading: simTimeLoading } = useSimTime();
 
@@ -95,7 +98,7 @@ export function DashboardPage() {
         </CardContent>
       </Card>
       <Box display="flex" gap={1}>
-        {newsTypes.includes(NewsType.Event) && (
+        {isAuthenticated && newsTypes.includes(NewsType.Event) && (
           <Button
             variant="contained"
             color="primary"
@@ -105,19 +108,20 @@ export function DashboardPage() {
             Proceed to event
           </Button>
         )}
-        {newsTypes.includes(NewsType.BlobCreated) && (
+        {isAuthenticated && newsTypes.includes(NewsType.BlobCreated) && (
           <Button variant="contained" color="primary" endIcon={<AddCircle />} onClick={() => setOpen(true)}>
             Create new Blob
           </Button>
         )}
-        {(newsTypes.includes(NewsType.Continue) ||
-          newsTypes.includes(NewsType.EventEnded) ||
-          newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
-          newsTypes.includes(NewsType.SeasonStart)) && (
-          <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
-            Proceed to next day
-          </Button>
-        )}
+        {isAuthenticated &&
+          (newsTypes.includes(NewsType.Continue) ||
+            newsTypes.includes(NewsType.EventEnded) ||
+            newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
+            newsTypes.includes(NewsType.SeasonStart)) && (
+            <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
+              Proceed to next day
+            </Button>
+          )}
       </Box>
       {/* TODO: handle blob with parent creation */}
       <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />

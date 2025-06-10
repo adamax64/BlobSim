@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.competition_service import (
     load_competition_data,
@@ -7,6 +7,8 @@ from domain.competition_service import (
 from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
+from .auth_dependency import require_auth
+
 
 router = APIRouter(prefix="/competition", tags=["competition"])
 
@@ -24,7 +26,7 @@ async def get_current_event() -> EventDto:
 
 
 @router.post("/quartered-event-results")
-async def save_quartered(event: EventDto, event_records: list[QuarteredEventRecordDto]) -> None:
+async def save_quartered(event: EventDto, event_records: list[QuarteredEventRecordDto], _=Depends(require_auth)) -> None:
     """
     Save event results for quartered events.
     """
@@ -32,14 +34,14 @@ async def save_quartered(event: EventDto, event_records: list[QuarteredEventReco
 
 
 @router.post("/race-event-results")
-async def save_race(event: EventDto, event_records: list[RaceEventRecordDto]) -> None:
+async def save_race(event: EventDto, event_records: list[RaceEventRecordDto], _=Depends(require_auth)) -> None:
     """
     Save event results for race events.
     """
     _save_event_results(event, event_records)
 
 
-def _save_event_results(event: EventDto, event_records: list[EventRecordDto]):
+def _save_event_results(event: EventDto, event_records: list[EventRecordDto]) -> None:
     if event_records is None or len(event_records) == 0:
         raise HTTPException(status_code=400, detail="EVENT_RECORDS_EMPTY")
 

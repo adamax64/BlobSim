@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi.responses import Response
 
 from domain.blob_service import get_all_blobs, create_blob as service_create_blob
 from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
+from .auth_dependency import require_auth
 
 
 router = APIRouter(prefix="/blobs", tags=["blobs"])
@@ -20,7 +22,7 @@ def get_all(
 
 
 @router.post("/create")
-def create_blob(first_name: str, last_name: str, parent_id: int | None = None) -> Response:
+def create_blob(first_name: str, last_name: str, parent_id: int | None = None, _=Depends(require_auth)) -> Response:
     try:
         service_create_blob(first_name=first_name, last_name=last_name, parent_id=parent_id)
         return Response(status_code=status.HTTP_204_NO_CONTENT)

@@ -43,7 +43,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/general-infos/news": {
@@ -141,6 +146,11 @@
         ],
         "summary": "Create Blob",
         "operationId": "create_blob_blobs_create_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "first_name",
@@ -253,6 +263,11 @@
         ],
         "summary": "Save Name Suggestion",
         "operationId": "save_name_suggestion_factory_save_name_suggestion_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "first_name",
@@ -303,6 +318,11 @@
         "summary": "Update Name Suggestion",
         "description": "Updates the first name of a child name suggestion",
         "operationId": "update_name_suggestion_factory_update_name_suggestion_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -533,7 +553,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/competition/race-event-results": {
@@ -573,7 +598,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/actions/create/quartered": {
@@ -584,6 +614,11 @@
         "summary": "Quartered",
         "description": "Generate score for contender and save the action for given event.",
         "operationId": "quartered_actions_create_quartered_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "event_id",
@@ -644,6 +679,11 @@
         "summary": "Race",
         "description": "Generate score for all contenders and save the actions for given event.",
         "operationId": "race_actions_create_race_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "event_id",
@@ -804,6 +844,71 @@
             }
           }
         }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/validate": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Validate Token",
+        "operationId": "validate_token_auth_validate_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     }
   },
@@ -1194,6 +1299,24 @@
         ],
         "title": "LeagueDto"
       },
+      "LoginRequest": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginRequest"
+      },
       "NameSuggestionDto": {
         "properties": {
           "id": {
@@ -1461,6 +1584,19 @@
         ],
         "title": "StandingsResultDTO"
       },
+      "Token": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "Token"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -1493,6 +1629,17 @@
           "type"
         ],
         "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "auth/login"
+          }
+        }
       }
     }
   }

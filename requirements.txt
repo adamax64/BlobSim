@@ -1,6 +1,7 @@
-
 sqlalchemy
 alembic
 rich
 pytest
 fastapi[standard]
+PyJWT
+python-dotenv

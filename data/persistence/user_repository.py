@@ -2,12 +2,6 @@ from data.db.db_engine import User, transactional
 
 
 @transactional
-def is_exist_by_name(username: str, session=None) -> bool:
-    query_result = session.query(User).filter(User.name == username).all()
-    return not len(query_result) == 0
-
-
-@transactional
 def get_user_by_name(username: str, session=None) -> User:
     query_result = session.query(User).filter(User.name == username).all()
 
