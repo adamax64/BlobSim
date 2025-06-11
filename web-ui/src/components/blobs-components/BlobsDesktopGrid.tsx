@@ -8,7 +8,6 @@ const desktopColumns = [
   {
     field: 'name',
     headerName: 'Name',
-    flex: 1,
     resizable: false,
     renderCell: (params: GridRenderCellParams<BlobStatsDto>) => (
       <Box padding={2} sx={{ cursor: 'pointer' }}>
@@ -23,7 +22,7 @@ const desktopColumns = [
   { field: 'wins', headerName: 'Wins', resizable: false },
   { field: 'championships', headerName: 'Championships', resizable: false },
   { field: 'grandmasters', headerName: 'Grandmasters', resizable: false },
-  { field: 'leagueName', headerName: 'League', flex: 1, resizable: false },
+  { field: 'leagueName', headerName: 'League', resizable: false },
 ];
 
 function getRowClass(params: GridRowClassNameParams<BlobStatsDto>) {
@@ -47,19 +46,8 @@ interface BlobsDesktopGridProps {
 
 export function BlobsDesktopGrid({ blobs, isPending, onBlobSelect }: BlobsDesktopGridProps) {
   return (
-    <Box display="flex" justifyContent="center">
-      <Box
-        width="98%"
-        margin={2}
-        alignContent="center"
-        pb="1vw"
-        sx={{
-          '& .MuiDataGrid-root': {
-            width: '100%',
-            overflowX: 'hidden',
-          },
-        }}
-      >
+    <Box margin={2} pb="1vw">
+      <Box display="grid" width="100%">
         <DataGrid
           columns={desktopColumns}
           rows={blobs ?? []}
@@ -78,6 +66,13 @@ export function BlobsDesktopGrid({ blobs, isPending, onBlobSelect }: BlobsDeskto
           rowSelection={false}
           getRowClassName={getRowClass}
           onRowClick={(params) => onBlobSelect(params.row)}
+          autosizeOnMount
+          autosizeOptions={{
+            columns: ['name', 'leagueName'],
+            expand: true,
+            includeHeaders: true,
+            includeOutliers: true,
+          }}
         />
       </Box>
     </Box>

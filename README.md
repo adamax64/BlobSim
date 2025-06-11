@@ -248,3 +248,7 @@ At the end of the event the top three are highlighted by colors resemble bronze,
   - Token-based authentication with backend API
   - Protected endpoints that require authentication
   - Only admin user is added at the moment, no registration
+
+### 2.3.1
+
+- Smaller UI fixes on blobs page and race event page

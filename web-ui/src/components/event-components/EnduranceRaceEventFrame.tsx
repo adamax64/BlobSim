@@ -141,7 +141,7 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
       <Divider />
       <CardContent>
         <ProgressButton
-          isStart={event.actions.length === 0}
+          isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
           isEnd={tick >= raceDuration}
           isEventFinished={isEventFinished}
           onClickStart={progressEvent}
