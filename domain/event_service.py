@@ -1,6 +1,5 @@
 from typing import List
 from sqlalchemy.orm import Session
-import random
 
 from data.db.db_engine import transactional
 from data.model.event import Event
@@ -48,7 +47,6 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
     ) for action in event.actions]
 
     competitors = _get_competitors(session, event, is_event_concluded)
-    random.shuffle(competitors)
 
     return EventDto(
         id=event.id,

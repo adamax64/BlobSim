@@ -1,4 +1,5 @@
 from collections import defaultdict
+import random
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventTypeDto
@@ -19,6 +20,12 @@ def _get_quartered_event_records(
 ) -> list[QuarteredEventRecordDto]:
     quarter_ends = _get_quarter_ends(len(competitors), event_type)
     records = {blob.id: QuarteredEventRecordDto(blob, [ScoreDto(), ScoreDto(), ScoreDto(), ScoreDto()]) for blob in competitors}
+
+    if len(actions) == 0:
+        result_records = list(records.values())
+        random.shuffle(result_records)
+        result_records[0].next = True
+        return result_records
 
     quarter = 1
     for action in actions:
@@ -115,6 +122,11 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
         actions_by_tick[action.tick].append(action)
 
     competitors = {competitor.id: RaceEventRecordDto(blob=competitor, distance_records=[]) for competitor in competitors}
+
+    if len(actions) == 0:
+        result_records = list(competitors.values())
+        random.shuffle(result_records)
+        return result_records
 
     previous_tick = sorted(actions_by_tick.keys(), reverse=True)[1] if len(actions_by_tick.keys()) > 1 else None
     for tick in actions_by_tick.keys():

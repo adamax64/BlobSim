@@ -252,3 +252,9 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 2.3.1
 
 - Smaller UI fixes on blobs page and race event page
+
+### 2.3.2
+
+- On race events score generation use perlin-like noise for more diverse race results
+- Fixed competitor shuffling at the beginning of events
+- Added event records cache to endurance race view to avoid table flashing on progressing to next tick

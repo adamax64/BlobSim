@@ -40,6 +40,7 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.tick), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
+  const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -52,7 +53,11 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
 
   const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
     mutationFn: (eventId: number) => eventRecordsApi.getRaceEventRecordsRaceGet({ eventId }),
-    onSuccess: () => setLoadingNextTick(false),
+    onSuccess: (data) => {
+      setLoadingNextTick(false);
+      setEventRecordsCache(data);
+      return data;
+    },
   });
 
   const { mutate: createActions } = useMutation<void, Error>({
@@ -128,7 +133,7 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
       if (previousPosition > currentPosition) {
         return 'cell-overtake';
       }
-      if (currentPosition > previousPosition) {
+      if (currentPosition > previousPosition && tick > 0) {
         return 'cell-fell-behind';
       }
     }
@@ -166,16 +171,24 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
               </TableRow>
             </TableHead>
             <TableBody>
-              {eventRecords?.map((record, index) => (
+              {(eventRecords ?? eventRecordsCache).map((record, index) => (
                 <TableRow key={index} className={getRowClass(record.previousPosition ?? 0, index + 1)}>
                   <TableCell padding="checkbox">{index + 1}</TableCell>
                   <TableCell>
                     <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
                   </TableCell>
                   <TableCell align="center">{getDistance(record)}</TableCell>
-                  {!isMobile && <TableCell align="center">{getDelta(record, eventRecords[0], index)}</TableCell>}
+                  {!isMobile && (
+                    <TableCell align="center">
+                      {getDelta(record, eventRecordsCache?.[0] ?? eventRecords?.[0], index)}
+                    </TableCell>
+                  )}
                   <TableCell align="center">
-                    {getDelta(record, eventRecords[index === 0 ? 0 : index - 1], index)}
+                    {getDelta(
+                      record,
+                      eventRecordsCache?.[index === 0 ? 0 : index - 1] ?? eventRecords?.[index === 0 ? 0 : index - 1],
+                      index,
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
