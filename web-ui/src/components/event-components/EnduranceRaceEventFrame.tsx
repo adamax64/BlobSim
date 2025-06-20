@@ -26,6 +26,7 @@ import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/
 import { getRaceDurationBySize, roundToThreeDecimals } from './EventUtils';
 import defaultConfig from '../../default-config';
 import { IconName } from '../common/IconName';
+import { useAuth } from '../../context/AuthContext';
 
 const TickLoadingBar = styled(LinearProgress)({
   height: 8,
@@ -37,6 +38,8 @@ interface EnduranceRaceEventFrameProps {
 }
 
 export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps) => {
+  const { isAuthenticated } = useAuth();
+
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.tick), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
@@ -145,14 +148,16 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
       <CardHeader title={translateEventType(event.type)} />
       <Divider />
       <CardContent>
-        <ProgressButton
-          isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
-          isEnd={tick >= raceDuration}
-          isEventFinished={isEventFinished}
-          onClickStart={progressEvent}
-          onClickNext={progressEvent}
-          onClickEnd={finishEvent}
-        />
+        {isAuthenticated && (
+          <ProgressButton
+            isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
+            isEnd={tick >= raceDuration}
+            isEventFinished={isEventFinished}
+            onClickStart={progressEvent}
+            onClickNext={progressEvent}
+            onClickEnd={finishEvent}
+          />
+        )}
         <Typography fontSize={18} fontWeight={600} paddingBottom={2}>
           Tick: {tick} / {raceDuration}
         </Typography>

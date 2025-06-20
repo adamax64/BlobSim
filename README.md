@@ -258,3 +258,8 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 - On race events score generation use perlin-like noise for more diverse race results
 - Fixed competitor shuffling at the beginning of events
 - Added event records cache to endurance race view to avoid table flashing on progressing to next tick
+
+### 2.3.3
+
+- Hide "add name suggestion" button and progress buttons on event page when user is unauthorized
+- Minor refactors on dashboard

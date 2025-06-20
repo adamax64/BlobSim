@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { AddCircle } from '@mui/icons-material';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
+import { useAuth } from '../../context/AuthContext';
 
 const FactoryProgressBar = styled(LinearProgress)({
   height: 16,
@@ -25,6 +26,8 @@ const FactoryProgressBar = styled(LinearProgress)({
 });
 
 export function FactoryPage() {
+  const { isAuthenticated } = useAuth();
+
   const [open, setOpen] = useState(false);
   const [selectedNameId, setSelectedNameId] = useState<number>();
   const [selectedLastName, setSelectedLastName] = useState<string>();
@@ -85,9 +88,11 @@ export function FactoryPage() {
         <CardContent>
           <Box display="flex" alignItems="flex-start" flexDirection="column" gap={1}>
             <Typography variant="h6">Blob name suggestions</Typography>
-            <Button variant="contained" onClick={() => setOpen(true)} endIcon={<AddCircle />}>
-              Add name suggestion
-            </Button>
+            {isAuthenticated && (
+              <Button variant="contained" onClick={() => setOpen(true)} endIcon={<AddCircle />}>
+                Add name suggestion
+              </Button>
+            )}
             {isLoadingNames ? (
               <Box display="flex" justifyContent="center" p={1}>
                 <CircularProgress />
@@ -97,7 +102,7 @@ export function FactoryPage() {
                 {nameSuggestions?.map((name, i) => (
                   <ListItem key={i} sx={{ display: 'flex', gap: 1 }}>
                     {name.firstName} {name.lastName}{' '}
-                    {!name.firstName && (
+                    {!name.firstName && isAuthenticated && (
                       <Button
                         variant="outlined"
                         size="small"

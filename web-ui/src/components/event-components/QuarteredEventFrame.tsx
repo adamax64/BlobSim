@@ -30,12 +30,15 @@ import { ProgressButton } from './ProgressButton';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { IconName } from '../common/IconName';
+import { useAuth } from '../../context/AuthContext';
 
 interface QuarteredEventFrameProps {
   event: EventDto;
 }
 
 export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
+  const { isAuthenticated } = useAuth();
+
   const [tick, setTick] = useState(event.actions.length);
   const [isPerforming, setIsPerforming] = useState(false);
   const [isEventFinished, setIsEventFinished] = useState(false);
@@ -210,14 +213,16 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
     <Card>
       <CardHeader title={translateEventType(event.type)} />
       <CardContent>
-        <ProgressButton
-          isStart={tick === 0}
-          isEnd={quarter > 4}
-          isEventFinished={isEventFinished}
-          onClickStart={progressEvent}
-          onClickNext={progressEvent}
-          onClickEnd={finishEvent}
-        />
+        {isAuthenticated && (
+          <ProgressButton
+            isStart={tick === 0}
+            isEnd={quarter > 4}
+            isEventFinished={isEventFinished}
+            onClickStart={progressEvent}
+            onClickNext={progressEvent}
+            onClickEnd={finishEvent}
+          />
+        )}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
