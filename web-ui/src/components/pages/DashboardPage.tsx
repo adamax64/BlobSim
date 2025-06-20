@@ -34,6 +34,7 @@ export function DashboardPage() {
   const [open, setOpen] = useState(false);
   const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const { refreshSimTime, loading: simTimeLoading } = useSimTime();
 
@@ -97,32 +98,34 @@ export function DashboardPage() {
           </Box>
         </CardContent>
       </Card>
-      <Box display="flex" gap={1}>
-        {isAuthenticated && newsTypes.includes(NewsType.Event) && (
+      {isAuthenticated && (
+        <Box display="flex" gap={1}>
+        {newsTypes.includes(NewsType.Event) && (
           <Button
             variant="contained"
             color="primary"
             endIcon={<Stadium />}
-            onClick={() => (window.location.href = '/event')}
+            onClick={() => navigate({ to: '/event' })}
           >
             Proceed to event
           </Button>
         )}
-        {isAuthenticated && newsTypes.includes(NewsType.BlobCreated) && (
+        {newsTypes.includes(NewsType.BlobCreated) && (
           <Button variant="contained" color="primary" endIcon={<AddCircle />} onClick={() => setOpen(true)}>
             Create new Blob
           </Button>
         )}
-        {isAuthenticated &&
+        {
           (newsTypes.includes(NewsType.Continue) ||
             newsTypes.includes(NewsType.EventEnded) ||
             newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
             newsTypes.includes(NewsType.SeasonStart)) && (
             <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
               Proceed to next day
-            </Button>
+              </Button>
           )}
-      </Box>
+        </Box>
+      )}
       {/* TODO: handle blob with parent creation */}
       <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
       {(loadingOverlayVisible || simTimeLoading) && <LoadingOverlay />}
