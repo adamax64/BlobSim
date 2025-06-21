@@ -263,3 +263,7 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 
 - Hide "add name suggestion" button and progress buttons on event page when user is unauthorized
 - Minor refactors on dashboard
+
+### 2.3.4
+
+- Display name of blob's parent on blob details dialog

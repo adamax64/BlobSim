@@ -16,6 +16,7 @@ from data.persistence.name_suggestion_repository import (
     get_oldest_name,
 )
 from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.parent_dto import ParentDto
 from domain.enums.activity_type import ActivityType
 from domain.exceptions.name_occupied_exception import NameOccupiedException
 from domain.sim_data_service import (
@@ -66,6 +67,7 @@ def get_all_blobs(
             is_dead=blob.terminated is not None,
             is_retired=blob.contract is not None and blob.contract < current_season,
             color=blob.color,
+            parent=ParentDto(name=format_blob_name(blob.parent), color=blob.parent.color) if blob.parent else None,
         )
         for blob in blobs
     ]

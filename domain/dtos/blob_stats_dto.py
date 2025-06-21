@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from domain.dtos.parent_dto import ParentDto
+
 
 class BlobStatsDto(BaseModel):
     name: str
@@ -15,3 +17,4 @@ class BlobStatsDto(BaseModel):
     is_dead: bool = False
     is_retired: bool = False
     color: str
+    parent: ParentDto | None = None

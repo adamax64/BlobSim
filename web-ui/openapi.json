@@ -1035,6 +1035,16 @@
           "color": {
             "type": "string",
             "title": "Color"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParentDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -1393,6 +1403,24 @@
           "CONTINUE"
         ],
         "title": "NewsType"
+      },
+      "ParentDto": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "color"
+        ],
+        "title": "ParentDto"
       },
       "QuarteredEventRecordDto": {
         "properties": {
