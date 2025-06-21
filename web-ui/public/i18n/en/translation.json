@@ -46,10 +46,9 @@
     "event_type": "Event Type"
   },
   "event_types": {
-    "QuarteredOneShotScoring": "Quartered One Shot High Jump",
-    "QuarteredTwoShotScoring": "Quartered Two Shot High Jump",
-    "EnduranceRace": "Endurance Race",
-    "unknown": "Unknown Event Type"
+    "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
+    "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
+    "ENDURANCE_RACE": "Endurance Race"
   },
   "event": {
     "title": "{{leagueName}} Season {{season}} Round {{round}}",

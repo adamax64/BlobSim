@@ -46,10 +46,9 @@
     "event_type": "Esemény típus"
   },
   "event_types": {
-    "QuarteredOneShotScoring": "Egypróbás Magasugrás",
-    "QuarteredTwoShotScoring": "Kétpróbás Magasugrás",
-    "EnduranceRace": "Hosszútávú verseny",
-    "unknown": "Ismeretlen esemény típus"
+    "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
+    "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
+    "ENDURANCE_RACE": "Hosszútávú verseny"
   },
   "event": {
     "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",
