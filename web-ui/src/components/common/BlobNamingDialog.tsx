@@ -15,6 +15,7 @@ import { BlobsApi, FactoryApi, ResponseError } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { closeSnackbar, useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 interface BlobNamingDialogProps {
   open: boolean;
@@ -29,6 +30,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>(prefilledLastName ?? '');
   const [validationError, setValidationError] = useState<string>();
+  const { t } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -60,7 +62,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
     onError: (error: ResponseError) => {
       error.response.json().then((errorBody) => {
         if (errorBody.detail === 'NAME_ALREADY_OCCUPIED') {
-          enqueueSnackbar('Name already exists in suggestions list', {
+          enqueueSnackbar(t('blob_naming.name_exists_error'), {
             key: errorBody.detail,
             variant: 'error',
             autoHideDuration: 6000,
@@ -96,7 +98,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
     }
 
     if (!value.match(/[A-Z]/)) {
-      setValidationError('Each word must start with a capital letter');
+      setValidationError(t('blob_naming.validation_error'));
     } else {
       setValidationError(undefined);
     }
@@ -105,7 +107,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
   return (
     <Dialog open={open} onClose={() => onClose()}>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', padding: '1.2rem', paddingBottom: 0 }}>
-        {mode == 'create' ? 'Create new blob' : 'Add name suggestion'}{' '}
+        {mode == 'create' ? t('blob_naming.create_title') : t('blob_naming.add_title')}
         <IconButton aria-label="close" onClick={() => onClose()}>
           <Close />
         </IconButton>
@@ -115,7 +117,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
           <TextField
             autoFocus
             id="first-name"
-            label="First name"
+            label={t('blob_naming.first_name')}
             type="text"
             fullWidth
             value={firstName}
@@ -124,7 +126,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
           />
           <TextField
             id="last-name"
-            label="Last name"
+            label={t('blob_naming.last_name')}
             type="text"
             fullWidth
             value={lastName}
@@ -148,7 +150,7 @@ export function BlobNamingDialog({ open, onClose, mode, prefilledLastName, nameI
           sx={{ margin: '0.5rem' }}
           disabled={!firstName || !!validationError}
         >
-          {mode == 'create' ? 'Create' : 'Add'}
+          {mode == 'create' ? t('blob_naming.create_button') : t('blob_naming.add_button')}
         </Button>
       </DialogActions>
     </Dialog>

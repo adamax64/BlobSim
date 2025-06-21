@@ -267,3 +267,12 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 ### 2.3.4
 
 - Display name of blob's parent on blob details dialog
+
+### 2.4
+
+- Introduce internationalization:
+  - Language can be set at the bottom of the drawer
+  - Default language is english
+  - Other language option is hungarian
+- Fixed blob search by name error
+- Adjusted blob datagrid autosizing to solve column grid imploding

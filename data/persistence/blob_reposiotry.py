@@ -1,4 +1,3 @@
-from typing import Dict, List
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
@@ -9,12 +8,12 @@ from data.model.blob import Blob
 @transactional
 def get_all_blobs_by_name(
     session: Session, name_search: str = None, show_dead: bool = False
-) -> List[Blob]:
+) -> list[Blob]:
     result = (
         session.query(Blob)
         .filter(
             and_(
-                name_search is None or Blob.first_name.contains(name_search) or Blob.last_name.contains(name_search),
+                name_search is None or or_(Blob.first_name.contains(name_search), Blob.last_name.contains(name_search)),
                 or_(show_dead, Blob.integrity > 0),
             )
         )
@@ -24,13 +23,13 @@ def get_all_blobs_by_name(
 
 
 @transactional
-def get_all_by_ids(session: Session, blob_ids) -> List[Blob]:
+def get_all_by_ids(session: Session, blob_ids) -> list[Blob]:
     result = session.query(Blob).filter(Blob.id.in_(blob_ids)).all()
     return result
 
 
 @transactional
-def get_all_by_league_order_by_id(session: Session, league_id: int) -> Dict[int, Blob]:
+def get_all_by_league_order_by_id(session: Session, league_id: int) -> dict[int, Blob]:
     result = session.query(Blob).filter(Blob.league_id == league_id).all()
     return {result.id: result for result in result}
 
@@ -42,7 +41,7 @@ def get_blob_by_id(session: Session, blob_id: int) -> Blob:
 
 
 @transactional
-def save_all_blobs(session: Session, blobs: List[Blob]):
+def save_all_blobs(session: Session, blobs: list[Blob]):
     session.add_all(blobs)
     session.commit()
 

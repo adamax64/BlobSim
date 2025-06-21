@@ -1,24 +1,26 @@
-import { Box, Drawer, List, ListItem, Typography, IconButton, useTheme, useMediaQuery, Fab } from '@mui/material';
+import { Box, Drawer, List, ListItem, Typography, useTheme, useMediaQuery, Fab } from '@mui/material';
 import { Link, Outlet } from '@tanstack/react-router';
 import { CalendarMonth, Dashboard, EmojiEvents, Factory, Menu } from '@mui/icons-material';
 import { BlobPiktogram } from './icons/BlobPiktogram';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './common/LanguageSwitcher';
 
-const pages = ['Dashboard', 'Blobs', 'Factory', 'Standings', 'Calendar'];
+const pages = ['dashboard', 'blobs', 'factory', 'standings', 'calendar'];
 
 const drawerWidth = 240;
 
 function getMenuIcon(page: string) {
   switch (page) {
-    case 'Dashboard':
+    case 'dashboard':
       return <Dashboard />;
-    case 'Blobs':
+    case 'blobs':
       return <BlobPiktogram size={24} color="#222222" />;
-    case 'Factory':
+    case 'factory':
       return <Factory />;
-    case 'Standings':
+    case 'standings':
       return <EmojiEvents />;
-    case 'Calendar':
+    case 'calendar':
       return <CalendarMonth />;
     default:
       return null;
@@ -29,6 +31,7 @@ export function RootLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -43,35 +46,36 @@ export function RootLayout() {
               {getMenuIcon(text)}
               <Link
                 key={text}
-                to={`/${text.toLowerCase()}` as string}
+                to={`/${text}`}
                 activeProps={{
                   className: 'font-bold',
                 }}
                 activeOptions={{ exact: true }}
                 onClick={() => isMobile && setMobileOpen(false)}
               >
-                {text}
+                {t(`menu.${text}`)}
               </Link>
             </Box>
           </ListItem>
         ))}
       </List>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-          padding: '1rem',
-          borderTop: '1px solid #e0e0e0',
-          backgroundColor: 'background.paper',
-        }}
-      >
-        <Typography variant="caption" display="block" color="text.secondary">
-          © 2025 Adamax-Works
-        </Typography>
-        <Typography variant="caption" display="block" color="text.secondary">
-          v2.3.4
-        </Typography>
+      <Box>
+        <LanguageSwitcher />
+        <Box
+          sx={{
+            width: '100%',
+            padding: '1rem',
+            borderTop: '1px solid #e0e0e0',
+            backgroundColor: 'background.paper',
+          }}
+        >
+          <Typography variant="caption" display="block" color="text.secondary">
+            © 2025 Adamax-Works
+          </Typography>
+          <Typography variant="caption" display="block" color="text.secondary">
+            v2.4
+          </Typography>
+        </Box>
       </Box>
     </>
   );
@@ -95,8 +99,9 @@ export function RootLayout() {
           keepMounted: true, // Better open performance on mobile.
         }}
         sx={{
-          display: { xs: 'block', sm: 'none' },
+          display: { xs: 'flex', sm: 'none' },
           '& .MuiDrawer-paper': {
+            justifyContent: 'space-between',
             boxSizing: 'border-box',
             width: drawerWidth,
           },
@@ -109,10 +114,11 @@ export function RootLayout() {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'none', sm: 'flex' },
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
+            justifyContent: 'space-between',
             width: drawerWidth,
             boxSizing: 'border-box',
           },

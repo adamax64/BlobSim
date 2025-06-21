@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
 import { SimTimeProvider } from './context/SimTimeContext';
 import { AuthProvider } from './context/AuthContext';
+import './i18n';
 
 // Set up a Router instance
 const router = createRouter({

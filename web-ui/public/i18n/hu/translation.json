@@ -1,0 +1,135 @@
+{
+  "login": {
+    "title": "Admin Bejelentkezés",
+    "username": "Felhasználónév",
+    "password": "Jelszó",
+    "login_button": "Bejelentkezés",
+    "invalid_credentials": "Hibás bejelentkezési adatok"
+  },
+  "dashboard": {
+    "title": "Blob Bajnokság - Kezdőlap",
+    "date": "Dátum",
+    "news": "Hírek",
+    "loading": "Betöltés...",
+    "proceed_to_event": "Ugrás az eseményhez",
+    "create_new_blob": "Új Blob létrehozása",
+    "proceed_to_next_day": "Tovább a következő napra",
+    "news_item": {
+      "event": "A mai napon verseny következik!",
+      "blob_created_and_named": "Egy új, {{blobInfo}} nevű blob lett létrehozva!",
+      "blob_created": "Egy új blob lett létrehozva!",
+      "season_start": "Új szezon kezdődött!",
+      "continue": "Ma nem történik semmi.",
+      "event_ended": "A(z) {{eventName}} véget ért. A dobogósok: {{winner}}, {{runnerUp}} és {{thirdPlace}}."
+    }
+  },
+  "blobs": {
+    "title": "Blobok",
+    "search_by_name": "Keresés név alapján",
+    "show_dead": "Termináltak megjelenítése"
+  },
+  "blobs_grid": {
+    "name": "Név",
+    "born": "Született",
+    "debut": "Debütálás",
+    "contract": "Szerződés",
+    "podiums": "Dobogók",
+    "wins": "Győzelmek",
+    "championships": "Bajnokságok",
+    "grandmasters": "Nagymesteri címek",
+    "league": "Liga"
+  },
+  "calendar": {
+    "title": "Blob Bajnokság - Versenynaptár",
+    "date": "Dátum",
+    "league": "Liga",
+    "event_type": "Esemény típus"
+  },
+  "event_types": {
+    "QuarteredOneShotScoring": "Egypróbás Magasugrás",
+    "QuarteredTwoShotScoring": "Kétpróbás Magasugrás",
+    "EnduranceRace": "Hosszútávú verseny",
+    "unknown": "Ismeretlen esemény típus"
+  },
+  "event": {
+    "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",
+    "no_event_data": "Nincs elérhető esemény adat"
+  },
+  "endurance_race": {
+    "tick": "Tick",
+    "name": "Név",
+    "distance": "Távolság",
+    "delta_leader": "Delta az éllovashoz",
+    "delta_interval": "Delta intervallum"
+  },
+  "progress_button": {
+    "start_competition": "Verseny indítása",
+    "next": "Következő",
+    "conclude_event": "Esemény lezárása",
+    "back_to_dashboard": "Vissza a kezdőlapra"
+  },
+  "quartered_event": {
+    "name": "Név",
+    "best": "Legjobb"
+  },
+  "factory": {
+    "title": "Blob Gyár",
+    "factory_progress": "Gyártás előrehaladás",
+    "name_suggestions": "Blob név javaslatok",
+    "add_name_suggestion": "Névjavaslat hozzáadása",
+    "add_first_name": "Keresztnév hozzáadása"
+  },
+  "standings": {
+    "title": "Blob Bajnokság - Tabellák",
+    "league": "Liga",
+    "grandmasters": "Nagymesterek",
+    "eon": "Éon",
+    "season": "Szezon"
+  },
+  "standings_table": {
+    "no_data": "Nincs adat a(z) {{leagueName}} liga {{season}}. szezonjához",
+    "name": "Név",
+    "sum": "Összesen",
+    "round": "{{round}}. F"
+  },
+  "grandmaster_standings_table": {
+    "no_data": "Nincs adat a(z) {{eon}}. éonhoz",
+    "name": "Név",
+    "championships": "Bajnoki címek",
+    "championships_short": "Bajn.",
+    "gold": "Arany",
+    "silver": "Ezüst",
+    "bronze": "Bronz",
+    "points": "Pont"
+  },
+  "blob_details": {
+    "birthdate": "Születési dátum",
+    "parent": "Szülő",
+    "debut": "Debütálás",
+    "terminated": "Blob terminálva",
+    "retired": "Blob visszavonult",
+    "current_league": "Jelenlegi liga",
+    "on_queue": "Jelenleg várakozóban",
+    "podiums": "Dobogók",
+    "wins": "Győzelmek",
+    "championships": "Bajnokságok",
+    "grandmasters": "Nagymesteri címek"
+  },
+  "blob_naming": {
+    "create_title": "Új blob létrehozása",
+    "add_title": "Névjavaslat hozzáadása",
+    "first_name": "Keresztnév",
+    "last_name": "Vezetéknév",
+    "validation_error": "Minden szónak nagybetűvel kell kezdődnie",
+    "name_exists_error": "A név már szerepel a javaslatok listájában",
+    "create_button": "Létrehozás",
+    "add_button": "Hozzáadás"
+  },
+  "menu": {
+    "dashboard": "Kezdőlap",
+    "blobs": "Blobok",
+    "factory": "Blob Gyár",
+    "standings": "Eredmények",
+    "calendar": "Versenynaptár"
+  }
+}

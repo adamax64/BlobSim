@@ -23,7 +23,6 @@ import {
   CompetitionApi,
   EventRecordsApi,
 } from '../../../generated';
-import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './EventUtils';
 import { ProgressButton } from './ProgressButton';
@@ -31,6 +30,7 @@ import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 interface QuarteredEventFrameProps {
   event: EventDto;
@@ -38,6 +38,7 @@ interface QuarteredEventFrameProps {
 
 export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation();
 
   const [tick, setTick] = useState(event.actions.length);
   const [isPerforming, setIsPerforming] = useState(false);
@@ -211,7 +212,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
 
   return (
     <Card>
-      <CardHeader title={translateEventType(event.type)} />
+      <CardHeader title={t(`event_types.${event.type}`)} />
       <CardContent>
         {isAuthenticated && (
           <ProgressButton
@@ -224,11 +225,11 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
           />
         )}
         <TableContainer component={Paper}>
-          <Table>
+          <Table size="small">
             <TableHead>
-              <TableRow className={currentBlobIndex === 0 ? 'disable-border-bottom' : ''}>
-                <TableCell width={60}>#</TableCell>
-                <TableCell>Name</TableCell>
+              <TableRow>
+                <TableCell width={30}>#</TableCell>
+                <TableCell>{t('quartered_event.name')}</TableCell>
                 {shouldShowQuarter(1) && (
                   <TableCell align="center" className={highlighByQuarter(1)}>
                     Q1

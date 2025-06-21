@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Fab, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import defaultConfig from '../../default-config';
 import { GeneralInfosApi, News, NewsType, SimDataApi } from '../../../generated';
@@ -12,21 +12,27 @@ import { useSimTime } from '../../context/SimTimeContext';
 import { LoadingOverlay } from '../common/LoadingOverlay';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
-function getNewsText(news: News) {
+function getNewsText(news: News, t: (key: string, options?: any) => string) {
   switch (news.newsType) {
     case NewsType.Event:
-      return 'There is a championship event today!';
+      return t('dashboard.news_item.event');
     case NewsType.BlobCreatedAndNamed:
-      return `A new blob called ${news.blobInfo} has been created!`;
+      return t('dashboard.news_item.blob_created_and_named', { blobInfo: news.blobInfo });
     case NewsType.BlobCreated:
-      return 'A new blob has been created!';
+      return t('dashboard.news_item.blob_created');
     case NewsType.SeasonStart:
-      return 'A new season has started!';
+      return t('dashboard.news_item.season_start');
     case NewsType.Continue:
-      return 'Nothing special happening today';
+      return t('dashboard.news_item.continue');
     case NewsType.EventEnded:
-      return `${news.eventSummary?.eventName} has ended. The top 3 are: ${news.eventSummary?.winner}, ${news.eventSummary?.runnerUp}, and ${news.eventSummary?.thirdPlace}.`;
+      return t('dashboard.news_item.event_ended', {
+        eventName: news.eventSummary?.eventName,
+        winner: news.eventSummary?.winner,
+        runnerUp: news.eventSummary?.runnerUp,
+        thirdPlace: news.eventSummary?.thirdPlace,
+      });
   }
 }
 
@@ -35,6 +41,7 @@ export function DashboardPage() {
   const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { refreshSimTime, loading: simTimeLoading } = useSimTime();
 
@@ -75,11 +82,11 @@ export function DashboardPage() {
 
   return (
     <PageFrame>
-      <PageTitleCard title="Blob Championship System - Dashboard" />
+      <PageTitleCard title={t('dashboard.title')} />
       <Card>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>
-            <Typography variant="h6">Date</Typography>
+            <Typography variant="h6">{t('dashboard.date')}</Typography>
             <SimTimeDisplay />
           </Box>
         </CardContent>
@@ -87,42 +94,41 @@ export function DashboardPage() {
       <Card>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>
-            <Typography variant="h6">News</Typography>
+            <Typography variant="h6">{t('dashboard.news')}</Typography>
             {news
               ? news.map((newsItem, index) => (
                   <Box key={index} display="flex" flexDirection="column" gap={1}>
-                    <Typography variant="body1">{getNewsText(newsItem)}</Typography>
+                    <Typography variant="body1">{getNewsText(newsItem, t)}</Typography>
                   </Box>
                 ))
-              : 'Loading...'}
+              : t('dashboard.loading')}
           </Box>
         </CardContent>
       </Card>
       {isAuthenticated && (
         <Box display="flex" gap={1}>
-        {newsTypes.includes(NewsType.Event) && (
-          <Button
-            variant="contained"
-            color="primary"
-            endIcon={<Stadium />}
-            onClick={() => navigate({ to: '/event' })}
-          >
-            Proceed to event
-          </Button>
-        )}
-        {newsTypes.includes(NewsType.BlobCreated) && (
-          <Button variant="contained" color="primary" endIcon={<AddCircle />} onClick={() => setOpen(true)}>
-            Create new Blob
-          </Button>
-        )}
-        {
-          (newsTypes.includes(NewsType.Continue) ||
+          {newsTypes.includes(NewsType.Event) && (
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<Stadium />}
+              onClick={() => navigate({ to: '/event' })}
+            >
+              {t('dashboard.proceed_to_event')}
+            </Button>
+          )}
+          {newsTypes.includes(NewsType.BlobCreated) && (
+            <Button variant="contained" color="primary" endIcon={<AddCircle />} onClick={() => setOpen(true)}>
+              {t('dashboard.create_new_blob')}
+            </Button>
+          )}
+          {(newsTypes.includes(NewsType.Continue) ||
             newsTypes.includes(NewsType.EventEnded) ||
             newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
             newsTypes.includes(NewsType.SeasonStart)) && (
             <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
-              Proceed to next day
-              </Button>
+              {t('dashboard.proceed_to_next_day')}
+            </Button>
           )}
         </Box>
       )}

@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { BlobStatsDto } from '../../../generated';
-import { IconName } from '../common/IconName';
 import { BlobState } from '../../utils/BlobStateUtils';
 import { BlobIcon } from '../icons/BlobIcon';
+import { useTranslation } from 'react-i18next';
 
 interface BlobsMobileCardsProps {
   blobs: BlobStatsDto[] | undefined;
@@ -10,6 +10,8 @@ interface BlobsMobileCardsProps {
 }
 
 export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps) {
+  const { t } = useTranslation();
+
   const getCardClass = (blob: BlobStatsDto) => {
     if (blob.atRisk) {
       return BlobState.AT_RISK;
@@ -50,10 +52,10 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
                       {blob.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Born: {blob.born}
+                      {t('blobs_grid.born')}: {blob.born}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      League: {blob.leagueName}
+                      {t('blobs_grid.league')}: {blob.leagueName}
                     </Typography>
                   </Box>
                 </Box>

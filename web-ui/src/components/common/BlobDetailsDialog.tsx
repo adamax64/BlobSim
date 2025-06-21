@@ -3,6 +3,7 @@ import { Close } from '@mui/icons-material';
 import { BlobIcon } from '../icons/BlobIcon';
 import { BlobStatsDto } from '../../../generated';
 import { IconName } from './IconName';
+import { useTranslation } from 'react-i18next';
 
 interface BlobDetailsDialogProps {
   open: boolean;
@@ -11,6 +12,7 @@ interface BlobDetailsDialogProps {
 }
 
 export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProps) {
+  const { t } = useTranslation();
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -26,58 +28,59 @@ export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProp
 
           <Box display="flex" flexDirection="column" gap={2} width="100%">
             <Typography variant="body1">
-              <strong>Birthdate:</strong> {blob.born}
+              <strong>{t('blob_details.birthdate')}:</strong> {blob.born}
             </Typography>
 
             {blob.parent && (
               <Typography variant="body1" component="div">
-                <strong>Parent:</strong> <IconName name={blob.parent.name} color={blob.parent.color} size={24} />
+                <strong>{t('blob_details.parent')}:</strong>{' '}
+                <IconName name={blob.parent.name} color={blob.parent.color} size={24} />
               </Typography>
             )}
 
             {blob.debut && (
               <Typography variant="body1">
-                <strong>Debut:</strong> {blob.debut}
+                <strong>{t('blob_details.debut')}:</strong> {blob.debut}
               </Typography>
             )}
 
             {!!blob.debut ? (
               blob.isRetired ? (
                 blob.isDead ? (
-                  <Typography variant="body1">Blob is terminated</Typography>
+                  <Typography variant="body1">{t('blob_details.terminated')}</Typography>
                 ) : (
-                  <Typography variant="body1">Blob is retired</Typography>
+                  <Typography variant="body1">{t('blob_details.retired')}</Typography>
                 )
               ) : (
                 <Typography variant="body1">
-                  <strong>Current League:</strong> {blob.leagueName}
+                  <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
                 </Typography>
               )
             ) : (
-              <Typography variant="body1">Currently on queue</Typography>
+              <Typography variant="body1">{t('blob_details.on_queue')}</Typography>
             )}
 
             {blob.podiums > 0 && (
               <Typography variant="body1">
-                <strong>Podiums:</strong> {blob.podiums}
+                <strong>{t('blob_details.podiums')}:</strong> {blob.podiums}
               </Typography>
             )}
 
             {blob.wins > 0 && (
               <Typography variant="body1">
-                <strong>Wins:</strong> {blob.wins}
+                <strong>{t('blob_details.wins')}:</strong> {blob.wins}
               </Typography>
             )}
 
             {blob.championships > 0 && (
               <Typography variant="body1">
-                <strong>Championships:</strong> {blob.championships}
+                <strong>{t('blob_details.championships')}:</strong> {blob.championships}
               </Typography>
             )}
 
             {blob.grandmasters > 0 && (
               <Typography variant="body1">
-                <strong>Grandmasters:</strong> {blob.grandmasters}
+                <strong>{t('blob_details.grandmasters')}:</strong> {blob.grandmasters}
               </Typography>
             )}
           </Box>

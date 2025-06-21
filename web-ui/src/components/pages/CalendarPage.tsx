@@ -6,10 +6,11 @@ import { CalendarApi, CalendarDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useEffect } from 'react';
 import { formatToShort } from '../../utils/SimTimeUtils';
-import { translateEventType } from '../../utils/EnumTranslationUtils';
+import { useTranslation } from 'react-i18next';
 
 export const CalendarPage = () => {
   const calendarApi = new CalendarApi(defaultConfig);
+  const { t } = useTranslation();
   const { data: calendar, mutate: loadCalendar } = useMutation<CalendarDto[], Error>({
     mutationFn: () => calendarApi.getSeasonCalendarCalendarGet(),
   });
@@ -20,22 +21,25 @@ export const CalendarPage = () => {
 
   return (
     <PageFrame>
-      <PageTitleCard title="Blob Championship System - Season Calendar" />
+      <PageTitleCard title={t('calendar.title')} />
       <TableContainer component={Paper} sx={{ padding: 2 }}>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>League</TableCell>
-              <TableCell>Event Type</TableCell>
+              <TableCell>{t('calendar.date')}</TableCell>
+              <TableCell>{t('calendar.league')}</TableCell>
+              <TableCell>{t('calendar.event_type')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {calendar?.map((event) => (
-              <TableRow className={event.isCurrent ? 'current-event' : event.isNext ? 'next-event' : ''}>
+              <TableRow
+                key={JSON.stringify(event.date)}
+                className={event.isCurrent ? 'current-event' : event.isNext ? 'next-event' : ''}
+              >
                 <TableCell>{formatToShort(event.date)}</TableCell>
                 <TableCell>{event.leagueName}</TableCell>
-                <TableCell>{translateEventType(event.eventType)}</TableCell>
+                <TableCell>{t(`event_types.${event.eventType}`)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

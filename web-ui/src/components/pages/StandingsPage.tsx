@@ -19,6 +19,7 @@ import { PageTitleCard } from '../common/PageTitleCard';
 import { StandingsTable } from '../standings/StandingsTable';
 import { GrandmasterStandingsTable } from '../standings/GrandmasterStandingsTable';
 import { useSimTime } from '../../context/SimTimeContext';
+import { useTranslation } from 'react-i18next';
 
 interface LeagueOption {
   id: number;
@@ -31,6 +32,7 @@ export function StandingsPage() {
   const [selectedLeague, setSelectedLeague] = useState<LeagueOption>();
   const [seasonOrEon, setSeasonOrEon] = useState<number>();
   const [isGrandmasters, setIsGrandmasters] = useState(false);
+  const { t } = useTranslation();
 
   const { simTime, loading: loadingTime, refreshSimTime: loadSimTime } = useSimTime();
 
@@ -88,7 +90,7 @@ export function StandingsPage() {
 
   useEffect(() => {
     if (leagues) {
-      setLeagueOptions([{ id: -1, name: 'Grandmasters', level: -1 }, ...leagues]);
+      setLeagueOptions([{ id: -1, name: t('standings.grandmasters'), level: -1 }, ...leagues]);
       setSelectedLeague(leagues[0]);
     }
   }, [leagues]);
@@ -131,7 +133,7 @@ export function StandingsPage() {
 
   return (
     <PageFrame>
-      <PageTitleCard title="Blob Championship System - Standings" />
+      <PageTitleCard title={t('standings.title')} />
       <Paper sx={{ marginBottom: 4 }}>
         {isFormLoading ? (
           <Box display="flex" justifyContent="center" p={1}>
@@ -140,8 +142,13 @@ export function StandingsPage() {
         ) : (
           <Box display="flex" gap={3} p={2}>
             <FormControl variant="outlined" sx={{ minWidth: 210 }}>
-              <InputLabel id="league-select">League</InputLabel>
-              <Select labelId="league-select" value={selectedLeague?.id} onChange={handleLeagueChange} label="League">
+              <InputLabel id="league-select">{t('standings.league')}</InputLabel>
+              <Select
+                labelId="league-select"
+                value={selectedLeague?.id}
+                onChange={handleLeagueChange}
+                label={t('standings.league')}
+              >
                 {leagueOptions?.map((league) => (
                   <MenuItem key={league.id} value={league.id}>
                     {league.name}
@@ -158,7 +165,9 @@ export function StandingsPage() {
                   : Array.from({ length: simTime?.season ?? 0 }, (_, i) => i + 1).reverse()
               }
               getOptionLabel={(option) => option.toString()}
-              renderInput={(params) => <TextField {...params} label={isGrandmasters ? 'Eon' : 'Season'} />}
+              renderInput={(params) => (
+                <TextField {...params} label={isGrandmasters ? t('standings.eon') : t('standings.season')} />
+              )}
             />
           </Box>
         )}

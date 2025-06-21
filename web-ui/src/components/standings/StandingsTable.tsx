@@ -15,6 +15,7 @@ import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils'
 import { useCallback } from 'react';
 import { useSimTime } from '../../context/SimTimeContext';
 import { IconName } from '../common/IconName';
+import { useTranslation } from 'react-i18next';
 
 function getRowClass(hasEonEnded: boolean, position: number, atRisk: boolean): string | undefined {
   if (!hasEonEnded) {
@@ -52,6 +53,7 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
   const { simTime } = useSimTime();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
 
   const getThresholdClassName = useCallback(
     (position: number) => {
@@ -78,9 +80,7 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
   if (!standings || standings.length === 0) {
     return (
       <Paper sx={{ margin: 2, padding: 2, display: 'flex', justifyContent: 'center' }}>
-        <p>
-          No data found for {leagueName} season {season}
-        </p>
+        <p>{t('standings_table.no_data', { leagueName, season })}</p>
       </Paper>
     );
   }
@@ -97,14 +97,21 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
         <TableHead>
           <TableRow>
             <TableCell width={25}>#</TableCell>
-            <TableCell>Name</TableCell>
-            {!isMobile && standings[0]?.results.map((_, index) => <TableCell key={index}>R{index + 1}</TableCell>)}
+            <TableCell>{t('standings_table.name')}</TableCell>
+            {!isMobile &&
+              standings[0]?.results.map((_, index) => (
+                <TableCell key={index}>{t('standings_table.round', { round: index + 1 })}</TableCell>
+              ))}
             {!isMobile &&
               Array.from(
                 { length: standings[0]?.numOfRounds - standings[0]?.results.length },
                 (_, index) => index + 1,
-              ).map((index) => <TableCell key={index}>R{standings[0].results.length + index}</TableCell>)}
-            <TableCell>Sum</TableCell>
+              ).map((index) => (
+                <TableCell key={index}>
+                  {t('standings_table.round', { round: standings[0].results.length + index })}
+                </TableCell>
+              ))}
+            <TableCell>{t('standings_table.sum')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

@@ -7,6 +7,7 @@ import { AuthApi } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { LoadingOverlay } from '../common/LoadingOverlay';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ export const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const authApi = new AuthApi(defaultConfig);
   const { mutate: loginMutation, isPending } = useMutation({
@@ -23,7 +25,7 @@ export const LoginPage = () => {
       navigate({ to: '/dashboard' });
     },
     onError: () => {
-      enqueueSnackbar('Invalid credentials', { variant: 'error' });
+      enqueueSnackbar(t('login.invalid_credentials'), { variant: 'error' });
     },
   });
 
@@ -45,12 +47,12 @@ export const LoginPage = () => {
       <Card sx={{ width: '100%', maxWidth: 400 }}>
         <CardContent>
           <Typography variant="h5" component="h1" gutterBottom textAlign="center">
-            Admin Login
+            {t('login.title')}
           </Typography>
           <form onSubmit={handleSubmit}>
             <Box display="flex" flexDirection="column" gap={2}>
               <TextField
-                label="Username"
+                label={t('login.username')}
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -58,7 +60,7 @@ export const LoginPage = () => {
                 fullWidth
               />
               <TextField
-                label="Password"
+                label={t('login.password')}
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -66,7 +68,7 @@ export const LoginPage = () => {
                 fullWidth
               />
               <Button type="submit" variant="contained" color="primary" fullWidth>
-                Login
+                {t('login.login_button')}
               </Button>
             </Box>
           </form>

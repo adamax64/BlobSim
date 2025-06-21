@@ -7,9 +7,11 @@ import { useCallback, useEffect } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
 import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
+import { useTranslation } from 'react-i18next';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);
+  const { t } = useTranslation();
 
   const {
     data: event,
@@ -38,7 +40,7 @@ export const EventPage = () => {
       return (
         <Card>
           <Box display="flex" justifyContent="center" alignItems="center" padding={4}>
-            No event data available
+            {t('event.no_event_data')}
           </Box>
         </Card>
       );
@@ -55,7 +57,16 @@ export const EventPage = () => {
 
   return (
     <PageFrame>
-      <PageTitleCard title={event && `${event.league.name} Season ${event.season} Round ${event.round}`} />
+      <PageTitleCard
+        title={
+          event &&
+          t('event.title', {
+            leagueName: event.league.name,
+            season: event.season,
+            round: event.round,
+          })
+        }
+      />
       {eventContent()}
     </PageFrame>
   );

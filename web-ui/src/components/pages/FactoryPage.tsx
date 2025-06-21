@@ -19,6 +19,7 @@ import {
 import { AddCircle } from '@mui/icons-material';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const FactoryProgressBar = styled(LinearProgress)({
   height: 16,
@@ -27,6 +28,7 @@ const FactoryProgressBar = styled(LinearProgress)({
 
 export function FactoryPage() {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [selectedNameId, setSelectedNameId] = useState<number>();
@@ -71,11 +73,11 @@ export function FactoryPage() {
 
   return (
     <PageFrame>
-      <PageTitleCard title="Blob Factory" center />
+      <PageTitleCard title={t('factory.title')} center />
       <Card>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>
-            <Typography variant="h6">Factory Progress</Typography>
+            <Typography variant="h6">{t('factory.factory_progress')}</Typography>
             <FactoryProgressBar
               color={(factoryProgress ?? 0) > 1 ? 'success' : 'primary'}
               variant={isFactoryProgressLoading ? 'query' : 'determinate'}
@@ -87,10 +89,10 @@ export function FactoryPage() {
       <Card>
         <CardContent>
           <Box display="flex" alignItems="flex-start" flexDirection="column" gap={1}>
-            <Typography variant="h6">Blob name suggestions</Typography>
+            <Typography variant="h6">{t('factory.name_suggestions')}</Typography>
             {isAuthenticated && (
               <Button variant="contained" onClick={() => setOpen(true)} endIcon={<AddCircle />}>
-                Add name suggestion
+                {t('factory.add_name_suggestion')}
               </Button>
             )}
             {isLoadingNames ? (
@@ -108,7 +110,7 @@ export function FactoryPage() {
                         size="small"
                         onClick={() => handleAddFirstName(name.id, name.lastName)}
                       >
-                        Add first name
+                        {t('factory.add_first_name')}
                       </Button>
                     )}
                   </ListItem>

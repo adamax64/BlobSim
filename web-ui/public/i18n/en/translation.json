@@ -1,0 +1,135 @@
+{
+  "login": {
+    "title": "Admin Login",
+    "username": "Username",
+    "password": "Password",
+    "login_button": "Login",
+    "invalid_credentials": "Invalid credentials"
+  },
+  "dashboard": {
+    "title": "Blob Championship System - Dashboard",
+    "date": "Date",
+    "news": "News",
+    "loading": "Loading...",
+    "proceed_to_event": "Proceed to event",
+    "create_new_blob": "Create new Blob",
+    "proceed_to_next_day": "Proceed to next day",
+    "news_item": {
+      "event": "There is a championship event today!",
+      "blob_created_and_named": "A new blob called {{blobInfo}} has been created!",
+      "blob_created": "A new blob has been created!",
+      "season_start": "A new season has started!",
+      "continue": "Nothing special happening today",
+      "event_ended": "{{eventName}} has ended. The top 3 are: {{winner}}, {{runnerUp}}, and {{thirdPlace}}."
+    }
+  },
+  "blobs": {
+    "title": "Blobs",
+    "search_by_name": "Search by name",
+    "show_dead": "Show dead"
+  },
+  "blobs_grid": {
+    "name": "Name",
+    "born": "Born",
+    "debut": "Debut",
+    "contract": "Contract",
+    "podiums": "Podiums",
+    "wins": "Wins",
+    "championships": "Championships",
+    "grandmasters": "Grandmasters",
+    "league": "League"
+  },
+  "calendar": {
+    "title": "Blob Championship System - Season Calendar",
+    "date": "Date",
+    "league": "League",
+    "event_type": "Event Type"
+  },
+  "event_types": {
+    "QuarteredOneShotScoring": "Quartered One Shot High Jump",
+    "QuarteredTwoShotScoring": "Quartered Two Shot High Jump",
+    "EnduranceRace": "Endurance Race",
+    "unknown": "Unknown Event Type"
+  },
+  "event": {
+    "title": "{{leagueName}} Season {{season}} Round {{round}}",
+    "no_event_data": "No event data available"
+  },
+  "endurance_race": {
+    "tick": "Tick",
+    "name": "Name",
+    "distance": "Distance",
+    "delta_leader": "Delta leader",
+    "delta_interval": "Delta interval"
+  },
+  "progress_button": {
+    "start_competition": "Start Competition",
+    "next": "Next",
+    "conclude_event": "Conclude Event",
+    "back_to_dashboard": "Back to Dashboard"
+  },
+  "quartered_event": {
+    "name": "Name",
+    "best": "Best"
+  },
+  "factory": {
+    "title": "Blob Factory",
+    "factory_progress": "Factory Progress",
+    "name_suggestions": "Blob name suggestions",
+    "add_name_suggestion": "Add name suggestion",
+    "add_first_name": "Add first name"
+  },
+  "standings": {
+    "title": "Blob Championship System - Standings",
+    "league": "League",
+    "grandmasters": "Grandmasters",
+    "eon": "Eon",
+    "season": "Season"
+  },
+  "standings_table": {
+    "no_data": "No data found for {{leagueName}} season {{season}}",
+    "name": "Name",
+    "sum": "Sum",
+    "round": "R{{round}}"
+  },
+  "grandmaster_standings_table": {
+    "no_data": "No data found for eon {{eon}}",
+    "name": "Name",
+    "championships": "Championships",
+    "championships_short": "Champs.",
+    "gold": "Gold",
+    "silver": "Silver",
+    "bronze": "Bronze",
+    "points": "Points"
+  },
+  "blob_details": {
+    "birthdate": "Birthdate",
+    "parent": "Parent",
+    "debut": "Debut",
+    "terminated": "Blob is terminated",
+    "retired": "Blob is retired",
+    "current_league": "Current League",
+    "on_queue": "Currently on queue",
+    "podiums": "Podiums",
+    "wins": "Wins",
+    "championships": "Championships",
+    "grandmasters": "Grandmasters"
+  },
+  "blob_naming": {
+    "create_title": "Create new blob",
+    "add_title": "Add name suggestion",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "validation_error": "Each word must start with a capital letter",
+    "name_exists_error": "Name already exists in suggestions list",
+    "create_button": "Create",
+    "add_button": "Add"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "blobs": "Blobs",
+    "factory": "Factory",
+    "standings": "Standings",
+    "calendar": "Calendar"
+  }
+}

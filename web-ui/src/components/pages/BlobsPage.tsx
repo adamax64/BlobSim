@@ -21,13 +21,15 @@ import { useMutation } from '@tanstack/react-query';
 import { BlobDetailsDialog } from '../common/BlobDetailsDialog';
 import { BlobsDesktopGrid } from '../blobs-components/BlobsDesktopGrid';
 import { BlobsMobileCards } from '../blobs-components/BlobsMobileCards';
+import { useTranslation } from 'react-i18next';
 
 export function BlobsPage() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [nameSearch, setNameSearch] = useState<string | undefined>();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [nameSearch, setNameSearch] = useState<string>('');
   const [showDead, setShowDead] = useState<boolean>(false);
   const [selectedBlob, setSelectedBlob] = useState<BlobStatsDto | null>(null);
+  const { t } = useTranslation();
 
   const blobsApi = new BlobsApi(defaultConfig);
 
@@ -35,7 +37,9 @@ export function BlobsPage() {
     data: blobs,
     isPending,
     mutate: getAllBlobs,
-  } = useMutation<BlobStatsDto[], Error>({ mutationFn: () => blobsApi.getAllBlobsAllGet({ nameSearch, showDead }) });
+  } = useMutation<BlobStatsDto[], Error>({
+    mutationFn: () => blobsApi.getAllBlobsAllGet({ nameSearch: nameSearch ? nameSearch : undefined, showDead }),
+  });
 
   useEffect(() => {
     getAllBlobs();
@@ -43,11 +47,11 @@ export function BlobsPage() {
 
   return (
     <PageFrame>
-      <PageTitleCard title="Blobs" center />
+      <PageTitleCard title={t('blobs.title')} center />
       <Paper sx={{ marginBottom: 4 }}>
         <Box display="flex" gap={3} p={2}>
           <FormControl variant="outlined">
-            <InputLabel htmlFor="search-by-name">Search by name</InputLabel>
+            <InputLabel htmlFor="search-by-name">{t('blobs.search_by_name')}</InputLabel>
             <OutlinedInput
               id="search-by-name"
               type="text"
@@ -59,14 +63,14 @@ export function BlobsPage() {
                 </InputAdornment>
               }
               value={nameSearch}
-              onChange={(e) => setNameSearch(e.target.value.length > 0 ? e.target.value : undefined)}
+              onChange={(e) => setNameSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && getAllBlobs()}
-              label="Search by name"
+              label={t('blobs.search_by_name')}
             />
           </FormControl>
           <FormControlLabel
             control={<Switch value={showDead} onChange={(e) => setShowDead(e.target.checked)} />}
-            label="Show dead"
+            label={t('blobs.show_dead')}
           />
         </Box>
         {isMobile ? (

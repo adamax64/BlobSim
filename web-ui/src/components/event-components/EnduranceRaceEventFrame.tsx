@@ -18,7 +18,6 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
-import { translateEventType } from '../../utils/EnumTranslationUtils';
 import { ProgressButton } from './ProgressButton';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -27,6 +26,7 @@ import { getRaceDurationBySize, roundToThreeDecimals } from './EventUtils';
 import defaultConfig from '../../default-config';
 import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const TickLoadingBar = styled(LinearProgress)({
   height: 8,
@@ -39,6 +39,7 @@ interface EnduranceRaceEventFrameProps {
 
 export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps) => {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation();
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.tick), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
@@ -145,7 +146,7 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
 
   return (
     <Card>
-      <CardHeader title={translateEventType(event.type)} />
+      <CardHeader title={t(`event_types.${event.type}`)} />
       <Divider />
       <CardContent>
         {isAuthenticated && (
@@ -159,7 +160,7 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
           />
         )}
         <Typography fontSize={18} fontWeight={600} paddingBottom={2}>
-          Tick: {tick} / {raceDuration}
+          {t('endurance_race.tick')}: {tick} / {raceDuration}
         </Typography>
         <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={2}>
           <TickLoadingBar />
@@ -169,10 +170,10 @@ export const EnduranceRaceEventFrame = ({ event }: EnduranceRaceEventFrameProps)
             <TableHead>
               <TableRow>
                 <TableCell width={60}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell align="center">Distance</TableCell>
-                {!isMobile && <TableCell align="center">Delta leader</TableCell>}
-                <TableCell align="center">Delta interval</TableCell>
+                <TableCell>{t('endurance_race.name')}</TableCell>
+                <TableCell align="center">{t('endurance_race.distance')}</TableCell>
+                {!isMobile && <TableCell align="center">{t('endurance_race.delta_leader')}</TableCell>}
+                <TableCell align="center">{t('endurance_race.delta_interval')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
