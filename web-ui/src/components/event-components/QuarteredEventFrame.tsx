@@ -133,7 +133,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const renderCellContent = useCallback(
     (record: EventRecordDto, quarterIndex: number) => {
       if (record.next && isPerforming && quarterIndex === quarter - 1) {
-        return <CircularProgress />;
+        return <CircularProgress size={26} />;
       }
 
       const currentScore = record.quarters[quarterIndex];
