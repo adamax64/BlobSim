@@ -1,7 +1,7 @@
 """populate data
 
 Revision ID: d1429827152b
-Revises: d63686c84980
+Revises: a0f5588ea845
 Create Date: 2025-06-29 11:46:03.625744
 
 """
@@ -16,15 +16,13 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = 'd1429827152b'
-down_revision: Union[str, None] = 'd63686c84980'
+down_revision: Union[str, None] = 'a0f5588ea845'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
     data_dir = os.path.join(os.path.dirname(__file__), '../../data_migration')
-
-    op.execute("ALTER TYPE \"BCS\".eventtype ADD VALUE IF NOT EXISTS 'ENDURANCE_RACE'", execution_options={"autocommit": True})
 
     # Leagues
     with open(os.path.join(data_dir, 'leagues_202506272255.csv'), encoding='utf-8') as f:
@@ -222,4 +220,3 @@ def downgrade() -> None:
             'name_suggestions', 'sim_data', 'results', 'actions', 'events', 'calendar', 'blobs', 'leagues'
     ]:
         conn.execute(f"DELETE FROM \"BCS\".\"{tbl}\"")
-    op.execute("ALTER TYPE \"BCS\".eventtype DROP VALUE IF EXISTS 'ENDURANCE_RACE'")
