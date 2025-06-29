@@ -7,9 +7,10 @@ from .event_type import EventType
 
 class Event(Base):
     __tablename__ = 'events'
+    __table_args__ = {'schema': 'BCS'}
 
     id = Column(Integer, primary_key=True)
-    league_id = Column(Integer, ForeignKey('leagues.id'))
+    league_id = Column(Integer, ForeignKey('BCS.leagues.id'))
     league = relationship('League', backref='events')
     actions = relationship('Action', backref='event')
     date = Column(BigInteger, default=None)

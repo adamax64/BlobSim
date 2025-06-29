@@ -6,11 +6,12 @@ from data.db.db_engine import Base
 
 class Action(Base):
     __tablename__ = 'actions'
+    __table_args__ = {'schema': 'BCS'}
 
     id = Column(Integer, primary_key=True)
-    event_id = Column(Integer, ForeignKey('events.id'))
+    event_id = Column(Integer, ForeignKey('BCS.events.id'))
     # event = relationship('Event', backref='action')
     tick = Column(Integer)
-    blob_id = Column(Integer, ForeignKey('blobs.id'))
+    blob_id = Column(Integer, ForeignKey('BCS.blobs.id'))
     blob = relationship('Blob', backref='actions')
     score = Column(Double)

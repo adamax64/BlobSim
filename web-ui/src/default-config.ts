@@ -1,7 +1,7 @@
 import { Configuration } from '../generated';
 
 const defaultConfig = new Configuration({
-  basePath: 'http://localhost:8000',
+  basePath: import.meta.env.VITE_API_BASE_URL,
   middleware: [
     {
       pre: async (context) => {

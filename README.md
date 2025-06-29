@@ -276,3 +276,10 @@ At the end of the event the top three are highlighted by colors resemble bronze,
   - Other language option is hungarian
 - Fixed blob search by name error
 - Adjusted blob datagrid autosizing to solve column grid imploding
+
+### 2.5
+
+- Adjusted application to be hosted on the internet
+- Migrated database to Postgres
+- Adjusted database migrations for postgres and populate initial data as current state of the "production" database
+- Adjusted frontend to enable setting backend url from environment variables

@@ -8,6 +8,7 @@ class Blob(Base):
     __tablename__ = 'blobs'
     __table_args__ = (
         UniqueConstraint('first_name', 'last_name', name='unique_blob_full_name'),
+        {'schema': 'BCS'}
     )
 
     id = Column(Integer, primary_key=True)
@@ -31,8 +32,8 @@ class Blob(Base):
     gold_trophies = Column(Integer, default=0)
     championships = Column(Integer, default=0)
     grandmasters = Column(Integer, default=0)
-    league_id = Column(Integer, ForeignKey('leagues.id'))
+    league_id = Column(Integer, ForeignKey('BCS.leagues.id'))
     league = relationship('League', backref='blobs', overlaps='blobs,league', viewonly=True)
-    parent_id = Column(Integer, ForeignKey('blobs.id'))
+    parent_id = Column(Integer, ForeignKey('BCS.blobs.id'))
     parent = relationship('Blob', remote_side=[id], backref='children')
     color = Column(String, nullable=False, default="#888888")

@@ -1,7 +1,7 @@
 """add color to blobs
 
 Revision ID: d63686c84980
-Revises: 
+Revises:
 Create Date: 2024-03-19 10:00:00.000000
 
 """
@@ -20,9 +20,9 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     # Add color column with default value
-    op.add_column('blobs', sa.Column('color', sa.String(), nullable=False, server_default='#888888'))
+    op.add_column('blobs', sa.Column('color', sa.String(), nullable=False, server_default='#888888'), schema="BCS")
 
 
 def downgrade() -> None:
     # Remove color column
-    op.drop_column('blobs', 'color')
+    op.drop_column('blobs', 'color', schema="BCS")

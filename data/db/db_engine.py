@@ -6,15 +6,18 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import inspect
 
+from dotenv import load_dotenv
+load_dotenv()
 
-PROD_DB_URL = 'sqlite:///bcs_database.db'
-DEBUG_DB_URL = 'sqlite:///bcs_database_debug.db'
+POSTGRES_USER = os.environ.get("POSTGRES_USER", "user")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "password")
+POSTGRES_DB = os.environ.get("POSTGRES_DB", "bcs_database")
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT", "5432")
 
-# Determine the database based on the argument parameter
-if os.environ.get("MODE", "dev") == "dev":
-    engine = create_engine(DEBUG_DB_URL)
-else:
-    engine = create_engine(PROD_DB_URL)
+DB_URL = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
+
+engine = create_engine(DB_URL)
 
 # Create the base class for declarative models
 Base = declarative_base()
@@ -25,6 +28,7 @@ Session = sessionmaker(bind=engine)
 # Define a model for your data
 class User(Base):
     __tablename__ = 'users'
+    __table_args__ = {'schema': 'BCS'}
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
