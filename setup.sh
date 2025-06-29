@@ -12,10 +12,12 @@ $python_exec -m venv venv
 source venv/bin/activate
 $python_exec -m pip install --upgrade pip
 pip install -r requirements.txt
-alembic upgrade head
 
 cd web-ui
 npm install
+npm install @openapitools/openapi-generator-cli -g
 npm run generate-api
 npm run build
 cd ..
+
+echo "Setup complete"

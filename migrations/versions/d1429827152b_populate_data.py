@@ -24,7 +24,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     data_dir = os.path.join(os.path.dirname(__file__), '../../data_migration')
 
-    op.execute("ALTER TYPE \"BCS\".eventtype ADD VALUE IF NOT EXISTS 'ENDURANCE_RACE'")
+    op.execute("ALTER TYPE \"BCS\".eventtype ADD VALUE IF NOT EXISTS 'ENDURANCE_RACE'", execution_options={"autocommit": True})
 
     # Leagues
     with open(os.path.join(data_dir, 'leagues_202506272255.csv'), encoding='utf-8') as f:
