@@ -1,5 +1,5 @@
 # Stage 1: Build with Node.js and Java
-FROM node:24.3.1-bookworm-slim as build
+FROM node:latest as build
 
 # Install Java (for openapi-generator)
 RUN apt-get update && \
