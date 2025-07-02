@@ -1,9 +1,14 @@
 import { Configuration } from '../generated';
 
-console.log('Default configuration loaded with base path:', import.meta.env.VITE_API_BASE_URL);
+// Add type for window.env
+declare global {
+  interface Window {
+    env?: { [key: string]: string };
+  }
+}
 
 const defaultConfig = new Configuration({
-  basePath: import.meta.env.VITE_API_BASE_URL,
+  basePath: (window.env && window.env.VITE_API_BASE_URL) || import.meta.env.VITE_API_BASE_URL,
   middleware: [
     {
       pre: async (context) => {
