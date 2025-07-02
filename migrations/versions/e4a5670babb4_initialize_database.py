@@ -8,7 +8,6 @@ Create Date: 2025-01-04 15:33:44.172229
 from typing import Sequence, Union
 
 from alembic import op
-from alembic import context
 import sqlalchemy as sa
 
 
@@ -20,9 +19,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # Disable transactional DDL for this migration to allow CREATE TYPE
-    context.get_context().config.set_main_option("transactional_ddl", "False")
-
     # Ensure BCS schema exists outside of transaction
     conn = op.get_bind()
     conn.execute(sa.text('CREATE SCHEMA IF NOT EXISTS "BCS"'))
@@ -84,6 +80,7 @@ def upgrade() -> None:
                     sa.Column('event_type', sa.Enum(
                         'QUARTERED_ONE_SHOT_SCORING',
                         'QUARTERED_TWO_SHOT_SCORING',
+                        'ENDURANCE_RACE',
                         name='eventtype',
                         schema='BCS'
                     ), nullable=True),
