@@ -1,7 +1,5 @@
 #!/bin/sh
 
-printenv
-
 # Generate env.js from environment variables
 cat <<EOF > /usr/share/nginx/html/env.js
 window.env = {

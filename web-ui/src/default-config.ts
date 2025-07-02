@@ -1,5 +1,7 @@
 import { Configuration } from '../generated';
 
+console.log('Default configuration loaded with base path:', import.meta.env.VITE_API_BASE_URL);
+
 const defaultConfig = new Configuration({
   basePath: import.meta.env.VITE_API_BASE_URL,
   middleware: [
