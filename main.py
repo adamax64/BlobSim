@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 from controllers import (
     action_router,
@@ -24,8 +25,12 @@ origins = [
     "http://localhost:8000",  # BE URL
     "http://localhost:3000",  # DEV URL
     "http://localhost:3001",  # DEV URL
-    "http://localhost:5173",  # PRD URL
 ]
+
+# Read production URLs from environment variables
+progon_url_prod = os.environ.get("ORIGIN_URL")
+if progon_url_prod:
+    origins.append(progon_url_prod)
 
 app.add_middleware(
     CORSMiddleware,
