@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+import traceback
 from domain.dtos.league_dto import LeagueDto
 from domain.league_service import get_all_real_leagues
 
@@ -13,5 +14,5 @@ def get_leagues() -> list[LeagueDto]:
     try:
         return get_all_real_leagues()
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

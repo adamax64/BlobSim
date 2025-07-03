@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response
+import traceback
 
 from domain.dtos.name_suggestion_dto import NameSuggestionDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
@@ -21,7 +22,7 @@ def get_factory_progress() -> float:
     try:
         return service_get_factory_progress() / BLOB_CREATION_RESOURCES
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -30,7 +31,7 @@ def get_name_suggestions() -> list[NameSuggestionDto]:
     try:
         return service_get_name_suggestions()
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -44,7 +45,7 @@ def save_name_suggestion(first_name: str, last_name: str, _=Depends(require_auth
     except NameOccupiedException:
         raise HTTPException(status_code=409, detail="NAME_ALREADY_OCCUPIED")
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -55,5 +56,5 @@ def update_name_suggestion(id: int, first_name: str, _=Depends(require_auth)) ->
         service_update_name_suggestion(id=id, first_name=first_name)
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

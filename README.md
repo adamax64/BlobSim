@@ -283,3 +283,11 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 - Migrated database to Postgres
 - Adjusted database migrations for postgres and populate initial data as current state of the "production" database
 - Adjusted frontend to enable setting backend url from environment variables
+
+### 2.5.1
+
+- Some hotfixes to production deployment
+- When user is logged in redirect from login to dashboard
+- Proceed to event button is green and visible for non logged in users too
+- At the first quarter in high jump events the randomized starting is fixed with a twist: the order of blobs that not scored yet is randomized every tick
+- Improved backend error logging

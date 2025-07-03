@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+import traceback
 
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.standings_dto import StandingsDTO
@@ -19,7 +20,7 @@ def get_standings_by_league_and_season(league_id: int, season: int) -> list[Stan
         current_season = current_season = get_season(get_sim_time())
         return get_standings(league_id, season, current_season)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -32,5 +33,5 @@ def get_grandmaster_standings_by_eon(start_season: int) -> list[GrandmasterStand
         current_season = current_season = get_season(get_sim_time())
         return get_grandmaster_standings(start_season, current_season)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

@@ -105,24 +105,19 @@ export function DashboardPage() {
           </Box>
         </CardContent>
       </Card>
-      {isAuthenticated && (
-        <Box display="flex" gap={1}>
-          {newsTypes.includes(NewsType.Event) && (
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<Stadium />}
-              onClick={() => navigate({ to: '/event' })}
-            >
-              {t('dashboard.proceed_to_event')}
-            </Button>
-          )}
-          {newsTypes.includes(NewsType.BlobCreated) && (
-            <Button variant="contained" color="primary" endIcon={<AddCircle />} onClick={() => setOpen(true)}>
-              {t('dashboard.create_new_blob')}
-            </Button>
-          )}
-          {(newsTypes.includes(NewsType.Continue) ||
+      <Box display="flex" gap={1}>
+        {newsTypes.includes(NewsType.Event) && (
+          <Button variant="contained" color="success" endIcon={<Stadium />} onClick={() => navigate({ to: '/event' })}>
+            {t('dashboard.proceed_to_event')}
+          </Button>
+        )}
+        {isAuthenticated && newsTypes.includes(NewsType.BlobCreated) && (
+          <Button variant="contained" color="primary" endIcon={<AddCircle />} onClick={() => setOpen(true)}>
+            {t('dashboard.create_new_blob')}
+          </Button>
+        )}
+        {isAuthenticated &&
+          (newsTypes.includes(NewsType.Continue) ||
             newsTypes.includes(NewsType.EventEnded) ||
             newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
             newsTypes.includes(NewsType.SeasonStart)) && (
@@ -130,8 +125,7 @@ export function DashboardPage() {
               {t('dashboard.proceed_to_next_day')}
             </Button>
           )}
-        </Box>
-      )}
+      </Box>
       {/* TODO: handle blob with parent creation */}
       <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
       {(loadingOverlayVisible || simTimeLoading) && <LoadingOverlay />}

@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardContent, TextField, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../../context/AuthContext';
 import { AuthApi } from '../../../generated';
@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
@@ -28,6 +28,12 @@ export const LoginPage = () => {
       enqueueSnackbar(t('login.invalid_credentials'), { variant: 'error' });
     },
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: '/dashboard' });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

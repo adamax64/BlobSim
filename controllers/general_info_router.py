@@ -2,6 +2,8 @@ from pydantic import BaseModel
 from enum import Enum
 from fastapi import APIRouter, HTTPException
 
+import traceback
+
 from domain.blob_service import check_blob_created
 from domain.dtos.event_summary_dto import EventSummaryDTO
 from domain.event_service import get_concluded_event_summary
@@ -63,5 +65,5 @@ def get_news() -> list[News]:
 
         return options
     except Exception as e:
-        print(str(e.with_traceback(None)))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

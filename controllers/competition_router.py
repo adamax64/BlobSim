@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+import traceback
 from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.competition_service import (
     load_competition_data,
@@ -21,7 +22,7 @@ async def get_current_event() -> EventDto:
     except NoCurrentEventException:
         raise HTTPException(status_code=400, detail="NO_CURRENT_EVENT")
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -50,5 +51,5 @@ def _save_event_results(event: EventDto, event_records: list[EventRecordDto]) ->
         end_season_if_over(event.league, event.season)
         end_eon_if_over(event.season, event.league)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

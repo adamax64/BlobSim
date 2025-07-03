@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+import traceback
 
 from domain.action_service import generate_and_save_all_actions, generate_score_and_save_action
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
@@ -19,7 +20,7 @@ def quartered(contender: BlobCompetitorDto, event_id: int, tick: int, _=Depends(
     try:
         generate_score_and_save_action(contender, event_id, tick)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -38,5 +39,5 @@ def race(event_id: int, tick: int, _=Depends(require_auth)):
     try:
         generate_and_save_all_actions(event.competitors, event_id, tick)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

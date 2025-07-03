@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+import traceback
 
 from domain import sim_data_service
 from domain.blob_service import update_blobs
@@ -16,7 +17,7 @@ async def get_sim_time() -> SimTimeDto:
         sim_time = sim_data_service.get_sim_time()
         return convert_to_sim_time(sim_time)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -28,13 +29,13 @@ def progress(_=Depends(require_auth)):
     try:
         update_blobs()
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error while updating blobs: {e.with_traceback(None)}")
 
     try:
         sim_data_service.progress_simulation()
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error while updating simulation progress: {e.with_traceback(None)}")
 
     return

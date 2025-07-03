@@ -18,12 +18,12 @@ def _get_quartered_event_records(
     competitors: list[BlobCompetitorDto],
     event_type: EventTypeDto
 ) -> list[QuarteredEventRecordDto]:
+    random.shuffle(competitors)
     quarter_ends = _get_quarter_ends(len(competitors), event_type)
     records = {blob.id: QuarteredEventRecordDto(blob, [ScoreDto(), ScoreDto(), ScoreDto(), ScoreDto()]) for blob in competitors}
 
     if len(actions) == 0:
         result_records = list(records.values())
-        random.shuffle(result_records)
         result_records[0].next = True
         return result_records
 

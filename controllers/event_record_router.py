@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+import traceback
 
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
 from domain.event_record_service import get_event_records
@@ -28,7 +29,7 @@ def _get_event_records(event_id: int) -> list[EventRecordDto]:
     except EventNotFoundException:
         raise HTTPException(status_code=404, detail="EVENT_NOT_FOUND")
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error querying event: {e.with_traceback(None)}")
 
     if event is None:
@@ -37,5 +38,5 @@ def _get_event_records(event_id: int) -> list[EventRecordDto]:
     try:
         return get_event_records(event.actions, event.competitors, event.type)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error getting event records: {e.with_traceback(None)}")

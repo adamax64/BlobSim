@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response
+import traceback
 
 from domain.blob_service import get_all_blobs, create_blob as service_create_blob
 from domain.dtos.blob_stats_dto import BlobStatsDto
@@ -17,7 +18,7 @@ def get_all(
     try:
         return get_all_blobs(name_search=name_search, show_dead=show_dead)
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
@@ -29,5 +30,5 @@ def create_blob(first_name: str, last_name: str, parent_id: int | None = None, _
     except NameOccupiedException:
         raise HTTPException(status_code=409, detail="NAME_ALREADY_OCCUPIED")
     except Exception as e:
-        print(e.with_traceback(None))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
