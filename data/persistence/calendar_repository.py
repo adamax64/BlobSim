@@ -14,12 +14,12 @@ def get_calendar(session: Session) -> Dict[int, Calendar]:
 
 @transactional
 def count_unconcluded_for_league(session: Session, league_id: int) -> int:
-    return session.query(Calendar).filter(Calendar.league_id == league_id, Calendar.concluded == 0).count()
+    return session.query(Calendar).filter(Calendar.league_id == league_id, Calendar.concluded.is_(False)).count()
 
 
 @transactional
 def get_next_unconcluded(session: Session) -> Calendar:
-    return session.query(Calendar).filter(Calendar.concluded == 0).order_by(Calendar.date).first()
+    return session.query(Calendar).filter(Calendar.concluded.is_(False)).order_by(Calendar.date).first()
 
 
 @transactional
