@@ -36,6 +36,8 @@ def get_name_suggestions() -> list[NameSuggestionDto]:
 
 @router.post("/save-name-suggestion")
 def save_name_suggestion(first_name: str, last_name: str, _=Depends(require_auth)) -> Response:
+    if first_name is None or first_name == "" or last_name is None or last_name == "":
+        raise HTTPException(status_code=400, detail="FIRST_NAME_AND_LAST_NAME_REQUIRED")
     try:
         service_save_name_suggestion(first_name=first_name, last_name=last_name)
         return Response(status_code=status.HTTP_204_NO_CONTENT)

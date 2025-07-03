@@ -211,6 +211,13 @@ def upgrade() -> None:
             multiinsert=False
         )
 
+    op.execute("SELECT setval('\"BCS\".actions_id_seq', COALESCE((SELECT MAX(id) FROM \"BCS\".actions), 1), true);")
+    op.execute("SELECT setval('\"BCS\".blobs_id_seq', COALESCE((SELECT MAX(id) FROM \"BCS\".blobs), 1), true);")
+    op.execute("SELECT setval('\"BCS\".events_id_seq', COALESCE((SELECT MAX(id) FROM \"BCS\".events), 1), true);")
+    op.execute("SELECT setval('\"BCS\".leagues_id_seq', COALESCE((SELECT MAX(id) FROM \"BCS\".leagues), 1), true);")
+    op.execute("SELECT setval('\"BCS\".results_id_seq', COALESCE((SELECT MAX(id) FROM \"BCS\".results), 1), true);")
+    op.execute("SELECT setval('\"BCS\".name_suggestions_id_seq', COALESCE((SELECT MAX(id) FROM \"BCS\".name_suggestions), 1), true);")
+
 
 def downgrade() -> None:
     # Remove inserted data by primary key

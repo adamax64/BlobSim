@@ -69,10 +69,11 @@ def upgrade() -> None:
                 .values(first_name=first or '', last_name=last or '')
             )
 
-    # Create new tables with desired schema
+    # Create blobs_new sequence, then table with default
+    op.execute('CREATE SEQUENCE IF NOT EXISTS "BCS".blobs_new_id_seq')
     op.execute('''
         CREATE TABLE "BCS".blobs_new (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY DEFAULT nextval('"BCS".blobs_new_id_seq'::regclass),
             first_name VARCHAR NOT NULL,
             last_name VARCHAR NOT NULL,
             strength FLOAT,
@@ -99,10 +100,13 @@ def upgrade() -> None:
             UNIQUE(first_name, last_name)
         )
     ''')
+    op.execute('ALTER SEQUENCE "BCS".blobs_new_id_seq OWNED BY "BCS".blobs_new.id')
 
+    # Create name_suggestions_new sequence, then table with default
+    op.execute('CREATE SEQUENCE IF NOT EXISTS "BCS".name_suggestions_new_id_seq')
     op.execute('''
         CREATE TABLE "BCS".name_suggestions_new (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY DEFAULT nextval('"BCS".name_suggestions_new_id_seq'::regclass),
             first_name VARCHAR,
             last_name VARCHAR NOT NULL,
             parent_id INTEGER,
@@ -111,6 +115,7 @@ def upgrade() -> None:
             UNIQUE(first_name, last_name)
         )
     ''')
+    op.execute('ALTER SEQUENCE "BCS".name_suggestions_new_id_seq OWNED BY "BCS".name_suggestions_new.id')
 
     # Copy data
     op.execute('''
@@ -148,6 +153,10 @@ def upgrade() -> None:
     # Rename new tables
     op.execute('ALTER TABLE "BCS".blobs_new RENAME TO blobs')
     op.execute('ALTER TABLE "BCS".name_suggestions_new RENAME TO name_suggestions')
+
+    # Rename sequences to match new table names
+    op.execute('ALTER SEQUENCE IF EXISTS "BCS".blobs_new_id_seq RENAME TO blobs_id_seq')
+    op.execute('ALTER SEQUENCE IF EXISTS "BCS".name_suggestions_new_id_seq RENAME TO name_suggestions_id_seq')
 
     # Create self-referential foreign key trigger/function after renaming
     op.execute('''
@@ -296,6 +305,10 @@ def downgrade() -> None:
     # Rename new tables
     op.execute('ALTER TABLE "BCS".blobs_new RENAME TO blobs')
     op.execute('ALTER TABLE "BCS".name_suggestions_new RENAME TO name_suggestions')
+
+    # Rename sequences to match new table names
+    op.execute('ALTER SEQUENCE IF EXISTS "BCS".blobs_new_id_seq RENAME TO blobs_id_seq')
+    op.execute('ALTER SEQUENCE IF EXISTS "BCS".name_suggestions_new_id_seq RENAME TO name_suggestions_id_seq')
 
     # Create self-referential foreign key trigger/function after renaming
     op.execute('''
