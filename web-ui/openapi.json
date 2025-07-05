@@ -1109,6 +1109,14 @@
             "type": "string",
             "title": "League Name"
           },
+          "league_level": {
+            "type": "integer",
+            "title": "League Level"
+          },
+          "round": {
+            "type": "integer",
+            "title": "Round"
+          },
           "is_concluded": {
             "type": "boolean",
             "title": "Is Concluded"
@@ -1129,6 +1137,8 @@
         "required": [
           "date",
           "league_name",
+          "league_level",
+          "round",
           "is_concluded",
           "event_type",
           "is_next",

@@ -46,7 +46,11 @@ export function DashboardPage() {
   const { refreshSimTime, loading: simTimeLoading } = useSimTime();
 
   const generalApi = new GeneralInfosApi(defaultConfig);
-  const { data: news, mutate: fetchNews } = useMutation<News[], Error>({
+  const {
+    data: news,
+    mutate: fetchNews,
+    isPending: isLoadingNews,
+  } = useMutation<News[], Error>({
     mutationFn: () => generalApi.getNewsGeneralInfosNewsGet(),
     onSuccess: () => {
       setLoadingOverlayVisible(false);
@@ -54,7 +58,7 @@ export function DashboardPage() {
   });
 
   const simDataApi = new SimDataApi(defaultConfig);
-  const { mutate: progressSimulation } = useMutation({
+  const { mutate: progressSimulation, isPending: isProgressingSimulation } = useMutation({
     mutationFn: () => simDataApi.progressSimDataSimulatePost(),
     onSuccess: () => {
       fetchNews();
@@ -121,7 +125,13 @@ export function DashboardPage() {
             newsTypes.includes(NewsType.EventEnded) ||
             newsTypes.includes(NewsType.BlobCreatedAndNamed) ||
             newsTypes.includes(NewsType.SeasonStart)) && (
-            <Button variant="contained" color="primary" endIcon={<SkipNext />} onClick={handleProgressClick}>
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<SkipNext />}
+              onClick={handleProgressClick}
+              disabled={isLoadingNews || isProgressingSimulation}
+            >
               {t('dashboard.proceed_to_next_day')}
             </Button>
           )}

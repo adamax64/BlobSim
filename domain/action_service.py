@@ -1,7 +1,7 @@
 import random
 from data.db.db_engine import transactional
 from data.model.action import Action
-from data.persistence.action_repository import save_action, save_all_actions
+from data.persistence.action_repository import save_action, save_all_actions, actions_exist_for_event_and_tick
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.sim_data_service import get_sim_time
 from domain.utils.action_utils import generate_race_score_for_contender
@@ -27,7 +27,11 @@ def generate_score_and_save_action(contender: BlobCompetitorDto, event_id: int, 
 def generate_and_save_all_actions(contenders: list[BlobCompetitorDto], event_id: int, tick: int, session) -> None:
     """
     Generate score for contender and save the action for given event.
+    Save only if no actions exist for the same event and tick.
     """
+    if actions_exist_for_event_and_tick(session, event_id, tick):
+        raise Exception("Actions already exist for this event and tick")
+
     current_time = get_sim_time(session)
     race_duration = get_race_duration_by_size(len(contenders))
     actions = []

@@ -33,6 +33,13 @@ export function roundToThreeDecimals(value?: number | null): number | undefined 
   return Math.round(value * 1000) / 1000;
 }
 
+export function roundToOneDecimals(value?: number | null): number | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  return Math.round(value * 10) / 10;
+}
+
 const TINY_FIELD = 5;
 const SMALL_FIELD = 8;
 const NEAR_HALF_FIELD = 11;

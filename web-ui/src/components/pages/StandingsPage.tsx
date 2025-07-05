@@ -140,7 +140,7 @@ export function StandingsPage() {
             <CircularProgress />
           </Box>
         ) : (
-          <Box display="flex" gap={3} p={2}>
+          <Box display="flex" gap={2} p={2} flexDirection={{ xs: 'column', sm: 'row' }}>
             <FormControl variant="outlined" sx={{ minWidth: 210 }}>
               <InputLabel id="league-select">{t('standings.league')}</InputLabel>
               <Select

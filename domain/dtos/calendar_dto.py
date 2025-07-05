@@ -8,6 +8,8 @@ from domain.dtos.sim_time_dto import SimTimeDto
 class CalendarDto:
     date: SimTimeDto
     league_name: str
+    league_level: int
+    round: int
     is_concluded: bool
     event_type: EventTypeDto
     is_next: bool

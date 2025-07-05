@@ -9,11 +9,13 @@ import {
   TableRow,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from '@mui/material';
 import { GrandmasterStandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
+import { EmojiEvents, WorkspacePremium } from '@mui/icons-material';
 
 function getRowClass(hasEonEnded: boolean, position: number): string {
   return hasEonEnded ? (position === 1 ? getClassNameForBlobState(BlobState.FIRST) : '') : '';
@@ -54,15 +56,27 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
           <TableRow>
             <TableCell>#</TableCell>
             <TableCell>{t('grandmaster_standings_table.name')}</TableCell>
-            <TableCell>
-              {isMobile
-                ? t('grandmaster_standings_table.championships_short')
-                : t('grandmaster_standings_table.championships')}
+            <TableCell align="center">
+              {isMobile ? (
+                <Tooltip title={t('grandmaster_standings_table.championships')}>
+                  <EmojiEvents />
+                </Tooltip>
+              ) : (
+                t('grandmaster_standings_table.championships')
+              )}
             </TableCell>
-            <TableCell>{t('grandmaster_standings_table.gold')}</TableCell>
-            {!isMobile && <TableCell>{t('grandmaster_standings_table.silver')}</TableCell>}
-            {!isMobile && <TableCell>{t('grandmaster_standings_table.bronze')}</TableCell>}
-            {!isMobile && <TableCell>{t('grandmaster_standings_table.points')}</TableCell>}
+            <TableCell align="center">
+              {isMobile ? (
+                <Tooltip title={t('grandmaster_standings_table.gold')}>
+                  <WorkspacePremium />
+                </Tooltip>
+              ) : (
+                t('grandmaster_standings_table.gold')
+              )}
+            </TableCell>
+            {!isMobile && <TableCell align="center">{t('grandmaster_standings_table.silver')}</TableCell>}
+            {!isMobile && <TableCell align="center">{t('grandmaster_standings_table.bronze')}</TableCell>}
+            {!isMobile && <TableCell align="center">{t('grandmaster_standings_table.points')}</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -70,13 +84,13 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
             <TableRow key={index} className={getRowClass(hasEonEnded, index + 1)}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                <IconName name={standing.name} color={standing.color} />
+                <IconName name={standing.name} color={standing.color} renderFullName={!isMobile} />
               </TableCell>
-              <TableCell>{standing.championships}</TableCell>
-              <TableCell>{standing.gold}</TableCell>
-              {!isMobile && <TableCell>{standing.silver}</TableCell>}
-              {!isMobile && <TableCell>{standing.bronze}</TableCell>}
-              {!isMobile && <TableCell>{standing.points}</TableCell>}
+              <TableCell align="center">{standing.championships}</TableCell>
+              <TableCell align="center">{standing.gold}</TableCell>
+              {!isMobile && <TableCell align="center">{standing.silver}</TableCell>}
+              {!isMobile && <TableCell align="center">{standing.bronze}</TableCell>}
+              {!isMobile && <TableCell align="center">{standing.points}</TableCell>}
             </TableRow>
           ))}
         </TableBody>

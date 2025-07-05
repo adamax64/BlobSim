@@ -119,7 +119,7 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
             <TableRow key={index} className={getRowClass(hasSeasonEnded, index + 1, standing.isContractEnding)}>
               <TableCell className={getThresholdClassName(index + 1)}>{index + 1}</TableCell>
               <TableCell className={getThresholdClassName(index + 1)}>
-                <IconName name={standing.name} color={standing.color} />
+                <IconName name={standing.name} color={standing.color} renderFullName={!isMobile} />
               </TableCell>
               {!isMobile &&
                 standing.results.map((result, resultIndex) => (

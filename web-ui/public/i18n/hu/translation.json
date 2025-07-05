@@ -43,7 +43,11 @@
     "title": "Blob Bajnokság - Versenynaptár",
     "date": "Dátum",
     "league": "Liga",
-    "event_type": "Esemény típus"
+    "event_type": "Esemény típus",
+    "season_title": "{{season}}. szezon",
+    "epoch_cycle": "Epoch\\Ciklus",
+    "event_title": "{{leagueName}} {{round}}. forduló {{eventType}}",
+    "jump_to_event": "Ugrás az eseményhez"
   },
   "event_types": {
     "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
@@ -88,14 +92,13 @@
   "standings_table": {
     "no_data": "Nincs adat a(z) {{leagueName}} liga {{season}}. szezonjához",
     "name": "Név",
-    "sum": "Összesen",
+    "sum": "Össz.",
     "round": "{{round}}. F"
   },
   "grandmaster_standings_table": {
     "no_data": "Nincs adat a(z) {{eon}}. éonhoz",
     "name": "Név",
     "championships": "Bajnoki címek",
-    "championships_short": "Bajn.",
     "gold": "Arany",
     "silver": "Ezüst",
     "bronze": "Bronz",
