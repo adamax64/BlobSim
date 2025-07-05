@@ -50,11 +50,11 @@ def get_grandmaster_standings(start_season: int, current_season: int, session) -
     end_season = current_season if start_season + 4 > current_season else start_season + 3
     standings = [get_standings(1, season, session) for season in range(start_season, end_season + 1)]
 
-    is_current_season_over = list(get_calendar(session).values())[-1].concluded
+    is_end_season_over = list(get_calendar(session).values())[-1].concluded or current_season != end_season
 
     championships_by_name = defaultdict(int)
     for i, season_standings in enumerate(standings):
-        if i == len(standings) - 1 and not is_current_season_over:
+        if i == len(standings) - 1 and not is_end_season_over:
             continue
         championships_by_name[(season_standings[0].name, season_standings[0].blob_id)] += 1
     standings_by_name = _get_standings_by_name(standings, championships_by_name.keys())

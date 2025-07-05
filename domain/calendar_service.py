@@ -39,6 +39,8 @@ def get_season_calendar(session: Session) -> list[CalendarDto]:
         result.append(CalendarDto(
             convert_to_sim_time(event.date),
             event.league.name,
+            event.league.level,
+            sum(1 for x in result if x.league_level == event.league.level) + 1,
             event.concluded,
             event.event_type,
             is_next,

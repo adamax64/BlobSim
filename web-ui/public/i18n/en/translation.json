@@ -43,7 +43,11 @@
     "title": "Blob Championship System - Season Calendar",
     "date": "Date",
     "league": "League",
-    "event_type": "Event Type"
+    "event_type": "Event Type",
+    "season_title": "Season {{season}}",
+    "epoch_cycle": "Epoch\\Cycle",
+    "event_title": "{{leagueName}} Round {{round}} {{eventType}}",
+    "jump_to_event": "Jump to event"
   },
   "event_types": {
     "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
@@ -95,7 +99,6 @@
     "no_data": "No data found for eon {{eon}}",
     "name": "Name",
     "championships": "Championships",
-    "championships_short": "Champs.",
     "gold": "Gold",
     "silver": "Silver",
     "bronze": "Bronze",

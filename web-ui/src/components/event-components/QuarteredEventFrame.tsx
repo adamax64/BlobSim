@@ -13,6 +13,8 @@ import {
   TableRow,
   useMediaQuery,
   useTheme,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import {
   ActionsApi,
@@ -36,7 +38,7 @@ interface QuarteredEventFrameProps {
   event: EventDto;
 }
 
-export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
+export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event }) => {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
@@ -47,6 +49,8 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
   const [nextBlobIndex, setNextBlobIndex] = useState(-1);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -80,6 +84,11 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
     onSuccess: () => {
       setTick((prev: number) => prev + 1);
       getEventRecords(event.id);
+    },
+    onError: (error) => {
+      setIsPerforming(false);
+      setSnackbarMessage(error.message || 'An error occurred');
+      setSnackbarOpen(true);
     },
   });
 
@@ -219,6 +228,7 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
             isStart={tick === 0}
             isEnd={quarter > 4}
             isEventFinished={isEventFinished}
+            disabled={isPerforming}
             onClickStart={progressEvent}
             onClickNext={progressEvent}
             onClickEnd={finishEvent}
@@ -286,6 +296,16 @@ export const QuarteredEventFrame = ({ event }: QuarteredEventFrameProps) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert onClose={() => setSnackbarOpen(false)} severity="error" variant="filled">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </CardContent>
     </Card>
   );

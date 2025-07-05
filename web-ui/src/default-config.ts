@@ -21,6 +21,11 @@ const defaultConfig = new Configuration({
         }
         return context;
       },
+      onError: async (context) => {
+        const error = context.error as { message?: string };
+        const errorMessage = error?.message || 'An unknown error occurred.';
+        throw errorMessage;
+      },
     },
   ],
 });
