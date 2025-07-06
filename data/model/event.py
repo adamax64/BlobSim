@@ -12,7 +12,7 @@ class Event(Base):
     id = Column(Integer, primary_key=True)
     league_id = Column(Integer, ForeignKey('BCS.leagues.id'))
     league = relationship('League', backref='events')
-    actions = relationship('Action', backref='event')
+    actions = relationship('Action', back_populates='event')  # Use back_populates
     date = Column(BigInteger, default=None)
     season = Column(Integer)
     round = Column(Integer)

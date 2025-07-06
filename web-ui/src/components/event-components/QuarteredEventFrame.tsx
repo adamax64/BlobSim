@@ -34,6 +34,12 @@ import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
+type SnackbarState = {
+  message: string | null;
+  severity: 'error' | 'success' | 'info' | 'warning';
+  anchorOrigin: { vertical: 'top' | 'bottom'; horizontal: 'left' | 'center' | 'right' };
+};
+
 interface QuarteredEventFrameProps {
   event: EventDto;
 }
@@ -50,7 +56,11 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
   const [nextBlobIndex, setNextBlobIndex] = useState(-1);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
+    message: null,
+    severity: 'error',
+    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -74,20 +84,32 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
     },
   });
 
-  const { mutate: createAction } = useMutation<void, Error, { contender: BlobCompetitorDto }>({
+  const { mutate: createAction } = useMutation<{ newRecord: boolean }, Error, { contender: BlobCompetitorDto }>({
     mutationFn: (params) =>
       actionApi.quarteredActionsCreateQuarteredPost({
         blobCompetitorDto: params.contender,
         tick,
         eventId: event.id,
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data?.newRecord) {
+        setSnackbarState({
+          message: t('quartered_event.new_record', { name: eventRecordsCache[currentBlobIndex]?.blob.name }),
+          severity: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+        setSnackbarOpen(true);
+      }
       setTick((prev: number) => prev + 1);
       getEventRecords(event.id);
     },
     onError: (error) => {
       setIsPerforming(false);
-      setSnackbarMessage(error.message || 'An error occurred');
+      setSnackbarState({
+        message: error.message || t('error.generic'),
+        severity: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
       setSnackbarOpen(true);
     },
   });
@@ -300,10 +322,10 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
           open={snackbarOpen}
           autoHideDuration={6000}
           onClose={() => setSnackbarOpen(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          anchorOrigin={snackbarState.anchorOrigin}
         >
-          <Alert onClose={() => setSnackbarOpen(false)} severity="error" variant="filled">
-            {snackbarMessage}
+          <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarState.severity} variant="filled">
+            {snackbarState.message}
           </Alert>
         </Snackbar>
       </CardContent>

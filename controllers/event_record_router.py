@@ -17,12 +17,12 @@ def get_quartered(event_id: int) -> list[QuarteredEventRecordDto]:
 
 
 @router.get("/race", response_model=list[RaceEventRecordDto])
-def get_race(event_id: int) -> list[RaceEventRecordDto]:
+def get_race(event_id: int, is_playback: bool = False) -> list[RaceEventRecordDto]:
     """ Get race event records by actions. """
-    return _get_event_records(event_id)
+    return _get_event_records(event_id, is_playback)
 
 
-def _get_event_records(event_id: int) -> list[EventRecordDto]:
+def _get_event_records(event_id: int, is_playback: bool = False) -> list[EventRecordDto]:
     event = None
     try:
         event = get_event_by_id(event_id)
@@ -36,7 +36,7 @@ def _get_event_records(event_id: int) -> list[EventRecordDto]:
         raise HTTPException(status_code=404, detail="EVENT_NOT_FOUND")
 
     try:
-        return get_event_records(event.actions, event.competitors, event.type)
+        return get_event_records(sorted(event.actions, key=lambda x: x.tick), event.competitors, event.type, is_playback)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error getting event records: {e.with_traceback(None)}")

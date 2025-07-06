@@ -16,9 +16,11 @@ router = APIRouter(prefix="/actions", tags=["actions"])
 def quartered(contender: BlobCompetitorDto, event_id: int, tick: int, _=Depends(require_auth)):
     """
     Generate score for contender and save the action for given event.
+    Returns: {"newRecord": bool}
     """
     try:
-        generate_score_and_save_action(contender, event_id, tick)
+        new_record = generate_score_and_save_action(contender, event_id, tick)
+        return {"newRecord": new_record}
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

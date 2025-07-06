@@ -66,8 +66,12 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const actionsApi = new ActionsApi(defaultConfig);
   const competitionApi = new CompetitionApi(defaultConfig);
 
-  const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
-    mutationFn: (eventId: number) => eventRecordsApi.getRaceEventRecordsRaceGet({ eventId }),
+  const { data: eventRecords, mutate: getEventRecords } = useMutation<
+    EventRecordDto[],
+    Error,
+    { eventId: number; isPlayback: boolean }
+  >({
+    mutationFn: ({ eventId, isPlayback }) => eventRecordsApi.getRaceEventRecordsRaceGet({ eventId, isPlayback }),
     onSuccess: (data) => {
       setLoadingNextTick(false);
       setEventRecordsCache(data);
@@ -79,7 +83,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
     mutationFn: () => actionsApi.raceActionsCreateRacePost({ eventId: event.id, tick: tick }),
     onSuccess: () => {
       setTick((prev) => prev + 1);
-      getEventRecords(event.id);
+      getEventRecords({ eventId: event.id, isPlayback: false });
     },
     onError: (error) => {
       setLoadingNextTick(false);
@@ -99,7 +103,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   });
 
   useEffect(() => {
-    getEventRecords(event.id);
+    getEventRecords({ eventId: event.id, isPlayback: true });
   }, [event.id]);
 
   const progressEvent = useCallback(() => {

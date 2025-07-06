@@ -73,7 +73,8 @@
   },
   "quartered_event": {
     "name": "Name",
-    "best": "Best"
+    "best": "Best",
+    "new_record": "New record by {{name}}!"
   },
   "factory": {
     "title": "Blob Factory",
@@ -133,5 +134,8 @@
     "factory": "Factory",
     "standings": "Standings",
     "calendar": "Calendar"
+  },
+  "error": {
+    "generic": "An error occurred"
   }
 }

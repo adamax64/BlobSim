@@ -1,7 +1,11 @@
 import random
 from data.db.db_engine import transactional
 from data.model.action import Action
-from data.persistence.action_repository import save_action, save_all_actions, actions_exist_for_event_and_tick
+from data.persistence.action_repository import (
+    is_quartered_score_new_record,
+    save_action, save_all_actions,
+    actions_exist_for_event_and_tick
+)
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.sim_data_service import get_sim_time
 from domain.utils.action_utils import generate_race_score_for_contender
@@ -9,18 +13,19 @@ from domain.utils.league_utils import get_race_duration_by_size
 
 
 @transactional
-def generate_score_and_save_action(contender: BlobCompetitorDto, event_id: int, tick: int, session) -> None:
+def generate_score_and_save_action(contender: BlobCompetitorDto, event_id: int, tick: int, session) -> bool:
     """
     Generate score for contender and save the action for given event.
     """
     score = contender.strength * random.random()
+    is_new_record = is_quartered_score_new_record(session, contender.id, score)
     save_action(session, Action(
         event_id=event_id,
         tick=tick,
         blob_id=contender.id,
         score=score
     ))
-    return score
+    return is_new_record
 
 
 @transactional

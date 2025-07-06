@@ -10,7 +10,7 @@ class Action(Base):
 
     id = Column(Integer, primary_key=True)
     event_id = Column(Integer, ForeignKey('BCS.events.id'))
-    # event = relationship('Event', backref='action')
+    event = relationship('Event', back_populates='actions')  # Use back_populates
     tick = Column(Integer)
     blob_id = Column(Integer, ForeignKey('BCS.blobs.id'))
     blob = relationship('Blob', backref='actions')

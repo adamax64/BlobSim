@@ -149,11 +149,19 @@ def update_blobs(session):
     save_all_blobs(session, modified_blobs)
 
 
-def _update_blob_strength(blob: Blob, multiplyer: float) -> float:
+@transactional
+def update_blob_strength_by_id(blob_id: int, multiplyer: float, session):
+    blob = get_blob_by_id(session, blob_id)
+    if blob:
+        blob.strength = _update_blob_strength(blob, multiplyer, False)
+        save_blob(session, blob)
+
+
+def _update_blob_strength(blob: Blob, multiplyer: float, add_atrophy: bool = True) -> float:
     """Update the strength of the blob based on the activity multiplyer, its current integrity and learning."""
 
     atrophy = 0
-    if blob.integrity < 0.4:
+    if blob.integrity < 0.4 and add_atrophy:
         tippingPoint = INITIAL_INTEGRITY * 0.6
         atrophy = -(blob.integrity - tippingPoint) / (
             1.2 * tippingPoint * CYCLES_PER_SEASON

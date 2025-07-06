@@ -157,7 +157,7 @@
 - At the first quarter in high jump events the randomized starting is fixed with a twist: the order of blobs that not scored yet is randomized every tick
 - Improved backend error logging
 
-### 2.5.2
+### 2.5.2 - Miscellaneous update
 
 - Reworked the calendar on desktop view to make the calendar more visual
   - No room for the new design in mobile view, it will be reworked later
@@ -166,3 +166,9 @@
   - Backend throws error when actions are about to be saved for a tick, but there are already saved actions corresponding for that tick
 - Fixed page sizing problems on standings page mobile
 - Fixed page sizing problems on endurance event page mobile
+
+### 2.5.3
+
+- On race events if a blob overtakes someone or is overtaken, they learn from it, so their strength increases a little bit
+- Added playback flag for race events to avoid duplicated rewards for overtakes on page reloads
+- When a blob sets a new record on a quartered high jump event, a snackbar appears to notify the user about the new record

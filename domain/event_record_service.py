@@ -1,16 +1,26 @@
 from collections import defaultdict
 import random
+from domain.blob_service import update_blob_strength_by_id
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto, ScoreDto
+from domain.utils.constants import OVERTAKE_EFFECT
 
 
-def get_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto], event_type: EventTypeDto) -> list[EventRecordDto]:
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING:
+def get_event_records(
+    actions: list[ActionDto],
+    competitors: list[BlobCompetitorDto],
+    event_type: EventTypeDto,
+    is_playback: bool
+) -> list[EventRecordDto]:
+    if (
+        event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING
+        or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING
+    ):
         return _get_quartered_event_records(actions, competitors, event_type)
     else:
-        return _get_race_event_records(actions, competitors)
+        return _get_race_event_records(actions, competitors, is_playback)
 
 
 def _get_quartered_event_records(
@@ -114,17 +124,17 @@ def _get_quarter_index(quarter_ends: list[int], tick: int, field_size: int) -> i
         return quarter_tick % current_field_size if current_field_size > 0 else 0
 
 
-def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto]) -> list[RaceEventRecordDto]:
+def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto], is_playback: bool) -> list[RaceEventRecordDto]:
     actions_by_tick = defaultdict(list[ActionDto])
     for action in actions:
         if action.tick not in actions_by_tick:
             actions_by_tick[action.tick] = []
         actions_by_tick[action.tick].append(action)
 
-    competitors = {competitor.id: RaceEventRecordDto(blob=competitor, distance_records=[]) for competitor in competitors}
+    event_records_by_competitors = {competitor.id: RaceEventRecordDto(blob=competitor, distance_records=[]) for competitor in competitors}
 
     if len(actions) == 0:
-        result_records = list(competitors.values())
+        result_records = list(event_records_by_competitors.values())
         random.shuffle(result_records)
         return result_records
 
@@ -132,19 +142,31 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
     for tick in actions_by_tick.keys():
         actions = actions_by_tick[tick]
         for action in actions:
-            competitor = competitors[action.blob_id]
+            competitor = event_records_by_competitors[action.blob_id]
             previous_distance = competitor.distance_records[-1] if len(competitor.distance_records) > 0 else 0
             competitor.distance_records.append(previous_distance + action.score)
         if tick == previous_tick:
-            sorted_competitors = sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
+            sorted_competitors = sorted(event_records_by_competitors.values(), key=_race_sort_lambda(), reverse=True)
             for i, competitor in enumerate(sorted_competitors):
                 competitor.previous_position = i + 1
 
     if previous_tick is None:
-        for i, competitor in enumerate(competitors.values()):
+        for i, competitor in enumerate(event_records_by_competitors.values()):
             competitor.previous_position = i + 1
 
-    return sorted(competitors.values(), key=_race_sort_lambda(), reverse=True)
+    # If a competitor overtakes another, or is overtaken, they learn from it.
+    current_sorted = sorted(event_records_by_competitors.values(), key=_race_sort_lambda(), reverse=True)
+    if not is_playback and previous_tick is not None:
+        for i, competitor in enumerate(current_sorted):
+            current_position = i + 1
+            prev_position = competitor.previous_position
+            overtakes = prev_position - current_position
+            if overtakes > 0:
+                update_blob_strength_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
+            elif overtakes < 0:
+                update_blob_strength_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
+
+    return current_sorted
 
 
 def _race_sort_lambda():

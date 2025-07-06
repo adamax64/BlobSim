@@ -73,7 +73,8 @@
   },
   "quartered_event": {
     "name": "Név",
-    "best": "Legjobb"
+    "best": "Legjobb",
+    "new_record": "Új rekord tőle: {{name}}!"
   },
   "factory": {
     "title": "Blob Gyár",
@@ -133,5 +134,8 @@
     "factory": "Blob Gyár",
     "standings": "Eredmények",
     "calendar": "Versenynaptár"
+  },
+  "error": {
+    "generic": "Hiba történt"
   }
 }
