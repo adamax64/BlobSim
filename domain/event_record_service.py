@@ -1,11 +1,11 @@
 from collections import defaultdict
 import random
-from domain.blob_service import update_blob_strength_by_id
+from domain.blob_service import update_blob_speed_by_id
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto, ScoreDto
-from domain.utils.constants import OVERTAKE_EFFECT
+from domain.utils.constants import OVERTAKE_EFFECT, OVERTAKEN_EFFECT
 
 
 def get_event_records(
@@ -162,9 +162,9 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
             prev_position = competitor.previous_position
             overtakes = prev_position - current_position
             if overtakes > 0:
-                update_blob_strength_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
+                update_blob_speed_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
             elif overtakes < 0:
-                update_blob_strength_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
+                update_blob_speed_by_id(competitor.blob.id, overtakes * OVERTAKEN_EFFECT)
 
     return current_sorted
 

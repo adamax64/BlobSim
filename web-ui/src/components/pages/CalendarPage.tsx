@@ -15,7 +15,11 @@ export const CalendarPage = () => {
 
   const calendarApi = new CalendarApi(defaultConfig);
   const { t } = useTranslation();
-  const { data: calendar, mutate: loadCalendar } = useMutation<CalendarDto[], Error>({
+  const {
+    data: calendar,
+    mutate: loadCalendar,
+    isPending: isCalendarLoading,
+  } = useMutation<CalendarDto[], Error>({
     mutationFn: () => calendarApi.getSeasonCalendarCalendarGet(),
   });
 
@@ -24,7 +28,7 @@ export const CalendarPage = () => {
   }, []);
 
   return (
-    <PageFrame>
+    <PageFrame showLoading={isCalendarLoading}>
       <PageTitleCard title={t('calendar.title')} />
       {isMobile ? <MobileCalendar calendar={calendar} /> : <DesktopCalendar calendar={calendar} />}
     </PageFrame>

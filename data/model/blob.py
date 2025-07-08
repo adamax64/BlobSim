@@ -15,6 +15,7 @@ class Blob(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     strength = Column(Double)
+    speed = Column(Double)
     learning = Column(Double)
     integrity = Column(Integer)
     born = Column(BigInteger)

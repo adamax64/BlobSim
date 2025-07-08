@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 import traceback
 
-from domain.action_service import generate_and_save_all_actions, generate_score_and_save_action
+from domain.action_service import create_actions_for_race, create_action_for_quartered_event
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.event_service import get_event_by_id
 from domain.exceptions.event_not_found_exception import EventNotFoundException
@@ -19,7 +19,7 @@ def quartered(contender: BlobCompetitorDto, event_id: int, tick: int, _=Depends(
     Returns: {"newRecord": bool}
     """
     try:
-        new_record = generate_score_and_save_action(contender, event_id, tick)
+        new_record = create_action_for_quartered_event(contender, event_id, tick)
         return {"newRecord": new_record}
     except Exception as e:
         traceback.print_exc()
@@ -39,7 +39,7 @@ def race(event_id: int, tick: int, _=Depends(require_auth)):
         raise HTTPException(status_code=404, detail="EVENT_NOT_FOUND")
 
     try:
-        generate_and_save_all_actions(event.competitors, event_id, tick)
+        create_actions_for_race(event.competitors, event_id, tick)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

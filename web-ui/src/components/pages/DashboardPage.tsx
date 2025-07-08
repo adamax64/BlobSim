@@ -85,7 +85,7 @@ export function DashboardPage() {
   };
 
   return (
-    <PageFrame>
+    <PageFrame showLoading={loadingOverlayVisible || simTimeLoading}>
       <PageTitleCard title={t('dashboard.title')} />
       <Card>
         <CardContent>
@@ -138,7 +138,6 @@ export function DashboardPage() {
       </Box>
       {/* TODO: handle blob with parent creation */}
       <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
-      {(loadingOverlayVisible || simTimeLoading) && <LoadingOverlay />}
     </PageFrame>
   );
 }

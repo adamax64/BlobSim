@@ -13,7 +13,7 @@ from domain.utils.league_utils import get_race_duration_by_size
 
 
 @transactional
-def generate_score_and_save_action(contender: BlobCompetitorDto, event_id: int, tick: int, session) -> bool:
+def create_action_for_quartered_event(contender: BlobCompetitorDto, event_id: int, tick: int, session) -> bool:
     """
     Generate score for contender and save the action for given event.
     """
@@ -29,7 +29,7 @@ def generate_score_and_save_action(contender: BlobCompetitorDto, event_id: int, 
 
 
 @transactional
-def generate_and_save_all_actions(contenders: list[BlobCompetitorDto], event_id: int, tick: int, session) -> None:
+def create_actions_for_race(contenders: list[BlobCompetitorDto], event_id: int, tick: int, session) -> None:
     """
     Generate score for contender and save the action for given event.
     Save only if no actions exist for the same event and tick.

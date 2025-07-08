@@ -72,7 +72,7 @@ export function FactoryPage() {
   const progressValue = (factoryProgress ?? 0) * 100 > 100 ? 100 : (factoryProgress ?? 0) * 100;
 
   return (
-    <PageFrame>
+    <PageFrame showLoading={isFactoryProgressLoading || isLoadingNames}>
       <PageTitleCard title={t('factory.title')} center />
       <Card>
         <CardContent>

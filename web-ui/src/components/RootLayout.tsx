@@ -73,7 +73,7 @@ export function RootLayout() {
             © 2025 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v2.5.3
+            v2.6
           </Typography>
         </Box>
       </Box>
@@ -81,7 +81,7 @@ export function RootLayout() {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', height: '100vh' }}>
       {isMobile && (
         <Box position="fixed" left={0} bottom={0} padding={2} sx={{ zIndex: 1000 }}>
           <Fab variant="circular" color="primary" aria-label="open drawer" onClick={handleDrawerToggle}>
@@ -128,7 +128,7 @@ export function RootLayout() {
         {drawer}
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, padding: '0.5rem' }}>
+      <Box component="main" flexGrow={1} display="flex" overflow="auto" flexWrap="wrap" sx={{ padding: '0.5rem' }}>
         <Outlet />
       </Box>
     </Box>

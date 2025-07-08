@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { useSimTime } from '../../context/SimTimeContext';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CalendarDto } from '../../../generated';
 import { EventChip } from './EventChip';
@@ -32,12 +32,32 @@ interface DesktopCalendarProps {
 export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) => {
   const { t } = useTranslation();
   const { simTime, refreshSimTime } = useSimTime();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const currentEpochRowRef = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
     if (!simTime) {
       refreshSimTime();
     }
   }, [simTime, refreshSimTime]);
+
+  useEffect(() => {
+    // Scroll so only one epoch is visible above the current epoch if possible
+    if (currentEpochRowRef.current && tableContainerRef.current) {
+      const container = tableContainerRef.current;
+      const row = currentEpochRowRef.current;
+      const rowHeight = row.clientHeight;
+      let scrollTo;
+      if (simTime?.epoch && simTime.epoch > 0) {
+        // Scroll so the row above the current epoch is at the top
+        scrollTo = row.offsetTop - container.offsetTop - rowHeight;
+      } else {
+        // If first epoch, align current epoch to top
+        scrollTo = row.offsetTop - container.offsetTop;
+      }
+      container.scrollTop = scrollTo;
+    }
+  }, [simTime]);
 
   const applyCurrentClass = (cellEpoch: number, cellCycle: number): string | undefined => {
     if (cellEpoch === simTime?.epoch && cellCycle === simTime?.cycle) {
@@ -49,8 +69,12 @@ export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) =>
   return (
     <Card sx={{ padding: 2 }}>
       <CardHeader title={t('calendar.season_title', { season: calendar?.[0]?.date.season })} />
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer
+        component={Paper}
+        ref={tableContainerRef}
+        sx={{ maxHeight: 'calc(100vh - 208px)', overflowY: 'auto' }}
+      >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCellWithBorder width={50}>
@@ -73,60 +97,28 @@ export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) =>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.from({ length: 10 }, (_, i) => {
-              let isNextSeason = false;
-              let epoch = (simTime?.epoch ?? 1) - 1 + i;
-              if (epoch >= 32) {
-                isNextSeason = true;
-                epoch = epoch % 32;
-              }
+            {Array.from({ length: 32 }, (_, i) => {
+              const epoch = i;
+              const isCurrentEpoch = simTime?.epoch === epoch;
               return (
-                <TableRow key={i} sx={{ height: 72 }}>
+                <TableRow key={i} sx={{ height: 72 }} ref={isCurrentEpoch ? currentEpochRowRef : undefined}>
                   <TableCellWithBorder align="center">{epoch}</TableCellWithBorder>
-                  <TableCellWithBorder align="center" className={applyCurrentClass(epoch, 0)}>
-                    {isNextSeason ? null : (
+                  {[0, 1, 2, 3].map((cycle) => (
+                    <TableCellWithBorder
+                      key={cycle}
+                      align="center"
+                      width="25%"
+                      className={applyCurrentClass(epoch, cycle)}
+                    >
                       <EventChip
                         calendar={calendar}
                         epoch={epoch}
-                        cycle={0}
+                        cycle={cycle}
                         t={t}
-                        isToday={simTime?.epoch === epoch && simTime?.cycle === 0}
+                        isToday={simTime?.epoch === epoch && simTime?.cycle === cycle}
                       />
-                    )}
-                  </TableCellWithBorder>
-                  <TableCellWithBorder align="center" className={applyCurrentClass(epoch, 1)}>
-                    {isNextSeason ? null : (
-                      <EventChip
-                        calendar={calendar}
-                        epoch={epoch}
-                        cycle={1}
-                        t={t}
-                        isToday={simTime?.epoch === epoch && simTime?.cycle === 1}
-                      />
-                    )}
-                  </TableCellWithBorder>
-                  <TableCellWithBorder align="center" className={applyCurrentClass(epoch, 2)}>
-                    {isNextSeason ? null : (
-                      <EventChip
-                        calendar={calendar}
-                        epoch={epoch}
-                        cycle={2}
-                        t={t}
-                        isToday={simTime?.epoch === epoch && simTime?.cycle === 2}
-                      />
-                    )}
-                  </TableCellWithBorder>
-                  <TableCellWithBorder align="center" className={applyCurrentClass(epoch, 3)}>
-                    {isNextSeason ? null : (
-                      <EventChip
-                        calendar={calendar}
-                        epoch={epoch}
-                        cycle={3}
-                        t={t}
-                        isToday={simTime?.epoch === epoch && simTime?.cycle === 3}
-                      />
-                    )}
-                  </TableCellWithBorder>
+                    </TableCellWithBorder>
+                  ))}
                 </TableRow>
               );
             })}

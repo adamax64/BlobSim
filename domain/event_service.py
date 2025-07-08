@@ -109,6 +109,7 @@ def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -
             id=player.id,
             name=format_blob_name(player),
             strength=player.strength,
+            speed=player.speed,
             color=player.color
         ) for player in event.league.players]
     else:
@@ -118,5 +119,6 @@ def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -
             id=blob.id,
             name=format_blob_name(blob),
             strength=blob.strength,
+            speed=blob.speed,
             color=blob.color
         ) for blob in blobs]

@@ -26,6 +26,12 @@ def progress(_=Depends(require_auth)):
     """
     Simulate the progress of the simulation and update blobs.
     """
+    if sim_data_service.is_unconcluded_event_today():
+        raise HTTPException(status_code=400, detail="UNCONCLUDED_EVENT")
+
+    if sim_data_service.is_blob_created():
+        raise HTTPException(status_code=400, detail="BLOB_CREATED_BUT_NOT_NAMED")
+
     try:
         update_blobs()
     except Exception as e:

@@ -61,6 +61,15 @@ export const EventChip: React.FC<EventChipProps> = ({ calendar, epoch, cycle, t,
           });
         }
       }}
+      sx={{
+        height: 'auto',
+        '& .MuiChip-label': {
+          display: 'block',
+          whiteSpace: 'normal',
+          paddingTop: 0.5,
+          paddingBottom: 0.5,
+        },
+      }}
     />
   );
 };

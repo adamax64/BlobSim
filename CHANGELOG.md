@@ -172,3 +172,13 @@
 - On race events if a blob overtakes someone or is overtaken, they learn from it, so their strength increases a little bit
 - Added playback flag for race events to avoid duplicated rewards for overtakes on page reloads
 - When a blob sets a new record on a quartered high jump event, a snackbar appears to notify the user about the new record
+
+### 2.6 - Stats update
+
+- Blobs get a new stat: speed
+  - Used for score generation in race events
+  - During practice, the practice effect is divided between the two stats in random ratio
+- Modified stat update multiplyer constants
+- Added backend checks for simulation progress endpoint
+- Generalised loading animation
+- Refined desktop calendar to display only the current season's epochs and all of the events in the current season
