@@ -46,7 +46,7 @@ export function BlobsPage() {
   }, [showDead]);
 
   return (
-    <PageFrame>
+    <PageFrame showLoading={isPending}>
       <PageTitleCard title={t('blobs.title')} center />
       <Paper sx={{ marginBottom: 4 }}>
         <Box display="flex" gap={3} p={2}>
