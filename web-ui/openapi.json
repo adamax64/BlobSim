@@ -612,7 +612,7 @@
           "actions"
         ],
         "summary": "Quartered",
-        "description": "Generate score for contender and save the action for given event.",
+        "description": "Generate score for contender and save the action for given event.\nReturns: {\"newRecord\": bool}",
         "operationId": "quartered_actions_create_quartered_post",
         "security": [
           {
@@ -961,6 +961,10 @@
             "type": "number",
             "title": "Strength"
           },
+          "speed": {
+            "type": "number",
+            "title": "Speed"
+          },
           "color": {
             "type": "string",
             "title": "Color"
@@ -971,6 +975,7 @@
           "id",
           "name",
           "strength",
+          "speed",
           "color"
         ],
         "title": "BlobCompetitorDto"

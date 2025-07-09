@@ -8,6 +8,7 @@ import defaultConfig from '../../default-config';
 import { LoadingOverlay } from '../common/LoadingOverlay';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
+import { PageFrame } from '../common/PageFrame';
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -41,46 +42,39 @@ export const LoginPage = () => {
   };
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-      }}
-    >
-      <Card sx={{ width: '100%', maxWidth: 400 }}>
-        <CardContent>
-          <Typography variant="h5" component="h1" gutterBottom textAlign="center">
-            {t('login.title')}
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <Box display="flex" flexDirection="column" gap={2}>
-              <TextField
-                label={t('login.username')}
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                fullWidth
-              />
-              <TextField
-                label={t('login.password')}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                fullWidth
-              />
-              <Button type="submit" variant="contained" color="primary" fullWidth>
-                {t('login.login_button')}
-              </Button>
-            </Box>
-          </form>
-        </CardContent>
-      </Card>
-      {isPending && <LoadingOverlay />}
-    </Box>
+    <PageFrame showLoading={isPending}>
+      <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
+        <Card sx={{ width: '100%', maxWidth: 400 }}>
+          <CardContent>
+            <Typography variant="h5" component="h1" gutterBottom textAlign="center">
+              {t('login.title')}
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <Box display="flex" flexDirection="column" gap={2}>
+                <TextField
+                  label={t('login.username')}
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  fullWidth
+                />
+                <TextField
+                  label={t('login.password')}
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  fullWidth
+                />
+                <Button type="submit" variant="contained" color="primary" fullWidth>
+                  {t('login.login_button')}
+                </Button>
+              </Box>
+            </form>
+          </CardContent>
+        </Card>
+      </Box>
+    </PageFrame>
   );
 };

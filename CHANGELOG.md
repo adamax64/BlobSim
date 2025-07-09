@@ -182,3 +182,8 @@
 - Added backend checks for simulation progress endpoint
 - Generalised loading animation
 - Refined desktop calendar to display only the current season's epochs and all of the events in the current season
+
+### 2.6.1 Hotfix
+
+- Updated openapi specifications to fix the quartered event action creation error
+- Fixed login page layout issues
