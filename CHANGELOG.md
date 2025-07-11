@@ -187,3 +187,8 @@
 
 - Updated openapi specifications to fix the quartered event action creation error
 - Fixed login page layout issues
+
+### 2.6.2
+
+- Fixed bug about getting error when saving quartered event results
+- Added error snackbar when result save and event record assembly runs into an error

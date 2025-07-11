@@ -8,7 +8,7 @@ class ScoreDto():
     score: float | None = None
     best: bool = False
     personal_best: bool = False
-    latest_score: int | None = None
+    latest_score: float | None = None
 
 
 @dataclass

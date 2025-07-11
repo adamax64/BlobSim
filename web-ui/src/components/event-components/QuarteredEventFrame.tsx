@@ -82,6 +82,15 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
       setEventRecordsCache(data);
       return data;
     },
+    onError: (error) => {
+      setIsPerforming(false);
+      setSnackbarState({
+        message: error.message || t('error.generic'),
+        severity: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
+      setSnackbarOpen(true);
+    },
   });
 
   const { mutate: createAction } = useMutation<{ newRecord: boolean }, Error, { contender: BlobCompetitorDto }>({
@@ -121,6 +130,14 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
       }),
     onSuccess: () => {
       setIsEventFinished(true);
+    },
+    onError: (error) => {
+      setSnackbarState({
+        message: error.message || t('error.generic'),
+        severity: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
+      setSnackbarOpen(true);
     },
   });
 
