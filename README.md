@@ -13,8 +13,12 @@ The following requirements should be met to run the application on your device:
 - Python 3.10 or newer
 - Node 20.17.0 or newer
 - npm 10.8.2 or newer
+- Java 11 or newer
+- Postgres 17
 
 ### Installation
+
+Before running the application, make sure to set the environment variables. Create a file called `.env` in the root folder and another one with the same name in the `web-ui` folder. The structure should be the same as their respective `.env.example` files, just change the values so the frontend and backend can communicate with each other and the database. 
 
 #### Automatic instalation
 
