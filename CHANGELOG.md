@@ -192,3 +192,7 @@
 
 - Fixed bug about getting error when saving quartered event results
 - Added error snackbar when result save and event record assembly runs into an error
+
+### 2.6.3
+
+- Added rookie of the year feature: if there are at least three rookies participated in a league at the end of the season the best rookie gets money reward and a contract extension

@@ -1,5 +1,4 @@
 from collections import defaultdict
-import random
 from domain.blob_service import update_blob_speed_by_id
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
@@ -28,11 +27,28 @@ def _get_quartered_event_records(
     competitors: list[BlobCompetitorDto],
     event_type: EventTypeDto
 ) -> list[QuarteredEventRecordDto]:
-    random.shuffle(competitors)
     quarter_ends = _get_quarter_ends(len(competitors), event_type)
-    records = {blob.id: QuarteredEventRecordDto(blob, [ScoreDto(), ScoreDto(), ScoreDto(), ScoreDto()]) for blob in competitors}
 
-    if len(actions) == 0:
+    # Create a mapping from blob_id to BlobCompetitorDto for quick lookup
+    blob_map = {blob.id: blob for blob in competitors}
+    records = {
+        action.blob_id: QuarteredEventRecordDto(
+            blob=blob_map.get(action.blob_id),
+            quarters=[ScoreDto(), ScoreDto(), ScoreDto(), ScoreDto()]
+        )
+        for action in actions
+    }
+
+    current_tick = sum(len(action.scores) for action in actions)
+
+    quarter = 1
+    for tick in range(current_tick):
+        quarter = _get_current_quarter(quarter_ends, tick)
+        score = records[action.blob_id].quarters[quarter - 1]
+        #action_score = 
+        # TODO go through the ticks, determine the current blob and their score, then apply to the event records
+
+    if current_tick == 0:
         result_records = list(records.values())
         result_records[0].next = True
         return result_records
@@ -135,7 +151,6 @@ def _get_race_event_records(actions: list[ActionDto], competitors: list[BlobComp
 
     if len(actions) == 0:
         result_records = list(event_records_by_competitors.values())
-        random.shuffle(result_records)
         return result_records
 
     previous_tick = sorted(actions_by_tick.keys(), reverse=True)[1] if len(actions_by_tick.keys()) > 1 else None
