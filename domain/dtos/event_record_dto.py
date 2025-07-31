@@ -14,6 +14,7 @@ class ScoreDto():
 @dataclass
 class EventRecordDto():
     blob: BlobCompetitorDto
+    tick: int
 
 
 @dataclass
