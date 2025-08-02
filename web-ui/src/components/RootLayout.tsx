@@ -30,7 +30,7 @@ function getMenuIcon(page: string) {
 export function RootLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
   const { t } = useTranslation();
 
   const handleDrawerToggle = () => {
@@ -73,7 +73,7 @@ export function RootLayout() {
             © 2025 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v2.6.2
+            v2.6.3
           </Typography>
         </Box>
       </Box>
@@ -99,7 +99,7 @@ export function RootLayout() {
           keepMounted: true, // Better open performance on mobile.
         }}
         sx={{
-          display: { xs: 'flex', sm: 'none' },
+          display: { xs: isMobile ? 'flex' : 'none' },
           '& .MuiDrawer-paper': {
             justifyContent: 'space-between',
             boxSizing: 'border-box',
@@ -114,7 +114,7 @@ export function RootLayout() {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'flex' },
+          display: { xs: isMobile ? 'none' : 'flex' },
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {

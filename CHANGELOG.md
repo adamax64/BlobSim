@@ -192,3 +192,7 @@
 
 - Fixed bug about getting error when saving quartered event results
 - Added error snackbar when result save and event record assembly runs into an error
+
+### 2.6.3
+
+- Fixed to show mobile drawer menu when mobile device is in landscape mode
