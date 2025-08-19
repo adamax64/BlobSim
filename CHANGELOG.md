@@ -196,3 +196,7 @@
 ### 2.6.3
 
 - Fixed to show mobile drawer menu when mobile device is in landscape mode
+
+### 3.0
+
+- Added rookie of the year feature: if there are at least three rookies participated in a league at the end of the season the best rookie gets money reward and a contract extension
