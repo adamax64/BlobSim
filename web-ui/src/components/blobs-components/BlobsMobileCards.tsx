@@ -1,8 +1,9 @@
-import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Badge, Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { BlobStatsDto } from '../../../generated';
 import { BlobState } from '../../utils/BlobStateUtils';
 import { BlobIcon } from '../icons/BlobIcon';
 import { useTranslation } from 'react-i18next';
+import { BlobStateBadge } from '../common/BlobStateBadge';
 
 interface BlobsMobileCardsProps {
   blobs: BlobStatsDto[] | undefined;
@@ -13,9 +14,6 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
   const { t } = useTranslation();
 
   const getCardClass = (blob: BlobStatsDto) => {
-    if (blob.atRisk) {
-      return BlobState.AT_RISK;
-    }
     if (blob.isDead) {
       return BlobState.DEAD;
     }
@@ -32,7 +30,6 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
           <Grid item xs={12} key={blob.name}>
             <Card
               onClick={() => onBlobSelect(blob)}
-              className={getCardClass(blob)}
               sx={{
                 cursor: 'pointer',
                 '&:hover': {
@@ -42,15 +39,17 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
                 },
               }}
             >
-              <CardContent>
+              <CardContent className={getCardClass(blob)}>
                 <Box display="flex" alignItems="center" gap={2}>
                   <Box paddingX={1}>
                     <BlobIcon size={72} color={blob.color} />
                   </Box>
                   <Box>
-                    <Typography variant="h6" component="div">
-                      {blob.name}
-                    </Typography>
+                    <BlobStateBadge atRisk={blob.atRisk} isRookie={blob.isRookie} size="medium">
+                      <Typography variant="h6" component="div">
+                        {blob.name}
+                      </Typography>
+                    </BlobStateBadge>
                     <Typography variant="body2" color="text.secondary">
                       {t('blobs_grid.born')}: {blob.born}
                     </Typography>

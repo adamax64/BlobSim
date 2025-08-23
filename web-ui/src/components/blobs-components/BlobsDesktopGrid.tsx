@@ -10,11 +10,18 @@ const desktopColumns = (t: (key: string) => string): GridColDef[] => [
     field: 'name',
     headerName: t('blobs_grid.name'),
     resizable: false,
-    renderCell: (params: GridRenderCellParams<BlobStatsDto>) => (
-      <Box padding={2} sx={{ cursor: 'pointer' }}>
-        <IconName name={params.row.name} color={params.row.color} />
-      </Box>
-    ),
+    renderCell: (params: GridRenderCellParams<BlobStatsDto>) => {
+      return (
+        <Box padding={2} sx={{ cursor: 'pointer' }}>
+          <IconName
+            name={params.row.name}
+            color={params.row.color}
+            atRisk={params.row.atRisk}
+            isRookie={params.row.isRookie}
+          />
+        </Box>
+      );
+    },
     flex: 1.5,
   },
   { field: 'born', headerName: t('blobs_grid.born'), resizable: false, flex: 1 },
@@ -28,9 +35,6 @@ const desktopColumns = (t: (key: string) => string): GridColDef[] => [
 ];
 
 function getRowClass(params: GridRowClassNameParams<BlobStatsDto>) {
-  if (params.row.atRisk) {
-    return BlobState.AT_RISK;
-  }
   if (params.row.isDead) {
     return BlobState.DEAD;
   }

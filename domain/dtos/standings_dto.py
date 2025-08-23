@@ -9,6 +9,7 @@ class StandingsDTO:
     name: str
     color: str
     is_contract_ending: bool
+    is_rookie: bool
     results: list[StandingsResultDTO]
     num_of_rounds: int
     total_points: int

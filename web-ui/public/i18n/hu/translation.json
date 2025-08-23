@@ -137,5 +137,9 @@
   },
   "error": {
     "generic": "Hiba történt"
+  },
+  "states": {
+    "at_risk": "Szerződése lejár",
+    "rookie": "Újonc"
   }
 }

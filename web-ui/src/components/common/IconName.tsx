@@ -1,15 +1,18 @@
 import { Box, Typography } from '@mui/material';
 import { BlobIcon } from '../icons/BlobIcon';
 import { useMemo } from 'react';
+import { BlobStatsDto } from '../../../generated';
+import { AddCircle, Error } from '@mui/icons-material';
+import { BlobStateBadge } from './BlobStateBadge';
 
-interface IconNameProps {
+interface IconNameProps extends Partial<BlobStatsDto> {
   name: string;
   color: string;
   size?: number;
   renderFullName?: boolean;
 }
 
-export function IconName({ name, color, size = 20, renderFullName = true }: IconNameProps) {
+export function IconName({ name, color, atRisk, isRookie, size = 20, renderFullName = true }: IconNameProps) {
   const formattedName = useMemo(() => {
     if (renderFullName) return name;
 
@@ -24,9 +27,11 @@ export function IconName({ name, color, size = 20, renderFullName = true }: Icon
   return (
     <Box display="flex" alignItems="center" gap={1}>
       <BlobIcon size={size} color={color} />
-      <Typography variant="body2" component="span" noWrap>
-        {formattedName}
-      </Typography>
+      <BlobStateBadge atRisk={atRisk} isRookie={isRookie}>
+        <Typography variant="body2" component="span" noWrap>
+          {formattedName}
+        </Typography>
+      </BlobStateBadge>
     </Box>
   );
 }
