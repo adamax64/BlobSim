@@ -628,15 +628,6 @@
               "type": "integer",
               "title": "Event Id"
             }
-          },
-          {
-            "name": "tick",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "Tick"
-            }
           }
         ],
         "requestBody": {
@@ -1029,6 +1020,11 @@
           "league_name": {
             "type": "string",
             "title": "League Name"
+          },
+          "is_rookie": {
+            "type": "boolean",
+            "title": "Is Rookie",
+            "default": false
           },
           "at_risk": {
             "type": "boolean",
@@ -1590,6 +1586,10 @@
             "type": "boolean",
             "title": "Is Contract Ending"
           },
+          "is_rookie": {
+            "type": "boolean",
+            "title": "Is Rookie"
+          },
           "results": {
             "items": {
               "$ref": "#/components/schemas/StandingsResultDTO"
@@ -1612,6 +1612,7 @@
           "name",
           "color",
           "is_contract_ending",
+          "is_rookie",
           "results",
           "num_of_rounds",
           "total_points"

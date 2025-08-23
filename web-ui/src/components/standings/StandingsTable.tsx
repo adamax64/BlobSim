@@ -17,11 +17,7 @@ import { useSimTime } from '../../context/SimTimeContext';
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
 
-function getRowClass(hasEonEnded: boolean, position: number, atRisk: boolean): string | undefined {
-  if (!hasEonEnded) {
-    return atRisk ? getClassNameForBlobState(BlobState.AT_RISK) : '';
-  }
-
+function getRowClass(position: number, atRisk: boolean): string | undefined {
   let state: BlobState | undefined;
   switch (position) {
     case 1:
@@ -32,9 +28,6 @@ function getRowClass(hasEonEnded: boolean, position: number, atRisk: boolean): s
       break;
     case 3:
       state = BlobState.THIRD;
-      break;
-    default:
-      state = atRisk ? BlobState.AT_RISK : undefined;
       break;
   }
 
@@ -116,10 +109,16 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
         </TableHead>
         <TableBody>
           {standings.map((standing, index) => (
-            <TableRow key={index} className={getRowClass(hasSeasonEnded, index + 1, standing.isContractEnding)}>
+            <TableRow key={index} className={getRowClass(index + 1, standing.isContractEnding)}>
               <TableCell className={getThresholdClassName(index + 1)}>{index + 1}</TableCell>
               <TableCell className={getThresholdClassName(index + 1)}>
-                <IconName name={standing.name} color={standing.color} renderFullName={!isMobile} />
+                <IconName
+                  name={standing.name}
+                  color={standing.color}
+                  renderFullName={!isMobile}
+                  atRisk={standing.isContractEnding}
+                  isRookie={standing.isRookie}
+                />
               </TableCell>
               {!isMobile &&
                 standing.results.map((result, resultIndex) => (

@@ -71,6 +71,7 @@ def get_all_blobs(
             championships=blob.championships,
             grandmasters=blob.grandmasters,
             league_name=blob.league.name if blob.league else "None",
+            is_rookie=blob.debut == current_season,
             at_risk=blob.contract == current_season,
             is_dead=blob.terminated is not None,
             is_retired=blob.contract is not None and blob.contract < current_season,

@@ -208,3 +208,4 @@
 - Enhanced event progresion handling:
   - Every click on the ProgressButton can be done by pressing _space_
   - Enchanced quartered event UI to display current blob with shadow box instead of darker border
+- Blobs with ending contract and rookies are now marked with badges instead of colored background

@@ -137,5 +137,9 @@
   },
   "error": {
     "generic": "An error occurred"
+  },
+  "states": {
+    "at_risk": "Contract Ending",
+    "rookie": "Rookie"
   }
 }

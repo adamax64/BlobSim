@@ -97,7 +97,6 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
     mutationFn: (params) =>
       actionApi.quarteredActionsCreateQuarteredPost({
         blobCompetitorDto: params.contender,
-        tick,
         eventId: event.id,
       }),
     onSuccess: (data) => {
@@ -165,22 +164,6 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
       createAction({ contender: eventRecords[nextBlobIndex].blob });
     }
   }, [createAction, eventRecords, nextBlobIndex]);
-
-  // Add key listener for spacebar to trigger progressEvent
-  // useEffect(() => {
-  //   const handleKeyDown = (e: KeyboardEvent) => {
-  //     if (e.code === 'Space' || e.key === ' ') {
-  //       e.preventDefault();
-  //       if (quarter <= 4) {
-  //         progressEvent();
-  //       } else if (!isEventFinished) {
-  //         finishEvent();
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener('keydown', handleKeyDown);
-  //   return () => window.removeEventListener('keydown', handleKeyDown);
-  // }, [progressEvent, finishEvent, quarter, isEventFinished]);
 
   const renderCellContent = useCallback(
     (record: EventRecordDto, quarterIndex: number) => {

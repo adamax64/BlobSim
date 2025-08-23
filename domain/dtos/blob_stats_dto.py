@@ -13,6 +13,7 @@ class BlobStatsDto(BaseModel):
     championships: int
     grandmasters: int
     league_name: str
+    is_rookie: bool = False
     at_risk: bool = False
     is_dead: bool = False
     is_retired: bool = False

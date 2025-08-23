@@ -31,6 +31,7 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
             standing_results.append(StandingsResultDTO(position=result.position, points=result.points))
 
         contract_ending = season == current_season and blob.contract == current_season
+        is_rookie = blob.debut == current_season and season == current_season
         standings.append(StandingsDTO(
             blob_id=blob.id,
             name=f"{blob.first_name} {blob.last_name}",
@@ -38,7 +39,8 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
             results=standing_results,
             num_of_rounds=num_of_rounds,
             total_points=total_points,
-            is_contract_ending=contract_ending
+            is_contract_ending=contract_ending,
+            is_rookie=is_rookie
         ))
 
     standings.sort(key=_sort_by_position(len(standings)), reverse=True)
