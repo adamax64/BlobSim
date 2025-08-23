@@ -200,3 +200,8 @@
 ### 3.0
 
 - Added rookie of the year feature: if there are at least three rookies participated in a league at the end of the season the best rookie gets money reward and a contract extension
+- Reworked actions data structure:
+  - Instead of storing every score one by one they are now grouped by event and competitor
+  - Event ticks and which score belongs to which tick is calculated from event rules
+  - DISCLAIMER (for dev): because of the previous point, event rules should be versioned, if they are changed in the future
+- Seed for score generation in race events are calculated from blob id instead of speed because speed can change during event

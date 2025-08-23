@@ -50,7 +50,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
-  const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.tick + 1), 0));
+  const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);

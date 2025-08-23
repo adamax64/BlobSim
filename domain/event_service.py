@@ -1,3 +1,4 @@
+import random
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -11,6 +12,8 @@ from data.persistence.event_repository import (
     save_event
 )
 from data.persistence.result_repository import get_results_of_event
+from data.model.action import Action
+from data.persistence.action_repository import save_all_actions
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
@@ -40,10 +43,15 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
         event_type = current_calendar_event.event_type
         event = save_event(session, Event(league_id=league_id, date=time, season=season, round=current_round, type=event_type))
 
+        # Create Action records for each competitor with empty scores list
+        competitors = _get_competitors(session, event, is_event_concluded)
+        random.shuffle(competitors)
+        actions = [Action(event_id=event.id, blob_id=competitor.id, scores=[]) for competitor in competitors]
+        save_all_actions(session, actions)
+
     actions = [ActionDto(
         blob_id=action.blob_id,
-        tick=action.tick,
-        score=action.score
+        scores=action.scores
     ) for action in event.actions]
 
     competitors = _get_competitors(session, event, is_event_concluded)
@@ -70,8 +78,7 @@ def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -
 
     actions = [ActionDto(
         blob_id=action.blob_id,
-        tick=action.tick,
-        score=action.score
+        scores=action.scores
     ) for action in event.actions]
 
     competitors = _get_competitors(session, event, False)

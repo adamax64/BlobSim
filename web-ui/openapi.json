@@ -926,24 +926,22 @@
     "schemas": {
       "ActionDto": {
         "properties": {
-          "tick": {
-            "type": "integer",
-            "title": "Tick"
-          },
           "blob_id": {
             "type": "integer",
             "title": "Blob Id"
           },
-          "score": {
-            "type": "number",
-            "title": "Score"
+          "scores": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Scores"
           }
         },
         "type": "object",
         "required": [
-          "tick",
           "blob_id",
-          "score"
+          "scores"
         ],
         "title": "ActionDto"
       },
@@ -1241,7 +1239,8 @@
         "enum": [
           "QUARTERED_ONE_SHOT_SCORING",
           "QUARTERED_TWO_SHOT_SCORING",
-          "ENDURANCE_RACE"
+          "ENDURANCE_RACE",
+          "ELIMINATION_SCORING"
         ],
         "title": "EventType"
       },

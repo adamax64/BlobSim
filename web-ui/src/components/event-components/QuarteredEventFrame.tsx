@@ -48,7 +48,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
-  const [tick, setTick] = useState(event.actions.length);
+  const [tick, setTick] = useState(event.actions.reduce((sum, action) => sum + action.scores.length, 0));
   const [isPerforming, setIsPerforming] = useState(false);
   const [isEventFinished, setIsEventFinished] = useState(false);
   const [quarter, setQuarter] = useState(0);
