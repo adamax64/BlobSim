@@ -1,6 +1,8 @@
 .row-inactive {
-  background-color: #e2e2e2;
-  color: #7a7a7a;
+  background-color: #e0e0e0;
+  td {
+    opacity: 0.7;
+  }
 }
 
 .row-retired {
@@ -48,30 +50,10 @@ td.text-bronze {
 }
 
 .row-current {
-  & > & thead th {
-    border-bottom-width: 0px !important;
-  }
-  td:first-child {
-    border-left-width: 1px;
-    border-left-color: black;
-  }
-  td {
-    border-top-width: 1px;
-    border-top-color: black;
-    border-bottom-width: 1px;
-    border-bottom-color: black;
-  }
-  td:last-child {
-    border-right-width: 1px;
-    border-right-color: black;
-  }
-}
-
-.disable-border-bottom {
-  th,
-  td {
-    border-bottom-width: 0px;
-  }
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.2s;
 }
 
 .cell-best {

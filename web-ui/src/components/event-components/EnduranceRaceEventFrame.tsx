@@ -114,16 +114,20 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   }, [eventRecords, isEventFinished]);
 
   // Add key listener for spacebar to trigger progressEvent
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' || e.key === ' ') {
-        e.preventDefault();
-        progressEvent();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [progressEvent]);
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (e.code === 'Space' || e.key === ' ') {
+  //       e.preventDefault();
+  //       if (tick < raceDuration) {
+  //         progressEvent();
+  //       } else if (!isEventFinished) {
+  //         finishEvent();
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener('keydown', handleKeyDown);
+  //   return () => window.removeEventListener('keydown', handleKeyDown);
+  // }, [progressEvent, finishEvent, tick, raceDuration, isEventFinished]);
 
   const getDistance = useCallback(
     (record: EventRecordDto) => {
