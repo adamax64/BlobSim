@@ -73,7 +73,7 @@ export function RootLayout() {
             © 2025 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v3.0-pre2
+            v3.0-pre3
           </Typography>
         </Box>
       </Box>

@@ -205,3 +205,6 @@
   - Event ticks and which score belongs to which tick is calculated from event rules
   - DISCLAIMER (for dev): because of the previous point, event rules should be versioned, if they are changed in the future
 - Seed for score generation in race events are calculated from blob id instead of speed because speed can change during event
+- Enhanced event progresion handling:
+  - Every click on the ProgressButton can be done by pressing _space_
+  - Enchanced quartered event UI to display current blob with shadow box instead of darker border

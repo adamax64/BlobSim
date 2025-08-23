@@ -167,16 +167,20 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
   }, [createAction, eventRecords, nextBlobIndex]);
 
   // Add key listener for spacebar to trigger progressEvent
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' || e.key === ' ') {
-        e.preventDefault();
-        progressEvent();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [progressEvent]);
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (e.code === 'Space' || e.key === ' ') {
+  //       e.preventDefault();
+  //       if (quarter <= 4) {
+  //         progressEvent();
+  //       } else if (!isEventFinished) {
+  //         finishEvent();
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener('keydown', handleKeyDown);
+  //   return () => window.removeEventListener('keydown', handleKeyDown);
+  // }, [progressEvent, finishEvent, quarter, isEventFinished]);
 
   const renderCellContent = useCallback(
     (record: EventRecordDto, quarterIndex: number) => {
@@ -228,11 +232,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
         if (quarter <= 4 && record.eliminated) {
           return 'row-inactive';
         }
-        return index === currentBlobIndex
-          ? 'row-current'
-          : index === currentBlobIndex - 1
-            ? 'disable-border-bottom'
-            : '';
+        return index === currentBlobIndex ? 'row-current' : '';
       }
     },
     [currentBlobIndex, isEventFinished, quarter],

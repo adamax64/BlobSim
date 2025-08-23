@@ -3,6 +3,7 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 interface ProgressButtonProps {
   isStart: boolean;
@@ -24,6 +25,26 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
   onClickEnd,
 }: ProgressButtonProps) => {
   const { t } = useTranslation();
+
+  // Add key listener for spacebar to trigger progressEvent
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' || e.key === ' ') {
+        e.preventDefault();
+        if (isStart) {
+          onClickStart();
+        } else if (!isStart && !isEnd) {
+          onClickNext();
+        } else if (isEnd && !isEventFinished) {
+          onClickEnd();
+        } else if (isEventFinished) {
+          window.location.href = '/';
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isStart, isEnd, isEventFinished, onClickStart, onClickNext, onClickEnd]);
 
   return (
     <Box position="fixed" right={0} bottom={0} padding={2}>
