@@ -8,7 +8,7 @@ def generate_race_score_for_contender(contender: BlobCompetitorDto, current_time
     """
     Generate race score for contender.
     """
-    noise = perlin_like_noise_1d(race_duration, current_time * contender.speed)
+    noise = perlin_like_noise_1d(race_duration, current_time * contender.id)
     return noise[tick] * contender.speed
 
 

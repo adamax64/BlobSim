@@ -30,8 +30,8 @@ def get_all_by_ids(session: Session, blob_ids) -> list[Blob]:
 
 @transactional
 def get_all_by_league_order_by_id(session: Session, league_id: int) -> dict[int, Blob]:
-    result = session.query(Blob).filter(Blob.league_id == league_id).all()
-    return {result.id: result for result in result}
+    results = session.query(Blob).filter(Blob.league_id == league_id).all()
+    return {result.id: result for result in results}
 
 
 @transactional

@@ -1,0 +1,21 @@
+from domain.dtos.action_dto import ActionDto
+from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.event_dto import EventTypeDto
+from domain.dtos.event_record_dto import EventRecordDto
+from domain.event_record_services.quartered_event_record_service import get_quartered_event_records
+from domain.event_record_services.race_event_records_service import get_race_event_records
+
+
+def get_event_records(
+    actions: list[ActionDto],
+    competitors: list[BlobCompetitorDto],
+    event_type: EventTypeDto,
+    is_playback: bool
+) -> list[EventRecordDto]:
+    if (
+        event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING
+        or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING
+    ):
+        return get_quartered_event_records(actions, competitors, event_type)
+    else:
+        return get_race_event_records(actions, competitors, is_playback)

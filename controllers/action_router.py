@@ -13,13 +13,13 @@ router = APIRouter(prefix="/actions", tags=["actions"])
 
 
 @router.post("/create/quartered")
-def quartered(contender: BlobCompetitorDto, event_id: int, tick: int, _=Depends(require_auth)):
+def quartered(contender: BlobCompetitorDto, event_id: int, _=Depends(require_auth)):
     """
     Generate score for contender and save the action for given event.
     Returns: {"newRecord": bool}
     """
     try:
-        new_record = create_action_for_quartered_event(contender, event_id, tick)
+        new_record = create_action_for_quartered_event(contender, event_id)
         return {"newRecord": new_record}
     except Exception as e:
         traceback.print_exc()
