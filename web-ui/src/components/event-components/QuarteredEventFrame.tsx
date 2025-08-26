@@ -161,7 +161,9 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event 
     if (eventRecords && !isEventFinished) {
       setCurrentBlobIndex(nextBlobIndex);
       setIsPerforming(true);
-      createAction({ contender: eventRecords[nextBlobIndex].blob });
+      setTimeout(() => {
+        createAction({ contender: eventRecords[nextBlobIndex].blob });
+      }, 1000);
     }
   }, [createAction, eventRecords, nextBlobIndex]);
 

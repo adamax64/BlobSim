@@ -31,16 +31,7 @@ import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Straighten } from '@mui/icons-material';
-
-const TickLoadingBar = styled(LinearProgress)({
-  height: 8,
-  borderRadius: 10,
-});
-
-const NarrowCell = styled(TableCell)(({}) => ({
-  paddingLeft: '8px',
-  paddingRight: '8px',
-}));
+import { NarrowCell, TickLoadingBar } from '../common/StyledComponents';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDto;
@@ -109,7 +100,9 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const progressEvent = useCallback(() => {
     if (eventRecords && !isEventFinished) {
       setLoadingNextTick(true);
-      createActions();
+      setTimeout(() => {
+        createActions();
+      }, 1000);
     }
   }, [eventRecords, isEventFinished]);
 

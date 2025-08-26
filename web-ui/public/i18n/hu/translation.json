@@ -52,7 +52,8 @@
   "event_types": {
     "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
     "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
-    "ENDURANCE_RACE": "Hosszútávú verseny"
+    "ENDURANCE_RACE": "Hosszútávú verseny",
+    "ELIMINATION_SCORING": "Kieséses verseny"
   },
   "event": {
     "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",
@@ -75,6 +76,13 @@
     "name": "Név",
     "best": "Legjobb",
     "new_record": "Új rekord tőle: {{name}}!"
+  },
+  "elimination_event": {
+    "name": "Név",
+    "score": "Pontszám",
+    "new_record": "Új rekord: {{name}}, {{score}}!",
+    "eliminated": "Kiesett",
+    "tick": "Tick"
   },
   "factory": {
     "title": "Blob Gyár",

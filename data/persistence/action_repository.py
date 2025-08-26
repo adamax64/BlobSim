@@ -36,7 +36,6 @@ def is_quartered_score_new_record(session: Session, score: float) -> bool:
     """
 
     # Build the query using a lateral join to unnest the scores array
-    # scores_unnest = func.unnest(Action.scores).alias('score')
     query = session.query(func.max(literal_column('score')))
     query = query.select_from(
         Action,
@@ -48,6 +47,31 @@ def is_quartered_score_new_record(session: Session, score: float) -> bool:
             Action.event.property.mapper.class_.type.in_([
                 EventType.QUARTERED_ONE_SHOT_SCORING,
                 EventType.QUARTERED_TWO_SHOT_SCORING
+            ])
+        )
+    )
+    max_score = query.scalar()
+    return (max_score is None) or (score > max_score)
+
+
+@transactional
+def is_elimination_score_new_record(session: Session, score: float) -> bool:
+    """
+    Returns True if the given score is greater than all scores in actions
+    where the event type is ELIMINATION_ONE_SHOT_SCORING or ELIMINATION_TWO_SHOT_SCORING.
+    """
+
+    # Build the query using a lateral join to unnest the scores array
+    query = session.query(func.max(literal_column('score')))
+    query = query.select_from(
+        Action,
+        func.unnest(Action.scores).alias('score')
+    ).join(
+        Action.event
+    ).filter(
+        Action.event.has(
+            Action.event.property.mapper.class_.type.in_([
+                EventType.ELIMINATION_SCORING
             ])
         )
     )

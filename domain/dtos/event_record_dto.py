@@ -28,3 +28,9 @@ class QuarteredEventRecordDto(EventRecordDto):
 class RaceEventRecordDto(EventRecordDto):
     distance_records: list[float]
     previous_position: int = 1
+
+
+@dataclass
+class EliminationEventRecordDto(EventRecordDto):
+    last_score: float | None = None
+    eliminated: bool = False

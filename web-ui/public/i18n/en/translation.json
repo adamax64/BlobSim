@@ -52,7 +52,8 @@
   "event_types": {
     "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
     "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
-    "ENDURANCE_RACE": "Endurance Race"
+    "ENDURANCE_RACE": "Endurance Race",
+    "ELIMINATION_SCORING": "Elimination Scoring"
   },
   "event": {
     "title": "{{leagueName}} Season {{season}} Round {{round}}",
@@ -75,6 +76,13 @@
     "name": "Name",
     "best": "Best",
     "new_record": "New record by {{name}}!"
+  },
+  "elimination_event": {
+    "name": "Name",
+    "score": "Score",
+    "new_record": "New record by {{name}}: {{score}}!",
+    "eliminated": "Eliminated",
+    "tick": "Tick"
   },
   "factory": {
     "title": "Blob Factory",

@@ -140,8 +140,11 @@ def update_blobs(session):
         if blob.league_id == current_event.league_id if current_event is not None else None:
             if current_event.event_type == EventType.ENDURANCE_RACE:
                 multiplyer.speed = COMPETITION_EFFECT
-            else:
+            elif current_event.event_type == EventType.ELIMINATION_SCORING:
                 multiplyer.strength = COMPETITION_EFFECT
+            else:
+                multiplyer.strength = COMPETITION_EFFECT * 0.7
+                multiplyer.speed = COMPETITION_EFFECT * 0.3
         elif blob.money >= MAINTENANCE_COST and random.random() < 0.5:
             blob.money -= MAINTENANCE_COST
             blob.integrity += MAINTENANCE_EFFECT

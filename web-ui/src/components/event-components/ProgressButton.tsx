@@ -4,6 +4,7 @@ import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 
 interface ProgressButtonProps {
   isStart: boolean;
@@ -25,6 +26,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
   onClickEnd,
 }: ProgressButtonProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // Add key listener for spacebar to trigger progressEvent
   useEffect(() => {
@@ -38,7 +40,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
         } else if (isEnd && !isEventFinished) {
           onClickEnd();
         } else if (isEventFinished) {
-          window.location.href = '/';
+          navigate({ to: '/' });
         }
       }
     };
@@ -67,7 +69,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
         </Fab>
       )}
       {isEventFinished && (
-        <Fab variant="extended" color="primary" onClick={() => (window.location.href = '/')} disabled={disabled}>
+        <Fab variant="extended" color="primary" onClick={() => navigate({ to: '/' })} disabled={disabled}>
           <ArrowBackIosNewRoundedIcon />
           {t('progress_button.back_to_dashboard')}
         </Fab>

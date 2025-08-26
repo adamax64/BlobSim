@@ -17,7 +17,7 @@ from domain.utils.constants import MAX_FIELD_SIZE, QUEUE_LEVEL
 
 
 def mock_blob(contract, league_id=None, integrity=1000, blob_id=0, born=0):
-    return Blob(name="Test Blob", contract=contract, league_id=league_id, integrity=integrity, id=blob_id, born=born)
+    return Blob(first_name="Test", last_name="Blob", contract=contract, league_id=league_id, integrity=integrity, id=blob_id, born=born)
 
 
 class TestLeagueService(unittest.TestCase):
@@ -88,7 +88,18 @@ class TestLeagueService(unittest.TestCase):
         dropout_league = League(id=2, name='Dropout', players=[mock_blob(5, 2, blob_id=1)], level=0)
         leagues = [league1]
 
-        mock_get_standings.return_value = [StandingsDTO(1, "Test Blob", False, [], 42)]
+        mock_get_standings.return_value = [
+            StandingsDTO(
+                1,
+                "Test Blob",
+                color="",
+                is_rookie=False,
+                is_contract_ending=False,
+                results=[],
+                total_points=42,
+                num_of_rounds=0
+            )
+        ]
         mock_get_blob_event.return_value = Result(event=Event(league=league1))
 
         _promote_dropout_winner_if_possibble(session, leagues, dropout_league, 5)
@@ -102,7 +113,7 @@ class TestLeagueService(unittest.TestCase):
         session = MagicMock(spec=Session)
         dropout_league = League(id=1, name='Dropout', players=[mock_blob(1, blob_id=1)], level=0)
 
-        mock_get_standings.return_value = [StandingsDTO(1, "Test Blob", False, [], 42)]
+        mock_get_standings.return_value = [StandingsDTO(1, "Test Blob", "", False, False, [], 0, 42)]
 
         result = _get_dropout_winner(session, dropout_league, 5)
 
@@ -145,7 +156,7 @@ class TestLeagueService(unittest.TestCase):
             if season == 5:
                 return []
             elif season == 4:
-                return [StandingsDTO(0, "Test Blob", False, [], 42)]
+                return [StandingsDTO(0, "Test Blob", "", False, False, [], 0, 42)]
             return []
 
         mock_get_standings.side_effect = side_effect
