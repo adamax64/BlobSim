@@ -8,6 +8,7 @@ import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
 import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
 import { useTranslation } from 'react-i18next';
+import { EliminationScoringEventFrame } from '../event-components/EliminationScoringEventFrame';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);
@@ -52,6 +53,8 @@ export const EventPage = () => {
         return <QuarteredEventFrame event={event} />;
       case EventType.EnduranceRace:
         return <EnduranceRaceEventFrame event={event} />;
+      case EventType.EliminationScoring:
+        return <EliminationScoringEventFrame event={event} />;
     }
   }, [loadingEvent, event]);
 

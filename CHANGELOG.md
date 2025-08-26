@@ -209,3 +209,9 @@
   - Every click on the ProgressButton can be done by pressing _space_
   - Enchanced quartered event UI to display current blob with shadow box instead of darker border
 - Blobs with ending contract and rookies are now marked with badges instead of colored background
+- Score generation for quartered events now require both skill stats from blobs: strength 70%, speed 30%
+  - Skills are updated after event accordingly
+- New event type: elimination scoring
+  - Scores generated from blob strength
+  - In each tick every non eliminated blob generates a score and the lowest scoring gets eliminated
+  - This repeats until only one blob is left

@@ -606,6 +606,51 @@
         ]
       }
     },
+    "/competition/elimination-event-results": {
+      "post": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Save Elimination",
+        "description": "Save event results for elimination events.",
+        "operationId": "save_elimination_competition_elimination_event_results_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_save_elimination_competition_elimination_event_results_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
     "/actions/create/quartered": {
       "post": {
         "tags": [
@@ -717,6 +762,66 @@
         }
       }
     },
+    "/actions/create/elimination": {
+      "post": {
+        "tags": [
+          "actions"
+        ],
+        "summary": "Elimination",
+        "description": "Generate score for all contenders and save the actions for given event.",
+        "operationId": "elimination_actions_create_elimination_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BlobCompetitorDto"
+                },
+                "title": "Contenders"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/event-records/quartered": {
       "get": {
         "tags": [
@@ -804,6 +909,53 @@
                     "$ref": "#/components/schemas/RaceEventRecordDto"
                   },
                   "title": "Response Get Race Event Records Race Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event-records/elimination": {
+      "get": {
+        "tags": [
+          "event-records"
+        ],
+        "summary": "Get Elimination",
+        "description": "Get elimination event records by actions.",
+        "operationId": "get_elimination_event_records_elimination_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EliminationEventRecordDto"
+                  },
+                  "title": "Response Get Elimination Event Records Elimination Get"
                 }
               }
             }
@@ -1069,6 +1221,26 @@
         ],
         "title": "BlobStatsDto"
       },
+      "Body_save_elimination_competition_elimination_event_results_post": {
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/EventDto"
+          },
+          "event_records": {
+            "items": {
+              "$ref": "#/components/schemas/EventRecordDto"
+            },
+            "type": "array",
+            "title": "Event Records"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event",
+          "event_records"
+        ],
+        "title": "Body_save_elimination_competition_elimination_event_results_post"
+      },
       "Body_save_quartered_competition_quartered_event_results_post": {
         "properties": {
           "event": {
@@ -1155,6 +1327,34 @@
         ],
         "title": "CalendarDto"
       },
+      "EliminationEventRecordDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobCompetitorDto"
+          },
+          "last_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Score"
+          },
+          "eliminated": {
+            "type": "boolean",
+            "title": "Eliminated",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob"
+        ],
+        "title": "EliminationEventRecordDto"
+      },
       "EventDto": {
         "properties": {
           "id": {
@@ -1201,6 +1401,18 @@
           "type"
         ],
         "title": "EventDto"
+      },
+      "EventRecordDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobCompetitorDto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob"
+        ],
+        "title": "EventRecordDto"
       },
       "EventSummaryDTO": {
         "properties": {

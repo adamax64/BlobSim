@@ -25,7 +25,7 @@ class TestChampionshipService(unittest.TestCase):
             GrandmasterStandingsDTO(blob_id=1, name="Test Blob", color="#FFFFFF", championships=3, gold=5, silver=4, bronze=3, points=100),
             GrandmasterStandingsDTO(blob_id=2, name="Blob Doe", color="#000000", championships=1, gold=5, silver=4, bronze=3, points=100),
             ]
-        mock_blob = Blob(id=1, name="Test Blob", grandmasters=0, money=0, contract=0, integrity=0)
+        mock_blob = Blob(id=1, first_name="Test", last_name="Blob", grandmasters=0, money=0, contract=0, integrity=0)
         mock_get_blob_by_id.return_value = mock_blob
 
         result = end_eon_if_over(season, league, session)
@@ -45,22 +45,64 @@ class TestChampionshipService(unittest.TestCase):
         session = MagicMock(spec=Session)
         mock_standings = [
             StandingsDTO(
-                blob_id=1, name="Blob 1", color="#111111", is_contract_ending=False, results=[], num_of_rounds=10, total_points=100
+                blob_id=1,
+                name="Blob 1",
+                color="#111111",
+                is_contract_ending=False,
+                is_rookie=False,
+                results=[],
+                num_of_rounds=10,
+                total_points=100
             ),
             StandingsDTO(
-                blob_id=2, name="Blob 2", color="#222222", is_contract_ending=False, results=[], num_of_rounds=10, total_points=90
+                blob_id=2,
+                name="Blob 2",
+                color="#222222",
+                is_contract_ending=False,
+                is_rookie=False,
+                results=[],
+                num_of_rounds=10,
+                total_points=90
             ),
             StandingsDTO(
-                blob_id=3, name="Blob 3", color="#333333", is_contract_ending=False, results=[], num_of_rounds=10, total_points=80
+                blob_id=3,
+                name="Blob 3",
+                color="#333333",
+                is_contract_ending=False,
+                is_rookie=False,
+                results=[],
+                num_of_rounds=10,
+                total_points=80
             ),
             StandingsDTO(
-                blob_id=4, name="Blob 4", color="#444444", is_contract_ending=False, results=[], num_of_rounds=10, total_points=70
+                blob_id=4,
+                name="Blob 4",
+                color="#444444",
+                is_contract_ending=False,
+                is_rookie=False,
+                results=[],
+                num_of_rounds=10,
+                total_points=70
             ),
             StandingsDTO(
-                blob_id=5, name="Blob 5", color="#555555", is_contract_ending=False, results=[], num_of_rounds=10, total_points=60
+                blob_id=5,
+                name="Blob 5",
+                color="#555555",
+                is_contract_ending=False,
+                is_rookie=False,
+                results=[],
+                num_of_rounds=10,
+                total_points=60
             ),
             StandingsDTO(
-                blob_id=6, name="Blob 6", color="#666666", is_contract_ending=False, results=[], num_of_rounds=10, total_points=50
+                blob_id=6,
+                name="Blob 6",
+                color="#666666",
+                is_contract_ending=False,
+                is_rookie=False,
+                results=[],
+                num_of_rounds=10,
+                total_points=50
             )
         ]
         mock_get_standings.return_value = mock_standings

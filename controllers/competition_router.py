@@ -42,6 +42,14 @@ async def save_race(event: EventDto, event_records: list[RaceEventRecordDto], _=
     _save_event_results(event, event_records)
 
 
+@router.post("/elimination-event-results")
+async def save_elimination(event: EventDto, event_records: list[EventRecordDto], _=Depends(require_auth)) -> None:
+    """
+    Save event results for elimination events.
+    """
+    _save_event_results(event, event_records)
+
+
 def _save_event_results(event: EventDto, event_records: list[EventRecordDto]) -> None:
     if event_records is None or len(event_records) == 0:
         raise HTTPException(status_code=400, detail="EVENT_RECORDS_EMPTY")
