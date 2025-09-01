@@ -6,8 +6,8 @@ import {
   CompetitionApi,
   EventDto,
   EventRecordsApi,
-} from '../../../generated';
-import { useAuth } from '../../context/AuthContext';
+} from '../../../../generated';
+import { useAuth } from '../../../context/AuthContext';
 import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
@@ -16,27 +16,21 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Paper,
   Snackbar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Tab,
+  Tabs,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { ProgressButton } from './ProgressButton';
-import { EliminationEventRecordDto as EventRecordDto } from '../../../generated/models/EliminationEventRecordDto';
-import defaultConfig from '../../default-config';
+import { ProgressButton } from '../ProgressButton';
+import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
+import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
-import { TickLoadingBar } from '../common/StyledComponents';
-import { IconName } from '../common/IconName';
-import { roundToThreeDecimals } from './EventUtils';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { ChartsTooltipContainer, useAxesTooltip } from '@mui/x-charts/ChartsTooltip';
+import { TickLoadingBar } from '../../common/StyledComponents';
+import { EventBarChart } from './EventBarChart';
+import { EliminationEventTable } from './EliminationEventTable';
+import { EliminationEventContentTabs } from './EliminationEventContentTabs';
 
 type SnackbarState = {
   message: string | null;
@@ -151,27 +145,6 @@ export const EliminationScoringEventFrame = ({ event }: EliminationScoringEventF
     }
   }, [eventRecords, isEventFinished, createAction]);
 
-  const getRowClass = useCallback(
-    (index: number, isEliminated: boolean) => {
-      if (isEventFinished) {
-        switch (index) {
-          case 0:
-            return 'row-gold';
-          case 1:
-            return 'row-silver';
-          case 2:
-            return 'row-bronze';
-        }
-      } else {
-        if (isEliminated) {
-          return 'row-inactive';
-        }
-      }
-      return '';
-    },
-    [isEventFinished],
-  );
-
   return (
     <Card>
       <CardHeader title={t(`event_types.${event.type}`)} />
@@ -191,65 +164,29 @@ export const EliminationScoringEventFrame = ({ event }: EliminationScoringEventF
         <Typography fontSize={18} fontWeight={600} paddingBottom={1}>
           {t('elimination_event.tick')}: {tick}
         </Typography>
-        <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={2}>
+        <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={isMobile ? 0 : 2}>
           <TickLoadingBar />
         </Box>
-        <Box display="flex" flexDirection="row">
-          <Box>
-            <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell width={30}>#</TableCell>
-                    <TableCell>{t('elimination_event.name')}</TableCell>
-                    <TableCell>{t('elimination_event.score')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(eventRecords ?? eventRecordsCache).map((record, index) => (
-                    <TableRow key={index} className={getRowClass(index, record.eliminated ?? false)}>
-                      <TableCell width={30}>{index + 1}</TableCell>
-                      <TableCell>
-                        <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
-                      </TableCell>
-                      <TableCell>
-                        {record.eliminated
-                          ? t('elimination_event.eliminated')
-                          : (roundToThreeDecimals(record.lastScore) ?? '-')}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+        {isMobile ? (
+          <EliminationEventContentTabs
+            eventRecords={eventRecords ?? eventRecordsCache}
+            isEventFinished={isEventFinished}
+            isMobile={isMobile}
+          />
+        ) : (
+          <Box display="flex" flexDirection="row">
+            <Box>
+              <EliminationEventTable
+                eventRecords={eventRecords ?? eventRecordsCache}
+                isEventFinished={isEventFinished}
+                isMobile={isMobile}
+              />
+            </Box>
+            <Box flexGrow={1}>
+              <EventBarChart eventRecords={eventRecords ?? eventRecordsCache} isMobile={isMobile} />
+            </Box>
           </Box>
-          <Box flexGrow={1}>
-            <BarChart
-              height={33 * (eventRecords?.length ?? 0) + 35}
-              series={[
-                {
-                  data: (eventRecords ?? eventRecordsCache).map((record) =>
-                    record.eliminated ? 0 : (record.lastScore ?? 0),
-                  ),
-                },
-              ]}
-              yAxis={[
-                {
-                  data: (eventRecords ?? eventRecordsCache).map((record) => record.blob.name),
-                  tickLabelStyle: { display: 'none' },
-                  colorMap: {
-                    colors: (eventRecords ?? eventRecordsCache).map((record) => record.blob.color),
-                    type: 'ordinal',
-                  },
-                },
-              ]}
-              layout="horizontal"
-              margin={{ top: 12, right: 16, bottom: 0, left: 0 }}
-              xAxis={[{ position: 'top' }]}
-              slots={{ tooltip: CustomTooltip }}
-            />
-          </Box>
-        </Box>
+        )}
         <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginTop={2}>
           <TickLoadingBar />
         </Box>
@@ -265,26 +202,5 @@ export const EliminationScoringEventFrame = ({ event }: EliminationScoringEventF
         </Snackbar>
       </CardContent>
     </Card>
-  );
-};
-
-const CustomTooltip = () => {
-  const axisTooltip = useAxesTooltip();
-
-  const name = axisTooltip?.[0].axisFormattedValue ?? '';
-  const color = axisTooltip?.[0].seriesItems[0].color ?? '';
-  const value = Number.parseFloat(axisTooltip?.[0].seriesItems[0].formattedValue ?? '');
-
-  return (
-    <ChartsTooltipContainer>
-      <Card>
-        <Box padding={1} display="flex" justifyContent="space-between" width={210}>
-          <IconName name={name} color={color} />
-          <Typography variant="body2" align="right">
-            {value > 0 ? value : '-'}
-          </Typography>
-        </Box>
-      </Card>
-    </ChartsTooltipContainer>
   );
 };

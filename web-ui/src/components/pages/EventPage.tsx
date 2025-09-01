@@ -8,7 +8,7 @@ import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
 import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
 import { useTranslation } from 'react-i18next';
-import { EliminationScoringEventFrame } from '../event-components/EliminationScoringEventFrame';
+import { EliminationScoringEventFrame } from '../event-components/elimination-scoring/EliminationScoringEventFrame';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);

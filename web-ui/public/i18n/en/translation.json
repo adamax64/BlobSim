@@ -82,7 +82,9 @@
     "score": "Score",
     "new_record": "New record by {{name}}: {{score}}!",
     "eliminated": "Eliminated",
-    "tick": "Tick"
+    "tick": "Tick",
+    "tab_table": "Table",
+    "tab_chart": "Chart"
   },
   "factory": {
     "title": "Blob Factory",
