@@ -82,7 +82,9 @@
     "score": "Pontszám",
     "new_record": "Új rekord: {{name}}, {{score}}!",
     "eliminated": "Kiesett",
-    "tick": "Tick"
+    "tick": "Tick",
+    "tab_table": "Táblázat",
+    "tab_chart": "Diagram"
   },
   "factory": {
     "title": "Blob Gyár",
