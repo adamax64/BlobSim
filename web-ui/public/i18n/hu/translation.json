@@ -49,11 +49,28 @@
     "event_title": "{{leagueName}} {{round}}. forduló {{eventType}}",
     "jump_to_event": "Ugrás az eseményhez"
   },
-  "event_types": {
-    "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
-    "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
-    "ENDURANCE_RACE": "Hosszútávú verseny",
-    "ELIMINATION_SCORING": "Kieséses verseny"
+  "enums": {
+    "event_types": {
+      "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
+      "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
+      "ENDURANCE_RACE": "Hosszútávú verseny",
+      "ELIMINATION_SCORING": "Kieséses verseny"
+    },
+    "speed_category": {
+      "SLOW": "Lassú",
+      "AVERAGE": "Átlagos",
+      "FAST": "Gyors"
+    },
+    "strength_category": {
+      "WEAK": "Gyenge",
+      "AVERAGE": "Átlagos",
+      "STRONG": "Erős"
+    },
+    "integrity_state": {
+      "POOR": "GyenRosszge",
+      "AVERAGE": "Átlagos",
+      "GOOD": "Jó"
+    }
   },
   "event": {
     "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",
@@ -117,12 +134,18 @@
   },
   "blob_details": {
     "birthdate": "Születési dátum",
+    "stats": {
+      "speed": "Sebesség",
+      "strength": "Erő",
+      "integrity": "Integritás"
+    },
     "parent": "Szülő",
     "debut": "Debütálás",
-    "terminated": "Blob terminálva",
-    "retired": "Blob visszavonult",
+    "terminated": "Terminálás dátuma",
+    "retired": "Visszavonult",
+    "money": "Pénz",
     "current_league": "Jelenlegi liga",
-    "on_queue": "Jelenleg várakozóban",
+    "on_queue": "Jelenleg várakozási sorban",
     "podiums": "Dobogók",
     "wins": "Győzelmek",
     "championships": "Bajnokságok",

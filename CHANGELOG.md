@@ -216,3 +216,8 @@
   - In each tick every non eliminated blob generates a score and the lowest scoring gets eliminated
   - This repeats until only one blob is left
 - Fixed bug: event result saving was possibble multiple times after event was concluded
+- Added new information to blob details dialog to display:
+  - Strength, speed and integrity state relative to other blobs (no exact values, just categories with color code)
+  - Termination and retirement dates
+  - Money
+  - If blob is dead, a different blob icon is displayed

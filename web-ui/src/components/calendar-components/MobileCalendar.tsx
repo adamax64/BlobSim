@@ -28,7 +28,7 @@ export const MobileCalendar: React.FC<CalendarProps> = ({ calendar }) => {
             >
               <TableCell>{formatToShort(event.date)}</TableCell>
               <TableCell>{event.leagueName}</TableCell>
-              <TableCell>{t(`event_types.${event.eventType}`)}</TableCell>
+              <TableCell>{t(`enums.event_types.${event.eventType}`)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
