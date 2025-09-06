@@ -1,4 +1,4 @@
-from domain.blob_service import update_blob_speed_by_id
+from domain.blob_services.blob_update_service import update_blob_speed_by_id
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_record_dto import RaceEventRecordDto

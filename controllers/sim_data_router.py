@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 import traceback
 
 from domain import sim_data_service
-from domain.blob_service import update_blobs
+from domain.blob_services.blob_service import update_blobs
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.utils.sim_time_utils import convert_to_sim_time
 from .auth_dependency import require_auth

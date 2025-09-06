@@ -50,3 +50,47 @@ def save_all_blobs(session: Session, blobs: list[Blob]):
 def save_blob(session: Session, blob: Blob):
     session.add(blob)
     session.commit()
+
+
+@transactional
+def get_blob_relative_strengths_by_blob(session: Session) -> dict[int, float]:
+    """
+    Get the relative strength of each blob compared to all other living blobs in the database.
+    The relative strength is a value between 0 and 1, where 0 is the weakest blob and 1 is the strongest blob.
+    """
+    blobs = session.query(Blob).where(Blob.integrity > 0).all()
+    if not blobs:
+        return {}
+
+    max_strength = max(blob.strength for blob in blobs)
+    min_strength = min(blob.strength for blob in blobs)
+
+    if max_strength == min_strength:
+        return {blob.id: 0.0 for blob in blobs}
+
+    return {
+        blob.id: (blob.strength - min_strength) / (max_strength - min_strength)
+        for blob in blobs
+    }
+
+
+@transactional
+def get_blob_relative_speeds_by_blob(session: Session) -> dict[int, float]:
+    """
+    Get the relative speeds of each blob compared to all other living blobs in the database.
+    The relative speed is a value between 0 and 1, where 0 is the slowest blob and 1 is the fastest blob.
+    """
+    blobs = session.query(Blob).where(Blob.integrity > 0).all()
+    if not blobs:
+        return {}
+
+    max_speed = max(blob.speed for blob in blobs)
+    min_speed = min(blob.speed for blob in blobs)
+
+    if max_speed == min_speed:
+        return {blob.id: 0.0 for blob in blobs}
+
+    return {
+        blob.id: (blob.speed - min_speed) / (max_speed - min_speed)
+        for blob in blobs
+    }

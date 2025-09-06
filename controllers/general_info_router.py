@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 import traceback
 
-from domain.blob_service import check_blob_created
+from domain.blob_services.blob_service import check_blob_created
 from domain.dtos.event_summary_dto import EventSummaryDTO
 from domain.event_service import get_concluded_event_summary
 from domain.sim_data_service import get_sim_time, is_unconcluded_event_today
