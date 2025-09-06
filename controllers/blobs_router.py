@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response
 import traceback
 
-from domain.blob_service import get_all_blobs, create_blob as service_create_blob
+from domain.blob_services.blob_service import get_all_blobs, create_blob as service_create_blob
 from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
 from .auth_dependency import require_auth

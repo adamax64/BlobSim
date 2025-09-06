@@ -1131,6 +1131,17 @@
             "type": "string",
             "title": "Born"
           },
+          "terminated": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terminated"
+          },
           "debut": {
             "anyOf": [
               {
@@ -1206,6 +1217,80 @@
                 "type": "null"
               }
             ]
+          },
+          "money": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Money"
+          },
+          "speed_category": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpeedCategory"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "strength_category": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StrengthCategory"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "integrity_state": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/IntegrityState"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "speed_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed Color"
+          },
+          "strength_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strength Color"
+          },
+          "integrity_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Integrity Color"
           }
         },
         "type": "object",
@@ -1518,6 +1603,15 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "IntegrityState": {
+        "type": "string",
+        "enum": [
+          "POOR",
+          "AVERAGE",
+          "GOOD"
+        ],
+        "title": "IntegrityState"
+      },
       "LeagueDto": {
         "properties": {
           "id": {
@@ -1785,6 +1879,15 @@
         ],
         "title": "SimTimeDto"
       },
+      "SpeedCategory": {
+        "type": "string",
+        "enum": [
+          "SLOW",
+          "AVERAGE",
+          "FAST"
+        ],
+        "title": "SpeedCategory"
+      },
       "StandingsDTO": {
         "properties": {
           "blob_id": {
@@ -1853,6 +1956,15 @@
           "points"
         ],
         "title": "StandingsResultDTO"
+      },
+      "StrengthCategory": {
+        "type": "string",
+        "enum": [
+          "WEAK",
+          "AVERAGE",
+          "STRONG"
+        ],
+        "title": "StrengthCategory"
       },
       "Token": {
         "properties": {
