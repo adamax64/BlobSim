@@ -157,7 +157,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
 
   return (
     <Card>
-      <CardHeader title={t(`event_types.${event.type}`)} />
+      <CardHeader title={t(`enums.event_types.${event.type}`)} />
       <Divider />
       <CardContent>
         {isAuthenticated && (

@@ -40,7 +40,7 @@ export const EventChip: React.FC<EventChipProps> = ({ calendar, epoch, cycle, t,
       label={t('calendar.event_title', {
         leagueName: event.leagueName,
         round: event.round,
-        eventType: t(`event_types.${event.eventType}`),
+        eventType: t(`enums.event_types.${event.eventType}`),
       })}
       color={color}
       deleteIcon={

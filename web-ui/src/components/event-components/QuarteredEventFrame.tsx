@@ -250,7 +250,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
 
   return (
     <Card>
-      <CardHeader title={t(`event_types.${event.type}`)} />
+      <CardHeader title={t(`enums.event_types.${event.type}`)} />
       <CardContent>
         {isAuthenticated && (
           <ProgressButton

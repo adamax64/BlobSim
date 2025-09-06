@@ -49,11 +49,28 @@
     "event_title": "{{leagueName}} Round {{round}} {{eventType}}",
     "jump_to_event": "Jump to event"
   },
-  "event_types": {
-    "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
-    "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
-    "ENDURANCE_RACE": "Endurance Race",
-    "ELIMINATION_SCORING": "Elimination Scoring"
+  "enums": {
+    "event_types": {
+      "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
+      "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
+      "ENDURANCE_RACE": "Endurance Race",
+      "ELIMINATION_SCORING": "Elimination Scoring"
+    },
+    "speed_category": {
+      "SLOW": "Slow",
+      "AVERAGE": "Average",
+      "FAST": "Fast"
+    },
+    "strength_category": {
+      "WEAK": "Weak",
+      "AVERAGE": "Average",
+      "STRONG": "Strong"
+    },
+    "integrity_state": {
+      "POOR": "Poor",
+      "AVERAGE": "Average",
+      "GOOD": "Good"
+    }
   },
   "event": {
     "title": "{{leagueName}} Season {{season}} Round {{round}}",
@@ -117,10 +134,16 @@
   },
   "blob_details": {
     "birthdate": "Birthdate",
+    "stats": {
+      "speed": "Speed",
+      "strength": "Strength",
+      "integrity": "Integrity"
+    },
     "parent": "Parent",
     "debut": "Debut",
-    "terminated": "Blob is terminated",
-    "retired": "Blob is retired",
+    "terminated": "Termination date",
+    "retired": "Retired",
+    "money": "Money",
     "current_league": "Current League",
     "on_queue": "Currently on queue",
     "podiums": "Podiums",
