@@ -25,7 +25,7 @@ import {
   CompetitionApi,
   EventRecordsApi,
 } from '../../../generated';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './EventUtils';
 import { ProgressButton } from './ProgressButton';
 import defaultConfig from '../../default-config';
@@ -42,15 +42,20 @@ type SnackbarState = {
 
 interface QuarteredEventFrameProps {
   event: EventDto;
+  setIsEventFinished: Dispatch<SetStateAction<boolean>>;
+  isEventFinished: boolean;
 }
 
-export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({ event }) => {
+export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
+  event,
+  setIsEventFinished,
+  isEventFinished,
+}) => {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(event.actions.reduce((sum, action) => sum + action.scores.length, 0));
   const [isPerforming, setIsPerforming] = useState(false);
-  const [isEventFinished, setIsEventFinished] = useState(false);
   const [quarter, setQuarter] = useState(0);
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
   const [nextBlobIndex, setNextBlobIndex] = useState(-1);

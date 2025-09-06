@@ -215,3 +215,4 @@
   - Scores generated from blob strength
   - In each tick every non eliminated blob generates a score and the lowest scoring gets eliminated
   - This repeats until only one blob is left
+- Fixed bug: event result saving was possibble multiple times after event was concluded

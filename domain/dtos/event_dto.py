@@ -19,3 +19,4 @@ class EventDto:
     season: int
     round: int
     type: EventTypeDto
+    isFinished: bool

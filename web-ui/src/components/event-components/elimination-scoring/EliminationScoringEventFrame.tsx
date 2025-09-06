@@ -8,7 +8,7 @@ import {
   EventRecordsApi,
 } from '../../../../generated';
 import { useAuth } from '../../../context/AuthContext';
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Box,
@@ -40,9 +40,15 @@ type SnackbarState = {
 
 interface EliminationScoringEventFrameProps {
   event: EventDto;
+  setIsEventFinished: Dispatch<SetStateAction<boolean>>;
+  isEventFinished: boolean;
 }
 
-export const EliminationScoringEventFrame = ({ event }: EliminationScoringEventFrameProps) => {
+export const EliminationScoringEventFrame = ({
+  event,
+  setIsEventFinished,
+  isEventFinished,
+}: EliminationScoringEventFrameProps) => {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
@@ -54,7 +60,6 @@ export const EliminationScoringEventFrame = ({ event }: EliminationScoringEventF
   });
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
-  const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
 

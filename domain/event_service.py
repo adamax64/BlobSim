@@ -63,7 +63,8 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
         competitors=competitors,
         season=event.season,
         round=event.round,
-        type=event.type
+        type=event.type,
+        isFinished=current_calendar_event.concluded
     )
 
 
@@ -89,7 +90,8 @@ def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -
         competitors=competitors,
         season=event.season,
         round=event.round,
-        type=event.type
+        type=event.type,
+        isFinished=None
     )
 
 

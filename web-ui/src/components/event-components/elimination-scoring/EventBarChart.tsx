@@ -47,8 +47,6 @@ export const EventBarChart = ({ eventRecords, isMobile }: EventBarChartProps) =>
 };
 
 const CustomAxisTickLabel = (isMobile: boolean) => (props: ChartsTextProps) => {
-  console.log(props);
-
   return isMobile ? (
     props.x === 0 ? (
       <ChartsText {...props} text={props.text} />
