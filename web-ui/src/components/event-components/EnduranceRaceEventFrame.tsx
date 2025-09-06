@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
 import { ProgressButton } from './ProgressButton';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/RaceEventRecordDto';
 import { getRaceDurationBySize, roundToThreeDecimals, roundToOneDecimals } from './EventUtils';
@@ -35,14 +35,19 @@ import { NarrowCell, TickLoadingBar } from '../common/StyledComponents';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDto;
+  setIsEventFinished: Dispatch<SetStateAction<boolean>>;
+  isEventFinished: boolean;
 }
 
-export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = ({ event }) => {
+export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = ({
+  event,
+  setIsEventFinished,
+  isEventFinished,
+}) => {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
-  const [isEventFinished, setIsEventFinished] = useState(false);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);

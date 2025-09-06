@@ -1388,6 +1388,10 @@
           },
           "type": {
             "$ref": "#/components/schemas/EventType"
+          },
+          "isFinished": {
+            "type": "boolean",
+            "title": "Isfinished"
           }
         },
         "type": "object",
@@ -1398,7 +1402,8 @@
           "league",
           "season",
           "round",
-          "type"
+          "type",
+          "isFinished"
         ],
         "title": "EventDto"
       },

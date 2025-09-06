@@ -3,7 +3,7 @@ import { CompetitionApi, EventDto, EventType } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { PageTitleCard } from '../common/PageTitleCard';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
 import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
@@ -25,6 +25,13 @@ export const EventPage = () => {
   useEffect(() => {
     loadEvent();
   }, []);
+
+  const [isEventFinished, setIsEventFinished] = useState(false);
+  useEffect(() => {
+    if (event) {
+      setIsEventFinished(event.isFinished);
+    }
+  }, [event]);
 
   const eventContent = useCallback(() => {
     if (loadingEvent) {
@@ -50,13 +57,31 @@ export const EventPage = () => {
     switch (event.type) {
       case EventType.QuarteredTwoShotScoring:
       case EventType.QuarteredOneShotScoring:
-        return <QuarteredEventFrame event={event} />;
+        return (
+          <QuarteredEventFrame
+            event={event}
+            setIsEventFinished={setIsEventFinished}
+            isEventFinished={isEventFinished}
+          />
+        );
       case EventType.EnduranceRace:
-        return <EnduranceRaceEventFrame event={event} />;
+        return (
+          <EnduranceRaceEventFrame
+            event={event}
+            setIsEventFinished={setIsEventFinished}
+            isEventFinished={isEventFinished}
+          />
+        );
       case EventType.EliminationScoring:
-        return <EliminationScoringEventFrame event={event} />;
+        return (
+          <EliminationScoringEventFrame
+            event={event}
+            setIsEventFinished={setIsEventFinished}
+            isEventFinished={isEventFinished}
+          />
+        );
     }
-  }, [loadingEvent, event]);
+  }, [loadingEvent, event, isEventFinished, setIsEventFinished]);
 
   return (
     <PageFrame>
