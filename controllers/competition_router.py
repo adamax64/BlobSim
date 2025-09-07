@@ -8,7 +8,7 @@ from domain.competition_service import (
 from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
-from domain.sim_data_service import get_current_calendar
+from domain.sim_data_service import is_current_event_concluded
 from .auth_dependency import require_auth
 
 
@@ -55,7 +55,7 @@ def _save_event_results(event: EventDto, event_records: list[EventRecordDto]) ->
     if event_records is None or len(event_records) == 0:
         raise HTTPException(status_code=400, detail="EVENT_RECORDS_EMPTY")
 
-    if get_current_calendar().concluded:
+    if is_current_event_concluded():
         raise HTTPException(status_code=400, detail="EVENT_ALREADY_CONCLUDED")
 
     try:

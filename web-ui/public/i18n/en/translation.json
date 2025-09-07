@@ -74,8 +74,8 @@
     "activity_type": {
       "EVENT": "Competing",
       "MAINTENANCE": "Maintenance",
-      "PRACTICE": "Practicing",
-      "LABOUR": "Labouring",
+      "PRACTICE": "Practice",
+      "LABOUR": "Labour",
       "IDLE": "Idle"
     }
   },
