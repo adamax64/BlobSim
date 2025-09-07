@@ -66,7 +66,8 @@ def fetch_all_blobs(
             ) if blob.integrity > 0 else None,
             speed_color=_get_color_indicator(relative_speeds.get(blob.id, 0)) if blob.integrity > 0 else None,
             strength_color=_get_color_indicator(relative_strengths.get(blob.id, 0)) if blob.integrity > 0 else None,
-            integrity_color=_get_color_indicator(blob.integrity / INITIAL_INTEGRITY) if blob.integrity > 0 else None
+            integrity_color=_get_color_indicator(blob.integrity / INITIAL_INTEGRITY) if blob.integrity > 0 else None,
+            current_activity=blob.current_activity if blob.integrity > 0 and blob.current_activity is not None else None,
         )
         for blob in blobs
     ]

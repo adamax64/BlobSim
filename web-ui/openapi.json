@@ -1088,6 +1088,18 @@
         ],
         "title": "ActionDto"
       },
+      "ActivityTypeDbo": {
+        "type": "string",
+        "enum": [
+          "EVENT",
+          "MAINTENANCE",
+          "PRACTICE",
+          "LABOUR",
+          "IDLE"
+        ],
+        "title": "ActivityTypeDbo",
+        "description": "Enum for Activity Type"
+      },
       "BlobCompetitorDto": {
         "properties": {
           "id": {
@@ -1291,6 +1303,16 @@
               }
             ],
             "title": "Integrity Color"
+          },
+          "current_activity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ActivityTypeDbo"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
