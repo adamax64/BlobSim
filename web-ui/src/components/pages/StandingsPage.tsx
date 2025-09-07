@@ -124,10 +124,11 @@ export function StandingsPage() {
 
   const hasSeasonOrEonEnded = useMemo(() => {
     if (isGrandmasters) {
-      return (seasonOrEon ?? 0) > (simTime?.eon ?? 0) + 1 || (simTime?.epoch ?? 0) > 30;
+      return (seasonOrEon ?? 0) < (simTime?.eon ?? 0) + 1 || (simTime?.epoch ?? 0) > 30;
     }
     return (
-      (seasonOrEon ?? 0) > (simTime?.season ?? 0) || standings?.[0]?.numOfRounds === standings?.[0]?.results.length
+      (seasonOrEon ?? 0) < (simTime?.season ?? 0) ||
+      (standings?.[0]?.numOfRounds ?? 0) === (standings?.[0]?.results.length ?? 0)
     );
   }, [isGrandmasters, seasonOrEon, simTime, standings]);
 

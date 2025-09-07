@@ -33,6 +33,7 @@ import { useMutation } from '@tanstack/react-query';
 import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 
 type SnackbarState = {
   message: string | null;
@@ -298,7 +299,12 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
                     {index + 1}
                   </TableCell>
                   <TableCell sx={isMobile ? { paddingX: 1 } : {}}>
-                    <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
+                    <IconNameWithDetailsModal
+                      blobId={record.blob.id}
+                      name={record.blob.name}
+                      color={record.blob.color}
+                      renderFullName={!isMobile}
+                    />
                   </TableCell>
                   {shouldShowQuarter(1) && (
                     <TableCell padding="none" align="center" className={highlighByQuarter(1)}>

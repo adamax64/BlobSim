@@ -139,6 +139,48 @@
         }
       }
     },
+    "/blobs/:blob_id": {
+      "get": {
+        "tags": [
+          "blobs"
+        ],
+        "summary": "Get Blob",
+        "operationId": "get_blob_blobs__blob_id_get",
+        "parameters": [
+          {
+            "name": "blob_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Blob Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlobStatsDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/blobs/create": {
       "post": {
         "tags": [

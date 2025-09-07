@@ -32,6 +32,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Straighten } from '@mui/icons-material';
 import { NarrowCell, TickLoadingBar } from '../common/StyledComponents';
+import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDto;
@@ -201,7 +202,12 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
                 <TableRow key={index} className={getRowClass(record.previousPosition ?? 0, index + 1)}>
                   {isMobile ? <NarrowCell>{index + 1}</NarrowCell> : <TableCell>{index + 1}</TableCell>}
                   <TableCell>
-                    <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
+                    <IconNameWithDetailsModal
+                      blobId={record.blob.id}
+                      name={record.blob.name}
+                      color={record.blob.color}
+                      renderFullName={!isMobile}
+                    />
                   </TableCell>
                   {isMobile ? (
                     <NarrowCell align="center">{getDistance(record)}</NarrowCell>
