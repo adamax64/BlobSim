@@ -40,6 +40,19 @@ def get_current_calendar(session) -> Calendar | None:
 
 
 @transactional
+def is_current_event_concluded(session) -> bool:
+    current_calendar = get_current_calendar(session)
+    if current_calendar is None:
+        return True
+    return current_calendar.concluded
+
+
+@transactional
+def get_event_next_day(session) -> Calendar | None:
+    return get_calendar(session).get(get_sim_time(session) + 1)
+
+
+@transactional
 def progress_simulation(session):
     sim_data = get_sim_data(session)
     if is_season_end(sim_data.sim_time):

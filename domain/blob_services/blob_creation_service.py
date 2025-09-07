@@ -1,5 +1,5 @@
 from logging import warning
-from random import random
+import random
 
 from psycopg2 import IntegrityError
 from data.db.db_engine import transactional

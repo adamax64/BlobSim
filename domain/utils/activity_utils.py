@@ -1,8 +1,10 @@
 from domain.enums.activity_type import ActivityType
 import random
 
+FREE_ACTIVITIES = [ActivityType.PRACTICE, ActivityType.LABOUR, ActivityType.IDLE]
 
-def choose_free_activity() -> ActivityType:
-    free_activities = [ActivityType.PRACTICE, ActivityType.LABOUR, ActivityType.IDLE]
 
-    return random.choice(free_activities)
+def choose_activity(extra_activities: list[ActivityType]) -> ActivityType:
+    activities = FREE_ACTIVITIES + extra_activities
+
+    return random.choice(activities)
