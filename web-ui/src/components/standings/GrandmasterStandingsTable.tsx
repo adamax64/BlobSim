@@ -16,6 +16,7 @@ import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils'
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
 import { EmojiEvents, WorkspacePremium } from '@mui/icons-material';
+import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 
 function getRowClass(hasEonEnded: boolean, position: number): string {
   return hasEonEnded ? (position === 1 ? getClassNameForBlobState(BlobState.FIRST) : '') : '';
@@ -84,7 +85,12 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
             <TableRow key={index} className={getRowClass(hasEonEnded, index + 1)}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                <IconName name={standing.name} color={standing.color} renderFullName={!isMobile} />
+                <IconNameWithDetailsModal
+                  blobId={standing.blobId}
+                  name={standing.name}
+                  color={standing.color}
+                  renderFullName={!isMobile}
+                />
               </TableCell>
               <TableCell align="center">{standing.championships}</TableCell>
               <TableCell align="center">{standing.gold}</TableCell>

@@ -2,10 +2,9 @@ import { Box, Typography } from '@mui/material';
 import { BlobIcon } from '../icons/BlobIcon';
 import { useMemo } from 'react';
 import { BlobStatsDto } from '../../../generated';
-import { AddCircle, Error } from '@mui/icons-material';
 import { BlobStateBadge } from './BlobStateBadge';
 
-interface IconNameProps extends Partial<BlobStatsDto> {
+export interface IconNameProps extends Partial<BlobStatsDto> {
   name: string;
   color: string;
   size?: number;

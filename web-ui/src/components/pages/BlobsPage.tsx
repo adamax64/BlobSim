@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { BlobsApi, BlobStatsDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
-import { BlobDetailsDialog } from '../common/BlobDetailsDialog';
+import { BlobDetailsDialog } from '../common/BlobDetailsDialog/BlobDetailsDialog';
 import { BlobsDesktopGrid } from '../blobs-components/BlobsDesktopGrid';
 import { BlobsMobileCards } from '../blobs-components/BlobsMobileCards';
 import { useTranslation } from 'react-i18next';
@@ -80,7 +80,7 @@ export function BlobsPage() {
         )}
       </Paper>
       {selectedBlob && (
-        <BlobDetailsDialog open={!!selectedBlob} onClose={() => setSelectedBlob(null)} blob={selectedBlob} />
+        <BlobDetailsDialog open={!!selectedBlob} onClose={() => setSelectedBlob(null)} cachedBlob={selectedBlob} />
       )}
     </PageFrame>
   );

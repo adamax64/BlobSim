@@ -1,65 +1,31 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Box,
-  Typography,
-  IconButton,
-  Divider,
-  Tooltip,
-  Paper,
-  Grid2,
-} from '@mui/material';
 import { Cake, Close, Handyman, Speed, Star } from '@mui/icons-material';
-import { BlobIcon } from '../icons/BlobIcon';
-import { BlobStatsDto } from '../../../generated';
-import { IconName } from './IconName';
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid2,
+  IconButton,
+  Paper,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { getContrastYIQ } from '../../../utils/ColorUtils';
+import { IconName } from '../IconName';
+import { BlobStatsDto } from '../../../../generated';
+import { JSX } from 'react/jsx-runtime';
 import { useTranslation } from 'react-i18next';
-import { getContrastYIQ } from '../../utils/ColorUtils';
-import { DeadBlobIcon } from '../icons/DeadBlobIcon';
-import { BlobBlinkIcon } from '../icons/BlobBlinkIcon';
-import { JSX, useEffect, useState } from 'react';
 
-interface BlobDetailsDialogProps {
+interface BlobDetailsDialogUiProps {
   open: boolean;
   onClose: () => void;
   blob: BlobStatsDto;
+  blobIcon: JSX.Element;
 }
 
-export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProps) {
+export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetailsDialogUiProps) => {
   const { t } = useTranslation();
-
-  const [blobIcon, setBlobIcon] = useState<JSX.Element>(<BlobIcon size={180} color={blob.color} />);
-
-  useEffect(() => {
-    if (blob.isDead) {
-      setBlobIcon(<DeadBlobIcon size={180} color={blob.color} />);
-    } else {
-      setBlobIcon(<BlobIcon size={180} color={blob.color} />);
-      const interval = setInterval(() => {
-        setBlobIcon(<BlobIcon size={180} color={blob.color} />);
-        setTimeout(() => {
-          setBlobIcon(<BlobBlinkIcon size={180} color={blob.color} />);
-        }, 4000);
-        setTimeout(() => {
-          setBlobIcon(<BlobIcon size={180} color={blob.color} />);
-        }, 4250);
-        setTimeout(() => {
-          setBlobIcon(<BlobBlinkIcon size={180} color={blob.color} />);
-        }, 8250);
-        setTimeout(() => {
-          setBlobIcon(<BlobIcon size={180} color={blob.color} />);
-        }, 8500);
-        setTimeout(() => {
-          setBlobIcon(<BlobBlinkIcon size={180} color={blob.color} />);
-        }, 8750);
-        setTimeout(() => {
-          setBlobIcon(<BlobIcon size={180} color={blob.color} />);
-        }, 9000);
-      }, 9000);
-      return () => clearInterval(interval);
-    }
-  }, [blob]);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
@@ -71,7 +37,7 @@ export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProp
       </DialogTitle>
       <Divider />
       <DialogContent>
-        <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
+        <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
           {blobIcon}
           <Box display="flex" flexDirection="column" gap={2} width="100%">
             <Grid2 container spacing={2} width="100%">
@@ -224,4 +190,4 @@ export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProp
       </DialogContent>
     </Dialog>
   );
-}
+};

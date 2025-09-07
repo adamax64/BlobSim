@@ -5,6 +5,7 @@ import { roundToThreeDecimals } from '../EventUtils';
 import { useTranslation } from 'react-i18next';
 import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
 import { NarrowCell } from '../../common/StyledComponents';
+import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 
 interface EliminationEventTableProps {
   eventRecords: EventRecordDto[];
@@ -55,7 +56,12 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
                 <TableCell width={30}>{index + 1}</TableCell>
               )}
               <TableCell>
-                <IconName name={record.blob.name} color={record.blob.color} renderFullName={!isMobile} />
+                <IconNameWithDetailsModal
+                  blobId={record.blob.id}
+                  name={record.blob.name}
+                  color={record.blob.color}
+                  renderFullName={!isMobile}
+                />
               </TableCell>
               <TableCell>
                 {record.eliminated

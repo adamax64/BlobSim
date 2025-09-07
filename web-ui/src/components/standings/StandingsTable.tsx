@@ -14,21 +14,23 @@ import { StandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
 import { useCallback } from 'react';
 import { useSimTime } from '../../context/SimTimeContext';
-import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
+import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 
-function getRowClass(position: number, atRisk: boolean): string | undefined {
+function getRowClass(position: number, hasSeasonEnded: boolean): string | undefined {
   let state: BlobState | undefined;
-  switch (position) {
-    case 1:
-      state = BlobState.FIRST;
-      break;
-    case 2:
-      state = BlobState.SECOND;
-      break;
-    case 3:
-      state = BlobState.THIRD;
-      break;
+  if (hasSeasonEnded) {
+    switch (position) {
+      case 1:
+        state = BlobState.FIRST;
+        break;
+      case 2:
+        state = BlobState.SECOND;
+        break;
+      case 3:
+        state = BlobState.THIRD;
+        break;
+    }
   }
 
   return state ? getClassNameForBlobState(state) : undefined;
@@ -42,7 +44,7 @@ interface StandingsTableProps {
   hasSeasonEnded: boolean;
 }
 
-export function StandingsTable({ loading, standings, leagueName, season, hasSeasonEnded }: StandingsTableProps) {
+export const StandingsTable = ({ loading, standings, leagueName, season, hasSeasonEnded }: StandingsTableProps) => {
   const { simTime } = useSimTime();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -109,10 +111,11 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
         </TableHead>
         <TableBody>
           {standings.map((standing, index) => (
-            <TableRow key={index} className={getRowClass(index + 1, standing.isContractEnding)}>
+            <TableRow key={index} className={getRowClass(index + 1, hasSeasonEnded)}>
               <TableCell className={getThresholdClassName(index + 1)}>{index + 1}</TableCell>
               <TableCell className={getThresholdClassName(index + 1)}>
-                <IconName
+                <IconNameWithDetailsModal
+                  blobId={standing.blobId}
                   name={standing.name}
                   color={standing.color}
                   renderFullName={!isMobile}
@@ -140,4 +143,4 @@ export function StandingsTable({ loading, standings, leagueName, season, hasSeas
       </Table>
     </TableContainer>
   );
-}
+};
