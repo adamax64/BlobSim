@@ -70,6 +70,13 @@
       "POOR": "Poor",
       "AVERAGE": "Average",
       "GOOD": "Good"
+    },
+    "activity_type": {
+      "EVENT": "Competing",
+      "MAINTENANCE": "Maintenance",
+      "PRACTICE": "Practicing",
+      "LABOUR": "Labouring",
+      "IDLE": "Idle"
     }
   },
   "event": {
@@ -149,7 +156,8 @@
     "podiums": "Podiums",
     "wins": "Wins",
     "championships": "Championships",
-    "grandmasters": "Grandmasters"
+    "grandmasters": "Grandmasters",
+    "current_activity": "Current Activity"
   },
   "blob_naming": {
     "create_title": "Create new blob",

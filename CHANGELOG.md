@@ -221,3 +221,5 @@
   - Termination and retirement dates
   - Money
   - If blob is dead, a different blob icon is displayed
+  - Current activity
+- Added minor blinking animation to blob on blob details dialog

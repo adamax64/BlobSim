@@ -1,7 +1,8 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Double, BigInteger, UniqueConstraint
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Double, BigInteger, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from data.db.db_engine import Base
+from data.model.activity_type import ActivityTypeDbo
 
 
 class Blob(Base):
@@ -38,3 +39,4 @@ class Blob(Base):
     parent_id = Column(Integer, ForeignKey('BCS.blobs.id'))
     parent = relationship('Blob', remote_side=[id], backref='children')
     color = Column(String, nullable=False, default="#888888")
+    current_activity = Column(Enum(ActivityTypeDbo), default=ActivityTypeDbo.IDLE)

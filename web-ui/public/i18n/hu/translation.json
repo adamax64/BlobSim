@@ -70,6 +70,13 @@
       "POOR": "GyenRosszge",
       "AVERAGE": "Átlagos",
       "GOOD": "Jó"
+    },
+    "activity_type": {
+      "EVENT": "Versenyzés",
+      "MAINTENANCE": "Karbantartás",
+      "PRACTICE": "Gyakorlás",
+      "LABOUR": "Munka",
+      "IDLE": "Tétlen"
     }
   },
   "event": {
@@ -149,7 +156,8 @@
     "podiums": "Dobogók",
     "wins": "Győzelmek",
     "championships": "Bajnokságok",
-    "grandmasters": "Nagymesteri címek"
+    "grandmasters": "Nagymesteri címek",
+    "current_activity": "Jelenlegi tevékenység"
   },
   "blob_naming": {
     "create_title": "Új blob létrehozása",

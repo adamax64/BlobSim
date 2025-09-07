@@ -15,8 +15,10 @@ import { BlobIcon } from '../icons/BlobIcon';
 import { BlobStatsDto } from '../../../generated';
 import { IconName } from './IconName';
 import { useTranslation } from 'react-i18next';
-import { getContrastYIQ } from '../../utils/Colorutils';
+import { getContrastYIQ } from '../../utils/ColorUtils';
 import { DeadBlobIcon } from '../icons/DeadBlobIcon';
+import { BlobBlinkIcon } from '../icons/BlobBlinkIcon';
+import { JSX, useEffect, useState } from 'react';
 
 interface BlobDetailsDialogProps {
   open: boolean;
@@ -26,6 +28,39 @@ interface BlobDetailsDialogProps {
 
 export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProps) {
   const { t } = useTranslation();
+
+  const [blobIcon, setBlobIcon] = useState<JSX.Element>(<BlobIcon size={180} color={blob.color} />);
+
+  useEffect(() => {
+    if (blob.isDead) {
+      setBlobIcon(<DeadBlobIcon size={180} color={blob.color} />);
+    } else {
+      setBlobIcon(<BlobIcon size={180} color={blob.color} />);
+      const interval = setInterval(() => {
+        setBlobIcon(<BlobIcon size={180} color={blob.color} />);
+        setTimeout(() => {
+          setBlobIcon(<BlobBlinkIcon size={180} color={blob.color} />);
+        }, 4000);
+        setTimeout(() => {
+          setBlobIcon(<BlobIcon size={180} color={blob.color} />);
+        }, 4250);
+        setTimeout(() => {
+          setBlobIcon(<BlobBlinkIcon size={180} color={blob.color} />);
+        }, 8250);
+        setTimeout(() => {
+          setBlobIcon(<BlobIcon size={180} color={blob.color} />);
+        }, 8500);
+        setTimeout(() => {
+          setBlobIcon(<BlobBlinkIcon size={180} color={blob.color} />);
+        }, 8750);
+        setTimeout(() => {
+          setBlobIcon(<BlobIcon size={180} color={blob.color} />);
+        }, 9000);
+      }, 9000);
+      return () => clearInterval(interval);
+    }
+  }, [blob]);
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -37,7 +72,7 @@ export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProp
       <Divider />
       <DialogContent>
         <Box display="flex" flexDirection="column" alignItems="center" gap={3}>
-          {blob.isDead ? <DeadBlobIcon size={180} color={blob.color} /> : <BlobIcon size={180} color={blob.color} />}
+          {blobIcon}
           <Box display="flex" flexDirection="column" gap={2} width="100%">
             <Grid2 container spacing={2} width="100%">
               <Grid2 size={6}>
@@ -175,6 +210,13 @@ export function BlobDetailsDialog({ open, onClose, blob }: BlobDetailsDialogProp
             {blob.grandmasters > 0 && (
               <Typography variant="body1">
                 <strong>{t('blob_details.grandmasters')}:</strong> {blob.grandmasters}
+              </Typography>
+            )}
+
+            {!blob.isDead && blob.currentActivity && (
+              <Typography variant="body1">
+                <strong>{t('blob_details.current_activity')}:</strong>{' '}
+                {t(`enums.activity_type.${blob.currentActivity}`)}
               </Typography>
             )}
           </Box>

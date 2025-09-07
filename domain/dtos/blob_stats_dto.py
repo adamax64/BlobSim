@@ -2,6 +2,7 @@ import enum
 from pydantic import BaseModel
 
 from domain.dtos.parent_dto import ParentDto
+from domain.enums.activity_type import ActivityType
 
 
 class SpeedCategory(enum.Enum):
@@ -46,3 +47,4 @@ class BlobStatsDto(BaseModel):
     speed_color: str | None = None
     strength_color: str | None = None
     integrity_color: str | None = None
+    current_activity: ActivityType | None = None
