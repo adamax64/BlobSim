@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
 import { BlobStatsDto } from '../../../generated';
-import { BlobState } from '../../utils/BlobStateUtils';
+import { BlobState } from '../../utils/blob-state-utils';
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
 

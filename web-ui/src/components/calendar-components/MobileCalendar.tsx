@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { formatToShort } from '../../utils/SimTimeUtils';
+import { formatToShort } from '../../utils/sim-time-utils';
 import { useTranslation } from 'react-i18next';
 import { CalendarDto } from '../../../generated';
 

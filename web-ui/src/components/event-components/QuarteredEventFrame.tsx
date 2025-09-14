@@ -26,7 +26,7 @@ import {
   EventRecordsApi,
 } from '../../../generated';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
-import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './EventUtils';
+import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './event-utils';
 import { ProgressButton } from './ProgressButton';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';

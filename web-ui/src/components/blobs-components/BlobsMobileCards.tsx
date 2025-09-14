@@ -1,6 +1,6 @@
 import { Badge, Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { BlobStatsDto } from '../../../generated';
-import { BlobState } from '../../utils/BlobStateUtils';
+import { BlobState } from '../../utils/blob-state-utils';
 import { BlobIcon } from '../icons/BlobIcon';
 import { useTranslation } from 'react-i18next';
 import { BlobStateBadge } from '../common/BlobStateBadge';
