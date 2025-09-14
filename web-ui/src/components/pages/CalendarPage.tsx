@@ -1,5 +1,4 @@
 import { PageFrame } from '../common/PageFrame';
-import { PageTitleCard } from '../common/PageTitleCard';
 import { useMutation } from '@tanstack/react-query';
 import { CalendarApi, CalendarDto } from '../../../generated';
 import defaultConfig from '../../default-config';
@@ -28,8 +27,7 @@ export const CalendarPage = () => {
   }, []);
 
   return (
-    <PageFrame showLoading={isCalendarLoading}>
-      <PageTitleCard title={t('calendar.title')} />
+    <PageFrame showLoading={isCalendarLoading} pageTitle={t('calendar.title')}>
       {isMobile ? <MobileCalendar calendar={calendar} /> : <DesktopCalendar calendar={calendar} />}
     </PageFrame>
   );

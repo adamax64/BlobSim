@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { FactoryApi, NameSuggestionDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
-import { PageTitleCard } from '../common/PageTitleCard';
 import { useEffect, useState } from 'react';
 import {
   Box,
@@ -72,8 +71,7 @@ export function FactoryPage() {
   const progressValue = (factoryProgress ?? 0) * 100 > 100 ? 100 : (factoryProgress ?? 0) * 100;
 
   return (
-    <PageFrame showLoading={isFactoryProgressLoading || isLoadingNames}>
-      <PageTitleCard title={t('factory.title')} center />
+    <PageFrame showLoading={isFactoryProgressLoading || isLoadingNames} pageTitle={t('factory.title')}>
       <Card>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>

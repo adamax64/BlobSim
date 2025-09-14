@@ -5,7 +5,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../../context/AuthContext';
 import { AuthApi } from '../../../generated';
 import defaultConfig from '../../default-config';
-import { LoadingOverlay } from '../common/LoadingOverlay';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import { PageFrame } from '../common/PageFrame';
@@ -42,7 +41,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <PageFrame showLoading={isPending}>
+    <PageFrame showLoading={isPending} pageTitle={t('login.title')}>
       <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
         <Card sx={{ width: '100%', maxWidth: 400 }}>
           <CardContent>

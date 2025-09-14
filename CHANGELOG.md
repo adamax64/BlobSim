@@ -225,3 +225,6 @@
 - Added minor blinking animation to blob on blob details dialog
 - Reworked blob activity logic to first proceed with the effects of the current activity stored in the database then generate the activities for next cycle (day)
 - Blob details dialog now can be opened on standings and event pages by clicking on blob name
+- Refactored UI:
+  - Added app header bar with page title and menu toggle button in mobile mode
+  - Page title card is removed

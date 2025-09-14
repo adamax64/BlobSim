@@ -18,6 +18,7 @@ const desktopColumns = (t: (key: string) => string): GridColDef[] => [
             color={params.row.color}
             atRisk={params.row.atRisk}
             isRookie={params.row.isRookie}
+            renderFullName={window.innerWidth > 1240}
           />
         </Box>
       );

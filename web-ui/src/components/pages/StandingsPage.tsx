@@ -15,7 +15,6 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import { PageTitleCard } from '../common/PageTitleCard';
 import { StandingsTable } from '../standings/StandingsTable';
 import { GrandmasterStandingsTable } from '../standings/GrandmasterStandingsTable';
 import { useSimTime } from '../../context/SimTimeContext';
@@ -133,8 +132,7 @@ export function StandingsPage() {
   }, [isGrandmasters, seasonOrEon, simTime, standings]);
 
   return (
-    <PageFrame>
-      <PageTitleCard title={t('standings.title')} />
+    <PageFrame pageTitle={t('standings.title')}>
       <Paper sx={{ marginBottom: 4 }}>
         {isFormLoading ? (
           <Box display="flex" justifyContent="center" p={1}>

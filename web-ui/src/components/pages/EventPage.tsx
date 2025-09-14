@@ -2,8 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { CompetitionApi, EventDto, EventType } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
-import { PageTitleCard } from '../common/PageTitleCard';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
 import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
@@ -83,19 +82,13 @@ export const EventPage = () => {
     }
   }, [loadingEvent, event, isEventFinished, setIsEventFinished]);
 
-  return (
-    <PageFrame>
-      <PageTitleCard
-        title={
-          event &&
-          t('event.title', {
-            leagueName: event.league.name,
-            season: event.season,
-            round: event.round,
-          })
-        }
-      />
-      {eventContent()}
-    </PageFrame>
+  const pageTitle = useMemo(
+    () =>
+      event
+        ? t('event.title', { leagueName: event.league.name, season: event.season, round: event.round })
+        : t('event.title_short'),
+    [event, t],
   );
+
+  return <PageFrame pageTitle={pageTitle}>{eventContent()}</PageFrame>;
 };

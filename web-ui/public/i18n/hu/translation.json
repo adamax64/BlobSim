@@ -81,6 +81,7 @@
   },
   "event": {
     "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",
+    "title_short": "Verseny",
     "no_event_data": "Nincs elérhető esemény adat"
   },
   "endurance_race": {

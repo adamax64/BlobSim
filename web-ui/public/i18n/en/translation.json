@@ -81,6 +81,7 @@
   },
   "event": {
     "title": "{{leagueName}} Season {{season}} Round {{round}}",
+    "title_short": "Championship event",
     "no_event_data": "No event data available"
   },
   "endurance_race": {
