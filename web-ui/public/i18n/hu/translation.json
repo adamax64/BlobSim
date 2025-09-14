@@ -1,13 +1,12 @@
 {
   "login": {
-    "title": "Admin Bejelentkezés",
+    "title": "Admin bejelentkezés",
     "username": "Felhasználónév",
     "password": "Jelszó",
     "login_button": "Bejelentkezés",
     "invalid_credentials": "Hibás bejelentkezési adatok"
   },
   "dashboard": {
-    "title": "Blob Bajnokság - Kezdőlap",
     "date": "Dátum",
     "news": "Hírek",
     "loading": "Betöltés...",
@@ -24,7 +23,6 @@
     }
   },
   "blobs": {
-    "title": "Blobok",
     "search_by_name": "Keresés név alapján",
     "show_dead": "Termináltak megjelenítése"
   },
@@ -40,7 +38,6 @@
     "league": "Liga"
   },
   "calendar": {
-    "title": "Blob Bajnokság - Versenynaptár",
     "date": "Dátum",
     "league": "Liga",
     "event_type": "Esemény típus",
@@ -112,14 +109,12 @@
     "tab_chart": "Diagram"
   },
   "factory": {
-    "title": "Blob Gyár",
     "factory_progress": "Gyártás előrehaladás",
     "name_suggestions": "Blob név javaslatok",
     "add_name_suggestion": "Névjavaslat hozzáadása",
     "add_first_name": "Keresztnév hozzáadása"
   },
   "standings": {
-    "title": "Blob Bajnokság - Tabellák",
     "league": "Liga",
     "grandmasters": "Nagymesterek",
     "eon": "Éon",
@@ -176,6 +171,20 @@
     "factory": "Blob Gyár",
     "standings": "Eredmények",
     "calendar": "Versenynaptár"
+  },
+  "page_titles": {
+    "dashboard": "Blob Bajnokság - Kezdőlap",
+    "dashboard_short": "BCS - Kezdőlap",
+    "blobs": "Blob Bajnokság - Blobok",
+    "blobs_short": "BCS - Blobok",
+    "factory": "Blob Gyár",
+    "factory_short": "Blob Gyár",
+    "standings": "Blob Bajnokság - Tabellák",
+    "standings_ short": "BCS - Tabellák",
+    "calendar": "Blob Bajnokság - Versenynaptár",
+    "calendar_short": "BCS - Versenynaptár",
+    "login": "Admin Bejelentkezés",
+    "login_short": "Admin Bejelentkezés"
   },
   "error": {
     "generic": "Hiba történt"

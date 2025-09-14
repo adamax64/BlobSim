@@ -83,7 +83,7 @@ export function DashboardPage() {
   };
 
   return (
-    <PageFrame showLoading={loadingOverlayVisible || simTimeLoading} pageTitle={t('dashboard.title')}>
+    <PageFrame showLoading={loadingOverlayVisible || simTimeLoading} pageName="dashboard">
       <Card>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>

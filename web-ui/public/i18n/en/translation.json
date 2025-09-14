@@ -7,7 +7,6 @@
     "invalid_credentials": "Invalid credentials"
   },
   "dashboard": {
-    "title": "Blob Championship System - Dashboard",
     "date": "Date",
     "news": "News",
     "loading": "Loading...",
@@ -24,7 +23,6 @@
     }
   },
   "blobs": {
-    "title": "Blobs",
     "search_by_name": "Search by name",
     "show_dead": "Show dead"
   },
@@ -40,7 +38,6 @@
     "league": "League"
   },
   "calendar": {
-    "title": "Blob Championship System - Season Calendar",
     "date": "Date",
     "league": "League",
     "event_type": "Event Type",
@@ -112,14 +109,12 @@
     "tab_chart": "Chart"
   },
   "factory": {
-    "title": "Blob Factory",
     "factory_progress": "Factory Progress",
     "name_suggestions": "Blob name suggestions",
     "add_name_suggestion": "Add name suggestion",
     "add_first_name": "Add first name"
   },
   "standings": {
-    "title": "Blob Championship System - Standings",
     "league": "League",
     "grandmasters": "Grandmasters",
     "eon": "Eon",
@@ -176,6 +171,20 @@
     "factory": "Factory",
     "standings": "Standings",
     "calendar": "Calendar"
+  },
+  "page_titles": {
+    "dashboard": "Blob Championship System - Dashboard",
+    "dashboard_short": "BCS - Dashboard",
+    "blobs": "Blob Championship System - Blobs",
+    "blobs_short": "BCS - Blobs",
+    "factory": "Blob factory",
+    "factory_short": "Blob factory",
+    "standings": "Blob Championship System - Standings",
+    "standings_ short": "BCS - Standings",
+    "calendar": "Blob Championship System - Season Calendar",
+    "calendar_short": "BCS - Calendar",
+    "login": "Admin Login",
+    "login_short": "Admin Login"
   },
   "error": {
     "generic": "An error occurred"
