@@ -45,7 +45,7 @@ export function BlobsPage() {
   }, [showDead]);
 
   return (
-    <PageFrame showLoading={isPending} pageTitle={t('blobs.title')}>
+    <PageFrame showLoading={isPending} pageName="blobs">
       <Paper sx={{ marginBottom: 4 }}>
         <Box display="flex" gap={3} p={2}>
           <FormControl variant="outlined">

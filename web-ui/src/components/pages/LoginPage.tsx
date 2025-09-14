@@ -41,7 +41,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <PageFrame showLoading={isPending} pageTitle={t('login.title')}>
+    <PageFrame showLoading={isPending} pageName="login">
       <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
         <Card sx={{ width: '100%', maxWidth: 400 }}>
           <CardContent>

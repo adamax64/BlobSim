@@ -132,7 +132,7 @@ export function StandingsPage() {
   }, [isGrandmasters, seasonOrEon, simTime, standings]);
 
   return (
-    <PageFrame pageTitle={t('standings.title')}>
+    <PageFrame pageName="standings">
       <Paper sx={{ marginBottom: 4 }}>
         {isFormLoading ? (
           <Box display="flex" justifyContent="center" p={1}>

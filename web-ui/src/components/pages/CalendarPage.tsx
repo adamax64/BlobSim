@@ -27,7 +27,7 @@ export const CalendarPage = () => {
   }, []);
 
   return (
-    <PageFrame showLoading={isCalendarLoading} pageTitle={t('calendar.title')}>
+    <PageFrame showLoading={isCalendarLoading} pageName="calendar">
       {isMobile ? <MobileCalendar calendar={calendar} /> : <DesktopCalendar calendar={calendar} />}
     </PageFrame>
   );

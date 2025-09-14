@@ -2,17 +2,23 @@ import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 import { LoadingOverlay } from './LoadingOverlay';
 import { useCurrentPage } from '../../context/CurrentPageContext';
+import { AppPage } from '../root-components/constants';
 
 type PageFrameProps = {
   children: ReactNode;
   showLoading?: boolean;
-  pageTitle?: string;
+  pageName?: AppPage;
+  customPageTitle?: string;
 };
 
-export const PageFrame = ({ children, showLoading, pageTitle }: PageFrameProps) => {
-  const { setPageTitle } = useCurrentPage();
-  if (pageTitle) {
-    setPageTitle(pageTitle);
+export const PageFrame = ({ children, showLoading, pageName, customPageTitle }: PageFrameProps) => {
+  const { setCurrentPage, setPageTitle } = useCurrentPage();
+  if (pageName) {
+    setPageTitle(undefined);
+    setCurrentPage(pageName);
+  }
+  if (customPageTitle) {
+    setPageTitle(customPageTitle);
   }
 
   return (

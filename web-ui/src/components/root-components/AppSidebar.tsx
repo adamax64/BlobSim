@@ -30,11 +30,11 @@ type AppSidebarProps = {
 };
 
 export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
-  const { setSelectedMenuItem } = useCurrentPage();
+  const { setCurrentPage } = useCurrentPage();
   const { t } = useTranslation();
 
   const handleMenuItemClick = (menuItem: string) => {
-    setSelectedMenuItem(menuItem);
+    setCurrentPage(menuItem);
     if (isMobile) {
       setMobileOpen(false);
     }

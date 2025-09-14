@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from 'react';
+import { AppPage } from '../components/root-components/constants';
 
 type CurrentPageContextValue = {
-  selectedMenuItem: string;
-  setSelectedMenuItem: (page: string) => void;
+  currentPage: AppPage;
+  setCurrentPage: (page: AppPage) => void;
   pageTitle?: string;
   setPageTitle: (title: string | undefined) => void;
 };
@@ -10,11 +11,13 @@ type CurrentPageContextValue = {
 const CurrentPageContext = createContext<CurrentPageContextValue | undefined>(undefined);
 
 export const CurrentPageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedMenuItem, setSelectedMenuItem] = useState(window.location.pathname.slice(1) || 'dashboard');
+  const [currentPage, setCurrentPage] = useState<AppPage>(
+    (window.location.pathname.slice(1) as AppPage) || 'dashboard',
+  );
   const [pageTitle, setPageTitle] = useState<string | undefined>();
 
   return (
-    <CurrentPageContext.Provider value={{ selectedMenuItem, setSelectedMenuItem, pageTitle, setPageTitle }}>
+    <CurrentPageContext.Provider value={{ currentPage, setCurrentPage, pageTitle, setPageTitle }}>
       {children}
     </CurrentPageContext.Provider>
   );

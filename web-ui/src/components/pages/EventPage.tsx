@@ -87,8 +87,12 @@ export const EventPage = () => {
       event
         ? t('event.title', { leagueName: event.league.name, season: event.season, round: event.round })
         : t('event.title_short'),
-    [event, t],
+    [event],
   );
 
-  return <PageFrame pageTitle={pageTitle}>{eventContent()}</PageFrame>;
+  return (
+    <PageFrame pageName="event" customPageTitle={pageTitle}>
+      {eventContent()}
+    </PageFrame>
+  );
 };
