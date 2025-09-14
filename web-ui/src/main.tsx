@@ -6,6 +6,7 @@ import { SnackbarProvider } from 'notistack';
 import { SimTimeProvider } from './context/SimTimeContext';
 import { AuthProvider } from './context/AuthContext';
 import './i18n';
+import { CurrentPageProvider } from './context/CurrentPageContext';
 
 // Set up a Router instance
 const router = createRouter({
@@ -31,7 +32,9 @@ if (!rootElement.innerHTML) {
       <SnackbarProvider>
         <AuthProvider>
           <SimTimeProvider>
-            <RouterProvider router={router} />
+            <CurrentPageProvider>
+              <RouterProvider router={router} />
+            </CurrentPageProvider>
           </SimTimeProvider>
         </AuthProvider>
       </SnackbarProvider>

@@ -12,7 +12,6 @@ import {
   useTheme,
 } from '@mui/material';
 import { PageFrame } from '../common/PageFrame';
-import { PageTitleCard } from '../common/PageTitleCard';
 import { Search } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { BlobsApi, BlobStatsDto } from '../../../generated';
@@ -46,8 +45,7 @@ export function BlobsPage() {
   }, [showDead]);
 
   return (
-    <PageFrame showLoading={isPending}>
-      <PageTitleCard title={t('blobs.title')} center />
+    <PageFrame showLoading={isPending} pageTitle={t('blobs.title')}>
       <Paper sx={{ marginBottom: 4 }}>
         <Box display="flex" gap={3} p={2}>
           <FormControl variant="outlined">

@@ -4,12 +4,10 @@ import defaultConfig from '../../default-config';
 import { GeneralInfosApi, News, NewsType, SimDataApi } from '../../../generated';
 import { useEffect, useMemo, useState } from 'react';
 import { AddCircle, SkipNext, Stadium } from '@mui/icons-material';
-import { PageTitleCard } from '../common/PageTitleCard';
 import { PageFrame } from '../common/PageFrame';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { SimTimeDisplay } from '../common/SimTimeDisplay';
 import { useSimTime } from '../../context/SimTimeContext';
-import { LoadingOverlay } from '../common/LoadingOverlay';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
@@ -85,8 +83,7 @@ export function DashboardPage() {
   };
 
   return (
-    <PageFrame showLoading={loadingOverlayVisible || simTimeLoading}>
-      <PageTitleCard title={t('dashboard.title')} />
+    <PageFrame showLoading={loadingOverlayVisible || simTimeLoading} pageTitle={t('dashboard.title')}>
       <Card>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>
