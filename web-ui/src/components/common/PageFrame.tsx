@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { LoadingOverlay } from './LoadingOverlay';
 import { useCurrentPage } from '../../context/CurrentPageContext';
 import { AppPage } from '../root-components/constants';
@@ -13,13 +13,16 @@ type PageFrameProps = {
 
 export const PageFrame = ({ children, showLoading, pageName, customPageTitle }: PageFrameProps) => {
   const { setCurrentPage, setPageTitle } = useCurrentPage();
-  if (pageName) {
-    setPageTitle(undefined);
-    setCurrentPage(pageName);
-  }
-  if (customPageTitle) {
-    setPageTitle(customPageTitle);
-  }
+
+  useEffect(() => {
+    if (pageName) {
+      setPageTitle(undefined);
+      setCurrentPage(pageName);
+    }
+    if (customPageTitle) {
+      setPageTitle(customPageTitle);
+    }
+  }, [pageName, customPageTitle]);
 
   return (
     <Box display="flex" flexGrow={1} height="100%" flexDirection="column" gap={2} className="p-2">

@@ -61,7 +61,7 @@ export const AppHeader = ({ isMobile, mobileOpen, setMobileOpen }: AppHeaderProp
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { xs: 'inline-flex', sm: 'none' } }}
+              sx={{ mr: 2, display: 'inline-flex' }}
             >
               <Menu />
             </IconButton>
