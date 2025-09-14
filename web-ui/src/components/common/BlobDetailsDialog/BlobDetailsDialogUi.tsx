@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { getContrastYIQ } from '../../../utils/ColorUtils';
+import { getContrastYIQ } from '../../../utils/color-utils';
 import { IconName } from '../IconName';
 import { BlobStatsDto } from '../../../../generated';
 import { JSX } from 'react/jsx-runtime';

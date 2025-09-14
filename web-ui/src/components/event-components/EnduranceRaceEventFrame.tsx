@@ -25,7 +25,7 @@ import { ProgressButton } from './ProgressButton';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/RaceEventRecordDto';
-import { getRaceDurationBySize, roundToThreeDecimals, roundToOneDecimals } from './EventUtils';
+import { getRaceDurationBySize, roundToThreeDecimals, roundToOneDecimals } from './event-utils';
 import defaultConfig from '../../default-config';
 import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';

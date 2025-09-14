@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { GrandmasterStandingsDTO } from '../../../generated';
-import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
+import { BlobState, getClassNameForBlobState } from '../../utils/blob-state-utils';
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
 import { EmojiEvents, WorkspacePremium } from '@mui/icons-material';

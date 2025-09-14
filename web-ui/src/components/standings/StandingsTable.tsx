@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { StandingsDTO } from '../../../generated';
-import { BlobState, getClassNameForBlobState } from '../../utils/BlobStateUtils';
+import { BlobState, getClassNameForBlobState } from '../../utils/blob-state-utils';
 import { useCallback } from 'react';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useTranslation } from 'react-i18next';
