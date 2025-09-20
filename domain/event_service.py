@@ -21,6 +21,7 @@ from domain.dtos.event_summary_dto import EventSummaryDTO
 from domain.dtos.league_dto import LeagueDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
+from domain.news_services.news_service import add_ongoing_event_news
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.sim_time_utils import get_season
@@ -48,6 +49,7 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
         random.shuffle(competitors)
         actions = [Action(event_id=event.id, blob_id=competitor.id, scores=[]) for competitor in competitors]
         save_all_actions(session, actions)
+        add_ongoing_event_news(event.league.name, event.round, event.type, session)
 
     actions = [ActionDto(
         blob_id=action.blob_id,

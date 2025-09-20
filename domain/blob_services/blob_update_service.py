@@ -1,11 +1,14 @@
 from dataclasses import dataclass
 import random
+from sqlalchemy.orm import Session
+
 from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.model.calendar import Calendar
 from data.model.event_type import EventType
 from data.persistence.blob_reposiotry import get_all_blobs_by_name, get_blob_by_id, save_all_blobs, save_blob
 from domain.enums.activity_type import ActivityType
+from domain.news_services.news_service import add_blob_terminated_news
 from domain.sim_data_service import get_current_calendar, get_event_next_day, get_sim_time
 from domain.utils.activity_utils import choose_activity
 from domain.utils.constants import (
@@ -26,7 +29,7 @@ class StatMultiplyers:
 
 
 @transactional
-def update_all_blobs(session):
+def update_all_blobs(session: Session):
     """Update all blobs living in the simulation and yield the progress in percentage."""
 
     current_event = get_current_calendar(session)
@@ -41,7 +44,7 @@ def update_all_blobs(session):
 
         _update_blob_stats(blob, multiplyer)
         blob.integrity -= 1
-        _terminate_blob(blob, current_time)
+        _terminate_blob(blob, current_time, session)
 
         _choose_activity_for_blob(blob, event_next_day)
 
@@ -51,7 +54,7 @@ def update_all_blobs(session):
 
 
 @transactional
-def update_blob_speed_by_id(blob_id: int, multiplyer: float, session):
+def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
     blob = get_blob_by_id(session, blob_id)
     if blob:
         blob.speed = _update_stat(blob.speed, multiplyer, blob.learning, blob.integrity, 0)
@@ -118,9 +121,10 @@ def _update_stat(stat: float, multiplyer: float, learning: float, integrity: flo
     return stat - atrophy + multiplyer * learning * (integrity / INITIAL_INTEGRITY)
 
 
-def _terminate_blob(blob: Blob, current_time: int):
+def _terminate_blob(blob: Blob, current_time: int, session: Session):
     """Terminate the blob if it's integrity or any stat drops to or below zero."""
 
     if blob.integrity <= 0 or blob.strength <= 0 or blob.speed <= 0:
         blob.league_id = None
         blob.terminated = current_time
+        add_blob_terminated_news(f'{blob.first_name} {blob.last_name}', session)

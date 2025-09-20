@@ -7,8 +7,15 @@ from data.persistence import league_repository
 from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import get_most_recent_real_league_result_of_blob
 from domain.dtos.league_dto import LeagueDto
+from domain.news_services.news_service import add_new_season_news
 from domain.standings_service import get_standings
+from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import CYCLES_PER_SEASON, MAX_FIELD_SIZE, MAX_LEAGUE_COUNT, MIN_FIELD_SIZE, QUEUE_LEVEL
+
+
+retirees: list[str] = []
+transfers: dict[League, list[str]] = {}
+debuts: list[str] = []
 
 
 @transactional
@@ -24,10 +31,15 @@ def manage_league_transfers(session: Session, current_season: int):
     """ Manage league transfers at the end of the season. """
 
     leagues = league_repository.get_all_leagues_ordered_by_level(session)
+    transfers = {league: [] for league in leagues}
+
     _correct_contract_of_inactive_leagues(session, leagues)
     _retire_blobs(session, leagues, current_season)
     _manage_dropout_league(session, leagues[1:], leagues[0], current_season)
     _promote_blobs_to_leagues(session, leagues[1:], current_season)
+
+    transfers_mapped = {league.name: names for league, names in transfers.items()}
+    add_new_season_news(current_season + 1, transfers_mapped, retirees, debuts, session)
 
 
 def _correct_contract_of_inactive_leagues(session, leagues: list[League]):
@@ -55,6 +67,9 @@ def _promote_blobs_to_leagues(session, leagues: list[League], current_season: in
                 if league.level == QUEUE_LEVEL:
                     blob.debut = current_season + 1
                     blob.contract = current_season + 3
+                    debuts.append(format_blob_name(blob))
+                else:
+                    transfers[next_league].append(format_blob_name(blob))
         session.commit()
         session.refresh(next_league)
         session.refresh(league)
@@ -98,6 +113,7 @@ def _promote_dropout_winner_if_possibble(session, leagues: list[League], dropout
             session.commit()
             session.refresh(dropout_league)
             session.refresh(promotee_league)
+            transfers[promotee_league].append(format_blob_name(dropout_winner))
 
 
 def _get_dropout_winner(session, dropout_league: League, current_season: int) -> Blob | None:
@@ -118,8 +134,10 @@ def _demote_blobs_to_dropout(session, leagues: list[League], dropout_league: Lea
 
                     session.commit()
                     session.refresh(dropout_league)     # Refresh the dropout league to get the new player
+                    transfers[dropout_league].append(format_blob_name(blob))
                 else:
                     blob.league_id = None   # If there are no free spaces in the dropout league, retire the blob
+                    retirees.append(format_blob_name(blob))
 
     session.commit()
     for league in leagues:
@@ -173,6 +191,7 @@ def _retire_blobs(session, leagues: list[League], current_season: int):
         for blob in blobs:
             if (blob.contract == current_season and league.level == 0) or blob.integrity < CYCLES_PER_SEASON:
                 blob.league_id = None
+                retirees.append(format_blob_name(blob))
     session.commit()
     for league in leagues:
         session.refresh(league)

@@ -18,7 +18,7 @@ The following requirements should be met to run the application on your device:
 
 ### Installation
 
-Before running the application, make sure to set the environment variables. Create a file called `.env` in the root folder and another one with the same name in the `web-ui` folder. The structure should be the same as their respective `.env.example` files, just change the values so the frontend and backend can communicate with each other and the database. 
+Before running the application, make sure to set the environment variables. Create a file called `.env` in the root folder and another one with the same name in the `web-ui` folder. The structure should be the same as their respective `.env.example` files, just change the values so the frontend and backend can communicate with each other and the database.
 
 #### Automatic instalation
 
@@ -79,6 +79,10 @@ The main thread waits for user input. When any key is pressed there (or enter on
 DISCLAIMER: closing the application result in killing ALL python and node processes!
 
 For developing purposes there is a `debug.bat` (or `debug.sh` for Linux), which runs the application in development mode. If you use development mode, make sure to duplicate the database file and rename it to `bcs_database_debug.db`.
+
+## Run tests
+
+To run the test, use this command in the root directory: `python -m unittest discover`.
 
 ## Using the application
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 import traceback
 
-from domain import sim_data_service
+from domain import sim_data_service, progression_service
 from domain.blob_services.blob_service import update_blobs
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.utils.sim_time_utils import convert_to_sim_time
@@ -39,7 +39,7 @@ def progress(_=Depends(require_auth)):
         raise HTTPException(status_code=500, detail=f"Error while updating blobs: {e.with_traceback(None)}")
 
     try:
-        sim_data_service.progress_simulation()
+        progression_service.progress_simulation()
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error while updating simulation progress: {e.with_traceback(None)}")

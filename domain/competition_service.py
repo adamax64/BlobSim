@@ -7,7 +7,9 @@ from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto
 from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
+from domain.news_services.news_service import add_event_ended_news
 from domain.sim_data_service import get_current_calendar
+from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import VICTORY_PRIZE
 
 
@@ -21,7 +23,12 @@ def load_competition_data(session) -> EventDto:
 
 
 @transactional
-def save_event_results(event: EventDto, event_records: list[EventRecordDto], session):
+def process_event_results(event: EventDto, event_records: list[EventRecordDto], session):
+    """
+    Calculates the points for the contenders by position and event type, and saves them in result objects to the database.
+    This function also administrates the trophies and medals, gives out the victory prize and saves a news entry about the event results.
+    """
+
     results = _map_records_to_results(event_records, event.id)
     saved_results = save_all_results(session, results)
 
@@ -47,6 +54,15 @@ def save_event_results(event: EventDto, event_records: list[EventRecordDto], ses
     save_all_blobs(session, [res.blob for res in saved_results])
 
     conclude_calendar_event(session)
+    sorted_results: list[Result] = sorted(saved_results, key=lambda x: x.position)
+    add_event_ended_news(
+        event.league.name,
+        event.round,
+        format_blob_name(sorted_results[0].blob),
+        format_blob_name(sorted_results[1].blob),
+        format_blob_name(sorted_results[2].blob),
+        session
+    )
 
 
 def _map_records_to_results(event_records: list[EventRecordDto], event_id: int) -> list[Result]:

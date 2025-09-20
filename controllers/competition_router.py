@@ -3,7 +3,7 @@ import traceback
 from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.competition_service import (
     load_competition_data,
-    save_event_results as service_save_event_results,
+    process_event_results as service_save_event_results,
 )
 from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto

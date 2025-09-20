@@ -10,7 +10,9 @@ from data.persistence.name_suggestion_repository import save_suggestion
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.league_dto import LeagueDto
 from domain.dtos.standings_dto import StandingsDTO
+from domain.news_services.news_service import add_rookie_of_the_year_news, add_season_ended_news
 from domain.standings_service import get_grandmaster_standings, get_standings
+from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import CHAMPION_PRIZE, CYCLES_PER_EON, GRANDMASTER_PRIZE, ROOKIE_OF_THE_YEAR_PRIZE
 
 
@@ -45,6 +47,8 @@ def end_season_if_over(league: LeagueDto, season: int, session) -> List[Standing
     standings: List[StandingsDTO] = get_standings(league.id, season, session)
     blobs = get_all_by_league_order_by_id(session, league.id)
     rookie_of_the_year_id = _get_rookie_of_the_year(blobs, standings, season)
+    champion = None
+    rookie = None
     for i, standing in enumerate(standings):
         extension = _calculate_contract_extension(i + 1, len(standings), rookie_of_the_year_id == standing.blob_id)
         blob = blobs[standing.blob_id]
@@ -52,13 +56,20 @@ def end_season_if_over(league: LeagueDto, season: int, session) -> List[Standing
         if i == 0 and league.level == 1:
             blob.championships += 1
             blob.money += CHAMPION_PRIZE
+            champion = blob
         elif i == 0:
             blob.season_victories += 1
             blob.money += CHAMPION_PRIZE
+            champion = blob
         if rookie_of_the_year_id == standing.blob_id:
             blob.money += ROOKIE_OF_THE_YEAR_PRIZE
+            rookie = blob
 
     save_all_blobs(session, list(blobs.values()))
+
+    add_season_ended_news(league.name, format_blob_name(champion), session)
+    if rookie is not None:
+        add_rookie_of_the_year_news(format_blob_name(rookie), session)
     return standings
 
 

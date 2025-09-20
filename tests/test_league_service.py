@@ -50,11 +50,14 @@ class TestLeagueService(unittest.TestCase):
         for blob in league.players:
             self.assertEqual(blob.contract, 2)
 
-    def test_promote_blobs_to_leagues(self):
+    @patch('domain.league_service.transfers')
+    def test_promote_blobs_to_leagues(self, mock_transfers):
         session = MagicMock(spec=Session)
         league1 = League(id=1, name='League 1', players=[mock_blob(1)], level=1)
         league2 = League(id=2, name='League 2', players=[mock_blob(1)], level=2)
         leagues = [league1, league2]
+
+        mock_transfers.__getitem__.side_effect = lambda league: []
 
         _promote_blobs_to_leagues(session, leagues, 5)
 
@@ -80,13 +83,16 @@ class TestLeagueService(unittest.TestCase):
         self.assertEqual(args[1].name, "League 2")
         self.assertEqual(args[1].level, 2)
 
+    @patch('domain.league_service.transfers')
     @patch('data.persistence.result_repository.get_most_recent_real_league_result_of_blob')
     @patch('domain.league_service.get_standings')
-    def test_promote_dropout_winner_if_possibble(self, mock_get_standings, mock_get_blob_event):
+    def test_promote_dropout_winner_if_possibble(self, mock_get_standings, mock_get_blob_event, mock_transfers):
         session = MagicMock(spec=Session)
         league1 = League(id=1, name='League 1', players=[mock_blob(6)], level=1)
         dropout_league = League(id=2, name='Dropout', players=[mock_blob(5, 2, blob_id=1)], level=0)
         leagues = [league1]
+
+        mock_transfers.__getitem__.side_effect = lambda league: []
 
         mock_get_standings.return_value = [
             StandingsDTO(
@@ -119,11 +125,14 @@ class TestLeagueService(unittest.TestCase):
 
         self.assertIsNotNone(result)
 
-    def test_demote_blobs_to_dropout(self):
+    @patch('domain.league_service.transfers')
+    def test_demote_blobs_to_dropout(self, mock_transfers):
         session = MagicMock(spec=Session)
         league1 = League(id=1, name='League 1', players=[mock_blob(5)], level=1)
         dropout_league = League(id=2, name='Dropout', players=[], level=0)
         leagues = [league1]
+
+        mock_transfers.__getitem__.side_effect = lambda league: []
 
         _demote_blobs_to_dropout(session, leagues, dropout_league, 5)
 
