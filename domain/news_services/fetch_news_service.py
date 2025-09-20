@@ -4,11 +4,11 @@ from data.db.db_engine import transactional
 from data.model.news import News
 from data.persistence.news_repository import get_all_news
 from domain.dtos.event_dto import EventTypeDto
-from domain.dtos.news_dto import NewsDto, NewsType, TransfersDto
+from domain.dtos.news_dto import NewsDto, NewsTypeDto, TransfersDto
 
 
 @transactional
-def get_news(session: Session) -> list[NewsDto]:
+def fetch_all_news(session: Session) -> list[NewsDto]:
     all_news = get_all_news(session)
 
     result: list[NewsDto] = []
@@ -17,7 +17,7 @@ def get_news(session: Session) -> list[NewsDto]:
         retired = None
         rookies = None
 
-        if news.news_type == NewsType.NEW_SEASON:
+        if news.news_type == NewsTypeDto.NEW_SEASON:
             (index, transfers) = _get_transfers(news.news_data)
             (index, retired) = _get_retired(index, news.news_data)
             rookies = _get_rookies(index, news.news_data)
@@ -32,9 +32,9 @@ def get_news(session: Session) -> list[NewsDto]:
                 season=_get_season(news),
                 event_type=_get_event_type(news),
                 winner=_get_winner(news),
-                second=news.news_data[3] if news.news_type == NewsType.EVENT_ENDED else None,
-                third=news.news_data[4] if news.news_type == NewsType.EVENT_ENDED else None,
-                grandmaster=news.news_data[0] if news.news_type == NewsType.NEW_GRANDMASTER else None,
+                second=news.news_data[3] if news.news_type == NewsTypeDto.EVENT_ENDED else None,
+                third=news.news_data[4] if news.news_type == NewsTypeDto.EVENT_ENDED else None,
+                grandmaster=news.news_data[0] if news.news_type == NewsTypeDto.NEW_GRANDMASTER else None,
                 transfers=transfers,
                 retired=retired,
                 rookies=rookies,
@@ -44,17 +44,17 @@ def get_news(session: Session) -> list[NewsDto]:
 
 
 def _get_blob_name(news: News) -> str | None:
-    return news.news_data[0] if news.news_type in [NewsType.BLOB_CREATED, NewsType.BLOB_TERMINATED] else None
+    return news.news_data[0] if news.news_type in [NewsTypeDto.BLOB_CREATED, NewsTypeDto.BLOB_TERMINATED] else None
 
 
 def _get_league_name(news: News) -> str | None:
     return (
         news.news_data[0]
         if news.news_type in [
-            NewsType.EVENT_STARTED,
-            NewsType.ONGOING_EVENT,
-            NewsType.EVENT_ENDED,
-            NewsType.SEASON_ENDED,
+            NewsTypeDto.EVENT_STARTED,
+            NewsTypeDto.ONGOING_EVENT,
+            NewsTypeDto.EVENT_ENDED,
+            NewsTypeDto.SEASON_ENDED,
         ]
         else None
     )
@@ -64,28 +64,28 @@ def _get_round(news: News) -> int | None:
     return (
         int(news.news_data[1])
         if news.news_type in [
-            NewsType.EVENT_STARTED,
-            NewsType.ONGOING_EVENT,
-            NewsType.EVENT_ENDED,
+            NewsTypeDto.EVENT_STARTED,
+            NewsTypeDto.ONGOING_EVENT,
+            NewsTypeDto.EVENT_ENDED,
         ]
         else None
     )
 
 
 def _get_season(news: News) -> int | None:
-    return int(news.news_data[0]) if news.news_type == NewsType.NEW_SEASON else None
+    return int(news.news_data[0]) if news.news_type == NewsTypeDto.NEW_SEASON else None
 
 
 def _get_event_type(news: News) -> EventTypeDto | None:
-    return news.news_data[2] if news.news_type in [NewsType.EVENT_STARTED, NewsType.ONGOING_EVENT] else None
+    return news.news_data[2] if news.news_type in [NewsTypeDto.EVENT_STARTED, NewsTypeDto.ONGOING_EVENT] else None
 
 
 def _get_winner(news: News) -> str | None:
-    if news.news_type == NewsType.EVENT_ENDED:
+    if news.news_type == NewsTypeDto.EVENT_ENDED:
         return news.news_data[2]
-    if news.news_type == NewsType.SEASON_ENDED:
+    if news.news_type == NewsTypeDto.SEASON_ENDED:
         return news.news_data[1]
-    if news.news_type == NewsType.ROOKIE_OF_THE_YEAR:
+    if news.news_type == NewsTypeDto.ROOKIE_OF_THE_YEAR:
         return news.news_data[0]
     return None
 

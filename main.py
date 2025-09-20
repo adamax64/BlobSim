@@ -11,8 +11,8 @@ from controllers import (
     event_record_router,
     factory_router,
     leagues_router,
+    news_router,
     sim_data_router,
-    general_info_router,
     standings_router,
 )
 from domain.startup_service import startup
@@ -43,7 +43,6 @@ app.add_middleware(
 startup()
 
 app.include_router(sim_data_router.router)
-app.include_router(general_info_router.router)
 app.include_router(blobs_router.router)
 app.include_router(factory_router.router)
 app.include_router(leagues_router.router)
@@ -53,3 +52,4 @@ app.include_router(action_router.router)
 app.include_router(event_record_router.router)
 app.include_router(calendar_router.router)
 app.include_router(auth_router.router)
+app.include_router(news_router.router)
