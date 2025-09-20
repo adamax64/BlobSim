@@ -1,7 +1,7 @@
 import enum
 
 
-class NewsTypeDbo(enum.Enum):
+class NewsType(enum.Enum):
     BLOB_CREATED = 'BLOB_CREATED',
     BLOB_IN_CREATION = 'BLOB_IN_CREATION',
     BLOB_TERMINATED = 'BLOB_TERMINATED',

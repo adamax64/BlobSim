@@ -7,9 +7,7 @@
   "paths": {
     "/sim_data/sim_time": {
       "get": {
-        "tags": [
-          "sim_data"
-        ],
+        "tags": ["sim_data"],
         "summary": "Get Sim Time",
         "operationId": "get_sim_time_sim_data_sim_time_get",
         "responses": {
@@ -28,9 +26,7 @@
     },
     "/sim_data/simulate": {
       "post": {
-        "tags": [
-          "sim_data"
-        ],
+        "tags": ["sim_data"],
         "summary": "Progress",
         "description": "Simulate the progress of the simulation and update blobs.",
         "operationId": "progress_sim_data_simulate_post",
@@ -51,36 +47,9 @@
         ]
       }
     },
-    "/general-infos/news": {
-      "get": {
-        "tags": [
-          "general-infos"
-        ],
-        "summary": "Get News",
-        "operationId": "get_news_general_infos_news_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/News"
-                  },
-                  "type": "array",
-                  "title": "Response Get News General Infos News Get"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/blobs/all": {
       "get": {
-        "tags": [
-          "blobs"
-        ],
+        "tags": ["blobs"],
         "summary": "Get All",
         "operationId": "get_all_blobs_all_get",
         "parameters": [
@@ -141,9 +110,7 @@
     },
     "/blobs/:blob_id": {
       "get": {
-        "tags": [
-          "blobs"
-        ],
+        "tags": ["blobs"],
         "summary": "Get Blob",
         "operationId": "get_blob_blobs__blob_id_get",
         "parameters": [
@@ -183,9 +150,7 @@
     },
     "/blobs/create": {
       "post": {
-        "tags": [
-          "blobs"
-        ],
+        "tags": ["blobs"],
         "summary": "Create Blob",
         "operationId": "create_blob_blobs_create_post",
         "security": [
@@ -253,9 +218,7 @@
     },
     "/factory/progress": {
       "get": {
-        "tags": [
-          "factory"
-        ],
+        "tags": ["factory"],
         "summary": "Get Factory Progress",
         "operationId": "get_factory_progress_factory_progress_get",
         "responses": {
@@ -275,9 +238,7 @@
     },
     "/factory/name-suggestions": {
       "get": {
-        "tags": [
-          "factory"
-        ],
+        "tags": ["factory"],
         "summary": "Get Name Suggestions",
         "operationId": "get_name_suggestions_factory_name_suggestions_get",
         "responses": {
@@ -300,9 +261,7 @@
     },
     "/factory/save-name-suggestion": {
       "post": {
-        "tags": [
-          "factory"
-        ],
+        "tags": ["factory"],
         "summary": "Save Name Suggestion",
         "operationId": "save_name_suggestion_factory_save_name_suggestion_post",
         "security": [
@@ -354,9 +313,7 @@
     },
     "/factory/update-name-suggestion": {
       "post": {
-        "tags": [
-          "factory"
-        ],
+        "tags": ["factory"],
         "summary": "Update Name Suggestion",
         "description": "Updates the first name of a child name suggestion",
         "operationId": "update_name_suggestion_factory_update_name_suggestion_post",
@@ -409,10 +366,7 @@
     },
     "/leagues/all": {
       "get": {
-        "tags": [
-          "Leagues",
-          "Leagues"
-        ],
+        "tags": ["Leagues", "Leagues"],
         "summary": "Get Leagues",
         "description": "Fetch all leagues excluding the queue.",
         "operationId": "get_leagues_leagues_all_get",
@@ -436,9 +390,7 @@
     },
     "/standings/championship/{league_id}/{season}": {
       "get": {
-        "tags": [
-          "Standings"
-        ],
+        "tags": ["Standings"],
         "summary": "Get Standings By League And Season",
         "description": "Fetch standings by league id and season.",
         "operationId": "get_standings_by_league_and_season_standings_championship__league_id___season__get",
@@ -492,9 +444,7 @@
     },
     "/standings/grandmaster/{start_season}": {
       "get": {
-        "tags": [
-          "Standings"
-        ],
+        "tags": ["Standings"],
         "summary": "Get Grandmaster Standings By Eon",
         "description": "Fetch grandmaster standings by starting season of eon.",
         "operationId": "get_grandmaster_standings_by_eon_standings_grandmaster__start_season__get",
@@ -539,9 +489,7 @@
     },
     "/competition/current": {
       "get": {
-        "tags": [
-          "competition"
-        ],
+        "tags": ["competition"],
         "summary": "Get Current Event",
         "operationId": "get_current_event_competition_current_get",
         "responses": {
@@ -560,9 +508,7 @@
     },
     "/competition/quartered-event-results": {
       "post": {
-        "tags": [
-          "competition"
-        ],
+        "tags": ["competition"],
         "summary": "Save Quartered",
         "description": "Save event results for quartered events.",
         "operationId": "save_quartered_competition_quartered_event_results_post",
@@ -605,9 +551,7 @@
     },
     "/competition/race-event-results": {
       "post": {
-        "tags": [
-          "competition"
-        ],
+        "tags": ["competition"],
         "summary": "Save Race",
         "description": "Save event results for race events.",
         "operationId": "save_race_competition_race_event_results_post",
@@ -650,9 +594,7 @@
     },
     "/competition/elimination-event-results": {
       "post": {
-        "tags": [
-          "competition"
-        ],
+        "tags": ["competition"],
         "summary": "Save Elimination",
         "description": "Save event results for elimination events.",
         "operationId": "save_elimination_competition_elimination_event_results_post",
@@ -695,9 +637,7 @@
     },
     "/actions/create/quartered": {
       "post": {
-        "tags": [
-          "actions"
-        ],
+        "tags": ["actions"],
         "summary": "Quartered",
         "description": "Generate score for contender and save the action for given event.\nReturns: {\"newRecord\": bool}",
         "operationId": "quartered_actions_create_quartered_post",
@@ -751,9 +691,7 @@
     },
     "/actions/create/race": {
       "post": {
-        "tags": [
-          "actions"
-        ],
+        "tags": ["actions"],
         "summary": "Race",
         "description": "Generate score for all contenders and save the actions for given event.",
         "operationId": "race_actions_create_race_post",
@@ -806,9 +744,7 @@
     },
     "/actions/create/elimination": {
       "post": {
-        "tags": [
-          "actions"
-        ],
+        "tags": ["actions"],
         "summary": "Elimination",
         "description": "Generate score for all contenders and save the actions for given event.",
         "operationId": "elimination_actions_create_elimination_post",
@@ -866,9 +802,7 @@
     },
     "/event-records/quartered": {
       "get": {
-        "tags": [
-          "event-records"
-        ],
+        "tags": ["event-records"],
         "summary": "Get Quartered",
         "description": "Get quartered event records by actions.",
         "operationId": "get_quartered_event_records_quartered_get",
@@ -913,9 +847,7 @@
     },
     "/event-records/race": {
       "get": {
-        "tags": [
-          "event-records"
-        ],
+        "tags": ["event-records"],
         "summary": "Get Race",
         "description": "Get race event records by actions.",
         "operationId": "get_race_event_records_race_get",
@@ -970,9 +902,7 @@
     },
     "/event-records/elimination": {
       "get": {
-        "tags": [
-          "event-records"
-        ],
+        "tags": ["event-records"],
         "summary": "Get Elimination",
         "description": "Get elimination event records by actions.",
         "operationId": "get_elimination_event_records_elimination_get",
@@ -1017,9 +947,7 @@
     },
     "/calendar": {
       "get": {
-        "tags": [
-          "calendar"
-        ],
+        "tags": ["calendar"],
         "summary": "Get Season Calendar",
         "description": "Get the season calendar.",
         "operationId": "get_season_calendar_calendar_get",
@@ -1043,9 +971,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Login",
         "operationId": "login_auth_login_post",
         "requestBody": {
@@ -1084,9 +1010,7 @@
     },
     "/auth/validate": {
       "get": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Validate Token",
         "operationId": "validate_token_auth_validate_get",
         "responses": {
@@ -1104,6 +1028,29 @@
             "OAuth2PasswordBearer": []
           }
         ]
+      }
+    },
+    "/news/": {
+      "get": {
+        "tags": ["news"],
+        "summary": "Get News",
+        "operationId": "get_news_news__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NewsDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get News News  Get"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -1124,21 +1071,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "blob_id",
-          "scores"
-        ],
+        "required": ["blob_id", "scores"],
         "title": "ActionDto"
       },
       "ActivityTypeDbo": {
         "type": "string",
-        "enum": [
-          "EVENT",
-          "MAINTENANCE",
-          "PRACTICE",
-          "LABOUR",
-          "IDLE"
-        ],
+        "enum": ["EVENT", "MAINTENANCE", "PRACTICE", "LABOUR", "IDLE"],
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"
       },
@@ -1166,13 +1104,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "strength",
-          "speed",
-          "color"
-        ],
+        "required": ["id", "name", "strength", "speed", "color"],
         "title": "BlobCompetitorDto"
       },
       "BlobStatsDto": {
@@ -1358,16 +1290,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "born",
-          "podiums",
-          "wins",
-          "championships",
-          "grandmasters",
-          "league_name",
-          "color"
-        ],
+        "required": ["name", "born", "podiums", "wins", "championships", "grandmasters", "league_name", "color"],
         "title": "BlobStatsDto"
       },
       "Body_save_elimination_competition_elimination_event_results_post": {
@@ -1384,10 +1307,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "event",
-          "event_records"
-        ],
+        "required": ["event", "event_records"],
         "title": "Body_save_elimination_competition_elimination_event_results_post"
       },
       "Body_save_quartered_competition_quartered_event_results_post": {
@@ -1404,10 +1324,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "event",
-          "event_records"
-        ],
+        "required": ["event", "event_records"],
         "title": "Body_save_quartered_competition_quartered_event_results_post"
       },
       "Body_save_race_competition_race_event_results_post": {
@@ -1424,10 +1341,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "event",
-          "event_records"
-        ],
+        "required": ["event", "event_records"],
         "title": "Body_save_race_competition_race_event_results_post"
       },
       "CalendarDto": {
@@ -1499,9 +1413,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "blob"
-        ],
+        "required": ["blob"],
         "title": "EliminationEventRecordDto"
       },
       "EventDto": {
@@ -1544,16 +1456,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "competitors",
-          "actions",
-          "league",
-          "season",
-          "round",
-          "type",
-          "isFinished"
-        ],
+        "required": ["id", "competitors", "actions", "league", "season", "round", "type", "isFinished"],
         "title": "EventDto"
       },
       "EventRecordDto": {
@@ -1563,47 +1466,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "blob"
-        ],
+        "required": ["blob"],
         "title": "EventRecordDto"
-      },
-      "EventSummaryDTO": {
-        "properties": {
-          "event_name": {
-            "type": "string",
-            "title": "Event Name"
-          },
-          "winner": {
-            "type": "string",
-            "title": "Winner"
-          },
-          "runner_up": {
-            "type": "string",
-            "title": "Runner Up"
-          },
-          "third_place": {
-            "type": "string",
-            "title": "Third Place"
-          }
-        },
-        "type": "object",
-        "required": [
-          "event_name",
-          "winner",
-          "runner_up",
-          "third_place"
-        ],
-        "title": "EventSummaryDTO"
       },
       "EventType": {
         "type": "string",
-        "enum": [
-          "QUARTERED_ONE_SHOT_SCORING",
-          "QUARTERED_TWO_SHOT_SCORING",
-          "ENDURANCE_RACE",
-          "ELIMINATION_SCORING"
-        ],
+        "enum": ["QUARTERED_ONE_SHOT_SCORING", "QUARTERED_TWO_SHOT_SCORING", "ENDURANCE_RACE", "ELIMINATION_SCORING"],
         "title": "EventType"
       },
       "GrandmasterStandingsDTO": {
@@ -1642,16 +1510,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "blob_id",
-          "name",
-          "color",
-          "championships",
-          "gold",
-          "silver",
-          "bronze",
-          "points"
-        ],
+        "required": ["blob_id", "name", "color", "championships", "gold", "silver", "bronze", "points"],
         "title": "GrandmasterStandingsDTO"
       },
       "HTTPValidationError": {
@@ -1669,11 +1528,7 @@
       },
       "IntegrityState": {
         "type": "string",
-        "enum": [
-          "POOR",
-          "AVERAGE",
-          "GOOD"
-        ],
+        "enum": ["POOR", "AVERAGE", "GOOD"],
         "title": "IntegrityState"
       },
       "LeagueDto": {
@@ -1696,12 +1551,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "field_size",
-          "level"
-        ],
+        "required": ["id", "name", "field_size", "level"],
         "title": "LeagueDto"
       },
       "LoginRequest": {
@@ -1716,10 +1566,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "username",
-          "password"
-        ],
+        "required": ["username", "password"],
         "title": "LoginRequest"
       },
       "NameSuggestionDto": {
@@ -1761,41 +1608,175 @@
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "last_name",
-          "created"
-        ],
+        "required": ["id", "last_name", "created"],
         "title": "NameSuggestionDto"
       },
-      "News": {
+      "NewsDto": {
         "properties": {
-          "news_type": {
+          "date": {
+            "type": "integer",
+            "title": "Date"
+          },
+          "type": {
             "$ref": "#/components/schemas/NewsType"
           },
-          "blob_info": {
-            "type": "string",
-            "title": "Blob Info"
+          "blob_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blob Name"
           },
-          "event_summary": {
-            "$ref": "#/components/schemas/EventSummaryDTO"
+          "league_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Name"
+          },
+          "round": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Round"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          },
+          "event_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EventType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "winner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Winner"
+          },
+          "second": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Second"
+          },
+          "third": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Third"
+          },
+          "transfers": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TransfersDto"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfers"
+          },
+          "retired": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retired"
+          },
+          "rookies": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rookies"
+          },
+          "grandmaster": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grandmaster"
           }
         },
         "type": "object",
-        "required": [
-          "news_type"
-        ],
-        "title": "News"
+        "required": ["date", "type"],
+        "title": "NewsDto"
       },
       "NewsType": {
-        "type": "string",
         "enum": [
-          "EVENT",
-          "EVENT_ENDED",
-          "BLOB_CREATED_AND_NAMED",
-          "BLOB_CREATED",
-          "SEASON_START",
-          "CONTINUE"
+          ["BLOB_CREATED"],
+          ["BLOB_IN_CREATION"],
+          ["BLOB_TERMINATED"],
+          ["EVENT_STARTED"],
+          ["ONGOING_EVENT"],
+          ["EVENT_ENDED"],
+          ["SEASON_ENDED"],
+          ["ROOKIE_OF_THE_YEAR"],
+          ["NEW_SEASON"],
+          "NEW_GRANDMASTER"
         ],
         "title": "NewsType"
       },
@@ -1811,10 +1792,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "color"
-        ],
+        "required": ["name", "color"],
         "title": "ParentDto"
       },
       "QuarteredEventRecordDto": {
@@ -1846,10 +1824,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "blob",
-          "quarters"
-        ],
+        "required": ["blob", "quarters"],
         "title": "QuarteredEventRecordDto"
       },
       "RaceEventRecordDto": {
@@ -1871,10 +1846,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "blob",
-          "distance_records"
-        ],
+        "required": ["blob", "distance_records"],
         "title": "RaceEventRecordDto"
       },
       "ScoreDto": {
@@ -1935,21 +1907,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "eon",
-          "season",
-          "epoch",
-          "cycle"
-        ],
+        "required": ["eon", "season", "epoch", "cycle"],
         "title": "SimTimeDto"
       },
       "SpeedCategory": {
         "type": "string",
-        "enum": [
-          "SLOW",
-          "AVERAGE",
-          "FAST"
-        ],
+        "enum": ["SLOW", "AVERAGE", "FAST"],
         "title": "SpeedCategory"
       },
       "StandingsDTO": {
@@ -2015,19 +1978,12 @@
           }
         },
         "type": "object",
-        "required": [
-          "position",
-          "points"
-        ],
+        "required": ["position", "points"],
         "title": "StandingsResultDTO"
       },
       "StrengthCategory": {
         "type": "string",
-        "enum": [
-          "WEAK",
-          "AVERAGE",
-          "STRONG"
-        ],
+        "enum": ["WEAK", "AVERAGE", "STRONG"],
         "title": "StrengthCategory"
       },
       "Token": {
@@ -2038,10 +1994,26 @@
           }
         },
         "type": "object",
-        "required": [
-          "token"
-        ],
+        "required": ["token"],
         "title": "Token"
+      },
+      "TransfersDto": {
+        "properties": {
+          "league_name": {
+            "type": "string",
+            "title": "League Name"
+          },
+          "blobs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Blobs"
+          }
+        },
+        "type": "object",
+        "required": ["league_name", "blobs"],
+        "title": "TransfersDto"
       },
       "ValidationError": {
         "properties": {
@@ -2069,11 +2041,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "title": "ValidationError"
       }
     },

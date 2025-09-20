@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
 from data.model.news import News
-from data.model.news_type import NewsTypeDbo
+from data.model.news_type import NewsType
 from data.persistence.sim_data_repository import get_sim_data
 
 
@@ -19,7 +19,7 @@ def save_news(news: News, session: Session):
 
 
 @transactional
-def delete_news_with_type(type: NewsTypeDbo, session: Session):
+def delete_news_with_type(type: NewsType, session: Session):
     session.query(News).filter(News.news_type == type).delete(synchronize_session=False)
     session.commit()
 
