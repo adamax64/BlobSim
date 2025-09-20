@@ -8,6 +8,7 @@ from data.persistence.blob_reposiotry import get_blob_by_id, save_blob
 from data.persistence.league_repository import get_queue
 from data.persistence.name_suggestion_repository import delete_suggestion, get_oldest_name
 from domain.exceptions.name_occupied_exception import NameOccupiedException
+from domain.news_services.news_service import add_blob_created_news, add_blob_in_creation_news
 from domain.sim_data_service import get_sim_time, is_blob_created, reset_factory_progress
 from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.color_utils import generate_random_color
@@ -53,6 +54,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
             ),
         )
         reset_factory_progress(session)
+        add_blob_created_news(f'{first_name} {last_name}', session)
     except IntegrityError:
         raise NameOccupiedException()
 
@@ -63,6 +65,7 @@ def _create_with_name_suggestion(session) -> str | bool:
 
     name_suggestion = get_oldest_name(session)
     if name_suggestion is None:
+        add_blob_in_creation_news(session)
         return True
     try:
         create_blob(session, name_suggestion.first_name, name_suggestion.last_name, name_suggestion.parent_id)
