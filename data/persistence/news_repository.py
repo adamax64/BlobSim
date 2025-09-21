@@ -8,7 +8,7 @@ from data.persistence.sim_data_repository import get_sim_data
 
 @transactional
 def get_all_news(session: Session) -> list[News]:
-    result: list[News] = session.query(News).all()
+    result: list[News] = session.query(News).order_by(News.date.desc()).all()
     return result
 
 
