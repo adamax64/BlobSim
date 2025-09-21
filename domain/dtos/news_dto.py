@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from data.model.news_type import NewsType
 from domain.dtos.event_dto import EventTypeDto
+from domain.dtos.sim_time_dto import SimTimeDto
 
 
 NewsTypeDto = NewsType
@@ -15,7 +16,7 @@ class TransfersDto():
 
 @dataclass
 class NewsDto():
-    date: int
+    date: SimTimeDto
     type: NewsTypeDto
     blob_name: str | None = None
     league_name: str | None = None

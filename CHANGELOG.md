@@ -236,3 +236,5 @@
 - Refactored UI:
   - Added app header bar with page title and menu toggle button in mobile mode
   - Page title card is removed
+  - News card redesigned according to the reworked news logic
+  - Control buttons like 'Next day', 'Proceed to event' are put to a toolbar card at the bottom

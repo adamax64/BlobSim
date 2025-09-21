@@ -12,15 +12,7 @@
     "loading": "Loading...",
     "proceed_to_event": "Proceed to event",
     "create_new_blob": "Create new Blob",
-    "proceed_to_next_day": "Proceed to next day",
-    "news_item": {
-      "event": "There is a championship event today!",
-      "blob_created_and_named": "A new blob called {{blobInfo}} has been created!",
-      "blob_created": "A new blob has been created!",
-      "season_start": "A new season has started!",
-      "continue": "Nothing special happening today",
-      "event_ended": "{{eventName}} has ended. The top 3 are: {{winner}}, {{runnerUp}}, and {{thirdPlace}}."
-    }
+    "proceed_to_next_day": "Proceed to next day"
   },
   "blobs": {
     "search_by_name": "Search by name",
@@ -74,6 +66,28 @@
       "PRACTICE": "Practice",
       "LABOUR": "Labour",
       "IDLE": "Idle"
+    },
+    "news_type": {
+      "BLOB_CREATED": "A new blob called {{blobName}} has been created!",
+      "BLOB_IN_CREATION": "A new blob has been created!",
+      "BLOB_TERMINATED": "Blob called {{blobName}} has been terminated.",
+      "EVENT_STARTED": "A championship event is about to start: {{leagueName}} Round {{round}}, {{eventType}}.",
+      "ONGOING_EVENT": "An ongoing chamionship event is taking place: {{leagueName}} Round {{round}}, {{eventType}}.",
+      "EVENT_ENDED": {
+        "headline": "{{leagueName}} Round {{round}} has ended. Results:",
+        "first": "1st: {{blobName}}",
+        "second": "2nd: {{blobName}}",
+        "third": "3rd: {{blobName}}"
+      },
+      "SEASON_ENDED": "Season ended for {{leagueName}}. Congratulations to {{winner}} for winning the championship.",
+      "ROOKIE_OF_THE_YEAR": "Congratulations to {{winner}} for being rookie of the year.",
+      "NEW_SEASON": {
+        "headline": "Season {{season}} has been started.",
+        "retirees": "The following blob(s) have been retired from the championship system:",
+        "transfers": "The following blob(s) have been transferred to {{leagueName}}:",
+        "rookies": "The following blob(s) are making their debuts to the championship system:"
+      },
+      "NEW_GRANDMASTER": "A new eon is starting. Congratulations to {{grandmaster}} for being the grandmaster for the next four seasons."
     }
   },
   "event": {

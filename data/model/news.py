@@ -5,6 +5,7 @@ from data.model.news_type import NewsType
 
 class News(Base):
     __tablename__ = 'news'
+    __table_args__ = {'schema': 'BCS'}
 
     id = Column(Integer, primary_key=True)
     date = Column(BigInteger, nullable=False)
