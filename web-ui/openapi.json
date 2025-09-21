@@ -1105,6 +1105,26 @@
           }
         }
       }
+    },
+    "/admin/db-dump": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Download Db Dump",
+        "description": "Returns a PostgreSQL database dump as a downloadable file for authenticated users.",
+        "operationId": "download_db_dump_admin_db_dump_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {

@@ -14,6 +14,7 @@ from controllers import (
     news_router,
     sim_data_router,
     standings_router,
+    admin_router,
 )
 from domain.startup_service import startup
 
@@ -53,3 +54,4 @@ app.include_router(event_record_router.router)
 app.include_router(calendar_router.router)
 app.include_router(auth_router.router)
 app.include_router(news_router.router)
+app.include_router(admin_router.router)

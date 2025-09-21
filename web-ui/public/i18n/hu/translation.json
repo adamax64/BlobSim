@@ -12,7 +12,10 @@
     "loading": "Betöltés...",
     "proceed_to_event": "Ugrás az eseményhez",
     "create_new_blob": "Új Blob létrehozása",
-    "proceed_to_next_day": "Tovább a következő napra"
+    "proceed_to_next_day": "Tovább a következő napra",
+    "download_db_dump_tooltip": "Adatbázis mentése",
+    "download_db_dump_failed": "Adatbázis mentése sikertelen.",
+    "download_db_dump_success": "Adatbázis mentése sikeres."
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",

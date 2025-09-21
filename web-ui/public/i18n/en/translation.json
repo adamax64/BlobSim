@@ -12,7 +12,10 @@
     "loading": "Loading...",
     "proceed_to_event": "Proceed to event",
     "create_new_blob": "Create new Blob",
-    "proceed_to_next_day": "Proceed to next day"
+    "proceed_to_next_day": "Proceed to next day",
+    "download_db_dump_tooltip": "Download DB Dump",
+    "download_db_dump_failed": "Failed to download database dump.",
+    "download_db_dump_success": "Database dump downloaded successfully."
   },
   "blobs": {
     "search_by_name": "Search by name",
