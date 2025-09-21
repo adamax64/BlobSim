@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  Grid2,
+  Grid,
   IconButton,
   Paper,
   Tooltip,
@@ -40,8 +40,8 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
         <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
           {blobIcon}
           <Box display="flex" flexDirection="column" gap={2} width="100%">
-            <Grid2 container spacing={2} width="100%">
-              <Grid2 size={6}>
+            <Grid container spacing={2} width="100%">
+              <Grid size={6}>
                 <Tooltip title={t('blob_details.birthdate')} placement="top">
                   <Box display="flex" width="fit-content" gap={1}>
                     <Cake />
@@ -50,10 +50,10 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                     </Typography>
                   </Box>
                 </Tooltip>
-              </Grid2>
+              </Grid>
               {!blob.isDead && (
                 <>
-                  <Grid2 size={6}>
+                  <Grid size={6}>
                     <Tooltip title={t('blob_details.stats.integrity')} placement="top">
                       <Box display="flex" gap={1}>
                         <Handyman />
@@ -68,8 +68,8 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                         </Paper>
                       </Box>
                     </Tooltip>
-                  </Grid2>
-                  <Grid2 size={6}>
+                  </Grid>
+                  <Grid size={6}>
                     <Tooltip title={t('blob_details.stats.strength')} placement="top">
                       <Box display="flex" gap={1}>
                         <Star />
@@ -84,8 +84,8 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                         </Paper>
                       </Box>
                     </Tooltip>
-                  </Grid2>
-                  <Grid2 size={6}>
+                  </Grid>
+                  <Grid size={6}>
                     <Tooltip title={t('blob_details.stats.speed')} placement="top">
                       <Box display="flex" gap={1}>
                         <Speed />
@@ -100,11 +100,11 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                         </Paper>
                       </Box>
                     </Tooltip>
-                  </Grid2>
+                  </Grid>
                 </>
               )}
               {blob.isDead && (
-                <Grid2 size={6}>
+                <Grid size={6}>
                   <Tooltip title={t('blob_details.terminated')} placement="top">
                     <Box display="flex" gap={1}>
                       <Handyman />
@@ -113,30 +113,30 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                       </Typography>
                     </Box>
                   </Tooltip>
-                </Grid2>
+                </Grid>
               )}
               {blob.debut && (
-                <Grid2 size={6}>
+                <Grid size={6}>
                   <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
                     <strong>{t('blob_details.debut')}</strong>: {blob.debut}
                   </Typography>
-                </Grid2>
+                </Grid>
               )}
               {blob.isRetired && (
-                <Grid2 size={6}>
+                <Grid size={6}>
                   <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
                     <strong>{t('blob_details.retired')}</strong>: {blob.contract}
                   </Typography>
-                </Grid2>
+                </Grid>
               )}
               {!blob.isDead && (
-                <Grid2 size={6}>
+                <Grid size={6}>
                   <Typography variant="body1">
                     <strong>{t('blob_details.money')}:</strong> {blob.money}
                   </Typography>
-                </Grid2>
+                </Grid>
               )}
-            </Grid2>
+            </Grid>
 
             {blob.parent && (
               <Typography variant="body1" component="div">

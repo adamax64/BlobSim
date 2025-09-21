@@ -16,10 +16,9 @@ from domain.utils.constants import INITIAL_INTEGRITY
 
 
 @transactional
-def check_blob_created(session) -> str | bool:
+def check_factory_and_create_blob(session):
     if is_blob_created(session):
-        return _create_with_name_suggestion(session)
-    return False
+        _create_with_name_suggestion(session)
 
 
 @transactional
@@ -60,19 +59,19 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
 
 
 @transactional
-def _create_with_name_suggestion(session) -> str | bool:
+def _create_with_name_suggestion(session):
     """Try to create new blob with suggested names. Retry if there is already a blob with suggested name"""
 
     name_suggestion = get_oldest_name(session)
     if name_suggestion is None:
         add_blob_in_creation_news(session)
-        return True
+        return
     try:
         create_blob(session, name_suggestion.first_name, name_suggestion.last_name, name_suggestion.parent_id)
         delete_suggestion(session, name_suggestion)
-        return format_blob_name(name_suggestion)
+        format_blob_name(name_suggestion)
     except NameOccupiedException:
         session.close()
         warning("There already exists a blob with suggested name, retrying creating blob...")
         delete_suggestion(name=name_suggestion)
-        return _create_with_name_suggestion()
+        _create_with_name_suggestion()

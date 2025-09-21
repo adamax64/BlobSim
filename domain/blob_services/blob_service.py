@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from data.db.db_engine import transactional
 from domain.blob_services.blob_fetching_service import fetch_all_blobs
 from domain.dtos.blob_stats_dto import BlobStatsDto
-from domain.blob_services.blob_creation_service import create_blob as service_create_blob, check_blob_created as service_check_blob_created
+from domain.blob_services.blob_creation_service import create_blob as service_create_blob
 from domain.blob_services.blob_update_service import update_all_blobs
 
 
@@ -21,11 +21,6 @@ def get_all_blobs(
     return fetch_all_blobs(
         session=session, name_search=name_search, show_dead=show_dead
     )
-
-
-@transactional
-def check_blob_created(session) -> str | bool:
-    return service_check_blob_created(session)
 
 
 @transactional

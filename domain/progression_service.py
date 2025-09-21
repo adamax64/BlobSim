@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from data.db.db_engine import transactional
 from data.persistence.calendar_repository import get_calendar
 from data.persistence.sim_data_repository import get_sim_data, save_sim_data
+from domain.blob_services.blob_creation_service import check_factory_and_create_blob
 from domain.calendar_service import recreate_calendar_for_next_season
 from domain.league_service import manage_league_transfers
 from domain.news_services.news_service import add_event_starting_news, add_new_grandmaster_news
@@ -34,9 +35,21 @@ def progress_simulation(session: Session):
     sim_data.factory_progress += random.randint(1, 5)
     sim_data.sim_time += 1
     save_sim_data(session, sim_data)
+
+    _check_and_add_event_news(sim_data.sim_time, session)
+    check_factory_and_create_blob(session)
+
+
+def _inagruate_grandmaster(current_season: int, session: Session):
+    standings = get_grandmaster_standings(current_season - 3, current_season, session)
+    grandmaster = standings[0]
+    add_new_grandmaster_news(grandmaster.name, session)
+
+
+def _check_and_add_event_news(sim_time: int, session: Session):
     if is_unconcluded_event_today(session):
         calendar = get_calendar(session)
-        calendar_event = calendar.get(sim_data.sim_time)
+        calendar_event = calendar.get(sim_time)
         add_event_starting_news(
             calendar_event.league.name,
             sum(
@@ -47,9 +60,3 @@ def progress_simulation(session: Session):
             calendar_event.event_type,
             session
         )
-
-
-def _inagruate_grandmaster(current_season: int, session: Session):
-    standings = get_grandmaster_standings(current_season - 3, current_season, session)
-    grandmaster = standings[0]
-    add_new_grandmaster_news(grandmaster.name, session)

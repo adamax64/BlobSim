@@ -11,13 +11,11 @@ from data.persistence.event_repository import (
     get_previous_event_by_league_id_and_season,
     save_event
 )
-from data.persistence.result_repository import get_results_of_event
 from data.model.action import Action
 from data.persistence.action_repository import save_all_actions
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_summary_dto import EventSummaryDTO
 from domain.dtos.league_dto import LeagueDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
@@ -94,23 +92,6 @@ def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -
         round=event.round,
         type=event.type,
         isFinished=None
-    )
-
-
-@transactional
-def get_concluded_event_summary(session: Session) -> str | None:
-    """ Get the summary of the last concluded event """
-    current_calendar_event = get_current_calendar(session)
-    if current_calendar_event is None or not current_calendar_event.concluded:
-        return None
-    event = get_event_by_date(session, current_calendar_event.date)
-    results = get_results_of_event(event.id, session)
-
-    return EventSummaryDTO(
-        event_name=f"{event.league.name}, S{event.season} R{event.round}",
-        winner=format_blob_name(results[0].blob),
-        runner_up=format_blob_name(results[1].blob),
-        third_place=format_blob_name(results[2].blob)
     )
 
 

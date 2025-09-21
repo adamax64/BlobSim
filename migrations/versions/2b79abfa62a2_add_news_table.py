@@ -40,6 +40,7 @@ def upgrade() -> None:
         sa.Column('date', sa.BigInteger(), nullable=False),
         sa.Column('news_type', newstype, nullable=False),
         sa.Column('news_data', sa.ARRAY(sa.String), nullable=False),
+        sa.PrimaryKeyConstraint('id'),
         schema="BCS"
     )
 

@@ -5,6 +5,7 @@ from data.model.news import News
 from data.persistence.news_repository import get_all_news
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.news_dto import NewsDto, NewsTypeDto, TransfersDto
+from domain.utils.sim_time_utils import convert_to_sim_time
 
 
 @transactional
@@ -24,7 +25,7 @@ def fetch_all_news(session: Session) -> list[NewsDto]:
 
         result.append(
             NewsDto(
-                date=news.date,
+                date=convert_to_sim_time(news.date),
                 type=news.news_type,
                 blob_name=_get_blob_name(news),
                 league_name=_get_league_name(news),

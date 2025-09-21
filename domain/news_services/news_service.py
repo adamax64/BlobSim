@@ -26,12 +26,12 @@ def add_blob_terminated_news(blob_name: str, session: Session):
 
 @transactional
 def add_event_starting_news(league_name: str, round: int, event_type: EventType, session: Session):
-    _create_news(NewsType.EVENT_STARTED, [league_name, str(round), str(event_type)], session)
+    _create_news(NewsType.EVENT_STARTED, [league_name, str(round), event_type.name], session)
 
 
 @transactional
 def add_ongoing_event_news(league_name: str, round: int, event_type: EventType, session: Session):
-    _create_news(NewsType.ONGOING_EVENT, [league_name, str(round), str(event_type)], session)
+    _create_news(NewsType.ONGOING_EVENT, [league_name, str(round), event_type.name], session)
     delete_news_with_type(NewsType.EVENT_STARTED, session)
 
 

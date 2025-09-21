@@ -27,7 +27,7 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
     <Box sx={{ p: 2 }}>
       <Grid container spacing={2}>
         {blobs?.map((blob) => (
-          <Grid item xs={12} key={blob.name}>
+          <Grid size={{ xs: 12 }} key={blob.name}>
             <Card
               onClick={() => onBlobSelect(blob)}
               sx={{

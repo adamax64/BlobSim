@@ -12,15 +12,7 @@
     "loading": "Betöltés...",
     "proceed_to_event": "Ugrás az eseményhez",
     "create_new_blob": "Új Blob létrehozása",
-    "proceed_to_next_day": "Tovább a következő napra",
-    "news_item": {
-      "event": "A mai napon verseny következik!",
-      "blob_created_and_named": "Egy új, {{blobInfo}} nevű blob lett létrehozva!",
-      "blob_created": "Egy új blob lett létrehozva!",
-      "season_start": "Új szezon kezdődött!",
-      "continue": "Ma nem történik semmi.",
-      "event_ended": "A(z) {{eventName}} véget ért. A dobogósok: {{winner}}, {{runnerUp}} és {{thirdPlace}}."
-    }
+    "proceed_to_next_day": "Tovább a következő napra"
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",
@@ -74,6 +66,28 @@
       "PRACTICE": "Gyakorlás",
       "LABOUR": "Munka",
       "IDLE": "Tétlen"
+    },
+    "news_type": {
+      "BLOB_CREATED": "Egy új blob lett létrehozva {{blobName}} néven!",
+      "BLOB_IN_CREATION": "Egy új blob lett létrehozva!",
+      "BLOB_TERMINATED": "Blob {{blobName}} terminált.",
+      "EVENT_STARTED": "A mai napon verseny következik: {{leagueName}} {{round}}. forduló, {{eventType}}.",
+      "ONGOING_EVENT": "Folyamatban lévő verseny: {{leagueName}} {{round}}. forduló, {{eventType}}.",
+      "EVENT_ENDED": {
+        "headline": "Véget ért a {{leagueName}} {{round}}. fordulója. Eredmények:",
+        "first": "Első: {{blobName}}",
+        "second": "Második: {{blobName}}",
+        "third": "Harmadik: {{blobName}}"
+      },
+      "SEASON_ENDED": "Végetért a szezon a {{leagueName}} mezőnyének. Gratulálunk {{winner}}-nak/nek a bajnoki győzelemért.",
+      "ROOKIE_OF_THE_YEAR": "Gratulálunk {{winner}}-nak/nek az év újonca címért.",
+      "NEW_SEASON": {
+        "headline": "Elkezdődött a {{season}}. szezon.",
+        "retirees": "Az alábbo blob(ok) vonultak vissza a versenyzéstől:",
+        "transfers": "Az alábbi blob(ok) a {{leagueName}}-ben folytatják:",
+        "rookies": "Az alábbi blob(ok) debütálnak az idei szezonban:"
+      },
+      "NEW_GRANDMASTER": "Új eon kezdődik. Gratulálunk {{grandmaster}}-nak/nek a nagymesterré nevezéssé a következő négy szezonra."
     }
   },
   "event": {
