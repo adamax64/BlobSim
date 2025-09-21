@@ -15,7 +15,7 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { AddCircle } from '@mui/icons-material';
+import AddCircle from '@mui/icons-material/AddCircle';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';

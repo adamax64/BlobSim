@@ -1,10 +1,13 @@
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
-import { CalendarMonth, Dashboard, EmojiEvents, Factory } from '@mui/icons-material';
+import CalendarMonth from '@mui/icons-material/CalendarMonth';
+import Dashboard from '@mui/icons-material/Dashboard';
+import EmojiEvents from '@mui/icons-material/EmojiEvents';
+import Factory from '@mui/icons-material/Factory';
 import { BlobPiktogram } from '../icons/BlobPiktogram';
 import { Link } from '@tanstack/react-router';
-import { MENU_ITEMS } from './constants';
+import { AppPage, MENU_ITEMS } from './constants';
 import { useCurrentPage } from '../../context/CurrentPageContext';
 
 function getMenuIcon(page: string) {
@@ -33,7 +36,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
   const { setCurrentPage } = useCurrentPage();
   const { t } = useTranslation();
 
-  const handleMenuItemClick = (menuItem: string) => {
+  const handleMenuItemClick = (menuItem: AppPage) => {
     setCurrentPage(menuItem);
     if (isMobile) {
       setMobileOpen(false);
@@ -76,7 +79,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
             © 2025 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v3.0
+            v3.0.1
           </Typography>
         </Box>
       </Box>

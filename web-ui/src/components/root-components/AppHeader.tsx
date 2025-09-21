@@ -1,4 +1,4 @@
-import { Menu } from '@mui/icons-material';
+import Menu from '@mui/icons-material/Menu';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useCurrentPage } from '../../context/CurrentPageContext';

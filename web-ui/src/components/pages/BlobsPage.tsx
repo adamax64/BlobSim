@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { PageFrame } from '../common/PageFrame';
-import { Search } from '@mui/icons-material';
+import Search from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import { BlobsApi, BlobStatsDto } from '../../../generated';
 import defaultConfig from '../../default-config';

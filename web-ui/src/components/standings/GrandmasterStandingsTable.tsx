@@ -13,9 +13,9 @@ import {
 } from '@mui/material';
 import { GrandmasterStandingsDTO } from '../../../generated';
 import { BlobState, getClassNameForBlobState } from '../../utils/blob-state-utils';
-import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
-import { EmojiEvents, WorkspacePremium } from '@mui/icons-material';
+import EmojiEvents from '@mui/icons-material/EmojiEvents';
+import WorkspacePremium from '@mui/icons-material/WorkspacePremium';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 
 function getRowClass(hasEonEnded: boolean, position: number): string {

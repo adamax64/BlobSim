@@ -1,4 +1,4 @@
-import { BrowseGallery } from '@mui/icons-material';
+import BrowseGallery from '@mui/icons-material/BrowseGallery';
 import {
   Card,
   CardHeader,

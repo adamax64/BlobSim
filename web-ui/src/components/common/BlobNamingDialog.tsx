@@ -1,4 +1,5 @@
-import { AddCircle, Close } from '@mui/icons-material';
+import AddCircle from '@mui/icons-material/AddCircle';
+import Close from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,

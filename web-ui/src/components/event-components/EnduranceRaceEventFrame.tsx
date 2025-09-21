@@ -4,9 +4,7 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  LinearProgress,
   Paper,
-  styled,
   Table,
   TableBody,
   TableCell,
@@ -27,10 +25,9 @@ import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/RaceEventRecordDto';
 import { getRaceDurationBySize, roundToThreeDecimals, roundToOneDecimals } from './event-utils';
 import defaultConfig from '../../default-config';
-import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { Straighten } from '@mui/icons-material';
+import Straighten from '@mui/icons-material/Straighten';
 import { NarrowCell, TickLoadingBar } from '../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 

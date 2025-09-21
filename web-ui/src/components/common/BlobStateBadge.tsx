@@ -1,4 +1,5 @@
-import { AddCircle, Error } from '@mui/icons-material';
+import AddCircle from '@mui/icons-material/AddCircle';
+import Error from '@mui/icons-material/Error';
 import { Badge, styled, Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 

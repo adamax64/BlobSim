@@ -1,4 +1,8 @@
-import { Cake, Close, Handyman, Speed, Star } from '@mui/icons-material';
+import Cake from '@mui/icons-material/Cake';
+import Close from '@mui/icons-material/Close';
+import Handyman from '@mui/icons-material/Handyman';
+import Speed from '@mui/icons-material/Speed';
+import Star from '@mui/icons-material/Star';
 import {
   Box,
   Dialog,

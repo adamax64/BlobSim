@@ -1,7 +1,8 @@
 import { TFunction } from 'i18next';
 import { CalendarDto } from '../../../generated';
 import { Chip, Tooltip } from '@mui/material';
-import { CheckCircle, PlayCircle } from '@mui/icons-material';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import PlayCircle from '@mui/icons-material/PlayCircle';
 import { useNavigate } from '@tanstack/react-router';
 
 interface EventChipProps {

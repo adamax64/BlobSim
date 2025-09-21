@@ -1,4 +1,3 @@
-import { AddCircle, SkipNext, Stadium } from '@mui/icons-material';
 import { AppBar, Box, Button, Toolbar } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
@@ -9,6 +8,9 @@ import { NewsDto, SimDataApi } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useAuth } from '../../context/AuthContext';
+import Stadium from '@mui/icons-material/Stadium';
+import AddCircle from '@mui/icons-material/AddCircle';
+import SkipNext from '@mui/icons-material/SkipNext';
 
 type ControlButtonsFooterProps = {
   fetchNews: UseMutateFunction<NewsDto[], Error, void, unknown>;
