@@ -54,6 +54,9 @@ def get_quartered_event_records(
             score.latest_score = action_score
         records.sort(key=_quartered_sort_lambda(quarter - 1), reverse=True)
 
+        if tick + 1 in quarter_ends:
+            records[0].quarters[quarter - 1].best = True
+
         if tick == current_tick - 1:
             record.current = True
 

@@ -238,3 +238,12 @@
   - Page title card is removed
   - News card redesigned according to the reworked news logic
   - Control buttons like 'Next day', 'Proceed to event' are put to a toolbar card at the bottom
+
+### 3.0.1
+
+- Fixed production build error caused by vite version update
+
+### 3.0.2
+
+- Fixed best score calculation error in quartered events
+- Fixed news text translation issues

@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { NewsDto } from '../../../generated';
-import { NewsContent } from './NewsContend';
+import { NewsContent } from './NewsContent';
 import { useTranslation } from 'react-i18next';
 import { formatToShort } from '../../utils/sim-time-utils';
 

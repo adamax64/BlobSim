@@ -31,21 +31,23 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
     case NewsType.EventEnded:
       return (
         <>
-          <Typography variant="body1">{t('enums.event_types.EVENT_ENDED.headline')}</Typography>
+          <Typography variant="body1">
+            {t('enums.news_type.EVENT_ENDED.headline', { leagueName: newsItem.leagueName, round: newsItem.round })}
+          </Typography>
           <ul>
             <li>
               <Typography variant="body1">
-                {t('enums.event_types.EVENT_ENDED.first', { blobName: newsItem.winner })}
+                {t('enums.news_type.EVENT_ENDED.first', { blobName: newsItem.winner })}
               </Typography>
             </li>
             <li>
               <Typography variant="body1">
-                {t('enums.event_types.EVENT_ENDED.second', { blobName: newsItem.second })}
+                {t('enums.news_type.EVENT_ENDED.second', { blobName: newsItem.second })}
               </Typography>
             </li>
             <li>
               <Typography variant="body1">
-                {t('enums.event_types.EVENT_ENDED.third', { blobName: newsItem.third })}
+                {t('enums.news_type.EVENT_ENDED.third', { blobName: newsItem.third })}
               </Typography>
             </li>
           </ul>
@@ -64,10 +66,10 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
     case NewsType.NewSeason:
       return (
         <>
-          <Typography variant="body1">{t('enums.event_types.NEW_SEASON.headline')}</Typography>
+          <Typography variant="body1">{t('enums.news_type.NEW_SEASON.headline')}</Typography>
           {(newsItem.retired?.length ?? 0) > 0 && (
             <>
-              <Typography variant="body1">{t('enums.event_types.NEW_SEASON.headline')}</Typography>
+              <Typography variant="body1">{t('enums.news_type.NEW_SEASON.headline')}</Typography>
               <ul>{newsItem.retired?.map((name) => <li>{name}</li>)}</ul>
             </>
           )}
@@ -77,7 +79,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               .map((league) => (
                 <>
                   <Typography variant="body1">
-                    {t('enums.event_types.NEW_SEASON.transfers', { leagueName: league.leagueName })}
+                    {t('enums.news_type.NEW_SEASON.transfers', { leagueName: league.leagueName })}
                   </Typography>
                   <ul>
                     {league.blobs.map((name) => (
@@ -88,7 +90,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               ))}
           {(newsItem.rookies?.length ?? 0) > 0 && (
             <>
-              <Typography variant="body1">{t('enums.event_types.NEW_SEASON.rookies')}</Typography>
+              <Typography variant="body1">{t('enums.news_type.NEW_SEASON.rookies')}</Typography>
               <ul>{newsItem.rookies?.map((name) => <li>{name}</li>)}</ul>
             </>
           )}
