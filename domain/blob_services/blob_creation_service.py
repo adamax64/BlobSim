@@ -35,6 +35,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         parent = get_blob_by_id(session, parent_id)
         learning += parent.championships * 0.01
         strength += parent.grandmasters * 0.01
+        speed += parent.grandmasters * 0.01
 
     try:
         save_blob(
