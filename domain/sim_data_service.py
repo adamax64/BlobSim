@@ -2,9 +2,11 @@ from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
 from data.model.calendar import Calendar
+from data.model.event_type import EventType
 from data.persistence.sim_data_repository import get_sim_data, save_sim_data
 from data.persistence.calendar_repository import get_calendar
 from domain.utils.constants import BLOB_CREATION_RESOURCES
+from domain.calendar_service import conclude_calendar_event
 
 
 @transactional
@@ -18,6 +20,11 @@ def is_unconcluded_event_today(session: Session) -> bool:
     calendar = get_calendar(session)
 
     if time in calendar:
+        # Automatically conclude catch-up training events
+        if calendar[time].event_type == EventType.CATCHUP_TRAINING and not calendar[time].concluded:
+            conclude_calendar_event(session)
+            return False
+
         return not calendar[time].concluded
     else:
         return False

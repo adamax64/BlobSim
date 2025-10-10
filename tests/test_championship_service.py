@@ -6,7 +6,6 @@ from domain.dtos.league_dto import LeagueDto
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.standings_dto import StandingsDTO
 from data.model.blob import Blob
-from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import GRANDMASTER_PRIZE, CHAMPION_PRIZE, CYCLES_PER_EON, ROOKIE_OF_THE_YEAR_PRIZE
 
 
@@ -150,8 +149,8 @@ class TestChampionshipService(unittest.TestCase):
             self.assertEqual(mock_blobs[4].season_victories, 0)
             self.assertEqual(mock_blobs[4].money, ROOKIE_OF_THE_YEAR_PRIZE)
             mock_save_all_blobs.assert_called_with(session, list(mock_blobs.values()))
-            mock_add_rookie_of_the_year_news.assert_called_with(format_blob_name(mock_blobs[4]), session)
-            mock_add_season_ended_news.assert_called_with(league.name, format_blob_name(mock_blobs[1]), session)
+            mock_add_rookie_of_the_year_news.assert_called_with(mock_blobs[4].id, session)
+            mock_add_season_ended_news.assert_called_with(league.name, mock_blobs[1].id, session)
 
         run_test_for_level(1)
         run_test_for_level(2)

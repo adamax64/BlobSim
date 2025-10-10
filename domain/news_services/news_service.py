@@ -9,8 +9,9 @@ from domain.sim_data_service import get_sim_time
 
 
 @transactional
-def add_blob_created_news(blob_name: str, session: Session):
-    _create_news(NewsType.BLOB_CREATED, [blob_name], session)
+def add_blob_created_news(blob_id: int, session: Session):
+    # store blob ids as strings in the news_data array
+    _create_news(NewsType.BLOB_CREATED, [str(blob_id)], session)
     delete_news_with_type(NewsType.BLOB_IN_CREATION, session)
 
 
@@ -20,8 +21,8 @@ def add_blob_in_creation_news(session: Session):
 
 
 @transactional
-def add_blob_terminated_news(blob_name: str, session: Session):
-    _create_news(NewsType.BLOB_TERMINATED, [blob_name], session)
+def add_blob_terminated_news(blob_id: int, session: Session):
+    _create_news(NewsType.BLOB_TERMINATED, [str(blob_id)], session)
 
 
 @transactional
@@ -36,23 +37,23 @@ def add_ongoing_event_news(league_name: str, round: int, event_type: EventType, 
 
 
 @transactional
-def add_event_ended_news(league_name: str, round: int, first: str, second: str, third: str, session: Session):
-    _create_news(NewsType.EVENT_ENDED, [league_name, str(round), first, second, third], session)
+def add_event_ended_news(league_name: str, round: int, first: int, second: int, third: int, session: Session):
+    _create_news(NewsType.EVENT_ENDED, [league_name, str(round), str(first), str(second), str(third)], session)
     delete_news_with_type(NewsType.ONGOING_EVENT, session)
 
 
 @transactional
-def add_season_ended_news(league_name: str, winner: str, session: Session):
-    _create_news(NewsType.SEASON_ENDED, [league_name, winner], session)
+def add_season_ended_news(league_name: str, winner_id: int, session: Session):
+    _create_news(NewsType.SEASON_ENDED, [league_name, str(winner_id)], session)
 
 
 @transactional
-def add_rookie_of_the_year_news(winner: str, session: Session):
-    _create_news(NewsType.ROOKIE_OF_THE_YEAR, [winner], session)
+def add_rookie_of_the_year_news(winner_id: int, session: Session):
+    _create_news(NewsType.ROOKIE_OF_THE_YEAR, [str(winner_id)], session)
 
 
 @transactional
-def add_new_season_news(season: int, transfers: dict[str, list[str]], retired: list[str], rookies: list[str], session: Session):
+def add_new_season_news(season: int, transfers: dict[str, list[int]], retired: list[int], rookies: list[int], session: Session):
     """
     Creates a news record for the new starting season with the following data:
     - season: the number of the newly starting season
@@ -64,8 +65,8 @@ def add_new_season_news(season: int, transfers: dict[str, list[str]], retired: l
     for (league, blobs) in transfers.items():
         flattened_transfers_array.append(league)
         flattened_transfers_array.append(str(len(blobs)))
-        for blob in blobs:
-            flattened_transfers_array.append(blob)
+        for blob_id in blobs:
+            flattened_transfers_array.append(str(blob_id))
 
     _create_news(
         NewsType.NEW_SEASON,
@@ -74,9 +75,9 @@ def add_new_season_news(season: int, transfers: dict[str, list[str]], retired: l
             str(len(transfers)),
             *flattened_transfers_array,
             str(len(retired)),
-            *retired,
+            *[str(x) for x in retired],
             str(len(rookies)),
-            *rookies
+            *[str(x) for x in rookies]
         ],
         session
     )

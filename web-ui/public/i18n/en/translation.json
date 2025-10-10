@@ -43,7 +43,8 @@
       "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
       "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
       "ENDURANCE_RACE": "Endurance Race",
-      "ELIMINATION_SCORING": "Elimination Scoring"
+      "ELIMINATION_SCORING": "Elimination Scoring",
+      "CATCHUP_TRAINING": "Catch-up Training No. {{day}}"
     },
     "speed_category": {
       "SLOW": "Slow",
@@ -64,6 +65,7 @@
       "EVENT": "Competing",
       "MAINTENANCE": "Maintenance",
       "PRACTICE": "Practice",
+      "INTENSE_TRAINING": "Intense training",
       "LABOUR": "Labour",
       "IDLE": "Idle"
     },
@@ -75,9 +77,9 @@
       "ONGOING_EVENT": "An ongoing chamionship event is taking place: {{leagueName}} Round {{round}}, {{eventType}}.",
       "EVENT_ENDED": {
         "headline": "{{leagueName}} Round {{round}} has ended. Results:",
-        "first": "1st: {{blobName}}",
-        "second": "2nd: {{blobName}}",
-        "third": "3rd: {{blobName}}"
+        "first": "1st:",
+        "second": "2nd:",
+        "third": "3rd:"
       },
       "SEASON_ENDED": "Season ended for {{leagueName}}. Congratulations to {{winner}} for winning the championship.",
       "ROOKIE_OF_THE_YEAR": "Congratulations to {{winner}} for being rookie of the year.",

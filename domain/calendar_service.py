@@ -36,11 +36,21 @@ def get_season_calendar(session: Session) -> list[CalendarDto]:
     for event in calendar:
         is_next = prev_event_concluded and not event.concluded
         is_current = event.date == sim_time
+        # Some calendar events (e.g. catchup training) have no league associated.
+        if event.league is None:
+            league_name = None
+            league_level = None
+            round_num = sum(1 for x in result if x.league_level is None) + 1
+        else:
+            league_name = event.league.name
+            league_level = event.league.level
+            round_num = sum(1 for x in result if x.league_level == event.league.level) + 1
+
         result.append(CalendarDto(
             convert_to_sim_time(event.date),
-            event.league.name,
-            event.league.level,
-            sum(1 for x in result if x.league_level == event.league.level) + 1,
+            league_name,
+            league_level,
+            round_num,
             event.concluded,
             event.event_type,
             is_next,
@@ -55,6 +65,13 @@ def recreate_calendar_for_next_season(session: Session, next_season: int):
     clear_calendar(session)
     leagues = get_all_real_leagues(session)
     calendar = []
+
+    # Add catch-up training event at the start of the season
+    calendar.append(_create_calendar_record(next_season, 1, 0, None, EventType.CATCHUP_TRAINING))
+    calendar.append(_create_calendar_record(next_season, 1, 1, None, EventType.CATCHUP_TRAINING))
+    calendar.append(_create_calendar_record(next_season, 1, 2, None, EventType.CATCHUP_TRAINING))
+    calendar.append(_create_calendar_record(next_season, 1, 3, None, EventType.CATCHUP_TRAINING))
+
     for league in leagues:
         cycle = get_epoch_cycle_by_level(league.level)
         field_size = len(league.players) if league.players else 0

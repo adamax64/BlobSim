@@ -48,6 +48,18 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
 
 
 @transactional
+def get_last_place_from_season_by_league(league_id: int, season: int, session) -> int | None:
+    """Return the blob id of the last place in the standings for a given league and season.
+
+    Returns None if no standings are available for that league/season.
+    """
+    standings = get_standings(league_id, season, season, session)
+    if not standings:
+        return None
+    return standings[-1].blob_id
+
+
+@transactional
 def get_grandmaster_standings(start_season: int, current_season: int, session) -> list[GrandmasterStandingsDTO]:
     end_season = current_season if start_season + 4 > current_season else start_season + 3
     standings = [get_standings(1, season, session) for season in range(start_season, end_season + 1)]

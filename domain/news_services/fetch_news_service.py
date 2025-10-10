@@ -5,7 +5,9 @@ from data.model.news import News
 from data.persistence.news_repository import get_all_news
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.news_dto import NewsDto, NewsTypeDto, TransfersDto
+from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.utils.sim_time_utils import convert_to_sim_time
+from domain.blob_services.blob_fetching_service import fetch_blob_by_id
 
 
 @transactional
@@ -19,23 +21,23 @@ def fetch_all_news(session: Session) -> list[NewsDto]:
         rookies = None
 
         if news.news_type == NewsTypeDto.NEW_SEASON:
-            (index, transfers) = _get_transfers(news.news_data)
-            (index, retired) = _get_retired(index, news.news_data)
-            rookies = _get_rookies(index, news.news_data)
+            (index, transfers) = _get_transfers(news.news_data, session)
+            (index, retired) = _get_retired(index, news.news_data, session)
+            rookies = _get_rookies(index, news.news_data, session)
 
         result.append(
             NewsDto(
                 date=convert_to_sim_time(news.date),
                 type=news.news_type,
-                blob_name=_get_blob_name(news),
+                blob=_get_blob(news, session),
                 league_name=_get_league_name(news),
                 round=_get_round(news),
                 season=_get_season(news),
                 event_type=_get_event_type(news),
-                winner=_get_winner(news),
-                second=news.news_data[3] if news.news_type == NewsTypeDto.EVENT_ENDED else None,
-                third=news.news_data[4] if news.news_type == NewsTypeDto.EVENT_ENDED else None,
-                grandmaster=news.news_data[0] if news.news_type == NewsTypeDto.NEW_GRANDMASTER else None,
+                winner=_get_winner(news, session),
+                second=_get_second(news, session),
+                third=_get_third(news, session),
+                grandmaster=_get_grandmaster(news, session),
                 transfers=transfers,
                 retired=retired,
                 rookies=rookies,
@@ -44,8 +46,13 @@ def fetch_all_news(session: Session) -> list[NewsDto]:
     return result
 
 
-def _get_blob_name(news: News) -> str | None:
-    return news.news_data[0] if news.news_type in [NewsTypeDto.BLOB_CREATED, NewsTypeDto.BLOB_TERMINATED] else None
+def _get_blob(news: News, session) -> BlobStatsDto | None:
+    if news.news_type in [NewsTypeDto.BLOB_CREATED, NewsTypeDto.BLOB_TERMINATED]:
+        try:
+            return fetch_blob_by_id(int(news.news_data[0]), session)
+        except Exception:
+            return None
+    return None
 
 
 def _get_league_name(news: News) -> str | None:
@@ -81,17 +88,41 @@ def _get_event_type(news: News) -> EventTypeDto | None:
     return news.news_data[2] if news.news_type in [NewsTypeDto.EVENT_STARTED, NewsTypeDto.ONGOING_EVENT] else None
 
 
-def _get_winner(news: News) -> str | None:
-    if news.news_type == NewsTypeDto.EVENT_ENDED:
-        return news.news_data[2]
-    if news.news_type == NewsTypeDto.SEASON_ENDED:
-        return news.news_data[1]
-    if news.news_type == NewsTypeDto.ROOKIE_OF_THE_YEAR:
-        return news.news_data[0]
+def _get_winner(news: News, session) -> BlobStatsDto | None:
+    try:
+        if news.news_type == NewsTypeDto.EVENT_ENDED:
+            return fetch_blob_by_id(int(news.news_data[2]), session)
+        if news.news_type == NewsTypeDto.SEASON_ENDED:
+            return fetch_blob_by_id(int(news.news_data[1]), session)
+        if news.news_type == NewsTypeDto.ROOKIE_OF_THE_YEAR:
+            return fetch_blob_by_id(int(news.news_data[0]), session)
+    except Exception:
+        return None
     return None
 
 
-def _get_transfers(data: list[str]) -> tuple[int, list[TransfersDto]]:
+def _get_second(news: News, session) -> BlobStatsDto | None:
+    try:
+        return fetch_blob_by_id(int(news.news_data[3]), session) if news.news_type == NewsTypeDto.EVENT_ENDED else None
+    except Exception:
+        return None
+
+
+def _get_third(news: News, session) -> BlobStatsDto | None:
+    try:
+        return fetch_blob_by_id(int(news.news_data[4]), session) if news.news_type == NewsTypeDto.EVENT_ENDED else None
+    except Exception:
+        return None
+
+
+def _get_grandmaster(news: News, session) -> BlobStatsDto | None:
+    try:
+        return fetch_blob_by_id(int(news.news_data[0]), session) if news.news_type == NewsTypeDto.NEW_GRANDMASTER else None
+    except Exception:
+        return None
+
+
+def _get_transfers(data: list[str], session) -> tuple[int, list[TransfersDto]]:
     result: list[TransfersDto] = []
 
     index = 1
@@ -103,31 +134,41 @@ def _get_transfers(data: list[str]) -> tuple[int, list[TransfersDto]]:
         blobs_num = int(data[index])
         for _ in range(blobs_num):
             index += 1
-            transfer.blobs.append(data[index])
+            try:
+                transfer.blobs.append(fetch_blob_by_id(int(data[index]), session))
+            except Exception:
+                # skip if cannot map
+                pass
         result.append(transfer)
 
-    return result
+    return (index, result)
 
 
-def _get_retired(index: int, data: list[str]) -> tuple[int, list[str]]:
-    result: list[str] = []
+def _get_retired(index: int, data: list[str], session) -> tuple[int, list[BlobStatsDto]]:
+    result: list[BlobStatsDto] = []
 
     index += 1
     retired_num = int(data[index])
     for _ in range(retired_num):
         index += 1
-        result.append(data[index])
+        try:
+            result.append(fetch_blob_by_id(int(data[index]), session))
+        except Exception:
+            pass
 
-    return result
+    return (index, result)
 
 
-def _get_rookies(index: int, data: list[str]) -> list[str]:
-    result: list[str] = []
+def _get_rookies(index: int, data: list[str], session) -> list[BlobStatsDto]:
+    result: list[BlobStatsDto] = []
 
     index += 1
     rookies_num = int(data[index])
     for _ in range(rookies_num):
         index += 1
-        result.append(data[index])
+        try:
+            result.append(fetch_blob_by_id(int(data[index]), session))
+        except Exception:
+            pass
 
     return result

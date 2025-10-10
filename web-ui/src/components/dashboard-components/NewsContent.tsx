@@ -1,6 +1,8 @@
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { NewsDto, NewsType } from '../../../generated';
 import { useTranslation } from 'react-i18next';
+import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
+import { InlineTranslatedBlob } from '../../components/common/InlineTranslatedBlob';
 
 type NewsContentProps = {
   newsItem: NewsDto;
@@ -13,9 +15,11 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
     case NewsType.BlobCreated:
     case NewsType.BlobTerminated:
       return (
-        <Typography variant="body1">
-          {t(`enums.news_type.${newsItem.type}`, { blobName: newsItem.blobName })}
-        </Typography>
+        <InlineTranslatedBlob
+          translationKey={`enums.news_type.${newsItem.type}`}
+          blob={newsItem.blob ?? undefined}
+          interpolationKey="blobName"
+        />
       );
     case NewsType.EventStarted:
     case NewsType.OngoingEvent:
@@ -35,20 +39,47 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
             {t('enums.news_type.EVENT_ENDED.headline', { leagueName: newsItem.leagueName, round: newsItem.round })}
           </Typography>
           <ul>
-            <li>
-              <Typography variant="body1">
-                {t('enums.news_type.EVENT_ENDED.first', { blobName: newsItem.winner })}
-              </Typography>
+            <li className="flex">
+              <Typography variant="body1">{t('enums.news_type.EVENT_ENDED.first')}</Typography>
+              {newsItem.winner && (
+                <Box component="span" display="inline-flex" alignItems="center" ml={1}>
+                  <IconNameWithDetailsModal
+                    blob={newsItem.winner}
+                    name={newsItem.winner.name}
+                    color={newsItem.winner.color}
+                    atRisk={newsItem.winner.atRisk}
+                    isRookie={newsItem.winner.isRookie}
+                  />
+                </Box>
+              )}
             </li>
-            <li>
-              <Typography variant="body1">
-                {t('enums.news_type.EVENT_ENDED.second', { blobName: newsItem.second })}
-              </Typography>
+            <li className="flex">
+              <Typography variant="body1">{t('enums.news_type.EVENT_ENDED.second')}</Typography>
+              {newsItem.second && (
+                <Box component="span" display="inline-flex" alignItems="center" ml={1}>
+                  <IconNameWithDetailsModal
+                    blob={newsItem.second ?? undefined}
+                    name={newsItem.second?.name ?? ''}
+                    color={newsItem.second?.color ?? '#888888'}
+                    atRisk={newsItem.second?.atRisk}
+                    isRookie={newsItem.second?.isRookie}
+                  />
+                </Box>
+              )}
             </li>
-            <li>
-              <Typography variant="body1">
-                {t('enums.news_type.EVENT_ENDED.third', { blobName: newsItem.third })}
-              </Typography>
+            <li className="flex">
+              <Typography variant="body1">{t('enums.news_type.EVENT_ENDED.third')}</Typography>
+              {(newsItem.third as any) && (
+                <Box component="span" display="inline-flex" alignItems="center" ml={1}>
+                  <IconNameWithDetailsModal
+                    blob={newsItem.third ?? undefined}
+                    name={newsItem.third?.name ?? ''}
+                    color={newsItem.third?.color ?? '#888888'}
+                    atRisk={newsItem.third?.atRisk}
+                    isRookie={newsItem.third?.isRookie}
+                  />
+                </Box>
+              )}
             </li>
           </ul>
         </>
@@ -56,21 +87,62 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
     case NewsType.SeasonEnded:
       return (
         <Typography variant="body1">
-          {t('enums.news_type.SEASON_ENDED', { leagueName: newsItem.leagueName, winner: newsItem.winner })}
+          {t('enums.news_type.SEASON_ENDED', {
+            leagueName: newsItem.leagueName,
+            winner: (newsItem.winner as any)?.name ?? '',
+          })}
+          {(newsItem.winner as any) && (
+            <Box component="span" sx={{ display: 'inline-block', ml: 1 }}>
+              <IconNameWithDetailsModal
+                blobId={(newsItem.winner as any).id}
+                name={(newsItem.winner as any).name}
+                color={(newsItem.winner as any).color}
+                atRisk={(newsItem.winner as any).atRisk}
+                isRookie={(newsItem.winner as any).isRookie}
+              />
+            </Box>
+          )}
         </Typography>
       );
     case NewsType.RookieOfTheYear:
       return (
-        <Typography variant="body1">{t('enums.news_type.ROOKIE_OF_THE_YEAR', { winner: newsItem.winner })}</Typography>
+        <Typography variant="body1">
+          {t('enums.news_type.ROOKIE_OF_THE_YEAR', { winner: (newsItem.winner as any)?.name ?? '' })}
+          {(newsItem.winner as any) && (
+            <Box component="span" sx={{ display: 'inline-block', ml: 1 }}>
+              <IconNameWithDetailsModal
+                blobId={(newsItem.winner as any).id}
+                name={(newsItem.winner as any).name}
+                color={(newsItem.winner as any).color}
+                atRisk={(newsItem.winner as any).atRisk}
+                isRookie={(newsItem.winner as any).isRookie}
+              />
+            </Box>
+          )}
+        </Typography>
       );
     case NewsType.NewSeason:
       return (
         <>
-          <Typography variant="body1">{t('enums.news_type.NEW_SEASON.headline')}</Typography>
+          <Typography variant="body1">
+            {t('enums.news_type.NEW_SEASON.headline', { season: newsItem.season })}
+          </Typography>
           {(newsItem.retired?.length ?? 0) > 0 && (
             <>
               <Typography variant="body1">{t('enums.news_type.NEW_SEASON.headline')}</Typography>
-              <ul>{newsItem.retired?.map((name) => <li>{name}</li>)}</ul>
+              <ul>
+                {(newsItem.retired as any[])?.map((b) => (
+                  <li key={b.id}>
+                    <IconNameWithDetailsModal
+                      blobId={b.id}
+                      name={b.name}
+                      color={b.color}
+                      atRisk={b.atRisk}
+                      isRookie={b.isRookie}
+                    />
+                  </li>
+                ))}
+              </ul>
             </>
           )}
           {(newsItem.transfers?.length ?? 0) > 0 &&
@@ -82,8 +154,16 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
                     {t('enums.news_type.NEW_SEASON.transfers', { leagueName: league.leagueName })}
                   </Typography>
                   <ul>
-                    {league.blobs.map((name) => (
-                      <li>{name}</li>
+                    {(league.blobs as any[]).map((b) => (
+                      <li key={b.id}>
+                        <IconNameWithDetailsModal
+                          blobId={b.id}
+                          name={b.name}
+                          color={b.color}
+                          atRisk={b.atRisk}
+                          isRookie={b.isRookie}
+                        />
+                      </li>
                     ))}
                   </ul>
                 </>
@@ -91,16 +171,30 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
           {(newsItem.rookies?.length ?? 0) > 0 && (
             <>
               <Typography variant="body1">{t('enums.news_type.NEW_SEASON.rookies')}</Typography>
-              <ul>{newsItem.rookies?.map((name) => <li>{name}</li>)}</ul>
+              <ul>
+                {(newsItem.rookies as any[])?.map((b) => (
+                  <li key={b.id}>
+                    <IconNameWithDetailsModal
+                      blobId={b.id}
+                      name={b.name}
+                      color={b.color}
+                      atRisk={b.atRisk}
+                      isRookie={b.isRookie}
+                    />
+                  </li>
+                ))}
+              </ul>
             </>
           )}
         </>
       );
     case NewsType.NewGrandmaster:
       return (
-        <Typography variant="body1">
-          {t('enums.news_type.NEW_GRANDMASTER', { grandmaster: newsItem.grandmaster })}
-        </Typography>
+        <InlineTranslatedBlob
+          translationKey={`enums.news_type.NEW_GRANDMASTER`}
+          blob={newsItem.grandmaster ?? undefined}
+          interpolationKey="grandmaster"
+        />
       );
     default:
       return <Typography variant="body1">{t(`enums.news_type.${newsItem.type}`)}</Typography>;

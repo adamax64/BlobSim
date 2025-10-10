@@ -8,6 +8,7 @@ class ActivityTypeDbo(enum.Enum):
     EVENT = 'EVENT'
     MAINTENANCE = 'MAINTENANCE'
 
+    INTENSE_TRAINING = 'INTENSE_TRAINING'
     PRACTICE = 'PRACTICE'
     LABOUR = 'LABOUR'
     IDLE = 'IDLE'

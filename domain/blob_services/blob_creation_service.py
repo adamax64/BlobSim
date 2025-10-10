@@ -38,23 +38,21 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         speed += parent.grandmasters * 0.01
 
     try:
-        save_blob(
-            session,
-            Blob(
-                first_name=first_name,
-                last_name=last_name,
-                strength=strength,
-                speed=speed,
-                learning=learning,
-                integrity=INITIAL_INTEGRITY,
-                born=current_time,
-                league_id=queue.id,
-                parent_id=parent_id,
-                color=generate_random_color(),
-            ),
+        blob_obj = Blob(
+            first_name=first_name,
+            last_name=last_name,
+            strength=strength,
+            speed=speed,
+            learning=learning,
+            integrity=INITIAL_INTEGRITY,
+            born=current_time,
+            league_id=queue.id,
+            parent_id=parent_id,
+            color=generate_random_color(),
         )
+        saved_blob = save_blob(session, blob_obj)
         reset_factory_progress(session)
-        add_blob_created_news(f'{first_name} {last_name}', session)
+        add_blob_created_news(saved_blob.id, session)
     except IntegrityError:
         raise NameOccupiedException()
 
@@ -74,5 +72,5 @@ def _create_with_name_suggestion(session):
     except NameOccupiedException:
         session.close()
         warning("There already exists a blob with suggested name, retrying creating blob...")
-        delete_suggestion(name=name_suggestion)
+        delete_suggestion(session, name_suggestion)
         _create_with_name_suggestion()

@@ -9,7 +9,6 @@ from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_event_ended_news
 from domain.sim_data_service import get_current_calendar
-from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import VICTORY_PRIZE
 
 
@@ -58,9 +57,9 @@ def process_event_results(event: EventDto, event_records: list[EventRecordDto], 
     add_event_ended_news(
         event.league.name,
         event.round,
-        format_blob_name(sorted_results[0].blob),
-        format_blob_name(sorted_results[1].blob),
-        format_blob_name(sorted_results[2].blob),
+        sorted_results[0].blob.id,
+        sorted_results[1].blob.id,
+        sorted_results[2].blob.id,
         session
     )
 

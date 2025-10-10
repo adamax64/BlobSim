@@ -12,7 +12,6 @@ from domain.dtos.league_dto import LeagueDto
 from domain.dtos.standings_dto import StandingsDTO
 from domain.news_services.news_service import add_rookie_of_the_year_news, add_season_ended_news
 from domain.standings_service import get_grandmaster_standings, get_standings
-from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import CHAMPION_PRIZE, CYCLES_PER_EON, GRANDMASTER_PRIZE, ROOKIE_OF_THE_YEAR_PRIZE
 
 
@@ -67,9 +66,10 @@ def end_season_if_over(league: LeagueDto, season: int, session) -> List[Standing
 
     save_all_blobs(session, list(blobs.values()))
 
-    add_season_ended_news(league.name, format_blob_name(champion), session)
+    if champion is not None:
+        add_season_ended_news(league.name, champion.id, session)
     if rookie is not None:
-        add_rookie_of_the_year_news(format_blob_name(rookie), session)
+        add_rookie_of_the_year_news(rookie.id, session)
     return standings
 
 

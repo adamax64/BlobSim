@@ -1135,6 +1135,7 @@
         "enum": [
           "EVENT",
           "MAINTENANCE",
+          "INTENSE_TRAINING",
           "PRACTICE",
           "LABOUR",
           "IDLE"
@@ -1574,7 +1575,8 @@
           "QUARTERED_ONE_SHOT_SCORING",
           "QUARTERED_TWO_SHOT_SCORING",
           "ENDURANCE_RACE",
-          "ELIMINATION_SCORING"
+          "ELIMINATION_SCORING",
+          "CATCHUP_TRAINING"
         ],
         "title": "EventType"
       },
@@ -1748,16 +1750,15 @@
           "type": {
             "$ref": "#/components/schemas/NewsType"
           },
-          "blob_name": {
+          "blob": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/BlobStatsDto"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Blob Name"
+            ]
           },
           "league_name": {
             "anyOf": [
@@ -1805,35 +1806,32 @@
           "winner": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/BlobStatsDto"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Winner"
+            ]
           },
           "second": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/BlobStatsDto"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Second"
+            ]
           },
           "third": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/BlobStatsDto"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Third"
+            ]
           },
           "transfers": {
             "anyOf": [
@@ -1853,7 +1851,7 @@
             "anyOf": [
               {
                 "items": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/BlobStatsDto"
                 },
                 "type": "array"
               },
@@ -1867,7 +1865,7 @@
             "anyOf": [
               {
                 "items": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/BlobStatsDto"
                 },
                 "type": "array"
               },
@@ -1880,13 +1878,12 @@
           "grandmaster": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/BlobStatsDto"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Grandmaster"
+            ]
           }
         },
         "type": "object",
@@ -2164,7 +2161,7 @@
           },
           "blobs": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/BlobStatsDto"
             },
             "type": "array",
             "title": "Blobs"

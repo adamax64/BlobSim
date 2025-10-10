@@ -43,7 +43,8 @@
       "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
       "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
       "ENDURANCE_RACE": "Hosszútávú verseny",
-      "ELIMINATION_SCORING": "Kieséses verseny"
+      "ELIMINATION_SCORING": "Kieséses verseny",
+      "CATCHUP_TRAINING": "Felzárkóztató tréning {{day}}."
     },
     "speed_category": {
       "SLOW": "Lassú",
@@ -64,6 +65,7 @@
       "EVENT": "Versenyzés",
       "MAINTENANCE": "Karbantartás",
       "PRACTICE": "Gyakorlás",
+      "INTENSE_TRAINING": "Intenzív tréning",
       "LABOUR": "Munka",
       "IDLE": "Tétlen"
     },
@@ -75,9 +77,9 @@
       "ONGOING_EVENT": "Folyamatban lévő verseny: {{leagueName}} {{round}}. forduló, {{eventType}}.",
       "EVENT_ENDED": {
         "headline": "Véget ért a {{leagueName}} {{round}}. fordulója. Eredmények:",
-        "first": "Első: {{blobName}}",
-        "second": "Második: {{blobName}}",
-        "third": "Harmadik: {{blobName}}"
+        "first": "Első:",
+        "second": "Második:",
+        "third": "Harmadik:"
       },
       "SEASON_ENDED": "Végetért a szezon a {{leagueName}} mezőnyének. Gratulálunk {{winner}}-nak/nek a bajnoki győzelemért.",
       "ROOKIE_OF_THE_YEAR": "Gratulálunk {{winner}}-nak/nek az év újonca címért.",

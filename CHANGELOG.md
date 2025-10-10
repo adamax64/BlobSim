@@ -251,3 +251,18 @@
 ### 3.0.3
 
 - Added speed stat bonus for grandmaster's child
+
+### 3.1
+
+- Added cathup trainings:
+  - On the second epoch of every season
+  - The following blobs participate:
+    - The youngest blob to debut
+    - Last seasons last place of every league
+    - Every blob demoted to the dropout league last season
+- Added intense training
+  - Done only on cathup trainings
+  - More efficient than regular practice
+- Added blob icons next to names in news
+- By clicking on the blob icon and name in the news the blob details dialog opens
+- Fixed new season news querying

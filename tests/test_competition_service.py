@@ -3,7 +3,6 @@ from unittest.mock import patch, MagicMock
 
 from domain.competition_service import process_event_results
 from domain.dtos.event_dto import EventDto
-from domain.utils.blob_name_utils import format_blob_name
 from tests.utils import create_blob_model_mock, create_mock_blob_competitor
 from tests.utils import create_mock_result
 
@@ -110,9 +109,9 @@ class TestProcessEventResults(unittest.TestCase):
         news_args = mock_add_event_ended_news.call_args[0]
         self.assertEqual(news_args[0], mock_league.name)
         self.assertEqual(news_args[1], event.round)
-        self.assertEqual(news_args[2], format_blob_name(mock_blob1))
-        self.assertEqual(news_args[3], format_blob_name(mock_blob2))
-        self.assertEqual(news_args[4], format_blob_name(mock_blob3))
+        self.assertEqual(news_args[2], mock_blob1.id)
+        self.assertEqual(news_args[3], mock_blob2.id)
+        self.assertEqual(news_args[4], mock_blob3.id)
         self.assertEqual(news_args[5], session)
 
     if __name__ == '__main__':

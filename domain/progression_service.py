@@ -43,20 +43,21 @@ def progress_simulation(session: Session):
 def _inagruate_grandmaster(current_season: int, session: Session):
     standings = get_grandmaster_standings(current_season - 3, current_season, session)
     grandmaster = standings[0]
-    add_new_grandmaster_news(grandmaster.name, session)
+    add_new_grandmaster_news(grandmaster.blob_id, session)
 
 
 def _check_and_add_event_news(sim_time: int, session: Session):
     if is_unconcluded_event_today(session):
         calendar = get_calendar(session)
         calendar_event = calendar.get(sim_time)
-        add_event_starting_news(
-            calendar_event.league.name,
-            sum(
-                1
-                for x in calendar.values()
-                if not x.concluded and x.league.level == calendar_event.league.level
-            ),
-            calendar_event.event_type,
-            session
-        )
+        if calendar_event.league is not None:
+            add_event_starting_news(
+                calendar_event.league.name,
+                sum(
+                    1
+                    for x in calendar.values()
+                    if not x.concluded and x.league.level == calendar_event.league.level
+                ),
+                calendar_event.event_type,
+                session
+            )

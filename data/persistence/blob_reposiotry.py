@@ -47,9 +47,11 @@ def save_all_blobs(session: Session, blobs: list[Blob]):
 
 
 @transactional
-def save_blob(session: Session, blob: Blob):
+def save_blob(session: Session, blob: Blob) -> Blob:
     session.add(blob)
     session.commit()
+    session.refresh(blob)
+    return blob
 
 
 @transactional
@@ -94,3 +96,14 @@ def get_blob_relative_speeds_by_blob(session: Session) -> dict[int, float]:
         blob.id: (blob.speed - min_speed) / (max_speed - min_speed)
         for blob in blobs
     }
+
+
+@transactional
+def get_youngest_blob_debuting_in_season(session: Session, season: int) -> Blob | None:
+    """Return the youngest blob (largest born timestamp) whose debut equals the given season."""
+    return (
+        session.query(Blob)
+        .filter(Blob.debut == season)
+        .order_by(Blob.born.desc())
+        .first()
+    )
