@@ -247,3 +247,7 @@
 
 - Fixed best score calculation error in quartered events
 - Fixed news text translation issues
+
+### 3.0.3
+
+- Added speed stat bonus for grandmaster's child
