@@ -266,3 +266,8 @@
 - Added blob icons next to names in news
 - By clicking on the blob icon and name in the news the blob details dialog opens
 - Fixed new season news querying
+
+### 3.1.1
+
+- Fixed news text for "rookie of the year" and "season ended" news types
+- Fixed bug about blob order is not randomized when event starts

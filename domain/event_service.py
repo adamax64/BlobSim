@@ -44,8 +44,8 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
 
         # Create Action records for each competitor with empty scores list
         competitors = _get_competitors(session, event, is_event_concluded)
-        random.shuffle(competitors)
         actions = [Action(event_id=event.id, blob_id=competitor.id, scores=[]) for competitor in competitors]
+        random.shuffle(actions)
         save_all_actions(session, actions)
         add_ongoing_event_news(event.league.name, event.round, event.type, session)
 

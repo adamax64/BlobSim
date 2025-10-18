@@ -86,40 +86,20 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
       );
     case NewsType.SeasonEnded:
       return (
-        <Typography variant="body1">
-          {t('enums.news_type.SEASON_ENDED', {
-            leagueName: newsItem.leagueName,
-            winner: (newsItem.winner as any)?.name ?? '',
-          })}
-          {(newsItem.winner as any) && (
-            <Box component="span" sx={{ display: 'inline-block', ml: 1 }}>
-              <IconNameWithDetailsModal
-                blobId={(newsItem.winner as any).id}
-                name={(newsItem.winner as any).name}
-                color={(newsItem.winner as any).color}
-                atRisk={(newsItem.winner as any).atRisk}
-                isRookie={(newsItem.winner as any).isRookie}
-              />
-            </Box>
-          )}
-        </Typography>
+        <InlineTranslatedBlob
+          translationKey={`enums.news_type.SEASON_ENDED`}
+          blob={newsItem.winner ?? undefined}
+          interpolationKey="winner"
+          otherInterpolations={{ leagueName: newsItem.leagueName ?? '' }}
+        />
       );
     case NewsType.RookieOfTheYear:
       return (
-        <Typography variant="body1">
-          {t('enums.news_type.ROOKIE_OF_THE_YEAR', { winner: (newsItem.winner as any)?.name ?? '' })}
-          {(newsItem.winner as any) && (
-            <Box component="span" sx={{ display: 'inline-block', ml: 1 }}>
-              <IconNameWithDetailsModal
-                blobId={(newsItem.winner as any).id}
-                name={(newsItem.winner as any).name}
-                color={(newsItem.winner as any).color}
-                atRisk={(newsItem.winner as any).atRisk}
-                isRookie={(newsItem.winner as any).isRookie}
-              />
-            </Box>
-          )}
-        </Typography>
+        <InlineTranslatedBlob
+          translationKey={`enums.news_type.ROOKIE_OF_THE_YEAR`}
+          blob={newsItem.winner ?? undefined}
+          interpolationKey="winner"
+        />
       );
     case NewsType.NewSeason:
       return (

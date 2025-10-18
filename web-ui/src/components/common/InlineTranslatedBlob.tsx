@@ -8,6 +8,7 @@ type InlineTranslatedBlobProps = {
   blob?: BlobStatsDto;
   interpolationKey?: string; // the key used in the translation (e.g. 'blobName' or 'grandmaster')
   marker?: string;
+  otherInterpolations?: Record<string, string | number>;
 };
 
 export const InlineTranslatedBlob = ({
@@ -15,22 +16,22 @@ export const InlineTranslatedBlob = ({
   blob,
   interpolationKey = 'blobName',
   marker = '%%BLOB_NAME%%',
+  otherInterpolations = {},
 }: InlineTranslatedBlobProps) => {
   const { t } = useTranslation();
 
   const blobComponent = blob && (
-    <Box component="span" display="inline-flex" sx={{ verticalAlign: 'text-bottom' }}>
-      <IconNameWithDetailsModal
-        blob={blob}
-        name={blob?.name ?? ''}
-        color={blob?.color ?? '#888888'}
-        atRisk={blob?.atRisk}
-        isRookie={blob?.isRookie}
-      />
+    <Box
+      component="span"
+      display="inline-flex"
+      px="2px"
+      sx={{ verticalAlign: 'text-bottom', transform: 'translateY(3px)' }}
+    >
+      <IconNameWithDetailsModal blob={blob} name={blob?.name ?? ''} color={blob?.color ?? '#888888'} />
     </Box>
   );
 
-  const translated = t(translationKey, { [interpolationKey]: marker });
+  const translated = t(translationKey, { [interpolationKey]: marker, ...otherInterpolations });
   const parts = translated.split(marker);
 
   return (
