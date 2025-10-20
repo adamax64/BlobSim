@@ -674,7 +674,7 @@
           "actions"
         ],
         "summary": "Quartered",
-        "description": "Generate score for contender and save the action for given event.\nReturns: {\"newRecord\": bool}",
+        "description": "Generate score for contender and save the action for given event.\nReturns: {\"name\": str, \"score\": float} if new record, None otherwise",
         "operationId": "quartered_actions_create_quartered_post",
         "security": [
           {
@@ -730,7 +730,7 @@
           "actions"
         ],
         "summary": "Race",
-        "description": "Generate score for all contenders and save the actions for given event.",
+        "description": "Generate score for all contenders and save the actions for given event.\nReturns: {\"name\": str, \"score\": float} if new record, None otherwise",
         "operationId": "race_actions_create_race_post",
         "security": [
           {
@@ -988,6 +988,192 @@
             }
           }
         }
+      }
+    },
+    "/records/league/{league_id}": {
+      "get": {
+        "summary": "Get League Records",
+        "description": "Get all records for a specific league.",
+        "operationId": "get_league_records_records_league__league_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "league_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "League Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordDto"
+                  },
+                  "title": "Response Get League Records Records League  League Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/records/event-type/{event_type}": {
+      "get": {
+        "summary": "Get Event Type Records",
+        "description": "Get all records for a specific event type.",
+        "operationId": "get_event_type_records_records_event_type__event_type__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EventType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordDto"
+                  },
+                  "title": "Response Get Event Type Records Records Event Type  Event Type  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/records/league/{league_id}/event-type/{event_type}": {
+      "get": {
+        "summary": "Get League Event Type Record",
+        "description": "Get the current record for a specific league and event type combination.",
+        "operationId": "get_league_event_type_record_records_league__league_id__event_type__event_type__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "league_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "League Id"
+            }
+          },
+          {
+            "name": "event_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EventType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/RecordDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get League Event Type Record Records League  League Id  Event Type  Event Type  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/records": {
+      "get": {
+        "summary": "Get All Records",
+        "description": "Get all records in the system.",
+        "operationId": "get_all_records_records_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RecordDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Records Records Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/calendar": {
@@ -1986,6 +2172,38 @@
           "distance_records"
         ],
         "title": "RaceEventRecordDto"
+      },
+      "RecordDto": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "league_id": {
+            "type": "integer",
+            "title": "League Id"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "competitor_id": {
+            "type": "integer",
+            "title": "Competitor Id"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "league_id",
+          "event_type",
+          "competitor_id",
+          "score"
+        ],
+        "title": "RecordDto"
       },
       "ScoreDto": {
         "properties": {

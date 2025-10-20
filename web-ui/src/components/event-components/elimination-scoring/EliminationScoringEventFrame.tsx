@@ -100,7 +100,7 @@ export const EliminationScoringEventFrame = ({
         setSnackbarState({
           message: t('elimination_event.new_record', { name: data.name, score: data.score }),
           severity: 'success',
-          anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
         });
         setSnackbarOpen(true);
       }

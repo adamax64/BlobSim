@@ -41,9 +41,10 @@ def progress_simulation(session: Session):
 
 
 def _inagruate_grandmaster(current_season: int, session: Session):
-    standings = get_grandmaster_standings(current_season - 3, current_season, session)
-    grandmaster = standings[0]
-    add_new_grandmaster_news(grandmaster.blob_id, session)
+    if current_season % 4 == 0:
+        standings = get_grandmaster_standings(current_season - 3, current_season, session)
+        grandmaster = standings[0]
+        add_new_grandmaster_news(grandmaster.blob_id, session)
 
 
 def _check_and_add_event_news(sim_time: int, session: Session):

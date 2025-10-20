@@ -30,16 +30,10 @@ import { getCurrentQuarter, getQuarterEnds, roundToThreeDecimals } from './event
 import { ProgressButton } from './ProgressButton';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
-import { IconName } from '../common/IconName';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
-
-type SnackbarState = {
-  message: string | null;
-  severity: 'error' | 'success' | 'info' | 'warning';
-  anchorOrigin: { vertical: 'top' | 'bottom'; horizontal: 'left' | 'center' | 'right' };
-};
+import { SnackbarState } from './snackbar-state';
 
 interface QuarteredEventFrameProps {
   event: EventDto;
@@ -99,16 +93,20 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
     },
   });
 
-  const { mutate: createAction } = useMutation<{ newRecord: boolean }, Error, { contender: BlobCompetitorDto }>({
+  const { mutate: createAction } = useMutation<
+    { name: string; score: number } | null,
+    Error,
+    { contender: BlobCompetitorDto }
+  >({
     mutationFn: (params) =>
       actionApi.quarteredActionsCreateQuarteredPost({
         blobCompetitorDto: params.contender,
         eventId: event.id,
       }),
     onSuccess: (data) => {
-      if (data?.newRecord) {
+      if (data) {
         setSnackbarState({
-          message: t('quartered_event.new_record', { name: eventRecordsCache[currentBlobIndex]?.blob.name }),
+          message: t('quartered_event.new_record', { name: data.name, score: data.score.toFixed(3) }),
           severity: 'success',
           anchorOrigin: { vertical: 'top', horizontal: 'center' },
         });

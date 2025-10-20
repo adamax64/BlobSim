@@ -12,6 +12,7 @@ from controllers import (
     factory_router,
     leagues_router,
     news_router,
+    records_router,
     sim_data_router,
     standings_router,
 )
@@ -50,6 +51,7 @@ app.include_router(standings_router.router)
 app.include_router(competition_router.router)
 app.include_router(action_router.router)
 app.include_router(event_record_router.router)
+app.include_router(records_router.router)
 app.include_router(calendar_router.router)
 app.include_router(auth_router.router)
 app.include_router(news_router.router)
