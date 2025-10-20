@@ -113,7 +113,10 @@
   "quartered_event": {
     "name": "Name",
     "best": "Best",
-    "new_record": "New record by {{name}}!"
+    "new_record": "New record by {{name}} with score {{score}}!"
+  },
+  "race_event": {
+    "new_record": "New record by {{name}} with score {{score}}!"
   },
   "elimination_event": {
     "name": "Name",

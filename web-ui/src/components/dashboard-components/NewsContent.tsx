@@ -113,13 +113,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               <ul>
                 {(newsItem.retired as any[])?.map((b) => (
                   <li key={b.id}>
-                    <IconNameWithDetailsModal
-                      blobId={b.id}
-                      name={b.name}
-                      color={b.color}
-                      atRisk={b.atRisk}
-                      isRookie={b.isRookie}
-                    />
+                    <IconNameWithDetailsModal blob={b} blobId={b.id} name={b.name} color={b.color} />
                   </li>
                 ))}
               </ul>
@@ -136,13 +130,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
                   <ul>
                     {(league.blobs as any[]).map((b) => (
                       <li key={b.id}>
-                        <IconNameWithDetailsModal
-                          blobId={b.id}
-                          name={b.name}
-                          color={b.color}
-                          atRisk={b.atRisk}
-                          isRookie={b.isRookie}
-                        />
+                        <IconNameWithDetailsModal blob={b} blobId={b.id} name={b.name} color={b.color} />
                       </li>
                     ))}
                   </ul>
@@ -154,13 +142,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               <ul>
                 {(newsItem.rookies as any[])?.map((b) => (
                   <li key={b.id}>
-                    <IconNameWithDetailsModal
-                      blobId={b.id}
-                      name={b.name}
-                      color={b.color}
-                      atRisk={b.atRisk}
-                      isRookie={b.isRookie}
-                    />
+                    <IconNameWithDetailsModal blob={b} blobId={b.id} name={b.name} color={b.color} />
                   </li>
                 ))}
               </ul>

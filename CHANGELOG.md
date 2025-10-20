@@ -271,3 +271,10 @@
 
 - Fixed news text for "rookie of the year" and "season ended" news types
 - Fixed bug about blob order is not randomized when event starts
+
+### 3.1.2
+
+- Created records database table to make record checking and managing logic simpler and mor robust
+- Created endpoints for querying records for possible future feature
+- Fixed bug about blob dialog not opening from news of certain types
+- Fixed issue about the "NEW_GRANDMASTER" news type appearing at the end of every season

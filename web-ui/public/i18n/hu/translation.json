@@ -113,7 +113,10 @@
   "quartered_event": {
     "name": "Név",
     "best": "Legjobb",
-    "new_record": "Új rekord tőle: {{name}}!"
+    "new_record": "Új rekord: {{name}}, {{score}}!"
+  },
+  "race_event": {
+    "new_record": "Új rekord: {{name}}, {{score}}!"
   },
   "elimination_event": {
     "name": "Név",

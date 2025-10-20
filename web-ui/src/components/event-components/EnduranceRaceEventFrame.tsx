@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next';
 import Straighten from '@mui/icons-material/Straighten';
 import { NarrowCell, TickLoadingBar } from '../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
+import { SnackbarState } from './snackbar-state';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDto;
@@ -49,7 +50,11 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
+    message: null,
+    severity: 'error',
+    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -71,17 +76,38 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
       setEventRecordsCache(data);
       return data;
     },
+    onError: (error) => {
+      setLoadingNextTick(false);
+      setSnackbarState({
+        message: error.message || 'An error occurred',
+        severity: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
+      setSnackbarOpen(true);
+    },
   });
 
-  const { mutate: createActions } = useMutation<void, Error>({
+  const { mutate: createActions } = useMutation<{ name: string; score: number } | null, Error>({
     mutationFn: () => actionsApi.raceActionsCreateRacePost({ eventId: event.id, tick: tick }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data) {
+        setSnackbarState({
+          message: t('race_event.new_record', { name: data.name, score: data.score.toFixed(3) }),
+          severity: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+        setSnackbarOpen(true);
+      }
       setTick((prev) => prev + 1);
       getEventRecords({ eventId: event.id, isPlayback: false });
     },
     onError: (error) => {
       setLoadingNextTick(false);
-      setSnackbarMessage(error.message || 'An error occurred');
+      setSnackbarState({
+        message: error.message || 'An error occurred',
+        severity: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
       setSnackbarOpen(true);
     },
   });
@@ -235,11 +261,11 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
           open={snackbarOpen}
           autoHideDuration={6000}
           onClose={() => setSnackbarOpen(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          anchorOrigin={snackbarState.anchorOrigin}
           color="error"
         >
-          <Alert onClose={() => setSnackbarOpen(false)} severity="error" variant="filled">
-            {snackbarMessage}
+          <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarState.severity} variant="filled">
+            {snackbarState.message}
           </Alert>
         </Snackbar>
       </CardContent>
