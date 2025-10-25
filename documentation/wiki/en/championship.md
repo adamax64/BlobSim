@@ -21,11 +21,13 @@ In this competition blobs are racing with each other on a racetrack for a set am
 The timespan of the race is determined by the number of blobs competing in the event. Assuming that the smaller the field is, the younger, thus slower the competitors are, the timespans are determined by the following table:
 
 | Field size | Timespan of the race |
-| 5 - 8 | 60 ticks |
-| 9 - 12 | 75 ticks |
-| 13 - 17 | 90 ticks |
-| 18 - 21 | 105 ticks |
-| 21 - 24 | 120 ticks |
+|---|---|
+| 5 - 7 | 60 ticks |
+| 8 - 10 | 75 ticks |
+| 11 - 13 | 90 ticks |
+| 14 - 17 | 100 ticks |
+| 18 - 21 | 110 ticks |
+| 22+ | 120 ticks |
 
 The final order is determined by the most distance driven after the specified amount of time.
 
