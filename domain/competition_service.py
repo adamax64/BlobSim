@@ -4,7 +4,7 @@ from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import save_all_results
 from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto
+from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto
 from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_event_ended_news
@@ -66,8 +66,14 @@ def process_event_results(event: EventDto, event_records: list[EventRecordDto], 
 
 def _map_records_to_results(event_records: list[EventRecordDto], event_id: int) -> list[Result]:
     results = []
+
+    # For elimination events, find the blob with most wins
+    max_wins = _get_max_tick_wins(event_records)
+
     for i, record in enumerate(event_records):
-        bonus_points = _calculate_bonus_points(record, i + 1)
+        bonus_points = _calculate_bonus_points(record, i + 1, max_wins)
+
+        # Add bonus point for most wins in elimination events
         results.append(Result(
             event_id=event_id,
             blob_id=record.blob.id,
@@ -86,8 +92,26 @@ def _calculate_points(position: int, field_size: int, bonus_points: int) -> int:
     return base + bonus_points
 
 
-def _calculate_bonus_points(record: EventRecordDto, position: int) -> int:
+def _calculate_bonus_points(record: EventRecordDto, position: int, max_wins: int | None) -> int:
     if isinstance(record, QuarteredEventRecordDto):
         return sum(1 for quarter in record.quarters if quarter.best is True)
+    elif isinstance(record, EliminationEventRecordDto):
+        bonus_points = 0
+        if record.tick_wins > 0:
+            bonus_points += 1
+        if record.tick_wins == max_wins:
+            bonus_points += 1
+        if position == 1:
+            bonus_points += 1
+        return bonus_points
     else:
         return 1 if position == 1 else 0
+
+
+def _get_max_tick_wins(event_records: list[EventRecordDto]) -> int | None:
+    """Get the maximum tick wins for elimination events. Returns None for non-elimination events."""
+    if not event_records or not isinstance(event_records[0], EliminationEventRecordDto):
+        return None
+    max_value = max((record.tick_wins for record in event_records), default=0)
+    occurrence_count = sum(1 for record in event_records if record.tick_wins == max_value)
+    return max_value if occurrence_count == 1 else None

@@ -6,7 +6,7 @@ from domain.competition_service import (
     process_event_results as service_save_event_results,
 )
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
+from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.sim_data_service import is_current_event_concluded
 from .auth_dependency import require_auth
@@ -44,7 +44,7 @@ async def save_race(event: EventDto, event_records: list[RaceEventRecordDto], _=
 
 
 @router.post("/elimination-event-results")
-async def save_elimination(event: EventDto, event_records: list[EventRecordDto], _=Depends(require_auth)) -> None:
+async def save_elimination(event: EventDto, event_records: list[EliminationEventRecordDto], _=Depends(require_auth)) -> None:
     """
     Save event results for elimination events.
     """

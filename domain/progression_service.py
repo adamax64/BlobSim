@@ -57,8 +57,8 @@ def _check_and_add_event_news(sim_time: int, session: Session):
                 sum(
                     1
                     for x in calendar.values()
-                    if not x.concluded and x.league.level == calendar_event.league.level
-                ),
+                    if x.concluded and x.league is not None and x.league.level == calendar_event.league.level
+                ) + 1,
                 calendar_event.event_type,
                 session
             )

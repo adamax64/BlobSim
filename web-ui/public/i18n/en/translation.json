@@ -121,6 +121,7 @@
   "elimination_event": {
     "name": "Name",
     "score": "Score",
+    "tick_wins": "Tick Wins",
     "new_record": "New record by {{name}}: {{score}}!",
     "eliminated": "Eliminated",
     "tick": "Tick",

@@ -121,6 +121,7 @@
   "elimination_event": {
     "name": "Név",
     "score": "Pontszám",
+    "tick_wins": "Tick Győzelmek",
     "new_record": "Új rekord: {{name}}, {{score}}!",
     "eliminated": "Kiesett",
     "tick": "Tick",

@@ -24,7 +24,7 @@ export const EventBarChart = ({ eventRecords, isMobile }: EventBarChartProps) =>
       height={33 * (eventRecords?.length ?? 0) + 35}
       series={[
         {
-          data: eventRecords.map((record) => (record.eliminated ? 0 : (record.lastScore ?? 0))),
+          data: eventRecords.map((record) => record.lastScore ?? 0),
         },
       ]}
       yAxis={[
@@ -39,7 +39,7 @@ export const EventBarChart = ({ eventRecords, isMobile }: EventBarChartProps) =>
         },
       ]}
       layout="horizontal"
-      margin={{ top: 12, right: 16, bottom: 0, left: 0 }}
+      margin={{ top: 12, right: 16, bottom: 0, left: isMobile ? 0 : -24 }}
       xAxis={[{ position: 'top' }]}
       slots={{ tooltip: CustomTooltip, axisTickLabel: CustomAxisTickLabel(isMobile) }}
     />

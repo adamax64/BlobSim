@@ -278,3 +278,14 @@
 - Created endpoints for querying records for possible future feature
 - Fixed bug about blob dialog not opening from news of certain types
 - Fixed issue about the "NEW_GRANDMASTER" news type appearing at the end of every season
+
+### 3.1.3
+
+- Extended bonus point calculation to elimination event:
+  - If a blob scores highest in at least one tick they get one bonus point
+  - The blob with the most ticks won gets an additional bonus point (if there is a tie then no bonus points given)
+  - The winner of the whole event gets one additional bonus point
+- Adjusted UI on elimination event so the latest eliminated blob's score is displayed
+- Fixed elimination event table aligning against the barchart
+- Added missing rounding to elimination score record
+- Fixed starting event news round calculation bug

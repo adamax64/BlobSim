@@ -45,6 +45,7 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
             {isMobile ? <NarrowCell width={30}>#</NarrowCell> : <TableCell width={30}>#</TableCell>}
             <TableCell>{t('elimination_event.name')}</TableCell>
             <TableCell>{t('elimination_event.score')}</TableCell>
+            <TableCell>{t('elimination_event.tick_wins')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,7 +56,7 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
               ) : (
                 <TableCell width={30}>{index + 1}</TableCell>
               )}
-              <TableCell>
+              <TableCell sx={{ display: 'flex' }}>
                 <IconNameWithDetailsModal
                   blobId={record.blob.id}
                   name={record.blob.name}
@@ -64,10 +65,11 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
                 />
               </TableCell>
               <TableCell>
-                {record.eliminated
+                {!record.lastScore && record.eliminated
                   ? t('elimination_event.eliminated')
                   : (roundToThreeDecimals(record.lastScore) ?? '-')}
               </TableCell>
+              <TableCell>{record.tickWins || '-'}</TableCell>
             </TableRow>
           ))}
         </TableBody>

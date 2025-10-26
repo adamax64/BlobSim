@@ -34,3 +34,4 @@ class RaceEventRecordDto(EventRecordDto):
 class EliminationEventRecordDto(EventRecordDto):
     last_score: float | None = None
     eliminated: bool = False
+    tick_wins: int = 0

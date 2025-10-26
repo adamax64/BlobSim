@@ -1564,7 +1564,7 @@
           },
           "event_records": {
             "items": {
-              "$ref": "#/components/schemas/EventRecordDto"
+              "$ref": "#/components/schemas/EliminationEventRecordDto"
             },
             "type": "array",
             "title": "Event Records"
@@ -1683,6 +1683,11 @@
             "type": "boolean",
             "title": "Eliminated",
             "default": false
+          },
+          "tick_wins": {
+            "type": "integer",
+            "title": "Tick Wins",
+            "default": 0
           }
         },
         "type": "object",
@@ -1742,18 +1747,6 @@
           "isFinished"
         ],
         "title": "EventDto"
-      },
-      "EventRecordDto": {
-        "properties": {
-          "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
-          }
-        },
-        "type": "object",
-        "required": [
-          "blob"
-        ],
-        "title": "EventRecordDto"
       },
       "EventType": {
         "type": "string",

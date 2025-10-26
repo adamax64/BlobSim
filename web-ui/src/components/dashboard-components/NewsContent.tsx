@@ -123,7 +123,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
             newsItem.transfers
               ?.filter((league) => league.blobs.length > 0)
               .map((league) => (
-                <>
+                <Box key={league.leagueName}>
                   <Typography variant="body1">
                     {t('enums.news_type.NEW_SEASON.transfers', { leagueName: league.leagueName })}
                   </Typography>
@@ -134,7 +134,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
                       </li>
                     ))}
                   </ul>
-                </>
+                </Box>
               ))}
           {(newsItem.rookies?.length ?? 0) > 0 && (
             <>
