@@ -289,3 +289,8 @@
 - Fixed elimination event table aligning against the barchart
 - Added missing rounding to elimination score record
 - Fixed starting event news round calculation bug
+
+### 3.1.4
+
+- Fixed missing browser shortcut icon
+- Fixed page overflow issue on mobile caused by browser header on scrolling

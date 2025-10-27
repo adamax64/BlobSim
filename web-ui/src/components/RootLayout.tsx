@@ -11,10 +11,10 @@ export const RootLayout = () => {
   const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
 
   return (
-    <Box display="flex" height="100vh" flexDirection="column">
+    <Box display="flex" height="100dvh" flexDirection="column">
       <AppHeader isMobile={isMobile} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
       <MobileMenu isMobile={isMobile} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-      <Box component="main" flexGrow={1} display="flex">
+      <Box component="main" flexGrow={1} display="flex" sx={{ minHeight: 0 }}>
         <DesktopMenu isMobile={isMobile} />
         <Box overflow="auto" flexGrow={1}>
           <Outlet />
