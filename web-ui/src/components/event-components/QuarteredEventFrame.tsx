@@ -248,7 +248,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   );
 
   return (
-    <Card>
+    <Paper>
       <CardHeader title={t(`enums.event_types.${event.type}`)} />
       <CardContent>
         {isAuthenticated && (
@@ -340,6 +340,6 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
           </Alert>
         </Snackbar>
       </CardContent>
-    </Card>
+    </Paper>
   );
 };

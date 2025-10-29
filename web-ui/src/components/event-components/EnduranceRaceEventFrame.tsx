@@ -180,7 +180,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   };
 
   return (
-    <Card>
+    <Paper>
       <CardHeader title={t(`enums.event_types.${event.type}`)} />
       <Divider />
       <CardContent>
@@ -269,6 +269,6 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
           </Alert>
         </Snackbar>
       </CardContent>
-    </Card>
+    </Paper>
   );
 };

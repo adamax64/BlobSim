@@ -16,6 +16,7 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  Paper,
   Snackbar,
   Tab,
   Tabs,
@@ -151,7 +152,7 @@ export const EliminationScoringEventFrame = ({
   }, [eventRecords, isEventFinished, createAction]);
 
   return (
-    <Card>
+    <Paper>
       <CardHeader title={t(`enums.event_types.${event.type}`)} />
       <Divider />
       <CardContent>
@@ -206,6 +207,6 @@ export const EliminationScoringEventFrame = ({
           </Alert>
         </Snackbar>
       </CardContent>
-    </Card>
+    </Paper>
   );
 };

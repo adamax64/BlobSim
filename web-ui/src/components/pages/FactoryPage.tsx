@@ -12,6 +12,7 @@ import {
   LinearProgress,
   List,
   ListItem,
+  Paper,
   styled,
   Typography,
 } from '@mui/material';
@@ -72,7 +73,7 @@ export function FactoryPage() {
 
   return (
     <PageFrame showLoading={isFactoryProgressLoading || isLoadingNames} pageName="factory">
-      <Card>
+      <Paper>
         <CardContent>
           <Box display="flex" flexDirection="column" gap={1}>
             <Typography variant="h6">{t('factory.factory_progress')}</Typography>
@@ -83,8 +84,8 @@ export function FactoryPage() {
             />
           </Box>
         </CardContent>
-      </Card>
-      <Card>
+      </Paper>
+      <Paper>
         <CardContent>
           <Box display="flex" alignItems="flex-start" flexDirection="column" gap={1}>
             <Typography variant="h6">{t('factory.name_suggestions')}</Typography>
@@ -124,7 +125,7 @@ export function FactoryPage() {
           prefilledLastName={selectedLastName}
           nameId={selectedNameId}
         />
-      </Card>
+      </Paper>
     </PageFrame>
   );
 }

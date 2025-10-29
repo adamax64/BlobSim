@@ -294,3 +294,7 @@
 
 - Fixed missing browser shortcut icon
 - Fixed page overflow issue on mobile caused by browser header on scrolling
+
+### 3.1.5
+
+- Fixed scrolling issue on event and factory page
