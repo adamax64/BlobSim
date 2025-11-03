@@ -9,6 +9,7 @@ from data.persistence.blob_reposiotry import (
 from domain.dtos.blob_stats_dto import BlobStatsDto, IntegrityState, SpeedCategory, StrengthCategory
 from domain.dtos.parent_dto import ParentDto
 from domain.sim_data_service import get_sim_time
+from domain.standings_service import get_current_grandmaster_id
 from domain.utils.blob_name_utils import format_blob_name
 from domain.utils.constants import INITIAL_INTEGRITY
 from domain.utils.sim_time_utils import format_sim_time_short, get_season
@@ -29,8 +30,10 @@ def fetch_all_blobs(
     relative_strengths = get_blob_relative_strengths_by_blob(session)
     relative_speeds = get_blob_relative_speeds_by_blob(session)
 
+    grandmaster_id = get_current_grandmaster_id(session)
+
     return [
-        _map_to_blob_state_dto(blob, current_season, relative_speeds.get(blob.id, 0), relative_strengths.get(blob.id, 0))
+        _map_to_blob_state_dto(blob, current_season, relative_speeds.get(blob.id, 0), relative_strengths.get(blob.id, 0), grandmaster_id)
         for blob in blobs
     ]
 
@@ -46,13 +49,21 @@ def fetch_blob_by_id(blob_id: int, session) -> BlobStatsDto:
 
     blob = get_blob_by_id(session, blob_id)
 
+    grandmaster_id = get_current_grandmaster_id(session)
+
     if not blob:
         raise ValueError(f"Blob with ID {blob_id} not found")
 
-    return _map_to_blob_state_dto(blob, current_season, relative_speeds.get(blob.id, 0), relative_strengths.get(blob.id, 0))
+    return _map_to_blob_state_dto(blob, current_season, relative_speeds.get(blob.id, 0), relative_strengths.get(blob.id, 0), grandmaster_id)
 
 
-def _map_to_blob_state_dto(blob: Blob, current_season: int, relative_speed: float, relative_strength: float) -> BlobStatsDto:
+def _map_to_blob_state_dto(
+    blob: Blob,
+    current_season: int,
+    relative_speed: float,
+    relative_strength: float,
+    grandmaster_id: int,
+) -> BlobStatsDto:
     return BlobStatsDto(
             name=format_blob_name(blob),
             born=format_sim_time_short(blob.born),
@@ -68,6 +79,7 @@ def _map_to_blob_state_dto(blob: Blob, current_season: int, relative_speed: floa
             at_risk=blob.contract == current_season,
             is_dead=blob.terminated is not None,
             is_retired=blob.contract is not None and blob.contract < current_season,
+            is_grandmaster=grandmaster_id == blob.id,
             color=blob.color,
             parent=ParentDto(name=format_blob_name(blob.parent), color=blob.parent.color) if blob.parent else None,
             money=blob.money if blob.integrity > 0 else None,

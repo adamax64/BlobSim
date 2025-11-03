@@ -2,7 +2,7 @@ from domain.blob_services.blob_update_service import update_blob_speed_by_id
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_record_dto import RaceEventRecordDto
-from domain.utils.constants import OVERTAKE_EFFECT, OVERTAKEN_EFFECT
+from domain.utils.constants import OVERTAKE_EFFECT
 
 
 def get_race_event_records(actions: list[ActionDto], competitors: list[BlobCompetitorDto], is_playback: bool) -> list[RaceEventRecordDto]:
@@ -31,7 +31,7 @@ def get_race_event_records(actions: list[ActionDto], competitors: list[BlobCompe
             if overtakes > 0:
                 update_blob_speed_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
             elif overtakes < 0:
-                update_blob_speed_by_id(competitor.blob.id, overtakes * OVERTAKEN_EFFECT)
+                update_blob_speed_by_id(competitor.blob.id, overtakes * OVERTAKE_EFFECT)
 
     return current_sorted
 

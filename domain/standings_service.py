@@ -6,7 +6,9 @@ from data.persistence.result_repository import get_results_of_league_by_season
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.standings_dto import StandingsDTO
 from domain.dtos.standings_result_dto import StandingsResultDTO
+from domain.sim_data_service import get_sim_time
 from domain.utils.league_utils import get_number_of_rounds_by_size
+from domain.utils.sim_time_utils import get_eon, get_season
 
 
 @transactional
@@ -57,6 +59,21 @@ def get_last_place_from_season_by_league(league_id: int, season: int, session) -
     if not standings:
         return None
     return standings[-1].blob_id
+
+
+@transactional
+def get_current_grandmaster_id(session) -> int | None:
+    """Return the blob id of the current grandmaster in the top league.
+
+    Returns None if no grandmaster is crowned yet.
+    """
+    sim_time = get_sim_time(session)
+    current_eon = get_eon(sim_time)
+
+    standings = get_grandmaster_standings(current_eon * 4 - 3, get_season(sim_time), session)
+    if not standings:
+        return None
+    return standings[0].blob_id
 
 
 @transactional

@@ -1445,6 +1445,11 @@
             "title": "Is Retired",
             "default": false
           },
+          "is_grandmaster": {
+            "type": "boolean",
+            "title": "Is Grandmaster",
+            "default": false
+          },
           "color": {
             "type": "string",
             "title": "Color"

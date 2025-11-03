@@ -4,6 +4,7 @@ import { BlobState } from '../../utils/blob-state-utils';
 import { BlobIcon } from '../icons/BlobIcon';
 import { useTranslation } from 'react-i18next';
 import { BlobStateBadge } from '../common/BlobStateBadge';
+import { DeadBlobIcon } from '../icons/DeadBlobIcon';
 
 interface BlobsMobileCardsProps {
   blobs: BlobStatsDto[] | undefined;
@@ -42,7 +43,11 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
               <CardContent className={getCardClass(blob)}>
                 <Box display="flex" alignItems="center" gap={2}>
                   <Box paddingX={1}>
-                    <BlobIcon size={72} color={blob.color} />
+                    {blob.isDead ? (
+                      <DeadBlobIcon size={72} color={blob.color} />
+                    ) : (
+                      <BlobIcon size={72} color={blob.color} />
+                    )}
                   </Box>
                   <Box>
                     <BlobStateBadge atRisk={blob.atRisk} isRookie={blob.isRookie} size="medium">

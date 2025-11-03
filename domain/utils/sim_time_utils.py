@@ -19,6 +19,10 @@ def convert_to_sim_time(sim_time: int) -> SimTimeDto:
         )
 
 
+def get_eon(time: int) -> int:
+    return int(time / CYCLES_PER_EON)
+
+
 def get_season(time: int) -> int:
     return int(time / CYCLES_PER_SEASON) + 1
 

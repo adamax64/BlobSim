@@ -3,6 +3,7 @@ import { BlobIcon } from '../icons/BlobIcon';
 import { useMemo } from 'react';
 import { BlobStatsDto } from '../../../generated';
 import { BlobStateBadge } from './BlobStateBadge';
+import { DeadBlobIcon } from '../icons/DeadBlobIcon';
 
 export interface IconNameProps extends Partial<BlobStatsDto> {
   name: string;
@@ -11,7 +12,15 @@ export interface IconNameProps extends Partial<BlobStatsDto> {
   renderFullName?: boolean;
 }
 
-export function IconName({ name, color, atRisk, isRookie, size = 20, renderFullName = true }: IconNameProps) {
+export const IconName = ({
+  name,
+  color,
+  atRisk,
+  isRookie,
+  isDead,
+  size = 20,
+  renderFullName = true,
+}: IconNameProps) => {
   const formattedName = useMemo(() => {
     if (renderFullName) return name;
 
@@ -25,7 +34,7 @@ export function IconName({ name, color, atRisk, isRookie, size = 20, renderFullN
 
   return (
     <Box display="flex" alignItems="center" gap={1}>
-      <BlobIcon size={size} color={color} />
+      {isDead ? <DeadBlobIcon size={size} color={color} /> : <BlobIcon size={size} color={color} />}
       <BlobStateBadge atRisk={atRisk} isRookie={isRookie}>
         <Typography variant="body2" component="span" noWrap>
           {formattedName}
@@ -33,4 +42,4 @@ export function IconName({ name, color, atRisk, isRookie, size = 20, renderFullN
       </BlobStateBadge>
     </Box>
   );
-}
+};

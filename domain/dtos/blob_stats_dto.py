@@ -38,6 +38,7 @@ class BlobStatsDto(BaseModel):
     at_risk: bool = False
     is_dead: bool = False
     is_retired: bool = False
+    is_grandmaster: bool = False
     color: str
     parent: ParentDto | None = None
     money: int | None = None

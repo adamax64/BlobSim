@@ -3,7 +3,9 @@
  * @param hexcolor The hex color code (e.g., "#FFFFFF").
  * @returns "black" or "white" depending on the brightness of the color.
  */
-export function getContrastYIQ(hexcolor: string): 'black' | 'white' {
+export function getContrastYIQ(hexcolor: string | null): 'black' | 'white' {
+  if (!hexcolor) return 'black';
+
   hexcolor = hexcolor.replace('#', '');
   const r = parseInt(hexcolor.substring(0, 2), 16);
   const g = parseInt(hexcolor.substring(2, 4), 16);

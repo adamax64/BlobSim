@@ -298,3 +298,11 @@
 ### 3.1.5
 
 - Fixed scrolling issue on event and factory page
+
+### 3.2
+
+- Changed skill effect of overtakes in endurance races: the blob overtaken now improves their speed skill with the same modifier as the one overtook them
+- Enhanced blob visualization:
+  - Blobs on blob details dialog has an idle animation of "extending" and "retracting" vertically
+  - The current grandmaster has a crown on their head
+- Fixed error on opening the blob details dialog for a terminated blob

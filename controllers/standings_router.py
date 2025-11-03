@@ -30,7 +30,7 @@ def get_grandmaster_standings_by_eon(start_season: int) -> list[GrandmasterStand
     Fetch grandmaster standings by starting season of eon.
     """
     try:
-        current_season = current_season = get_season(get_sim_time())
+        current_season = get_season(get_sim_time())
         return get_grandmaster_standings(start_season, current_season)
     except Exception as e:
         traceback.print_exc()
