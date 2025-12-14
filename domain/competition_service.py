@@ -53,13 +53,10 @@ def process_event_results(event: EventDto, event_records: list[EventRecordDto], 
     save_all_blobs(session, [res.blob for res in saved_results])
 
     conclude_calendar_event(session)
-    sorted_results: list[Result] = sorted(saved_results, key=lambda x: x.position)
     add_event_ended_news(
         event.league.name,
         event.round,
-        sorted_results[0].blob.id,
-        sorted_results[1].blob.id,
-        sorted_results[2].blob.id,
+        event.id,
         session
     )
 

@@ -46,16 +46,6 @@
       "ELIMINATION_SCORING": "Elimination Scoring",
       "CATCHUP_TRAINING": "Catch-up Training No. {{day}}"
     },
-    "speed_category": {
-      "SLOW": "Slow",
-      "AVERAGE": "Average",
-      "FAST": "Fast"
-    },
-    "strength_category": {
-      "WEAK": "Weak",
-      "AVERAGE": "Average",
-      "STRONG": "Strong"
-    },
     "integrity_state": {
       "POOR": "Poor",
       "AVERAGE": "Average",
@@ -76,10 +66,8 @@
       "EVENT_STARTED": "A championship event is about to start: {{leagueName}} Round {{round}}, {{eventType}}.",
       "ONGOING_EVENT": "An ongoing chamionship event is taking place: {{leagueName}} Round {{round}}, {{eventType}}.",
       "EVENT_ENDED": {
-        "headline": "{{leagueName}} Round {{round}} has ended. Results:",
-        "first": "1st:",
-        "second": "2nd:",
-        "third": "3rd:"
+        "headline": "{{leagueName}} Round {{round}} has ended.",
+        "results": "See results"
       },
       "SEASON_ENDED": "Season ended for {{leagueName}}. Congratulations to {{winner}} for winning the championship.",
       "ROOKIE_OF_THE_YEAR": "Congratulations to {{winner}} for being rookie of the year.",

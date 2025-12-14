@@ -22,11 +22,10 @@ class NewsDto():
     blob: BlobStatsDto | None = None
     league_name: str | None = None
     round: int | None = None
+    event_id: int | None = None
     season: int | None = None
     event_type: EventTypeDto | None = None
     winner: BlobStatsDto | None = None
-    second: BlobStatsDto | None = None
-    third: BlobStatsDto | None = None
     transfers: list[TransfersDto] | None = None
     retired: list[BlobStatsDto] | None = None
     rookies: list[BlobStatsDto] | None = None

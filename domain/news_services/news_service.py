@@ -37,8 +37,8 @@ def add_ongoing_event_news(league_name: str, round: int, event_type: EventType, 
 
 
 @transactional
-def add_event_ended_news(league_name: str, round: int, first: int, second: int, third: int, session: Session):
-    _create_news(NewsType.EVENT_ENDED, [league_name, str(round), str(first), str(second), str(third)], session)
+def add_event_ended_news(league_name: str, round: int, event_id: int, session: Session):
+    _create_news(NewsType.EVENT_ENDED, [league_name, str(round), str(event_id)], session)
     delete_news_with_type(NewsType.ONGOING_EVENT, session)
 
 

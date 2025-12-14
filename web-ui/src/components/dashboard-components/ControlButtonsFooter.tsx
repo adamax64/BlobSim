@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { useNavigate } from '@tanstack/react-router';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { UseMutateFunction, useMutation } from '@tanstack/react-query';
-import { NewsDto, SimDataApi } from '../../../generated';
+import { useMutation } from '@tanstack/react-query';
+import { SimDataApi } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -13,8 +13,8 @@ import AddCircle from '@mui/icons-material/AddCircle';
 import SkipNext from '@mui/icons-material/SkipNext';
 
 type ControlButtonsFooterProps = {
-  fetchNews: UseMutateFunction<NewsDto[], Error, void, unknown>;
-  setLoadingOverlayVisible: Dispatch<SetStateAction<boolean>>;
+  fetchNews: () => void;
+  setLoadingSkeletonVisible: Dispatch<SetStateAction<boolean>>;
   isLoadingNews: boolean;
   canCreateBlob: boolean;
   canStartEvent: boolean;
@@ -23,7 +23,7 @@ type ControlButtonsFooterProps = {
 
 export const ControlButtonsFooter = ({
   fetchNews,
-  setLoadingOverlayVisible,
+  setLoadingSkeletonVisible,
   isLoadingNews,
   canCreateBlob,
   canStartEvent,
@@ -53,7 +53,7 @@ export const ControlButtonsFooter = ({
   };
 
   const handleProgressClick = () => {
-    setLoadingOverlayVisible(true);
+    setLoadingSkeletonVisible(true);
     progressSimulation();
   };
 

@@ -306,3 +306,11 @@
   - Blobs on blob details dialog has an idle animation of "extending" and "retracting" vertically
   - The current grandmaster has a crown on their head
 - Fixed error on opening the blob details dialog for a terminated blob
+
+### 3.3
+
+- Made news loading independent from the other loading processes on dashboard
+  - Added skeleton loader to news card
+- Removed strength and speed indicator from blob details dialog
+- Replaced top 3 blobs in event ended news with a link
+  - Opens a modal containing the event results

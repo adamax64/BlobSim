@@ -1,37 +1,31 @@
 import { NewsApi, NewsDto, NewsType } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NewsCard } from './NewsCard';
 import { ControlButtonsFooter } from './ControlButtonsFooter';
 
-type NewsAndFooterProps = {
-  setLoadingOverlayVisible: Dispatch<SetStateAction<boolean>>;
-};
-
-export const NewsAndFooter = ({ setLoadingOverlayVisible }: NewsAndFooterProps) => {
+export const NewsAndFooter = () => {
   const [canCreateBlob, setCanCreateBlob] = useState(false);
   const [canStartEvent, setCanStartEvent] = useState(false);
   const [canContinue, setCanContinue] = useState(false);
+  const [loadingSkeletonVisible, setLoadingSkeletonVisible] = useState(false);
 
   const newsApi = new NewsApi(defaultConfig);
-  const {
-    data: news,
-    mutate: fetchNews,
-    isPending: isLoadingNews,
-  } = useMutation<NewsDto[], Error>({
+
+  const { data: news, mutate } = useMutation<NewsDto[], Error>({
     mutationFn: () => newsApi.getNewsNewsGet(),
     onSuccess: () => {
-      setLoadingOverlayVisible(false);
+      setLoadingSkeletonVisible(false);
     },
   });
 
-  useEffect(() => {
-    if (isLoadingNews) {
-      setLoadingOverlayVisible(true);
-    }
-  }, [isLoadingNews]);
+  const fetchNews = useCallback(() => {
+    setLoadingSkeletonVisible(true);
+    mutate();
+  }, [mutate]);
 
+  // Fetch news on mount
   useEffect(() => {
     fetchNews();
   }, []);
@@ -48,11 +42,11 @@ export const NewsAndFooter = ({ setLoadingOverlayVisible }: NewsAndFooterProps) 
 
   return (
     <>
-      <NewsCard news={news} />
+      <NewsCard news={news} loadingSkeletonVisible={loadingSkeletonVisible} />
       <ControlButtonsFooter
         fetchNews={fetchNews}
-        setLoadingOverlayVisible={setLoadingOverlayVisible}
-        isLoadingNews={isLoadingNews}
+        setLoadingSkeletonVisible={setLoadingSkeletonVisible}
+        isLoadingNews={loadingSkeletonVisible}
         canCreateBlob={canCreateBlob}
         canStartEvent={canStartEvent}
         canContinue={canContinue}

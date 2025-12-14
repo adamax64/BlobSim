@@ -533,6 +533,53 @@
         }
       }
     },
+    "/competition/results/event/{event_id}": {
+      "get": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Get Results For Event Route",
+        "description": "Get results for a specific event by id.",
+        "operationId": "get_results_for_event_route_competition_results_event__event_id__get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResultDto"
+                  },
+                  "title": "Response Get Results For Event Route Competition Results Event  Event Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/competition/quartered-event-results": {
       "post": {
         "tags": [
@@ -1475,26 +1522,6 @@
             ],
             "title": "Money"
           },
-          "speed_category": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/SpeedCategory"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "strength_category": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/StrengthCategory"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "integrity_state": {
             "anyOf": [
               {
@@ -1504,28 +1531,6 @@
                 "type": "null"
               }
             ]
-          },
-          "speed_color": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Speed Color"
-          },
-          "strength_color": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Strength Color"
           },
           "integrity_color": {
             "anyOf": [
@@ -1966,6 +1971,17 @@
             ],
             "title": "Round"
           },
+          "event_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Id"
+          },
           "season": {
             "anyOf": [
               {
@@ -1988,26 +2004,6 @@
             ]
           },
           "winner": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/BlobStatsDto"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "second": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/BlobStatsDto"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "third": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/BlobStatsDto"
@@ -2203,6 +2199,28 @@
         ],
         "title": "RecordDto"
       },
+      "ResultDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "points": {
+            "type": "integer",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob",
+          "position",
+          "points"
+        ],
+        "title": "ResultDto"
+      },
       "ScoreDto": {
         "properties": {
           "score": {
@@ -2268,15 +2286,6 @@
           "cycle"
         ],
         "title": "SimTimeDto"
-      },
-      "SpeedCategory": {
-        "type": "string",
-        "enum": [
-          "SLOW",
-          "AVERAGE",
-          "FAST"
-        ],
-        "title": "SpeedCategory"
       },
       "StandingsDTO": {
         "properties": {
@@ -2346,15 +2355,6 @@
           "points"
         ],
         "title": "StandingsResultDTO"
-      },
-      "StrengthCategory": {
-        "type": "string",
-        "enum": [
-          "WEAK",
-          "AVERAGE",
-          "STRONG"
-        ],
-        "title": "StrengthCategory"
       },
       "Token": {
         "properties": {

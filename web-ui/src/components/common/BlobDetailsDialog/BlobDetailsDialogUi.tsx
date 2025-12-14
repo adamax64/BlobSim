@@ -73,38 +73,6 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                       </Box>
                     </Tooltip>
                   </Grid>
-                  <Grid size={6}>
-                    <Tooltip title={t('blob_details.stats.strength')} placement="top">
-                      <Box display="flex" gap={1}>
-                        <Star />
-                        <Paper sx={{ backgroundColor: blob.strengthColor, padding: '0px 16px' }}>
-                          <Typography
-                            variant="body1"
-                            color={getContrastYIQ(blob.strengthColor!)}
-                            sx={{ transform: 'translateY(1px)' }}
-                          >
-                            {t(`enums.strength_category.${blob.strengthCategory}`)}
-                          </Typography>
-                        </Paper>
-                      </Box>
-                    </Tooltip>
-                  </Grid>
-                  <Grid size={6}>
-                    <Tooltip title={t('blob_details.stats.speed')} placement="top">
-                      <Box display="flex" gap={1}>
-                        <Speed />
-                        <Paper sx={{ backgroundColor: blob.speedColor, padding: '0px 16px' }}>
-                          <Typography
-                            variant="body1"
-                            color={getContrastYIQ(blob.speedColor!)}
-                            sx={{ transform: 'translateY(1px)' }}
-                          >
-                            {t(`enums.speed_category.${blob.speedCategory}`)}
-                          </Typography>
-                        </Paper>
-                      </Box>
-                    </Tooltip>
-                  </Grid>
                 </>
               )}
               {blob.isDead && (

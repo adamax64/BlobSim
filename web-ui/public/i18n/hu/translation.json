@@ -46,16 +46,6 @@
       "ELIMINATION_SCORING": "Kieséses verseny",
       "CATCHUP_TRAINING": "Felzárkóztató tréning {{day}}."
     },
-    "speed_category": {
-      "SLOW": "Lassú",
-      "AVERAGE": "Átlagos",
-      "FAST": "Gyors"
-    },
-    "strength_category": {
-      "WEAK": "Gyenge",
-      "AVERAGE": "Átlagos",
-      "STRONG": "Erős"
-    },
     "integrity_state": {
       "POOR": "GyenRosszge",
       "AVERAGE": "Átlagos",
@@ -76,10 +66,8 @@
       "EVENT_STARTED": "A mai napon verseny következik: {{leagueName}} {{round}}. forduló, {{eventType}}.",
       "ONGOING_EVENT": "Folyamatban lévő verseny: {{leagueName}} {{round}}. forduló, {{eventType}}.",
       "EVENT_ENDED": {
-        "headline": "Véget ért a {{leagueName}} {{round}}. fordulója. Eredmények:",
-        "first": "Első:",
-        "second": "Második:",
-        "third": "Harmadik:"
+        "headline": "Véget ért a {{leagueName}} {{round}}. fordulója.",
+        "results": "Eredmények megtekintése"
       },
       "SEASON_ENDED": "Végetért a szezon a {{leagueName}} mezőnyének. Gratulálunk {{winner}}-nak/nek a bajnoki győzelemért.",
       "ROOKIE_OF_THE_YEAR": "Gratulálunk {{winner}}-nak/nek az év újonca címért.",

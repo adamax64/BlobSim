@@ -32,11 +32,10 @@ def fetch_all_news(session: Session) -> list[NewsDto]:
                 blob=_get_blob(news, session),
                 league_name=_get_league_name(news),
                 round=_get_round(news),
+                event_id=_get_event_id(news),
                 season=_get_season(news),
                 event_type=_get_event_type(news),
                 winner=_get_winner(news, session),
-                second=_get_second(news, session),
-                third=_get_third(news, session),
                 grandmaster=_get_grandmaster(news, session),
                 transfers=transfers,
                 retired=retired,
@@ -80,6 +79,10 @@ def _get_round(news: News) -> int | None:
     )
 
 
+def _get_event_id(news: News) -> int | None:
+    return int(news.news_data[2]) if news.news_type == NewsTypeDto.EVENT_ENDED else None
+
+
 def _get_season(news: News) -> int | None:
     return int(news.news_data[0]) if news.news_type == NewsTypeDto.NEW_SEASON else None
 
@@ -90,8 +93,6 @@ def _get_event_type(news: News) -> EventTypeDto | None:
 
 def _get_winner(news: News, session) -> BlobStatsDto | None:
     try:
-        if news.news_type == NewsTypeDto.EVENT_ENDED:
-            return fetch_blob_by_id(int(news.news_data[2]), session)
         if news.news_type == NewsTypeDto.SEASON_ENDED:
             return fetch_blob_by_id(int(news.news_data[1]), session)
         if news.news_type == NewsTypeDto.ROOKIE_OF_THE_YEAR:
@@ -99,20 +100,6 @@ def _get_winner(news: News, session) -> BlobStatsDto | None:
     except Exception:
         return None
     return None
-
-
-def _get_second(news: News, session) -> BlobStatsDto | None:
-    try:
-        return fetch_blob_by_id(int(news.news_data[3]), session) if news.news_type == NewsTypeDto.EVENT_ENDED else None
-    except Exception:
-        return None
-
-
-def _get_third(news: News, session) -> BlobStatsDto | None:
-    try:
-        return fetch_blob_by_id(int(news.news_data[4]), session) if news.news_type == NewsTypeDto.EVENT_ENDED else None
-    except Exception:
-        return None
 
 
 def _get_grandmaster(news: News, session) -> BlobStatsDto | None:

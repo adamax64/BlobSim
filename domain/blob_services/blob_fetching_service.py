@@ -3,10 +3,8 @@ from data.model.blob import Blob
 from data.persistence.blob_reposiotry import (
     get_all_blobs_by_name,
     get_blob_by_id,
-    get_blob_relative_speeds_by_blob,
-    get_blob_relative_strengths_by_blob,
 )
-from domain.dtos.blob_stats_dto import BlobStatsDto, IntegrityState, SpeedCategory, StrengthCategory
+from domain.dtos.blob_stats_dto import BlobStatsDto, IntegrityState
 from domain.dtos.parent_dto import ParentDto
 from domain.sim_data_service import get_sim_time
 from domain.standings_service import get_current_grandmaster_id
@@ -26,14 +24,10 @@ def fetch_all_blobs(
     )
 
     current_season = get_season(get_sim_time(session))
-
-    relative_strengths = get_blob_relative_strengths_by_blob(session)
-    relative_speeds = get_blob_relative_speeds_by_blob(session)
-
     grandmaster_id = get_current_grandmaster_id(session)
 
     return [
-        _map_to_blob_state_dto(blob, current_season, relative_speeds.get(blob.id, 0), relative_strengths.get(blob.id, 0), grandmaster_id)
+        map_to_blob_state_dto(blob, current_season, grandmaster_id)
         for blob in blobs
     ]
 
@@ -43,25 +37,18 @@ def fetch_blob_by_id(blob_id: int, session) -> BlobStatsDto:
     """Fetch a blob by its ID and return it as a BlobStatsDto."""
 
     current_season = get_season(get_sim_time(session))
-
-    relative_strengths = get_blob_relative_strengths_by_blob(session)
-    relative_speeds = get_blob_relative_speeds_by_blob(session)
-
     blob = get_blob_by_id(session, blob_id)
-
     grandmaster_id = get_current_grandmaster_id(session)
 
     if not blob:
         raise ValueError(f"Blob with ID {blob_id} not found")
 
-    return _map_to_blob_state_dto(blob, current_season, relative_speeds.get(blob.id, 0), relative_strengths.get(blob.id, 0), grandmaster_id)
+    return map_to_blob_state_dto(blob, current_season, grandmaster_id)
 
 
-def _map_to_blob_state_dto(
+def map_to_blob_state_dto(
     blob: Blob,
     current_season: int,
-    relative_speed: float,
-    relative_strength: float,
     grandmaster_id: int,
 ) -> BlobStatsDto:
     return BlobStatsDto(
@@ -83,20 +70,6 @@ def _map_to_blob_state_dto(
             color=blob.color,
             parent=ParentDto(name=format_blob_name(blob.parent), color=blob.parent.color) if blob.parent else None,
             money=blob.money if blob.integrity > 0 else None,
-            speed_category=(
-                SpeedCategory.FAST
-                if relative_speed > 0.66
-                else SpeedCategory.AVERAGE
-                if relative_speed > 0.33
-                else SpeedCategory.SLOW
-            ) if blob.integrity > 0 else None,
-            strength_category=(
-                StrengthCategory.STRONG
-                if relative_strength > 0.66
-                else StrengthCategory.AVERAGE
-                if relative_strength > 0.33
-                else StrengthCategory.WEAK
-            ) if blob.integrity > 0 else None,
             integrity_state=(
                 IntegrityState.GOOD
                 if blob.integrity > 0.7
@@ -104,8 +77,6 @@ def _map_to_blob_state_dto(
                 if blob.integrity > 0.4
                 else IntegrityState.POOR
             ) if blob.integrity > 0 else None,
-            speed_color=_get_color_indicator(relative_speed) if blob.integrity > 0 else None,
-            strength_color=_get_color_indicator(relative_strength) if blob.integrity > 0 else None,
             integrity_color=_get_color_indicator(blob.integrity / INITIAL_INTEGRITY) if blob.integrity > 0 else None,
             current_activity=blob.current_activity if blob.integrity > 0 and blob.current_activity is not None else None,
         )

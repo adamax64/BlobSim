@@ -7,7 +7,9 @@ from domain.competition_service import (
 )
 from domain.dtos.event_dto import EventDto
 from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
+from domain.dtos.result_dto import ResultDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
+from domain.result_service import get_results_for_event
 from domain.sim_data_service import is_current_event_concluded
 from .auth_dependency import require_auth
 
@@ -25,6 +27,12 @@ async def get_current_event() -> EventDto:
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
+
+
+@router.get("/results/event/{event_id}")
+async def get_results_for_event_route(event_id: int) -> list[ResultDto]:
+    """Get results for a specific event by id."""
+    return get_results_for_event(event_id)
 
 
 @router.post("/quartered-event-results")

@@ -1,8 +1,10 @@
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Link } from '@mui/material';
 import { NewsDto, NewsType } from '../../../generated';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 import { InlineTranslatedBlob } from '../../components/common/InlineTranslatedBlob';
+import ResultsModal from '../event-components/ResultsModal';
 
 type NewsContentProps = {
   newsItem: NewsDto;
@@ -10,6 +12,8 @@ type NewsContentProps = {
 
 export const NewsContent = ({ newsItem }: NewsContentProps) => {
   const { t } = useTranslation();
+  const [resultsOpen, setResultsOpen] = useState(false);
+  const [resultsEventId, setResultsEventId] = useState<number | null>(null);
 
   switch (newsItem.type) {
     case NewsType.BlobCreated:
@@ -38,50 +42,25 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
           <Typography variant="body1">
             {t('enums.news_type.EVENT_ENDED.headline', { leagueName: newsItem.leagueName, round: newsItem.round })}
           </Typography>
-          <ul>
-            <li className="flex">
-              <Typography variant="body1">{t('enums.news_type.EVENT_ENDED.first')}</Typography>
-              {newsItem.winner && (
-                <Box component="span" display="inline-flex" alignItems="center" ml={1}>
-                  <IconNameWithDetailsModal
-                    blob={newsItem.winner}
-                    name={newsItem.winner.name}
-                    color={newsItem.winner.color}
-                    atRisk={newsItem.winner.atRisk}
-                    isRookie={newsItem.winner.isRookie}
-                  />
-                </Box>
-              )}
-            </li>
-            <li className="flex">
-              <Typography variant="body1">{t('enums.news_type.EVENT_ENDED.second')}</Typography>
-              {newsItem.second && (
-                <Box component="span" display="inline-flex" alignItems="center" ml={1}>
-                  <IconNameWithDetailsModal
-                    blob={newsItem.second ?? undefined}
-                    name={newsItem.second?.name ?? ''}
-                    color={newsItem.second?.color ?? '#888888'}
-                    atRisk={newsItem.second?.atRisk}
-                    isRookie={newsItem.second?.isRookie}
-                  />
-                </Box>
-              )}
-            </li>
-            <li className="flex">
-              <Typography variant="body1">{t('enums.news_type.EVENT_ENDED.third')}</Typography>
-              {(newsItem.third as any) && (
-                <Box component="span" display="inline-flex" alignItems="center" ml={1}>
-                  <IconNameWithDetailsModal
-                    blob={newsItem.third ?? undefined}
-                    name={newsItem.third?.name ?? ''}
-                    color={newsItem.third?.color ?? '#888888'}
-                    atRisk={newsItem.third?.atRisk}
-                    isRookie={newsItem.third?.isRookie}
-                  />
-                </Box>
-              )}
-            </li>
-          </ul>
+          <Link
+            href="#"
+            variant="body1"
+            onClick={(e) => {
+              e.preventDefault();
+              const eid = newsItem.eventId ?? null;
+              if (eid == null) {
+                // nothing to open
+                // eslint-disable-next-line no-console
+                console.warn('News item has no eventId');
+                return;
+              }
+              setResultsEventId(eid);
+              setResultsOpen(true);
+            }}
+          >
+            {t('enums.news_type.EVENT_ENDED.results')}
+          </Link>
+          <ResultsModal eventId={resultsEventId} open={resultsOpen} onClose={() => setResultsOpen(false)} />
         </>
       );
     case NewsType.SeasonEnded:
