@@ -45,7 +45,6 @@ export const ResultsModal = ({ eventId, open, onClose }: ResultsModalProps) => {
     }
     if (!open) {
       // reset state when modal closes
-      setResults([]);
       reset();
     }
   }, [open, eventId]);

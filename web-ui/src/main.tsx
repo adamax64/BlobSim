@@ -7,6 +7,7 @@ import { SimTimeProvider } from './context/SimTimeContext';
 import { AuthProvider } from './context/AuthContext';
 import './i18n';
 import { CurrentPageProvider } from './context/CurrentPageContext';
+import { PoliciesProvider } from './context/PoliciesContext';
 
 // Set up a Router instance
 const router = createRouter({
@@ -32,9 +33,11 @@ if (!rootElement.innerHTML) {
       <SnackbarProvider>
         <AuthProvider>
           <SimTimeProvider>
-            <CurrentPageProvider>
-              <RouterProvider router={router} />
-            </CurrentPageProvider>
+            <PoliciesProvider>
+              <CurrentPageProvider>
+                <RouterProvider router={router} />
+              </CurrentPageProvider>
+            </PoliciesProvider>
           </SimTimeProvider>
         </AuthProvider>
       </SnackbarProvider>

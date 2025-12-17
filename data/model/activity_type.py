@@ -12,3 +12,5 @@ class ActivityTypeDbo(enum.Enum):
     PRACTICE = 'PRACTICE'
     LABOUR = 'LABOUR'
     IDLE = 'IDLE'
+
+    ADMINISTRATION = 'ADMINISTRATION'

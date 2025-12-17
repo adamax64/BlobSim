@@ -314,3 +314,17 @@
 - Removed strength and speed indicator from blob details dialog
 - Replaced top 3 blobs in event ended news with a link
   - Opens a modal containing the event results
+
+### 3.4
+
+### 3.5
+
+- Added grandmaster "Administration" activity allowing grandmasters to randomly create temporary "policies" (Factory modernization, Gym improvements, Salary raise, Pension).
+
+  - Policies have duration depending on grandmaster level (level 1 → 4 days; level 2 → 6 days; level >2 → 6 + (level - 2) days) and an applied level determining effect strength.
+  - Effects: factory modernization speeds up factory progress; gym improvements increase practice/intense training efficiency; salary raises increase labour salary; pension schemes provide pension payouts to retired blobs.
+  - Backend: new `policies` DB table, repository upsert, domain service to create/update policies, and an API endpoint (`GET /policies/`) returning active policies. Added Alembic migrations (policies table + ADMINISTRATION activity enum value) and unit tests.
+  - Frontend: Dashboard "Policies" panel showing active policies with tooltips and translations added (English & Hungarian).
+
+- Bugfix: Fixed Results modal so it properly refreshes/resets on open/close to avoid stale state and duplicated fetches.
+- Bugfix: Results table on the modal displays name shorthands on mobile devices

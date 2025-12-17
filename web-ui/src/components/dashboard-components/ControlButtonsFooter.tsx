@@ -11,6 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 import Stadium from '@mui/icons-material/Stadium';
 import AddCircle from '@mui/icons-material/AddCircle';
 import SkipNext from '@mui/icons-material/SkipNext';
+import { usePolicies } from '../../context/PoliciesContext';
 
 type ControlButtonsFooterProps = {
   fetchNews: () => void;
@@ -33,6 +34,7 @@ export const ControlButtonsFooter = ({
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { refreshSimTime } = useSimTime();
+  const { refreshPolicies } = usePolicies();
 
   const [open, setOpen] = useState(false);
 
@@ -42,6 +44,7 @@ export const ControlButtonsFooter = ({
     onSuccess: () => {
       fetchNews();
       refreshSimTime();
+      refreshPolicies();
     },
   });
 

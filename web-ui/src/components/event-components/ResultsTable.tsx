@@ -1,4 +1,14 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { BlobStatsDto } from '../../../generated';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 import { BlobState, getClassNameForBlobState } from '../../utils/blob-state-utils';
@@ -31,6 +41,9 @@ type ResultsTableProps = {
 };
 
 export const ResultsTable = ({ results }: ResultsTableProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -46,7 +59,12 @@ export const ResultsTable = ({ results }: ResultsTableProps) => {
             <TableRow key={idx} className={getRowClass(r.position)}>
               <TableCell>{r.position}</TableCell>
               <TableCell>
-                <IconNameWithDetailsModal blob={r.blob} color={r.blob.color} name={r.blob.name} />
+                <IconNameWithDetailsModal
+                  blob={r.blob}
+                  color={r.blob.color}
+                  name={r.blob.name}
+                  renderFullName={!isMobile}
+                />
               </TableCell>
               <TableCell align="right">{r.points}</TableCell>
             </TableRow>

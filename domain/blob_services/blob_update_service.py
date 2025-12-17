@@ -6,6 +6,7 @@ from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.model.calendar import Calendar
 from data.model.event_type import EventType
+from data.model.policy_type import PolicyType
 from data.persistence.blob_reposiotry import (
     get_all_blobs_by_name,
     get_blob_by_id,
@@ -16,9 +17,12 @@ from data.persistence.blob_reposiotry import (
 from domain.enums.activity_type import ActivityType
 from domain.news_services.news_service import add_blob_terminated_news
 from domain.sim_data_service import get_current_calendar, get_event_next_day, get_sim_time
-from domain.standings_service import get_last_place_from_season_by_league
+from data.persistence.policy_repository import get_active_policy_by_type
+from domain.policy_service import create_or_update_policy
+from domain.standings_service import get_current_grandmaster_id, get_last_place_from_season_by_league
 from data.persistence.league_repository import get_all_leagues_ordered_by_level
 from data.persistence.result_repository import get_most_recent_real_league_result_of_blob
+from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
 from domain.utils.constants import (
@@ -57,13 +61,14 @@ def update_all_blobs(session: Session):
 
     modified_blobs = []
     for blob in blobs:
-        multiplyer = _proceed_with_activity(blob, current_event)
+        multiplyer = _proceed_with_activity(blob, current_event, session)
 
         _update_blob_stats(blob, multiplyer)
         blob.integrity -= 1
         _terminate_blob(blob, current_time, session)
 
-        _choose_activity_for_blob(blob, event_next_day, catchup_training_blob_ids)
+        is_grandmaster = get_current_grandmaster_id(session) == blob.id
+        _choose_activity_for_blob(blob, event_next_day, catchup_training_blob_ids, is_grandmaster)
 
         modified_blobs.append(blob)
 
@@ -78,7 +83,7 @@ def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
         save_blob(session, blob)
 
 
-def _proceed_with_activity(blob: Blob, current_event: Calendar | None) -> StatMultiplyers:
+def _proceed_with_activity(blob: Blob, current_event: Calendar | None, session: Session) -> StatMultiplyers:
     multiplyer = StatMultiplyers(strength=0, speed=0)
     current_activity: ActivityType = blob.current_activity
 
@@ -95,14 +100,43 @@ def _proceed_with_activity(blob: Blob, current_event: Calendar | None) -> StatMu
             blob.money -= MAINTENANCE_COST
             blob.integrity += MAINTENANCE_EFFECT
     elif current_activity == ActivityType.LABOUR:
+        # base labour salary
         blob.money += LABOUR_SALARY
+
+        # apply active salary raise policies
+        current_time = get_sim_time(session)
+        labour_subsidies = get_active_policy_by_type(session, PolicyType.LABOUR_SUBSIDIES, current_time)
+        if labour_subsidies:
+            blob.money += 1
+
+            chance = 0.1 * (labour_subsidies.applied_level - 1)
+            if chance > 1:
+                chance = 1
+            if random.random() < chance:
+                blob.money += 1
     elif current_activity == ActivityType.PRACTICE:
         ratio = random.random()
-        multiplyer.strength = PRACTICE_EFFECT * ratio
-        multiplyer.speed = PRACTICE_EFFECT * (1 - ratio)
+        current_time = get_sim_time(session)
+        gym_improvement_level = get_active_policy_by_type(session, PolicyType.GYM_IMPROVEMENT, current_time)
+        practice_effect = PRACTICE_EFFECT
+        if gym_improvement_level:
+            practice_effect += practice_effect * (0.05 * gym_improvement_level.applied_level)
+        multiplyer.strength = practice_effect * ratio
+        multiplyer.speed = practice_effect * (1 - ratio)
     elif current_activity == ActivityType.INTENSE_TRAINING:
-        multiplyer.strength = PRACTICE_EFFECT * 1.1
-        multiplyer.speed = PRACTICE_EFFECT * 1.1
+        practice_effect = PRACTICE_EFFECT * 1.1
+        current_time = get_sim_time(session)
+        gym_improvement_level = get_active_policy_by_type(session, PolicyType.GYM_IMPROVEMENT, current_time)
+        if gym_improvement_level:
+            practice_effect += practice_effect * (0.05 * gym_improvement_level.applied_level)
+
+        multiplyer.strength = practice_effect
+        multiplyer.speed = practice_effect
+    elif current_activity == ActivityType.ADMINISTRATION:
+        level = blob.grandmasters
+        chosen = choose_random_policy_type()
+        create_or_update_policy(session, chosen, level)
+        blob.money += 2  # grandmaster salary
     else:
         pass  # Idle activity
 
@@ -112,7 +146,8 @@ def _proceed_with_activity(blob: Blob, current_event: Calendar | None) -> StatMu
 def _choose_activity_for_blob(
     blob: Blob,
     event_next_day: Calendar | None,
-    catchup_training_blob_ids: set[int]
+    catchup_training_blob_ids: set[int],
+    is_grandmaster: bool
 ) -> ActivityType:
     """ Generate activity for blob for the next day """
     if blob.terminated is None:
@@ -124,6 +159,9 @@ def _choose_activity_for_blob(
             extra_activities = []
             if blob.money >= MAINTENANCE_COST:
                 extra_activities.append(ActivityType.MAINTENANCE)
+            # grandmasters may enact policies
+            if is_grandmaster:
+                extra_activities.append(ActivityType.ADMINISTRATION)
             blob.current_activity = choose_activity(extra_activities)
 
 

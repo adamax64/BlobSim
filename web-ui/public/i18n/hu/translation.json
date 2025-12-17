@@ -14,6 +14,22 @@
     "create_new_blob": "Új Blob létrehozása",
     "proceed_to_next_day": "Tovább a következő napra"
   },
+  "policies": {
+    "title": "Nagymesteri intézkedések",
+    "name": {
+      "FACTORY_MODERNIZATION": "Gyármodernizáció",
+      "GYM_IMPROVEMENT": "Edzőterem fejlesztések",
+      "LABOUR_SUBSIDIES": "Béremelés",
+      "PENSION_SCHEME": "Nyugdíjrendszer"
+    },
+    "summary": {
+      "FACTORY_MODERNIZATION": "Növeli a blob gyár gyártási teljesítményt",
+      "GYM_IMPROVEMENT": "Gyakorlási hatás +5% minden nagymesteri szintenként",
+      "LABOUR_SUBSIDIES": "+1 érme a munka után; magasabb szinten esély további érme megszerzésére",
+      "PENSION_SCHEME": "+1 érme minden visszavonult blobnak ciklusonként; magasabb szinten esély további érme megszerzésére"
+    },
+    "effect_until": "Érvényes: {{effectUntil}}-ig"
+  },
   "blobs": {
     "search_by_name": "Keresés név alapján",
     "show_dead": "Termináltak megjelenítése"

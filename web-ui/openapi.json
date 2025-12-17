@@ -1338,6 +1338,31 @@
           }
         }
       }
+    },
+    "/policies/": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Get Active Policies",
+        "operationId": "get_active_policies_policies__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PolicyDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get Active Policies Policies  Get"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1371,7 +1396,8 @@
           "INTENSE_TRAINING",
           "PRACTICE",
           "LABOUR",
-          "IDLE"
+          "IDLE",
+          "ADMINISTRATION"
         ],
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"
@@ -2106,6 +2132,32 @@
           "color"
         ],
         "title": "ParentDto"
+      },
+      "PolicyDto": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PolicyType"
+          },
+          "effect_until": {
+            "$ref": "#/components/schemas/SimTimeDto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "effect_until"
+        ],
+        "title": "PolicyDto"
+      },
+      "PolicyType": {
+        "type": "string",
+        "enum": [
+          "FACTORY_MODERNIZATION",
+          "LABOUR_SUBSIDIES",
+          "GYM_IMPROVEMENT",
+          "PENSION_SCHEME"
+        ],
+        "title": "PolicyType"
       },
       "QuarteredEventRecordDto": {
         "properties": {

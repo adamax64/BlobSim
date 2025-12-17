@@ -14,6 +14,22 @@
     "create_new_blob": "Create new Blob",
     "proceed_to_next_day": "Proceed to next day"
   },
+  "policies": {
+    "title": "Grandmaster policies",
+    "name": {
+      "FACTORY_MODERNIZATION": "Factory modernization",
+      "GYM_IMPROVEMENT": "Gym improvements",
+      "LABOUR_SUBSIDIES": "Salary raise",
+      "PENSION_SCHEME": "Pension scheme"
+    },
+    "summary": {
+      "FACTORY_MODERNIZATION": "Improves factory production of blob factory",
+      "GYM_IMPROVEMENT": "Practice effect increases by 5% per grandmaster level",
+      "LABOUR_SUBSIDIES": "+1 coin for labour; chance for an extra coin at higher levels",
+      "PENSION_SCHEME": "+1 coin for retired blobs per cycle; chance for extra coin at higher levels"
+    },
+    "effect_until": "Effect until: {{effectUntil}}"
+  },
   "blobs": {
     "search_by_name": "Search by name",
     "show_dead": "Show dead"

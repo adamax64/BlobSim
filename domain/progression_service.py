@@ -2,9 +2,12 @@ import random
 from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
+from data.model.policy_type import PolicyType
 from data.persistence.calendar_repository import get_calendar
 from data.persistence.sim_data_repository import get_sim_data, save_sim_data
 from domain.blob_services.blob_creation_service import check_factory_and_create_blob
+from data.persistence.policy_repository import get_active_policy_by_type
+from data.persistence.blob_reposiotry import get_all_retired, save_all_blobs
 from domain.calendar_service import recreate_calendar_for_next_season
 from domain.league_service import manage_league_transfers
 from domain.news_services.news_service import add_event_starting_news, add_new_grandmaster_news
@@ -32,9 +35,16 @@ def progress_simulation(session: Session):
         recreate_calendar_for_next_season(session, get_season(sim_data.sim_time) + 1)
         _inagruate_grandmaster(get_season(sim_data.sim_time), session)
 
-    sim_data.factory_progress += random.randint(1, 5)
+    # base factory progress plus any active factory modernization policies
+    extra = 0
+    factory_level = get_active_policy_by_type(session, PolicyType.FACTORY_MODERNIZATION, sim_data.sim_time)
+    if factory_level:
+        extra = factory_level.applied_level
+    sim_data.factory_progress += random.randint(1, 5) + extra
     sim_data.sim_time += 1
     save_sim_data(session, sim_data)
+
+    _hand_out_pensions(session, sim_data.sim_time)
 
     _check_and_add_event_news(sim_data.sim_time, session)
     check_factory_and_create_blob(session)
@@ -62,3 +72,22 @@ def _check_and_add_event_news(sim_time: int, session: Session):
                 calendar_event.event_type,
                 session
             )
+
+
+def _hand_out_pensions(session: Session, sim_time: int):
+    """ Apply pension payouts for retired blobs if pension policies active """
+
+    pension_policy = get_active_policy_by_type(session, PolicyType.PENSION_SCHEME, sim_time)
+    if pension_policy:
+        retired = get_all_retired(session)
+        base = 1
+        chance = 0.1 * (pension_policy.applied_level - 1)
+        if chance > 1:
+            chance = 1
+        for r in retired:
+            r.money += base
+            if random.random() < chance:
+                r.money += 1
+        # save retired blobs
+        if retired:
+            save_all_blobs(session, retired)
