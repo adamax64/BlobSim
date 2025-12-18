@@ -317,8 +317,6 @@
 
 ### 3.4
 
-### 3.5
-
 - Added grandmaster "Administration" activity allowing grandmasters to randomly create temporary "policies" (Factory modernization, Gym improvements, Salary raise, Pension).
 
   - Policies have duration depending on grandmaster level (level 1 → 4 days; level 2 → 6 days; level >2 → 6 + (level - 2) days) and an applied level determining effect strength.
@@ -328,3 +326,8 @@
 
 - Bugfix: Fixed Results modal so it properly refreshes/resets on open/close to avoid stale state and duplicated fetches.
 - Bugfix: Results table on the modal displays name shorthands on mobile devices
+
+### 3.4.1
+
+- fixed policies not fetched during page load
+- fixed console error about unique key prop in NewsContent

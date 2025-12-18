@@ -91,7 +91,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               <Typography variant="body1">{t('enums.news_type.NEW_SEASON.headline')}</Typography>
               <ul>
                 {(newsItem.retired as any[])?.map((b) => (
-                  <li key={b.id}>
+                  <li key={`${b.id}-retired`}>
                     <IconNameWithDetailsModal blob={b} blobId={b.id} name={b.name} color={b.color} />
                   </li>
                 ))}
@@ -108,7 +108,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
                   </Typography>
                   <ul>
                     {(league.blobs as any[]).map((b) => (
-                      <li key={b.id}>
+                      <li key={`${b.id}-transfers`}>
                         <IconNameWithDetailsModal blob={b} blobId={b.id} name={b.name} color={b.color} />
                       </li>
                     ))}
@@ -120,7 +120,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               <Typography variant="body1">{t('enums.news_type.NEW_SEASON.rookies')}</Typography>
               <ul>
                 {(newsItem.rookies as any[])?.map((b) => (
-                  <li key={b.id}>
+                  <li key={`${b.id}-rookies`}>
                     <IconNameWithDetailsModal blob={b} blobId={b.id} name={b.name} color={b.color} />
                   </li>
                 ))}

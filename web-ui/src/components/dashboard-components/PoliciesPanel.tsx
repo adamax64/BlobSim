@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useMemo } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 import { Box, Tooltip, Typography, Paper } from '@mui/material';
 import { BlobIcon } from '../icons/BlobIcon';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +26,13 @@ const getPolicies = (): Pick<PolicyInfo, 'type' | 'color'>[] => {
 export const PoliciesPanel = () => {
   const { t } = useTranslation();
 
-  const { policies: policyData } = usePolicies();
+  const { policies: policyData, refreshPolicies } = usePolicies();
+
+  useEffect(() => {
+    if (!policyData) {
+      refreshPolicies();
+    }
+  }, [refreshPolicies, policyData]);
 
   const policies = useMemo(
     () =>
@@ -36,7 +42,7 @@ export const PoliciesPanel = () => {
         const name = t(`policies.name.${p.type}`);
         const summary = t(`policies.summary.${p.type}`);
 
-        return { ...p, effectUntil: activePolicy ? activePolicy.effectUntil : undefined, summary, name };
+        return { ...p, summary, name, effectUntil: activePolicy ? activePolicy.effectUntil : undefined };
       }),
     [policyData],
   );

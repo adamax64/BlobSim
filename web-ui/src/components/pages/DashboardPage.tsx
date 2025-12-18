@@ -5,7 +5,6 @@ import { useSimTime } from '../../context/SimTimeContext';
 import { useTranslation } from 'react-i18next';
 import { NewsAndFooter } from '../dashboard-components/NewsAndFooter';
 import PoliciesPanel from '../dashboard-components/PoliciesPanel';
-import { useState } from 'react';
 import { usePolicies } from '../../context/PoliciesContext';
 
 export function DashboardPage() {
