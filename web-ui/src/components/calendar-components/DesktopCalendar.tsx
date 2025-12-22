@@ -23,6 +23,11 @@ const TableCellWithBorder = styled(TableCell)(({ theme }) => ({
   '&:last-child': {
     borderRight: 'none',
   },
+  '&.next-event': {
+    // use action.selected so it adapts to light/dark themes
+    backgroundColor: theme.palette.action.selected,
+    transition: 'background-color 200ms',
+  },
 }));
 
 interface DesktopCalendarProps {

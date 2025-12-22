@@ -1,5 +1,6 @@
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import ThemeModeSwitcher from './ThemeModeSwitcher';
 import { useTranslation } from 'react-i18next';
 import CalendarMonth from '@mui/icons-material/CalendarMonth';
 import Dashboard from '@mui/icons-material/Dashboard';
@@ -15,7 +16,7 @@ function getMenuIcon(page: string) {
     case 'dashboard':
       return <Dashboard />;
     case 'blobs':
-      return <BlobPiktogram size={24} color="#222222" />;
+      return <BlobPiktogram size={24} color="currentColor" />;
     case 'factory':
       return <Factory />;
     case 'standings':
@@ -48,7 +49,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
       <List>
         {MENU_ITEMS.map((text, _) => (
           <ListItem key={text}>
-            <Box display="flex" gap={1} color="#222222">
+            <Box display="flex" gap={1} color="text.primary">
               {getMenuIcon(text)}
               <Link
                 key={text}
@@ -66,12 +67,15 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
         ))}
       </List>
       <Box>
-        <LanguageSwitcher />
+        <Box display="flex" alignItems="center" justifyContent="space-between" gap={1} margin={1}>
+          <LanguageSwitcher />
+          <ThemeModeSwitcher />
+        </Box>
         <Box
           sx={{
             width: '100%',
             padding: '1rem',
-            borderTop: '1px solid #e0e0e0',
+            borderTop: (theme) => `1px solid ${theme.palette.divider}`,
             backgroundColor: 'background.paper',
           }}
         >

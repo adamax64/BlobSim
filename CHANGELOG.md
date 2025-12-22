@@ -329,5 +329,8 @@
 
 ### 3.4.1
 
+- added dark mode and a switch between dark and light mode
+- adjusted dashboard page so the policies card appear next to the time card even in mobile mode
+- adjusted font sizes of card titles and header titles
 - fixed policies not fetched during page load
 - fixed console error about unique key prop in NewsContent

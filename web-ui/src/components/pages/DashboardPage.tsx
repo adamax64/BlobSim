@@ -15,8 +15,8 @@ export function DashboardPage() {
 
   return (
     <PageFrame showLoading={simTimeLoading || policiesLoading} pageName="dashboard">
-      <Box gap={2} display="flex" flexDirection={{ xs: 'column', xl: 'row' }}>
-        <Card sx={{ width: { xs: '100%', xl: '80%' } }}>
+      <Box gap={2} display="flex">
+        <Card sx={{ flexGrow: 1 }}>
           <CardContent>
             <Box display="flex" flexDirection="column" gap={1}>
               <Typography variant="h6">{t('dashboard.date')}</Typography>
@@ -24,14 +24,9 @@ export function DashboardPage() {
             </Box>
           </CardContent>
         </Card>
-        <Card sx={{ width: { xs: '100%', xl: '20%' } }}>
+        <Card>
           <CardContent>
-            <Box
-              display="flex"
-              flexDirection={{ xs: 'row', xl: 'column' }}
-              gap={1}
-              alignItems={{ xs: 'center', xl: 'flex-start' }}
-            >
+            <Box display="flex" flexDirection="column" gap={1} alignItems={{ xs: 'center', xl: 'flex-start' }}>
               <Typography variant="h6">{t('policies.title')}</Typography>
               <PoliciesPanel />
             </Box>

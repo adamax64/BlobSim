@@ -6,6 +6,7 @@ import { SnackbarProvider } from 'notistack';
 import { SimTimeProvider } from './context/SimTimeContext';
 import { AuthProvider } from './context/AuthContext';
 import './i18n';
+import { ThemeModeProvider } from './context/ThemeModeContext';
 import { CurrentPageProvider } from './context/CurrentPageContext';
 import { PoliciesProvider } from './context/PoliciesContext';
 
@@ -30,17 +31,19 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>
-        <AuthProvider>
-          <SimTimeProvider>
-            <PoliciesProvider>
-              <CurrentPageProvider>
-                <RouterProvider router={router} />
-              </CurrentPageProvider>
-            </PoliciesProvider>
-          </SimTimeProvider>
-        </AuthProvider>
-      </SnackbarProvider>
+      <ThemeModeProvider>
+        <SnackbarProvider>
+          <AuthProvider>
+            <SimTimeProvider>
+              <PoliciesProvider>
+                <CurrentPageProvider>
+                  <RouterProvider router={router} />
+                </CurrentPageProvider>
+              </PoliciesProvider>
+            </SimTimeProvider>
+          </AuthProvider>
+        </SnackbarProvider>
+      </ThemeModeProvider>
     </QueryClientProvider>,
   );
 }

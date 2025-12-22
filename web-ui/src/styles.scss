@@ -1,3 +1,7 @@
+body {
+  background-color: '#f9f9f9';
+}
+
 .row-inactive {
   background-color: #e0e0e0;
   td {
@@ -14,30 +18,30 @@
 }
 
 .row-gold {
-  background-color: #ffe993; // Brighter gold
+  background-color: var(--row-gold-bg);
 }
 
 .row-silver {
-  background-color: #d9d9d9; // Brighter silver
+  background-color: var(--row-silver-bg);
 }
 
 .row-bronze {
-  background-color: #eccfa0; // Brighter bronze
+  background-color: var(--row-bronze-bg);
 }
 
 td.text-gold {
   font-weight: bolder;
-  color: #8c7300;
+  color: var(--row-gold-text);
 }
 
 td.text-silver {
   font-weight: bolder;
-  color: #7a7a7a;
+  color: var(--row-silver-text);
 }
 
 td.text-bronze {
   font-weight: bolder;
-  color: #8c5a1e;
+  color: var(--row-bronze-text);
 }
 
 .row-middle {

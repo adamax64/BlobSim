@@ -9,7 +9,9 @@
     "build": "vite build",
     "serve": "vite preview",
     "start": "vite --host 0.0.0.0",
-    "generate-api": "openapi-generator-cli generate -i ./openapi.json -g typescript-fetch -o ./generated"
+    "generate-api": "openapi-generator-cli generate -i ./openapi.json -g typescript-fetch -o ./generated",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
@@ -21,7 +23,11 @@
     "@vitejs/plugin-react": "^4.3.2",
     "prettier": "^3.5.3",
     "sass-embedded": "^1.85.1",
-    "vite": "^6.3.6"
+    "vite": "^6.3.6",
+    "eslint": "^8.50.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "eslint-plugin-react": "^7.32.2"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.2",

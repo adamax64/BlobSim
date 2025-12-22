@@ -16,14 +16,13 @@ export const DesktopMenu = ({ isMobile }: DesktopMenuProps) => {
       <Box
         component="nav"
         position="fixed"
-        bgcolor="white"
         display="flex"
         flexDirection="column"
         height="-webkit-fill-available"
         minWidth={DRAWER_WIDTH}
         justifyContent={'space-between'}
         boxSizing={'border-box'}
-        borderRight={'1px solid #e0e0e0'}
+        borderRight={(theme) => `1px solid ${theme.palette.divider}`}
       >
         <AppSidebar isMobile={isMobile} setMobileOpen={() => {}} />
       </Box>

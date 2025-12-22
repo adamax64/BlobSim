@@ -216,5 +216,9 @@
   "states": {
     "at_risk": "Szerződése lejár",
     "rookie": "Újonc"
+  },
+  "theme": {
+    "switch_to_light": "Váltás világos módra",
+    "switch_to_dark": "Váltás sötét módra"
   }
 }

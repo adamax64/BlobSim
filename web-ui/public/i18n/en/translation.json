@@ -216,5 +216,9 @@
   "states": {
     "at_risk": "Contract Ending",
     "rookie": "Rookie"
+  },
+  "theme": {
+    "switch_to_light": "Switch to light mode",
+    "switch_to_dark": "Switch to dark mode"
   }
 }

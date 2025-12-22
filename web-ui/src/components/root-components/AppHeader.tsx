@@ -13,7 +13,7 @@ type TitleProps = {
 const MobileTitle = ({ pageTitle, currentPage }: TitleProps) => {
   const { t } = useTranslation();
   return (
-    <Typography variant="h6" noWrap component="div">
+    <Typography variant="h5" noWrap component="div">
       {pageTitle ?? t(`page_titles.${currentPage}_short`)}
     </Typography>
   );
@@ -25,7 +25,7 @@ const DesktopTitle = ({ currentPage, pageTitle }: TitleProps) => {
   return (
     <Box display="flex" justifyContent="space-between" flexGrow={1}>
       <BlobIcon size={32} color={blobIconColor} />
-      <Typography variant="h6" noWrap component="div">
+      <Typography variant="h5" noWrap component="div">
         {pageTitle ?? t(`page_titles.${currentPage}`)}
       </Typography>
       <BlobIcon size={32} color={blobIconColor} />
