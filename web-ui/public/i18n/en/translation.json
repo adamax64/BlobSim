@@ -73,7 +73,8 @@
       "PRACTICE": "Practice",
       "INTENSE_TRAINING": "Intense training",
       "LABOUR": "Labour",
-      "IDLE": "Idle"
+      "IDLE": "Idle",
+      "ADMINISTRATION": "Administration"
     },
     "news_type": {
       "BLOB_CREATED": "A new blob called {{blobName}} has been created!",

@@ -73,7 +73,8 @@
       "PRACTICE": "Gyakorlás",
       "INTENSE_TRAINING": "Intenzív tréning",
       "LABOUR": "Munka",
-      "IDLE": "Tétlen"
+      "IDLE": "Tétlen",
+      "ADMINISTRATION": "Adminisztráció"
     },
     "news_type": {
       "BLOB_CREATED": "Egy új blob lett létrehozva {{blobName}} néven!",
