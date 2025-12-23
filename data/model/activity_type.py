@@ -14,3 +14,4 @@ class ActivityTypeDbo(enum.Enum):
     IDLE = 'IDLE'
 
     ADMINISTRATION = 'ADMINISTRATION'
+    MINING = 'MINING'

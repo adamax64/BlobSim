@@ -104,15 +104,13 @@ class TestProcessEventResults(unittest.TestCase):
         # Assert conclude_calendar_event called with correct params
         mock_conclude_calendar_event.assert_called_once_with(session)
 
-        # Assert add_event_ended_news called with correct params
+        # Assert add_event_ended_news called with correct params (league, round, event_id, session)
         mock_add_event_ended_news.assert_called_once()
         news_args = mock_add_event_ended_news.call_args[0]
         self.assertEqual(news_args[0], mock_league.name)
         self.assertEqual(news_args[1], event.round)
-        self.assertEqual(news_args[2], mock_blob1.id)
-        self.assertEqual(news_args[3], mock_blob2.id)
-        self.assertEqual(news_args[4], mock_blob3.id)
-        self.assertEqual(news_args[5], session)
+        self.assertEqual(news_args[2], event.id)
+        self.assertEqual(news_args[3], session)
 
     if __name__ == '__main__':
         unittest.main()

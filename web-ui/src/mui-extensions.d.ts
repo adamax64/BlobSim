@@ -5,10 +5,12 @@ declare module '@mui/material/styles' {
     gold: Palette['primary'];
     silver: Palette['primary'];
     bronze: Palette['primary'];
+    inactive: Palette['primary'];
   }
   interface PaletteOptions {
     gold?: PaletteOptions['primary'];
     silver?: PaletteOptions['primary'];
     bronze?: PaletteOptions['primary'];
+    inactive?: PaletteOptions['primary'];
   }
 }

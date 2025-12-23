@@ -63,7 +63,7 @@
       "CATCHUP_TRAINING": "Felzárkóztató tréning {{day}}."
     },
     "integrity_state": {
-      "POOR": "GyenRosszge",
+      "POOR": "Rossz",
       "AVERAGE": "Átlagos",
       "GOOD": "Jó"
     },
@@ -74,7 +74,8 @@
       "INTENSE_TRAINING": "Intenzív tréning",
       "LABOUR": "Munka",
       "IDLE": "Tétlen",
-      "ADMINISTRATION": "Adminisztráció"
+      "ADMINISTRATION": "Adminisztráció",
+      "MINING": "Bányászat"
     },
     "news_type": {
       "BLOB_CREATED": "Egy új blob lett létrehozva {{blobName}} néven!",

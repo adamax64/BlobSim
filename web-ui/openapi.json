@@ -1397,7 +1397,8 @@
           "PRACTICE",
           "LABOUR",
           "IDLE",
-          "ADMINISTRATION"
+          "ADMINISTRATION",
+          "MINING"
         ],
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"

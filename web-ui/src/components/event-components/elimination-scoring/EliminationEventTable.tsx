@@ -1,6 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useCallback } from 'react';
-import { IconName } from '../../common/IconName';
 import { roundToThreeDecimals } from '../event-utils';
 import { useTranslation } from 'react-i18next';
 import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';

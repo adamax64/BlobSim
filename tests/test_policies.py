@@ -51,12 +51,12 @@ class TestPolicies(unittest.TestCase):
         self.assertGreater(multiplyer.strength, 0)
         self.assertGreater(multiplyer.speed, 0)
 
+    @patch('domain.blob_services.blob_creation_service.is_blob_created')
     @patch('domain.progression_service.get_active_policy_by_type')
     @patch('domain.progression_service.random.randint')
     @patch('domain.progression_service.get_sim_data')
-    @patch('domain.progression_service.save_sim_data')
     @patch('domain.progression_service.get_all_retired')
-    def test_factory_and_pension_effects(self, mock_get_retired, mock_save_sim, mock_get_sim, mock_randint, mock_policy_query):
+    def test_factory_and_pension_effects(self, mock_get_retired, mock_get_sim, mock_randint, mock_policy_query, mock_is_blob_created):
         session = MagicMock()
         sim = SimData(id=1, sim_time=10, factory_progress=0)
         mock_get_sim.return_value = sim
@@ -84,6 +84,7 @@ class TestPolicies(unittest.TestCase):
         # retired blob
         retired = Blob(id=1, first_name='Old', last_name='Blob', money=0, terminated=5)
         mock_get_retired.return_value = [retired]
+        mock_is_blob_created.return_value = False
 
         progress_simulation(session)
 

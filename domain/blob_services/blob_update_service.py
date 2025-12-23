@@ -35,6 +35,8 @@ from domain.utils.constants import (
     PRACTICE_EFFECT,
 )
 
+miners: list[Blob] = []
+
 
 @dataclass
 class StatMultiplyers:
@@ -44,6 +46,7 @@ class StatMultiplyers:
 
 @transactional
 def update_all_blobs(session: Session):
+    global miners
     """Update all blobs living in the simulation and yield the progress in percentage."""
 
     current_event = get_current_calendar(session)
@@ -60,6 +63,7 @@ def update_all_blobs(session: Session):
     current_time = get_sim_time(session)
 
     modified_blobs = []
+    miners = []
     for blob in blobs:
         multiplyer = _proceed_with_activity(blob, current_event, session)
 
@@ -71,6 +75,17 @@ def update_all_blobs(session: Session):
         _choose_activity_for_blob(blob, event_next_day, catchup_training_blob_ids, is_grandmaster)
 
         modified_blobs.append(blob)
+
+    # Distribute mining reward: pick one miner and give them money equal to number of miners
+    if miners:
+        chosen = random.choice(miners)
+        reward = len(miners)
+        chosen.money += reward
+        print(f"[INFO] Blob {chosen.id} received mining reward of {reward} coins.")
+
+        # Ensure the chosen blob is included in saved blobs
+        if chosen not in modified_blobs:
+            modified_blobs.append(chosen)
 
     save_all_blobs(session, modified_blobs)
 
@@ -84,6 +99,8 @@ def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
 
 
 def _proceed_with_activity(blob: Blob, current_event: Calendar | None, session: Session) -> StatMultiplyers:
+    global miners
+
     multiplyer = StatMultiplyers(strength=0, speed=0)
     current_activity: ActivityType = blob.current_activity
 
@@ -137,6 +154,8 @@ def _proceed_with_activity(blob: Blob, current_event: Calendar | None, session: 
         chosen = choose_random_policy_type()
         create_or_update_policy(session, chosen, level)
         blob.money += 2  # grandmaster salary
+    elif current_activity == ActivityType.MINING:
+        miners.append(blob)
     else:
         pass  # Idle activity
 

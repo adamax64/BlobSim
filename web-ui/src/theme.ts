@@ -9,6 +9,7 @@ export function createAppTheme(mode: Mode) {
     background: { default: '#f9f9f9' },
     gold: { main: '#ffe993', contrastText: '#8c7300' },
     silver: { main: '#d9d9d9', contrastText: '#7a7a7a' },
+    inactive: { main: '#e0e0e0', contrastText: '#7a7a7a' },
     bronze: { main: '#eccfa0', contrastText: '#8c5a1e' },
   };
 
@@ -17,6 +18,7 @@ export function createAppTheme(mode: Mode) {
     background: { default: '#121212' },
     gold: { main: '#5f4700', contrastText: '#ffffff' },
     silver: { main: '#3a3a3a', contrastText: '#ffffff' },
+    inactive: { main: '#2a2a2a', contrastText: '#bdbdbd' },
     bronze: { main: '#5a3e22', contrastText: '#ffffff' },
   };
 
@@ -37,6 +39,8 @@ export function createAppTheme(mode: Mode) {
             '--row-silver-text': themePalette.silver?.contrastText,
             '--row-bronze-bg': themePalette.bronze?.main,
             '--row-bronze-text': themePalette.bronze?.contrastText,
+            '--row-inactive-bg': themePalette.inactive?.main,
+            '--row-inactive-text': themePalette.inactive?.contrastText,
           },
         }),
       },
