@@ -4,6 +4,7 @@ import { BlobBase } from './blob-parts/BlobBase';
 import { IdleEyes } from './blob-parts/eyes/IdleEyes';
 import { TerminatedEyes } from './blob-parts/eyes/TerminatedEyes';
 import { Blink } from './blob-parts/eyes/Blink';
+import { mapActivityToTool } from './utils';
 
 type BlobAnimatedProps = {
   blob: BlobStatsDto;
@@ -76,6 +77,7 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
       eyeSlot={eyeSlot}
       doSquash={!blob.isDead}
       hasCrown={blob.isGrandmaster ?? false}
+      toolSlot={mapActivityToTool(blob.currentActivity)}
     />
   );
 };

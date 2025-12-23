@@ -7,9 +7,10 @@ type BlobBaseProps = {
   doSquash: boolean;
   hasCrown: boolean;
   eyeSlot: JSX.Element;
+  toolSlot?: JSX.Element;
 };
 
-export const BlobBase = ({ size, color, eyeSlot, doSquash, hasCrown }: BlobBaseProps) => {
+export const BlobBase = ({ size, color, eyeSlot, doSquash, hasCrown, toolSlot }: BlobBaseProps) => {
   return (
     <svg width={size} height={size} viewBox="0 0 130 95" version="1.1" id="svg5" xmlns="http://www.w3.org/2000/svg">
       <g id="layer1">
@@ -54,6 +55,20 @@ export const BlobBase = ({ size, color, eyeSlot, doSquash, hasCrown }: BlobBaseP
                 />
               )}
               <Crown />
+            </g>
+          )}
+          {toolSlot && (
+            <g id="toolGroup">
+              {doSquash && (
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  values="0 -1.74; 0 3.48; 0 -1.74"
+                  dur="3s"
+                  repeatCount="indefinite"
+                />
+              )}
+              {toolSlot}
             </g>
           )}
         </g>

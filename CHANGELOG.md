@@ -332,6 +332,11 @@
 - added new activity: mining
   - from the blobs who chose to mine in the current cycle one is chosen as winner
   - the winner gets the same amount of coins as the number of blobs participated in mining
+- added visualization for the following activities:
+  - practice
+  - intense training
+  - labour
+  - mining
 - added dark mode and a switch between dark and light mode
 - adjusted dashboard page so the policies card appear next to the time card even in mobile mode
 - adjusted font sizes of card titles and header titles
