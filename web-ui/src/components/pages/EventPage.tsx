@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
 import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
 import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
+import { SprintRaceEventFrame } from '../event-components/SprintRaceEventFrame';
 import { useTranslation } from 'react-i18next';
 import { EliminationScoringEventFrame } from '../event-components/elimination-scoring/EliminationScoringEventFrame';
 
@@ -66,6 +67,14 @@ export const EventPage = () => {
       case EventType.EnduranceRace:
         return (
           <EnduranceRaceEventFrame
+            event={event}
+            setIsEventFinished={setIsEventFinished}
+            isEventFinished={isEventFinished}
+          />
+        );
+      case EventType.SprintRace:
+        return (
+          <SprintRaceEventFrame
             event={event}
             setIsEventFinished={setIsEventFinished}
             isEventFinished={isEventFinished}

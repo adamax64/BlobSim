@@ -625,19 +625,64 @@
         ]
       }
     },
-    "/competition/race-event-results": {
+    "/competition/endurance-event-results": {
       "post": {
         "tags": [
           "competition"
         ],
-        "summary": "Save Race",
-        "description": "Save event results for race events.",
-        "operationId": "save_race_competition_race_event_results_post",
+        "summary": "Save Endurance",
+        "description": "Save event results for endurance events.",
+        "operationId": "save_endurance_competition_endurance_event_results_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_save_race_competition_race_event_results_post"
+                "$ref": "#/components/schemas/Body_save_endurance_competition_endurance_event_results_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/competition/sprint-event-results": {
+      "post": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Save Sprint",
+        "description": "Save event results for sprint events.",
+        "operationId": "save_sprint_competition_sprint_event_results_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_save_sprint_competition_sprint_event_results_post"
               }
             }
           },
@@ -933,14 +978,14 @@
         }
       }
     },
-    "/event-records/race": {
+    "/event-records/endurance": {
       "get": {
         "tags": [
           "event-records"
         ],
-        "summary": "Get Race",
-        "description": "Get race event records by actions.",
-        "operationId": "get_race_event_records_race_get",
+        "summary": "Get Endurance",
+        "description": "Get endurance race event records by actions.",
+        "operationId": "get_endurance_event_records_endurance_get",
         "parameters": [
           {
             "name": "event_id",
@@ -972,7 +1017,64 @@
                   "items": {
                     "$ref": "#/components/schemas/RaceEventRecordDto"
                   },
-                  "title": "Response Get Race Event Records Race Get"
+                  "title": "Response Get Endurance Event Records Endurance Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event-records/sprint": {
+      "get": {
+        "tags": [
+          "event-records"
+        ],
+        "summary": "Get Sprint",
+        "description": "Get sprint race event records by actions.",
+        "operationId": "get_sprint_event_records_sprint_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "is_playback",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Is Playback"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SprintEventRecordDto"
+                  },
+                  "title": "Response Get Sprint Event Records Sprint Get"
                 }
               }
             }
@@ -1614,6 +1716,26 @@
         ],
         "title": "Body_save_elimination_competition_elimination_event_results_post"
       },
+      "Body_save_endurance_competition_endurance_event_results_post": {
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/EventDto"
+          },
+          "event_records": {
+            "items": {
+              "$ref": "#/components/schemas/RaceEventRecordDto"
+            },
+            "type": "array",
+            "title": "Event Records"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event",
+          "event_records"
+        ],
+        "title": "Body_save_endurance_competition_endurance_event_results_post"
+      },
       "Body_save_quartered_competition_quartered_event_results_post": {
         "properties": {
           "event": {
@@ -1634,14 +1756,14 @@
         ],
         "title": "Body_save_quartered_competition_quartered_event_results_post"
       },
-      "Body_save_race_competition_race_event_results_post": {
+      "Body_save_sprint_competition_sprint_event_results_post": {
         "properties": {
           "event": {
             "$ref": "#/components/schemas/EventDto"
           },
           "event_records": {
             "items": {
-              "$ref": "#/components/schemas/RaceEventRecordDto"
+              "$ref": "#/components/schemas/SprintEventRecordDto"
             },
             "type": "array",
             "title": "Event Records"
@@ -1652,7 +1774,7 @@
           "event",
           "event_records"
         ],
-        "title": "Body_save_race_competition_race_event_results_post"
+        "title": "Body_save_sprint_competition_sprint_event_results_post"
       },
       "CalendarDto": {
         "properties": {
@@ -1791,6 +1913,7 @@
           "QUARTERED_ONE_SHOT_SCORING",
           "QUARTERED_TWO_SHOT_SCORING",
           "ENDURANCE_RACE",
+          "SPRINT_RACE",
           "ELIMINATION_SCORING",
           "CATCHUP_TRAINING"
         ],
@@ -2339,6 +2462,47 @@
           "cycle"
         ],
         "title": "SimTimeDto"
+      },
+      "SprintEventRecordDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobCompetitorDto"
+          },
+          "distance_records": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Distance Records"
+          },
+          "previous_position": {
+            "type": "integer",
+            "title": "Previous Position",
+            "default": 1
+          },
+          "is_finished": {
+            "type": "boolean",
+            "title": "Is Finished",
+            "default": false
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob",
+          "distance_records"
+        ],
+        "title": "SprintEventRecordDto"
       },
       "StandingsDTO": {
         "properties": {

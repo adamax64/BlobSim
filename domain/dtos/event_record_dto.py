@@ -31,6 +31,12 @@ class RaceEventRecordDto(EventRecordDto):
 
 
 @dataclass
+class SprintEventRecordDto(RaceEventRecordDto):
+    is_finished: bool = False
+    time: float | None = None
+
+
+@dataclass
 class EliminationEventRecordDto(EventRecordDto):
     last_score: float | None = None
     eliminated: bool = False

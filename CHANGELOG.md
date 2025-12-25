@@ -329,6 +329,13 @@
 
 ### 3.5
 
+- added new event type: sprint race
+  - blobs have a certain amount of time to finish the race of a given distance
+  - the available time is determined the same way as for endurance races
+  - the distance to make during the race is the same amount of distance units as the number of available ticks
+  - point system is the same as for endurance races with one addition:
+    - contenders who cannot finish the given time in the available time get one point less as the base points determined by finishing position
+  - from the four guaranteed event types Quartered two shot high jump is replaced by sprint race
 - added new activity: mining
   - from the blobs who chose to mine in the current cycle one is chosen as winner
   - the winner gets the same amount of coins as the number of blobs participated in mining

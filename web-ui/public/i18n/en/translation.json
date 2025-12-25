@@ -59,6 +59,7 @@
       "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
       "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
       "ENDURANCE_RACE": "Endurance Race",
+      "SPRINT_RACE": "Sprint Race",
       "ELIMINATION_SCORING": "Elimination Scoring",
       "CATCHUP_TRAINING": "Catch-up Training No. {{day}}"
     },
@@ -109,6 +110,13 @@
     "distance": "Distance",
     "delta_leader": "Delta leader",
     "delta_interval": "Delta interval"
+  },
+  "sprint_race": {
+    "tick": "Tick",
+    "name": "Name",
+    "progress": "Progress",
+    "delta_leader": "Delta leader",
+    "delta_time": "Delta interval/Overall time"
   },
   "progress_button": {
     "start_competition": "Start Competition",

@@ -51,7 +51,11 @@ td.text-bronze {
 }
 
 .column-actual {
-  background-color: #e9f3ff;
+  background-color: var(--column-active-bg);
+}
+
+.cell-finished {
+  background-color: var(--column-active-bg);
 }
 
 .row-current {
@@ -82,15 +86,15 @@ td.text-bronze {
 }
 
 .cell-overtake {
-  background-color: #d4f8e8;
+  background-color: var(--cell-overtake-bg);
   td {
-    color: #007700 !important;
+    color: var(--cell-overtake-text) !important;
   }
 }
 
 .cell-fell-behind {
-  background-color: #ffe6b3;
+  background-color: var(--cell-fell-behind-bg);
   td {
-    color: #a65c00 !important;
+    color: var(--cell-fell-behind-text) !important;
   }
 }

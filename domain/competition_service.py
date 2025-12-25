@@ -4,7 +4,7 @@ from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import save_all_results
 from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto
+from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, SprintEventRecordDto
 from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_event_ended_news
@@ -98,6 +98,11 @@ def _calculate_bonus_points(record: EventRecordDto, position: int, max_wins: int
             bonus_points += 1
         if record.tick_wins == max_wins:
             bonus_points += 1
+        if position == 1:
+            bonus_points += 1
+        return bonus_points
+    elif isinstance(record, SprintEventRecordDto):
+        bonus_points = 0 if record.is_finished else -1
         if position == 1:
             bonus_points += 1
         return bonus_points

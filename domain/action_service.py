@@ -1,5 +1,6 @@
 import random
 from data.db.db_engine import transactional
+from data.model.event_type import EventType
 from data.persistence.action_repository import (
     get_action_by_event_and_blob,
     get_all_actions_by_event,
@@ -54,7 +55,12 @@ def create_actions_for_race(contenders: list[BlobCompetitorDto], event_id: int, 
     max_scorer_name = None
     max_scorer_id = None
 
+    event = get_event_by_id(session, event_id)
+
     for contender in contenders:
+        if event.type == EventType.SPRINT_RACE and sum(actions[contender.id].scores) >= race_duration:
+            continue
+
         score = generate_race_score_for_contender(contender, current_time, race_duration, tick)
         actions[contender.id].scores = actions[contender.id].scores + [score]
         if score > max_score:
@@ -64,8 +70,6 @@ def create_actions_for_race(contenders: list[BlobCompetitorDto], event_id: int, 
 
     save_all_actions(session, actions.values())
 
-    # Get event information to check for records
-    event = get_event_by_id(session, event_id)
     if event and max_scorer_id:
         is_new_record = check_and_update_record(event.league_id, event.type, max_scorer_id, max_score, session)
         if is_new_record:

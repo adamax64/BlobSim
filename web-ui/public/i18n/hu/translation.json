@@ -59,6 +59,7 @@
       "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
       "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
       "ENDURANCE_RACE": "Hosszútávú verseny",
+      "SPRINT_RACE": "Sprintverseny",
       "ELIMINATION_SCORING": "Kieséses verseny",
       "CATCHUP_TRAINING": "Felzárkóztató tréning {{day}}."
     },
@@ -109,6 +110,13 @@
     "distance": "Távolság",
     "delta_leader": "Delta az éllovashoz",
     "delta_interval": "Delta intervallum"
+  },
+  "sprint_race": {
+    "tick": "Tick",
+    "name": "Név",
+    "progress": "Előrehaladás",
+    "delta_leader": "Delta az éllovashoz",
+    "delta_time": "Delta intervallum/Össz. idő"
   },
   "progress_button": {
     "start_competition": "Verseny indítása",

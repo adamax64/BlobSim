@@ -9,3 +9,8 @@ export const NarrowCell = styled(TableCell)(({}) => ({
   paddingLeft: '8px',
   paddingRight: '8px',
 }));
+
+export const DistanceProgress = styled(LinearProgress)({
+  height: 24,
+  borderRadius: 2,
+});

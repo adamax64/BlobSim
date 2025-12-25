@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import traceback
 
-from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
+from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto, SprintEventRecordDto
 from domain.event_record_services.event_record_service import get_event_records
 from domain.event_service import get_event_by_id
 from domain.exceptions.event_not_found_exception import EventNotFoundException
@@ -16,9 +16,15 @@ def get_quartered(event_id: int) -> list[QuarteredEventRecordDto]:
     return _get_event_records(event_id)
 
 
-@router.get("/race", response_model=list[RaceEventRecordDto])
-def get_race(event_id: int, is_playback: bool = False) -> list[RaceEventRecordDto]:
-    """ Get race event records by actions. """
+@router.get("/endurance", response_model=list[RaceEventRecordDto])
+def get_endurance(event_id: int, is_playback: bool = False) -> list[RaceEventRecordDto]:
+    """ Get endurance race event records by actions. """
+    return _get_event_records(event_id, is_playback)
+
+
+@router.get("/sprint", response_model=list[SprintEventRecordDto])
+def get_sprint(event_id: int, is_playback: bool = False) -> list[RaceEventRecordDto]:
+    """ Get sprint race event records by actions. """
     return _get_event_records(event_id, is_playback)
 
 

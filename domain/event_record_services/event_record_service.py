@@ -4,7 +4,7 @@ from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.event_record_dto import EventRecordDto
 from domain.event_record_services.elimination_event_record_service import get_elimination_event_records
 from domain.event_record_services.quartered_event_record_service import get_quartered_event_records
-from domain.event_record_services.race_event_records_service import get_race_event_records
+from domain.event_record_services.race_event_records_service import get_endurance_event_records, get_sprint_event_records
 
 
 def get_event_records(
@@ -19,6 +19,8 @@ def get_event_records(
     ):
         return get_quartered_event_records(actions, competitors, event_type)
     elif event_type == EventTypeDto.ENDURANCE_RACE:
-        return get_race_event_records(actions, competitors, is_playback)
+        return get_endurance_event_records(actions, competitors, is_playback)
+    elif event_type == EventTypeDto.SPRINT_RACE:
+        return get_sprint_event_records(actions, competitors, is_playback)
     else:
         return get_elimination_event_records(actions, competitors)

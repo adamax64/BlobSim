@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   CardContent,
   CardHeader,
   Divider,
@@ -70,7 +69,8 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
     Error,
     { eventId: number; isPlayback: boolean }
   >({
-    mutationFn: ({ eventId, isPlayback }) => eventRecordsApi.getRaceEventRecordsRaceGet({ eventId, isPlayback }),
+    mutationFn: ({ eventId, isPlayback }) =>
+      eventRecordsApi.getEnduranceEventRecordsEnduranceGet({ eventId, isPlayback }),
     onSuccess: (data) => {
       setLoadingNextTick(false);
       setEventRecordsCache(data);
@@ -114,8 +114,8 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
 
   const { mutate: finishEvent } = useMutation<void, Error>({
     mutationFn: () =>
-      competitionApi.saveRaceCompetitionRaceEventResultsPost({
-        bodySaveRaceCompetitionRaceEventResultsPost: { event, eventRecords: eventRecords ?? [] },
+      competitionApi.saveEnduranceCompetitionEnduranceEventResultsPost({
+        bodySaveEnduranceCompetitionEnduranceEventResultsPost: { event, eventRecords: eventRecords ?? [] },
       }),
     onSuccess: () => {
       setIsEventFinished(true);

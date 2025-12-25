@@ -6,7 +6,7 @@ from domain.competition_service import (
     process_event_results as service_save_event_results,
 )
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto
+from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto, SprintEventRecordDto
 from domain.dtos.result_dto import ResultDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.result_service import get_results_for_event
@@ -43,10 +43,18 @@ async def save_quartered(event: EventDto, event_records: list[QuarteredEventReco
     _save_event_results(event, event_records)
 
 
-@router.post("/race-event-results")
-async def save_race(event: EventDto, event_records: list[RaceEventRecordDto], _=Depends(require_auth)) -> None:
+@router.post("/endurance-event-results")
+async def save_endurance(event: EventDto, event_records: list[RaceEventRecordDto], _=Depends(require_auth)) -> None:
     """
-    Save event results for race events.
+    Save event results for endurance events.
+    """
+    _save_event_results(event, event_records)
+
+
+@router.post("/sprint-event-results")
+async def save_sprint(event: EventDto, event_records: list[SprintEventRecordDto], _=Depends(require_auth)) -> None:
+    """
+    Save event results for sprint events.
     """
     _save_event_results(event, event_records)
 

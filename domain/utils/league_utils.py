@@ -27,6 +27,7 @@ def get_race_duration_by_size(league_size: int) -> int:
         return 75
     if league_size >= TINY_FIELD:
         return 60
+    return 60  # Default for sizes less than TINY_FIELD
 
 
 def get_number_of_rounds_by_size(league_size: int) -> int:
