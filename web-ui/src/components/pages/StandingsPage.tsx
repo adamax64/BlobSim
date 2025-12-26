@@ -118,7 +118,7 @@ export function StandingsPage() {
 
   const isFormLoading = useMemo(
     () => loadingLeagues || loadingTime || !selectedLeague || (!seasonOrEon && seasonOrEon !== 0),
-    [loadingLeagues, loadingTime, selectedLeague],
+    [loadingLeagues, loadingTime, selectedLeague, seasonOrEon],
   );
 
   const hasSeasonOrEonEnded = useMemo(() => {

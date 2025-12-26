@@ -346,6 +346,11 @@
   - mining
 - added dark mode and a switch between dark and light mode
 - adjusted dashboard page so the policies card appear next to the time card even in mobile mode
+- changed standings table:
+  - points cell background is colored for podium finishes instead of font color
+  - removed row coloring for closed seasons
+  - centered points for competition finishes and point sums
+- fixed standings page loading issue
 - adjusted font sizes of card titles and header titles
 - fixed policies not fetched during page load
 - fixed console error about unique key prop in NewsContent

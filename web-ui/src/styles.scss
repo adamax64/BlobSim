@@ -30,19 +30,19 @@ body {
   background-color: var(--row-bronze-bg);
 }
 
-td.text-gold {
+td.gold {
   font-weight: bolder;
-  color: var(--row-gold-text);
+  background-color: var(--row-gold-bg);
 }
 
-td.text-silver {
+td.silver {
   font-weight: bolder;
-  color: var(--row-silver-text);
+  background-color: var(--row-silver-bg);
 }
 
-td.text-bronze {
+td.bronze {
   font-weight: bolder;
-  color: var(--row-bronze-text);
+  background-color: var(--row-bronze-bg);
 }
 
 .row-middle {
