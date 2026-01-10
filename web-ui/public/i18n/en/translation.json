@@ -185,7 +185,21 @@
       "other_leagues": "Other leagues"
     },
     "titles-tab": {
-      "title": "Titles"
+      "title": "Titles",
+      "season": "Champions and Grandmasters",
+      "competition": "Wins and Podiums",
+      "table": {
+        "name": "Name",
+        "count": "Count",
+        "grandmasters": "Grandmasters",
+        "championships": "Championships",
+        "season_victories": "Season Victories",
+        "season_victory_info": "A.K.A. Lower League Championships",
+        "top_wins": "Top League Wins",
+        "top_podiums": "Top League Podiums",
+        "lower_wins": "Lower League Wins",
+        "lower_podiums": "Lower League Podiums"
+      }
     },
     "events-tab": {
       "title": "Events"

@@ -37,7 +37,7 @@ export const HallOfFamePage = () => {
         <ChronologyTab setLoading={setLoading} />
       </Box>
       <Box role="tabpanel" hidden={index !== 1} id="hall-of-fame-tab-titles-content">
-        <TitlesTab />
+        <TitlesTab setLoading={setLoading} />
       </Box>
       <Box role="tabpanel" hidden={index !== 2} id="hall-of-fame-tab-events-content">
         <EventsTab />

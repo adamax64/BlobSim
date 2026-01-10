@@ -45,13 +45,14 @@ def _get_grandmaster_counts(session, current_season: int, grandmaster_id: int) -
         if gm.blob not in grandmaster_counts:
             grandmaster_counts[gm.blob] = 0
         grandmaster_counts[gm.blob] += 1
-    return [
+    unsorted = [
         TitleCountDto(
             blob=map_to_blob_state_dto(blob, current_season, grandmaster_id),
             count=count
         )
         for blob, count in grandmaster_counts.items()
     ]
+    return sorted(unsorted, key=lambda x: x.count, reverse=True)
 
 
 def _get_champion_counts(session, current_season: int, grandmaster_id: int, blobs) -> list[TitleCountDto]:
@@ -61,13 +62,14 @@ def _get_champion_counts(session, current_season: int, grandmaster_id: int, blob
         if champ.blob not in champion_counts:
             champion_counts[champ.blob] = 0
         champion_counts[champ.blob] += 1
-    return [
+    unsorted = [
         TitleCountDto(
             blob=map_to_blob_state_dto(blob, current_season, grandmaster_id),
             count=count
         )
         for blob, count in champion_counts.items()
     ]
+    return sorted(unsorted, key=lambda x: x.count, reverse=True)
 
 
 def _get_top_win_counts(current_season: int, grandmaster_id: int, blobs) -> list[TitleCountDto]:

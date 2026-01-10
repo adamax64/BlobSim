@@ -4,10 +4,11 @@ import defaultConfig from '../../default-config';
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Box } from '@mui/system';
-import { Accordion, AccordionDetails, AccordionSummary, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Accordion, AccordionDetails, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { GrandmasterChronologyTable } from './tables/GrandmasterChronologyTable';
 import { ChampionsChronologyTable } from './tables/ChampionsChronologyTable';
+import { SmallAccordionTitle } from '../common/StyledComponents';
 
 interface ChronologyTabProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -57,9 +58,9 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
         <>
           {topLeague && (
             <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="body2">{topLeague.league.name}</Typography>
-              </AccordionSummary>
+              </SmallAccordionTitle>
               <AccordionDetails>
                 <ChampionsChronologyTable leagueChampions={topLeague} />
               </AccordionDetails>
@@ -67,11 +68,11 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
           )}
           {grandmasters && (
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="body2">
                   {t('hall-of-fame.chronology-tab.table.grandmaster_table_title')}
                 </Typography>
-              </AccordionSummary>
+              </SmallAccordionTitle>
               <AccordionDetails>
                 <GrandmasterChronologyTable grandmasters={grandmasters} />
               </AccordionDetails>
@@ -79,9 +80,9 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
           )}
           {dropoutLeague && (
             <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="body2">{dropoutLeague.league.name}</Typography>
-              </AccordionSummary>
+              </SmallAccordionTitle>
               <AccordionDetails>
                 <ChampionsChronologyTable leagueChampions={dropoutLeague} />
               </AccordionDetails>
@@ -90,9 +91,9 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
           {otherLeagues.length > 0 &&
             otherLeagues.map((league) => (
               <Accordion key={league.league.id}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="body2">{league.league.name}</Typography>
-                </AccordionSummary>
+                </SmallAccordionTitle>
                 <AccordionDetails>
                   <ChampionsChronologyTable leagueChampions={league} />
                 </AccordionDetails>
@@ -102,9 +103,9 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
       ) : (
         <>
           <Accordion defaultExpanded sx={{ flexGrow: 1 }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{t('hall-of-fame.chronology-tab.highlighted')}</Typography>
-            </AccordionSummary>
+            <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="body2">{t('hall-of-fame.chronology-tab.highlighted')}</Typography>
+            </SmallAccordionTitle>
             <AccordionDetails sx={{ display: 'flex', flexDirection: 'row', flexGrow: 1, gap: 2 }}>
               {topLeague && <ChampionsChronologyTable leagueChampions={topLeague} />}
               {grandmasters && <GrandmasterChronologyTable grandmasters={grandmasters} />}
@@ -112,16 +113,16 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
             </AccordionDetails>
           </Accordion>
           <Accordion sx={{ flexGrow: 1 }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{t('hall-of-fame.chronology-tab.other')}</Typography>
-            </AccordionSummary>
+            <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="body2">{t('hall-of-fame.chronology-tab.other')}</Typography>
+            </SmallAccordionTitle>
             <AccordionDetails sx={{ display: 'flex', flexDirection: 'row', flexGrow: 1, gap: 2 }}>
               {otherLeagues.length > 0 ? (
                 otherLeagues.map((league) => (
                   <ChampionsChronologyTable key={league.league.id} leagueChampions={league} />
                 ))
               ) : (
-                <Typography variant="body2">{t('hall-of-fame.chronology-tab.empty')}</Typography>
+                <Typography variant="caption">{t('hall-of-fame.chronology-tab.empty')}</Typography>
               )}
             </AccordionDetails>
           </Accordion>
