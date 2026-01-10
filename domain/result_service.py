@@ -4,8 +4,8 @@ from data.db.db_engine import transactional
 from data.persistence.result_repository import get_results_of_event
 from domain.dtos.result_dto import ResultDto
 from domain.blob_services.blob_fetching_service import map_to_blob_state_dto
+from domain.hall_of_fame_services.titles_chronology_service import get_current_grandmaster_id
 from domain.sim_data_service import get_sim_time
-from domain.standings_service import get_current_grandmaster_id
 from domain.utils.sim_time_utils import get_season
 
 

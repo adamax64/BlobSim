@@ -12,6 +12,8 @@ module.exports = {
   env: { browser: true, es2021: true },
   rules: {
     '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-unused-vars': 'error',
+    'plugin:react/jsx-runtime': 'extends',
   },
   settings: { react: { version: 'detect' } },
 };

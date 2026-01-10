@@ -6,6 +6,7 @@ import CalendarMonth from '@mui/icons-material/CalendarMonth';
 import Dashboard from '@mui/icons-material/Dashboard';
 import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import Factory from '@mui/icons-material/Factory';
+import StarIcon from '@mui/icons-material/Star';
 import { BlobPiktogram } from '../icons/BlobPiktogram';
 import { Link } from '@tanstack/react-router';
 import { AppPage, MENU_ITEMS } from './constants';
@@ -23,6 +24,8 @@ function getMenuIcon(page: string) {
       return <EmojiEvents />;
     case 'calendar':
       return <CalendarMonth />;
+    case 'hall-of-fame':
+      return <StarIcon />;
     default:
       return null;
   }

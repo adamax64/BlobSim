@@ -204,7 +204,8 @@
     "blobs": "Blobok",
     "factory": "Blob Gyár",
     "standings": "Eredmények",
-    "calendar": "Versenynaptár"
+    "calendar": "Versenynaptár",
+    "hall-of-fame": "Hírességek Csarnoka"
   },
   "page_titles": {
     "dashboard": "Blob Bajnokság - Kezdőlap",
@@ -217,6 +218,8 @@
     "standings_short": "BCS - Tabellák",
     "calendar": "Blob Bajnokság - Versenynaptár",
     "calendar_short": "BCS - Versenynaptár",
+    "hall-of-fame": "Blob Bajnokság - Hírességek Csarnoka",
+    "hall-of-fame_short": "BCS - Hírességek Csarnoka",
     "login": "Admin Bejelentkezés",
     "login_short": "Admin Bejelentkezés"
   },

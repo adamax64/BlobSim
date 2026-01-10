@@ -15,11 +15,12 @@ from data.persistence.blob_reposiotry import (
     get_youngest_blob_debuting_in_season,
 )
 from domain.enums.activity_type import ActivityType
+from domain.hall_of_fame_services.titles_chronology_service import get_current_grandmaster_id
 from domain.news_services.news_service import add_blob_terminated_news
 from domain.sim_data_service import get_current_calendar, get_event_next_day, get_sim_time
 from data.persistence.policy_repository import get_active_policy_by_type
 from domain.policy_service import create_or_update_policy
-from domain.standings_service import get_current_grandmaster_id, get_last_place_from_season_by_league
+from domain.standings_service import get_last_place_from_season_by_league
 from data.persistence.league_repository import get_all_leagues_ordered_by_level
 from data.persistence.result_repository import get_most_recent_real_league_result_of_blob
 from domain.utils.policy_utils import choose_random_policy_type

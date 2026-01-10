@@ -3,9 +3,13 @@ from math import ceil
 from typing import List
 from data.db.db_engine import transactional
 from data.model.blob import Blob
+from data.model.champion import Champion
+from data.model.grandmaster import Grandmaster
 from data.model.name_suggestion import NameSuggestion
 from data.persistence.blob_reposiotry import get_all_by_league_order_by_id, get_blob_by_id, save_all_blobs, save_blob
 from data.persistence.calendar_repository import count_unconcluded_for_league
+from data.persistence.champion_repository import add_champion
+from data.persistence.grandmaster_repository import add_grandmaster
 from data.persistence.name_suggestion_repository import save_suggestion
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.league_dto import LeagueDto
@@ -28,6 +32,10 @@ def end_eon_if_over(season: int, league: LeagueDto, session) -> List[Grandmaster
     if grandmaster.integrity < CYCLES_PER_EON:
         grandmaster.integrity = CYCLES_PER_EON
     save_blob(session, grandmaster)
+    add_grandmaster(session, Grandmaster(
+        eon=season / 4,
+        blob_id=grandmaster.id,
+    ))
 
     save_suggestion(session, NameSuggestion(
         last_name=grandmaster.last_name,
@@ -67,6 +75,11 @@ def end_season_if_over(league: LeagueDto, season: int, session) -> List[Standing
     save_all_blobs(session, list(blobs.values()))
 
     if champion is not None:
+        add_champion(session, Champion(
+            season=season,
+            blob_id=champion.id,
+            league_id=league.id
+        ))
         add_season_ended_news(league.name, champion.id, session)
     if rookie is not None:
         add_rookie_of_the_year_news(rookie.id, session)

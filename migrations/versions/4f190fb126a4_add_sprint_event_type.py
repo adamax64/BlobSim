@@ -8,8 +8,6 @@ Create Date: 2025-12-25 11:50:18.446720
 from typing import Sequence, Union
 
 from alembic import op
-import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
 revision: str = '4f190fb126a4'
@@ -20,7 +18,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.execute('ALTER TYPE "BCS".eventtype ADD VALUE IF NOT EXISTS \'SPRINT_RACE\';')
-    
+
     # Update the check constraint to include SPRINT_RACE
     op.drop_constraint('ck_records_event_type', 'records', schema='BCS')
     op.create_check_constraint(

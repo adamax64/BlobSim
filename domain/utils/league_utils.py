@@ -1,3 +1,7 @@
+from data.model.league import League
+from domain.dtos.league_dto import LeagueDto
+
+
 INACTIVE_SEASON = 0
 MINIMAL_SEASON = 4
 SHORT_SEASON = 8
@@ -56,3 +60,12 @@ def get_epoch_cycle_by_level(level: int) -> int:
     if level == 0:
         return 0
     return -1
+
+
+def map_league_to_dto(league: League, competitors) -> LeagueDto:
+    return LeagueDto(
+        id=league.id,
+        name=league.name,
+        field_size=len(competitors),
+        level=league.level
+    )

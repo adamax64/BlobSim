@@ -10,6 +10,7 @@ from domain.dtos.league_dto import LeagueDto
 from domain.news_services.news_service import add_new_season_news
 from domain.standings_service import get_standings
 from domain.utils.constants import CYCLES_PER_SEASON, MAX_FIELD_SIZE, MAX_LEAGUE_COUNT, MIN_FIELD_SIZE, QUEUE_LEVEL
+from domain.utils.league_utils import map_league_to_dto
 
 
 retirees: list[int] = []
@@ -22,7 +23,7 @@ def get_all_real_leagues(session) -> list[LeagueDto]:
     """ Get all leagues that are not the queue. """
 
     leagues = league_repository.get_all_real_leagues(session)
-    return [LeagueDto(id=league.id, name=league.name, field_size=len(league.players), level=league.level) for league in leagues]
+    return [map_league_to_dto(league, league.players) for league in leagues]
 
 
 @transactional
@@ -40,6 +41,16 @@ def manage_league_transfers(session: Session, current_season: int):
 
     transfers_mapped = {league_name: names for league_name, names in transfers.items()}
     add_new_season_news(current_season + 1, transfers_mapped, retirees, debuts, session)
+
+
+@transactional
+def get_league_by_id(league_id: int, session) -> LeagueDto | None:
+    """ Get a league by its ID. """
+
+    league = league_repository.get_league_by_id(session, league_id)
+    if league is None:
+        return None
+    return map_league_to_dto(league, league.players)
 
 
 def _correct_contract_of_inactive_leagues(session, leagues: list[League]):

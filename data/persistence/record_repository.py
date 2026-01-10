@@ -21,16 +21,6 @@ def get_record_by_league_and_event_type(session: Session, league_id: int, event_
 
 
 @transactional
-def get_all_records_by_league(session: Session, league_id: int) -> list[Record]:
-    return session.query(Record).filter(Record.league_id == league_id).all()
-
-
-@transactional
-def get_all_records_by_event_type(session: Session, event_type: EventType) -> list[Record]:
-    return session.query(Record).filter(Record.event_type == event_type).all()
-
-
-@transactional
 def get_all_records(session: Session) -> list[Record]:
     return session.query(Record).all()
 

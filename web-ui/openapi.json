@@ -1139,48 +1139,18 @@
         }
       }
     },
-    "/records/league/{league_id}": {
+    "/hall-of-fame/chronology": {
       "get": {
-        "summary": "Get League Records",
-        "description": "Get all records for a specific league.",
-        "operationId": "get_league_records_records_league__league_id__get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "league_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "League Id"
-            }
-          }
-        ],
+        "summary": "Get Titles Chronology",
+        "description": "Fetch the chronology of titles awarded over the seasons.",
+        "operationId": "get_titles_chronology_hall_of_fame_chronology_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RecordDto"
-                  },
-                  "title": "Response Get League Records Records League  League Id  Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/TitlesChronologyDto"
                 }
               }
             }
@@ -1188,47 +1158,18 @@
         }
       }
     },
-    "/records/event-type/{event_type}": {
+    "/hall-of-fame/titles": {
       "get": {
-        "summary": "Get Event Type Records",
-        "description": "Get all records for a specific event type.",
-        "operationId": "get_event_type_records_records_event_type__event_type__get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "event_type",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/EventType"
-            }
-          }
-        ],
+        "summary": "Get Titles Count Summary",
+        "description": "Fetch the count of the following:\n- Grandmaster titles\n- Top league championships\n- Top league wins\n- Top league podiums\n- Lower league season victories\n- Lower league wins\n- Lower league podiums.",
+        "operationId": "get_titles_count_summary_hall_of_fame_titles_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RecordDto"
-                  },
-                  "title": "Response Get Event Type Records Records Event Type  Event Type  Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/TitlesCountSummaryDto"
                 }
               }
             }
@@ -1236,93 +1177,23 @@
         }
       }
     },
-    "/records/league/{league_id}/event-type/{event_type}": {
+    "/hall-of-fame/records-by-event": {
       "get": {
-        "summary": "Get League Event Type Record",
-        "description": "Get the current record for a specific league and event type combination.",
-        "operationId": "get_league_event_type_record_records_league__league_id__event_type__event_type__get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "league_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "League Id"
-            }
-          },
-          {
-            "name": "event_type",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/EventType"
-            }
-          }
-        ],
+        "summary": "Get Records By Event Type",
+        "description": "Fetch wins and records organized by event type and league.",
+        "operationId": "get_records_by_event_type_hall_of_fame_records_by_event_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/RecordDto"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "title": "Response Get League Event Type Record Records League  League Id  Event Type  Event Type  Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/RecordsByEventDto"
                 }
               }
             }
           }
         }
-      }
-    },
-    "/records": {
-      "get": {
-        "summary": "Get All Records",
-        "description": "Get all records in the system.",
-        "operationId": "get_all_records_records_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/RecordDto"
-                  },
-                  "type": "array",
-                  "title": "Response Get All Records Records Get"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
       }
     },
     "/calendar": {
@@ -1822,6 +1693,23 @@
         ],
         "title": "CalendarDto"
       },
+      "ChampionDto": {
+        "properties": {
+          "season": {
+            "type": "integer",
+            "title": "Season"
+          },
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "blob"
+        ],
+        "title": "ChampionDto"
+      },
       "EliminationEventRecordDto": {
         "properties": {
           "blob": {
@@ -1919,6 +1807,23 @@
         ],
         "title": "EventType"
       },
+      "GrandmasterDto": {
+        "properties": {
+          "eon": {
+            "type": "integer",
+            "title": "Eon"
+          },
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "eon",
+          "blob"
+        ],
+        "title": "GrandmasterDto"
+      },
       "GrandmasterStandingsDTO": {
         "properties": {
           "blob_id": {
@@ -1988,6 +1893,26 @@
           "GOOD"
         ],
         "title": "IntegrityState"
+      },
+      "LeagueChampionsDto": {
+        "properties": {
+          "league": {
+            "$ref": "#/components/schemas/LeagueDto"
+          },
+          "champions": {
+            "items": {
+              "$ref": "#/components/schemas/ChampionDto"
+            },
+            "type": "array",
+            "title": "Champions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "league",
+          "champions"
+        ],
+        "title": "LeagueChampionsDto"
       },
       "LeagueDto": {
         "properties": {
@@ -2375,6 +2300,36 @@
         ],
         "title": "RecordDto"
       },
+      "RecordsByEventDto": {
+        "properties": {
+          "winsByEvent": {
+            "items": {
+              "$ref": "#/components/schemas/WinsByEventDto"
+            },
+            "type": "array",
+            "title": "Winsbyevent"
+          },
+          "recordsByEvent": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/RecordDto"
+              },
+              "type": "array"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/LeagueDto"
+            },
+            "type": "object",
+            "title": "Recordsbyevent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "winsByEvent",
+          "recordsByEvent"
+        ],
+        "title": "RecordsByEventDto"
+      },
       "ResultDto": {
         "properties": {
           "blob": {
@@ -2573,6 +2528,111 @@
         ],
         "title": "StandingsResultDTO"
       },
+      "TitleCountDto": {
+        "properties": {
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob",
+          "count"
+        ],
+        "title": "TitleCountDto"
+      },
+      "TitlesChronologyDto": {
+        "properties": {
+          "league_champions": {
+            "items": {
+              "$ref": "#/components/schemas/LeagueChampionsDto"
+            },
+            "type": "array",
+            "title": "League Champions"
+          },
+          "grandmasters": {
+            "items": {
+              "$ref": "#/components/schemas/GrandmasterDto"
+            },
+            "type": "array",
+            "title": "Grandmasters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "league_champions",
+          "grandmasters"
+        ],
+        "title": "TitlesChronologyDto"
+      },
+      "TitlesCountSummaryDto": {
+        "properties": {
+          "grandmasters": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Grandmasters"
+          },
+          "championships": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Championships"
+          },
+          "top_wins": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Top Wins"
+          },
+          "top_podiums": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Top Podiums"
+          },
+          "season_victories": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Season Victories"
+          },
+          "lower_wins": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Lower Wins"
+          },
+          "lower_podiums": {
+            "items": {
+              "$ref": "#/components/schemas/TitleCountDto"
+            },
+            "type": "array",
+            "title": "Lower Podiums"
+          }
+        },
+        "type": "object",
+        "required": [
+          "grandmasters",
+          "championships",
+          "top_wins",
+          "top_podiums",
+          "season_victories",
+          "lower_wins",
+          "lower_podiums"
+        ],
+        "title": "TitlesCountSummaryDto"
+      },
       "Token": {
         "properties": {
           "token": {
@@ -2639,6 +2699,27 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "WinsByEventDto": {
+        "properties": {
+          "event_type": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
+          },
+          "win_count": {
+            "type": "integer",
+            "title": "Win Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_type",
+          "blob",
+          "win_count"
+        ],
+        "title": "WinsByEventDto"
       }
     },
     "securitySchemes": {

@@ -315,7 +315,7 @@
 - Replaced top 3 blobs in event ended news with a link
   - Opens a modal containing the event results
 
-### 3.4
+### 3.4 - Grandmaster activity update
 
 - Added grandmaster "Administration" activity allowing grandmasters to randomly create temporary "policies" (Factory modernization, Gym improvements, Salary raise, Pension).
 
@@ -327,7 +327,7 @@
 - Bugfix: Fixed Results modal so it properly refreshes/resets on open/close to avoid stale state and duplicated fetches.
 - Bugfix: Results table on the modal displays name shorthands on mobile devices
 
-### 3.5
+### 3.5 - Sprint and Mining update
 
 - added new event type: sprint race
   - blobs have a certain amount of time to finish the race of a given distance
@@ -354,3 +354,12 @@
 - adjusted font sizes of card titles and header titles
 - fixed policies not fetched during page load
 - fixed console error about unique key prop in NewsContent
+
+### 3.6 - Hall of Fame update
+
+- refactored getting current grandmaster logic in backend to use new grandmasters table
+  - this makes this logic more performant
+- removed unused code for records
+- added new 'Hall of Fame' page with three tabs:
+  - Chronology: displays the list of champions in various leagues and list of grandmasters
+- made round titles on standings table centered

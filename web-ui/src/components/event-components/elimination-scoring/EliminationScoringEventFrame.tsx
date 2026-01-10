@@ -1,14 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import {
-  ActionDto,
-  ActionsApi,
-  BlobCompetitorDto,
-  CompetitionApi,
-  EventDto,
-  EventRecordsApi,
-} from '../../../../generated';
+import type { ActionDto, BlobCompetitorDto, EventDto } from '../../../../generated';
+import { ActionsApi, CompetitionApi, EventRecordsApi } from '../../../../generated';
 import { useAuth } from '../../../context/AuthContext';
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Box,
@@ -18,14 +13,12 @@ import {
   Divider,
   Paper,
   Snackbar,
-  Tab,
-  Tabs,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { ProgressButton } from '../ProgressButton';
-import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
+import type { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { TickLoadingBar } from '../../common/StyledComponents';
@@ -33,11 +26,11 @@ import { EventBarChart } from './EventBarChart';
 import { EliminationEventTable } from './EliminationEventTable';
 import { EliminationEventContentTabs } from './EliminationEventContentTabs';
 
-type SnackbarState = {
+interface SnackbarState {
   message: string | null;
   severity: 'error' | 'success' | 'info' | 'warning';
   anchorOrigin: { vertical: 'top' | 'bottom'; horizontal: 'left' | 'center' | 'right' };
-};
+}
 
 interface EliminationScoringEventFrameProps {
   event: EventDto;

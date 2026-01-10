@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
-  Card,
   CardContent,
   CircularProgress,
   LinearProgress,

@@ -16,12 +16,12 @@ from data.persistence.action_repository import save_all_actions
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
-from domain.dtos.league_dto import LeagueDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_ongoing_event_news
 from domain.sim_data_service import get_current_calendar, get_sim_time
-from domain.utils.blob_name_utils import format_blob_name
+from domain.utils.blob_utils import format_blob_name
+from domain.utils.league_utils import map_league_to_dto
 from domain.utils.sim_time_utils import get_season
 
 
@@ -58,7 +58,7 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
 
     return EventDto(
         id=event.id,
-        league=LeagueDto(id=event.league_id, name=event.league.name, field_size=len(competitors), level=event.league.level),
+        league=map_league_to_dto(event.league, competitors),
         actions=actions,
         competitors=competitors,
         season=event.season,
@@ -85,7 +85,7 @@ def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -
     competitors = _get_competitors(session, event, False)
     return EventDto(
         id=event.id,
-        league=LeagueDto(id=event.league_id, name=event.league.name, field_size=len(competitors), level=event.league.level),
+        league=map_league_to_dto(event.league, competitors),
         actions=actions,
         competitors=competitors,
         season=event.season,

@@ -10,7 +10,7 @@ from data.persistence.name_suggestion_repository import delete_suggestion, get_o
 from domain.exceptions.name_occupied_exception import NameOccupiedException
 from domain.news_services.news_service import add_blob_created_news, add_blob_in_creation_news
 from domain.sim_data_service import get_sim_time, is_blob_created, reset_factory_progress
-from domain.utils.blob_name_utils import format_blob_name
+from domain.utils.blob_utils import format_blob_name
 from domain.utils.color_utils import generate_random_color
 from domain.utils.constants import INITIAL_INTEGRITY
 

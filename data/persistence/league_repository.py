@@ -22,6 +22,11 @@ def get_queue(session: Session) -> League:
 
 
 @transactional
+def get_league_by_id(session: Session, league_id: int) -> League | None:
+    return session.query(League).filter(League.id == league_id).first()
+
+
+@transactional
 def save_league(session: Session, league: League) -> League:
     session.add(league)
     session.commit()

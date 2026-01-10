@@ -169,6 +169,28 @@
     "bronze": "Bronze",
     "points": "Points"
   },
+  "hall-of-fame": {
+    "chronology-tab": {
+      "title": "Chronology",
+      "highlighted": "Highlighted Leagues",
+      "other": "Other Leagues",
+      "empty": "No league data available yet.",
+      "table": {
+        "eon": "Eon",
+        "season": "Season",
+        "champion": "Champion",
+        "grandmaster": "Grandmaster",
+        "grandmaster_table_title": "Grandmasters"
+      },
+      "other_leagues": "Other leagues"
+    },
+    "titles-tab": {
+      "title": "Titles"
+    },
+    "events-tab": {
+      "title": "Events"
+    }
+  },
   "blob_details": {
     "birthdate": "Birthdate",
     "stats": {
@@ -204,7 +226,8 @@
     "blobs": "Blobs",
     "factory": "Factory",
     "standings": "Standings",
-    "calendar": "Calendar"
+    "calendar": "Calendar",
+    "hall-of-fame": "Hall of Fame"
   },
   "page_titles": {
     "dashboard": "Blob Championship System - Dashboard",
@@ -217,6 +240,8 @@
     "standings_short": "BCS - Standings",
     "calendar": "Blob Championship System - Season Calendar",
     "calendar_short": "BCS - Calendar",
+    "hall-of-fame": "Blob Championship System - Hall of Fame",
+    "hall-of-fame_short": "BCS - Hall of Fame",
     "login": "Admin Login",
     "login_short": "Admin Login"
   },

@@ -1,4 +1,5 @@
 from typing import List
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
@@ -45,3 +46,15 @@ def save_all_results(session: Session, results: List[Result]) -> List[Result]:
     for result in results:
         session.refresh(result)
     return results
+
+
+@transactional
+def get_wins_by_event(session):
+    """Return rows of (event_type, blob_id, wins) where wins is count of position==1."""
+    return (
+        session.query(Event.type, Result.blob_id, func.count(Result.id).label('wins'))
+        .join(Result, Result.event_id == Event.id)
+        .filter(Result.position == 1)
+        .group_by(Event.type, Result.blob_id)
+        .all()
+    )
