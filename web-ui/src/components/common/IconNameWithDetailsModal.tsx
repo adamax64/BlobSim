@@ -4,10 +4,14 @@ import { useState } from 'react';
 import { BlobDetailsDialog } from './BlobDetailsDialog/BlobDetailsDialog';
 import { BlobStatsDto } from '../../../generated/models/BlobStatsDto';
 
-type IconNameWithDetailsModalProps = IconNameProps & ({
-  blobId: number;
-  blob?: never;
-} | {blob?: BlobStatsDto; blobId?: never})
+type IconNameWithDetailsModalProps = IconNameProps &
+  (
+    | {
+        blobId: number;
+        blob?: never;
+      }
+    | { blob?: BlobStatsDto; blobId?: never }
+  );
 
 export const IconNameWithDetailsModal = ({ blobId, blob, ...props }: IconNameWithDetailsModalProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

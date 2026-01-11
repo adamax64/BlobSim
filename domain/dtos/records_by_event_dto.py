@@ -14,6 +14,12 @@ class WinsByEventDto:
 
 
 @dataclass
+class RecordsByLeagueDto:
+    league: LeagueDto
+    records: list[RecordDto]
+
+
+@dataclass
 class RecordsByEventDto:
     winsByEvent: list[WinsByEventDto]
-    recordsByEvent: dict[LeagueDto, list[RecordDto]]
+    recordsByLeague: list[RecordsByLeagueDto]

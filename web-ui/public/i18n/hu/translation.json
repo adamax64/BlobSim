@@ -169,6 +169,49 @@
     "bronze": "Bronz",
     "points": "Pont"
   },
+  "hall-of-fame": {
+    "chronology-tab": {
+      "title": "Kronológia",
+      "highlighted": "Kiemelt Ligák",
+      "other": "Egyéb Ligák",
+      "empty": "Nincs elérhető liga adat jelenleg.",
+      "table": {
+        "eon": "Éon",
+        "season": "Szezon",
+        "champion": "Bajnok",
+        "grandmaster": "Nagymester",
+        "grandmaster_table_title": "Nagymesterek"
+      },
+      "other_leagues": "Egyéb Ligák"
+    },
+    "titles-tab": {
+      "title": "Címek",
+      "season": "Bajnokok és Nagymesterek",
+      "competition": "Győzelmek és Dobogók",
+      "table": {
+        "name": "Név",
+        "count": "Darab",
+        "grandmasters": "Nagymesterek",
+        "championships": "Bajnoki címek",
+        "season_victories": "Szezon Győzelmek",
+        "season_victory_info": "Avagy alsóbb liga bajnoki címek",
+        "top_wins": "Felső liga győzelmek",
+        "top_podiums": "Felső liga dobogók",
+        "lower_wins": "Alsó liga győzelmek",
+        "lower_podiums": "Alsó liga dobogók"
+      }
+    },
+    "events-tab": {
+      "title": "Versenyek",
+      "wins_by_event": "Győzelmek verseny típus szerint",
+      "table": {
+        "event_type": "Verseny típus",
+        "wins": "Győzelmek",
+        "record_holder": "Rekordtartó",
+        "score": "Pont"
+      }
+    }
+  },
   "blob_details": {
     "birthdate": "Születési dátum",
     "stats": {

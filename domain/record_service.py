@@ -4,20 +4,35 @@ from data.persistence.record_repository import (
     update_record_if_better
 )
 from data.model.event_type import EventType
+from domain.dtos.league_dto import LeagueDto
 from domain.dtos.record_dto import RecordDto
 from data.db.db_engine import transactional
+from domain.hall_of_fame_services.titles_chronology_service import get_current_grandmaster_id
+from domain.sim_data_service import get_sim_time
+from domain.utils.blob_utils import map_to_blob_state_dto
+from domain.utils.sim_time_utils import get_season
 
 
 @transactional
 def get_all_records_service(session) -> list[RecordDto]:
     """Get all records in the system."""
+
+    # Determine current season and grandmaster id for BlobStats mapping
+    current_season = get_season(get_sim_time(session))
+    grandmaster_id = get_current_grandmaster_id(session)
+
     records = get_all_records(session)
     return [
         RecordDto(
             id=record.id,
-            league_id=record.league_id,
+            league=LeagueDto(
+                id=record.league.id,
+                name=record.league.name,
+                field_size=len(record.league.players),
+                level=record.league.level
+            ),
             event_type=record.event_type,
-            competitor_id=record.competitor_id,
+            blob=map_to_blob_state_dto(record.competitor, current_season, grandmaster_id),
             score=record.score
         )
         for record in records

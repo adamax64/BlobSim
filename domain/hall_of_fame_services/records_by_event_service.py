@@ -1,8 +1,5 @@
 from data.db.db_engine import transactional
-from domain.dtos.league_dto import LeagueDto
-from domain.dtos.record_dto import RecordDto
-from domain.dtos.records_by_event_dto import RecordsByEventDto, WinsByEventDto
-from domain.league_service import get_league_by_id
+from domain.dtos.records_by_event_dto import RecordsByEventDto, RecordsByLeagueDto, WinsByEventDto
 from domain.record_service import get_all_records_service
 from domain.utils.blob_utils import map_to_blob_state_dto
 from domain.sim_data_service import get_sim_time
@@ -18,22 +15,26 @@ def get_records_by_event_type(session) -> RecordsByEventDto:
 
     return RecordsByEventDto(
         winsByEvent=_get_wins_by_event(session),
-        recordsByEvent=_get_records_by_league(session)
+        recordsByLeague=_get_records_by_league(session)
     )
 
 
-def _get_records_by_league(session) -> dict[LeagueDto, list[RecordDto]]:
+def _get_records_by_league(session) -> list[RecordsByLeagueDto]:
     """Fetch all records and organize them by event type and league."""
     records = get_all_records_service(session)
 
     records_by_event: dict = {}
     for record in records:
-        league_dto = get_league_by_id(record.league_id, session)
-        if league_dto not in records_by_event:
-            records_by_event[league_dto] = []
-        records_by_event[league_dto].append(record)
+        if record.league.level not in records_by_event:
+            records_by_event[record.league.level] = []
+        records_by_event[record.league.level].append(record)
 
-    return records_by_event
+    mapped = [RecordsByLeagueDto(
+        league=records_by_event[level][0].league,
+        records=records_by_event[level]
+    ) for level in sorted(records_by_event.keys())]
+
+    return mapped
 
 
 def _get_wins_by_event(session) -> list[WinsByEventDto]:

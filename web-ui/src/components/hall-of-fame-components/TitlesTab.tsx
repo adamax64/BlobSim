@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, Badge, Box, Tooltip, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Accordion, AccordionDetails, Box, Tooltip, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Info from '@mui/icons-material/Info';
 import { DefaultApi } from '../../../generated';
@@ -19,14 +19,14 @@ export const TitlesTab = ({ setLoading }: TitlesTabProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
 
-  const chronologyApi = new DefaultApi(defaultConfig);
+  const titlesApi = new DefaultApi(defaultConfig);
   const {
     data,
     isPending,
     mutate: fetchData,
   } = useMutation({
     mutationKey: ['fetch-titles-data'],
-    mutationFn: () => chronologyApi.getTitlesCountSummaryHallOfFameTitlesGet(),
+    mutationFn: () => titlesApi.getTitlesCountSummaryHallOfFameTitlesGet(),
   });
 
   useEffect(() => {

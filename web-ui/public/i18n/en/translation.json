@@ -202,7 +202,14 @@
       }
     },
     "events-tab": {
-      "title": "Events"
+      "title": "Events",
+      "wins_by_event": "Wins by Event Type",
+      "table": {
+        "event_type": "Event Type",
+        "wins": "Wins",
+        "record_holder": "Record Holder",
+        "score": "Score"
+      }
     }
   },
   "blob_details": {

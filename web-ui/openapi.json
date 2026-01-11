@@ -2274,16 +2274,14 @@
             "type": "integer",
             "title": "Id"
           },
-          "league_id": {
-            "type": "integer",
-            "title": "League Id"
+          "league": {
+            "$ref": "#/components/schemas/LeagueDto"
           },
           "event_type": {
             "$ref": "#/components/schemas/EventType"
           },
-          "competitor_id": {
-            "type": "integer",
-            "title": "Competitor Id"
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
           },
           "score": {
             "type": "number",
@@ -2293,9 +2291,9 @@
         "type": "object",
         "required": [
           "id",
-          "league_id",
+          "league",
           "event_type",
-          "competitor_id",
+          "blob",
           "score"
         ],
         "title": "RecordDto"
@@ -2309,26 +2307,40 @@
             "type": "array",
             "title": "Winsbyevent"
           },
-          "recordsByEvent": {
-            "additionalProperties": {
-              "items": {
-                "$ref": "#/components/schemas/RecordDto"
-              },
-              "type": "array"
+          "recordsByLeague": {
+            "items": {
+              "$ref": "#/components/schemas/RecordsByLeagueDto"
             },
-            "propertyNames": {
-              "$ref": "#/components/schemas/LeagueDto"
-            },
-            "type": "object",
-            "title": "Recordsbyevent"
+            "type": "array",
+            "title": "Recordsbyleague"
           }
         },
         "type": "object",
         "required": [
           "winsByEvent",
-          "recordsByEvent"
+          "recordsByLeague"
         ],
         "title": "RecordsByEventDto"
+      },
+      "RecordsByLeagueDto": {
+        "properties": {
+          "league": {
+            "$ref": "#/components/schemas/LeagueDto"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/RecordDto"
+            },
+            "type": "array",
+            "title": "Records"
+          }
+        },
+        "type": "object",
+        "required": [
+          "league",
+          "records"
+        ],
+        "title": "RecordsByLeagueDto"
       },
       "ResultDto": {
         "properties": {

@@ -363,4 +363,5 @@
 - added new 'Hall of Fame' page with three tabs:
   - Chronology: displays the list of champions in various leagues and list of grandmasters
   - Titles: displays the count of championships, wins, podiums etc.
+  - Events: displays most wins by event type and record scores by league and event type
 - made round titles on standings table centered
