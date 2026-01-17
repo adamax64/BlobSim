@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from data.db.db_engine import transactional
+from data.model.blob import Blob
 from data.persistence.calendar_repository import get_calendar
 from data.persistence.result_repository import get_results_of_league_by_season
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
@@ -10,7 +11,9 @@ from domain.utils.league_utils import get_number_of_rounds_by_size
 
 
 @transactional
-def get_standings(league_id: int, season: int, current_season: int, session) -> list[StandingsDTO]:
+def get_standings(
+    league_id: int, season: int, current_season: int, session
+) -> list[StandingsDTO]:
     results = get_results_of_league_by_season(league_id, season, session)
 
     if len(results) == 0:
@@ -28,27 +31,33 @@ def get_standings(league_id: int, season: int, current_season: int, session) -> 
         standing_results: list[StandingsResultDTO] = []
         for result in results:
             total_points += result.points
-            standing_results.append(StandingsResultDTO(position=result.position, points=result.points))
+            standing_results.append(
+                StandingsResultDTO(position=result.position, points=result.points)
+            )
 
         contract_ending = season == current_season and blob.contract == current_season
         is_rookie = blob.debut == current_season and season == current_season
-        standings.append(StandingsDTO(
-            blob_id=blob.id,
-            name=f"{blob.first_name} {blob.last_name}",
-            color=blob.color,
-            results=standing_results,
-            num_of_rounds=num_of_rounds,
-            total_points=total_points,
-            is_contract_ending=contract_ending,
-            is_rookie=is_rookie
-        ))
+        standings.append(
+            StandingsDTO(
+                blob_id=blob.id,
+                name=f"{blob.first_name} {blob.last_name}",
+                color=blob.color,
+                results=standing_results,
+                num_of_rounds=num_of_rounds,
+                total_points=total_points,
+                is_contract_ending=contract_ending,
+                is_rookie=is_rookie,
+            )
+        )
 
     standings.sort(key=_sort_by_position(len(standings)), reverse=True)
     return standings
 
 
 @transactional
-def get_last_place_from_season_by_league(league_id: int, season: int, session) -> int | None:
+def get_last_place_from_season_by_league(
+    league_id: int, season: int, session
+) -> int | None:
     """Return the blob id of the last place in the standings for a given league and season.
 
     Returns None if no standings are available for that league/season.
@@ -60,17 +69,29 @@ def get_last_place_from_season_by_league(league_id: int, season: int, session) -
 
 
 @transactional
-def get_grandmaster_standings(start_season: int, current_season: int, session) -> list[GrandmasterStandingsDTO]:
-    end_season = current_season if start_season + 4 > current_season else start_season + 3
-    standings = [get_standings(1, season, session) for season in range(start_season, end_season + 1)]
+def get_grandmaster_standings(
+    start_season: int, current_season: int, session
+) -> list[GrandmasterStandingsDTO]:
+    end_season = (
+        current_season if start_season + 4 > current_season else start_season + 3
+    )
+    standings = [
+        get_standings(1, season, session)
+        for season in range(start_season, end_season + 1)
+    ]
 
-    is_end_season_over = list(get_calendar(session).values())[-1].concluded or current_season != end_season
+    is_end_season_over = (
+        list(get_calendar(session).values())[-1].concluded
+        or current_season != end_season
+    )
 
     championships_by_name = defaultdict(int)
     for i, season_standings in enumerate(standings):
         if i == len(standings) - 1 and not is_end_season_over:
             continue
-        championships_by_name[(season_standings[0].name, season_standings[0].blob_id)] += 1
+        championships_by_name[
+            (season_standings[0].name, season_standings[0].blob_id)
+        ] += 1
     standings_by_name = _get_standings_by_name(standings, championships_by_name.keys())
 
     grandmaster_standings = []
@@ -81,21 +102,54 @@ def get_grandmaster_standings(start_season: int, current_season: int, session) -
         bronzes = _count_by_position(results, 3)
         points = sum(result.points for result in results)
 
-        grandmaster_standings.append(GrandmasterStandingsDTO(
-            blob_id=champion[1],
-            name=champion[0],
-            color=standings_by_name[champion][0].color,
-            championships=championships_by_name[champion],
-            gold=golds,
-            silver=silvers,
-            bronze=bronzes,
-            points=points
-        ))
-    grandmaster_standings.sort(key=lambda x: (x.championships, x.gold, x.silver, x.bronze, x.points), reverse=True)
+        grandmaster_standings.append(
+            GrandmasterStandingsDTO(
+                blob_id=champion[1],
+                name=champion[0],
+                color=standings_by_name[champion][0].color,
+                championships=championships_by_name[champion],
+                gold=golds,
+                silver=silvers,
+                bronze=bronzes,
+                points=points,
+            )
+        )
+    grandmaster_standings.sort(
+        key=lambda x: (x.championships, x.gold, x.silver, x.bronze, x.points),
+        reverse=True,
+    )
     return grandmaster_standings
 
 
-def _get_standings_by_name(standings: list[list[StandingsDTO]], champions: list[tuple[str, int]]) -> dict[str, list[StandingsDTO]]:
+@transactional
+def get_standings_by_league(
+    session, blobs: list[Blob], season: int
+) -> dict[int, dict[int, int]]:
+    """
+    Fetch standings for all leagues of the given blobs.
+
+    Returns a dictionary mapping league_id -> {blob_id -> position}
+    """
+    from domain.standings_service import get_standings
+
+    standings_by_league = {}
+    for blob in blobs:
+        if blob.league and blob.league.id not in standings_by_league:
+            standings = get_standings(
+                session=session,
+                league_id=blob.league.id,
+                season=season,
+                current_season=season,
+            )
+            standings_by_league[blob.league.id] = {
+                standing.blob_id: idx + 1 for idx, standing in enumerate(standings)
+            }
+    return standings_by_league
+
+
+def _get_standings_by_name(
+    standings: list[list[StandingsDTO]], champions: list[tuple[str, int]]
+) -> dict[str, list[StandingsDTO]]:
     standings_by_name = {}
     for standing_record in standings:
         for standing in standing_record:
@@ -117,5 +171,6 @@ def _count_by_position(results: list[StandingsResultDTO], position: int) -> int:
 
 def _sort_by_position(field_size: int):
     return lambda x: (
-        x.total_points, *(_count_by_position(x.results, i + 1) for i in range(field_size))
+        x.total_points,
+        *(_count_by_position(x.results, i + 1) for i in range(field_size)),
     )

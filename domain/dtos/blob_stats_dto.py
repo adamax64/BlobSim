@@ -33,3 +33,4 @@ class BlobStatsDto(BaseModel):
     integrity_state: IntegrityState | None = None
     integrity_color: str | None = None
     current_activity: ActivityType | None = None
+    current_standings_position: int | None = None

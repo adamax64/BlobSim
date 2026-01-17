@@ -1,8 +1,7 @@
 import Cake from '@mui/icons-material/Cake';
 import Close from '@mui/icons-material/Close';
 import Handyman from '@mui/icons-material/Handyman';
-import Speed from '@mui/icons-material/Speed';
-import Star from '@mui/icons-material/Star';
+import WarningIcon from '@mui/icons-material/Warning';
 import {
   Box,
   Dialog,
@@ -119,9 +118,30 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
 
             {!!blob.debut ? (
               !blob.isRetired && (
-                <Typography variant="body1">
-                  <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
-                </Typography>
+                <>
+                  <Typography variant="body1">
+                    <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
+                  </Typography>
+                  <Grid container spacing={2} width="100%">
+                    <Grid size={6}>
+                      <Box display="flex" gap={0.75} alignItems="center">
+                        <Typography variant="body1">
+                          <strong>{t('blob_details.contract')}:</strong> {blob.contract}
+                        </Typography>
+                        {blob.atRisk && (
+                          <Tooltip title={t('blob_details.contract_ending')}>
+                            <WarningIcon fontSize="small" color="warning" />
+                          </Tooltip>
+                        )}
+                      </Box>
+                    </Grid>
+                    <Grid size={6}>
+                      <Typography variant="body1">
+                        <strong>{t('blob_details.standings')}:</strong> {blob.currentStandingsPosition}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </>
               )
             ) : (
               <Typography variant="body1">{t('blob_details.on_queue')}</Typography>

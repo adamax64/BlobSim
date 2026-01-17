@@ -1552,6 +1552,17 @@
                 "type": "null"
               }
             ]
+          },
+          "current_standings_position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Standings Position"
           }
         },
         "type": "object",

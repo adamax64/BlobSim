@@ -15,36 +15,56 @@ def map_to_blob_state_dto(
     blob: Blob,
     current_season: int,
     grandmaster_id: int,
+    standings_position: int | None,
 ) -> BlobStatsDto:
     return BlobStatsDto(
-            name=format_blob_name(blob),
-            born=format_sim_time_short(blob.born),
-            terminated=format_sim_time_short(blob.terminated) if blob.terminated else None,
-            debut=blob.debut,
-            contract=blob.contract,
-            podiums=(blob.bronze_trophies + blob.silver_trophies + blob.gold_trophies),
-            wins=blob.gold_trophies,
-            championships=blob.championships,
-            grandmasters=blob.grandmasters,
-            league_name=blob.league.name if blob.league else "None",
-            is_rookie=blob.debut == current_season,
-            at_risk=blob.contract == current_season,
-            is_dead=blob.terminated is not None,
-            is_retired=blob.contract is not None and blob.contract < current_season,
-            is_grandmaster=grandmaster_id == blob.id,
-            color=blob.color,
-            parent=ParentDto(name=format_blob_name(blob.parent), color=blob.parent.color) if blob.parent else None,
-            money=blob.money if blob.integrity > 0 else None,
-            integrity_state=(
+        name=format_blob_name(blob),
+        born=format_sim_time_short(blob.born),
+        terminated=format_sim_time_short(blob.terminated) if blob.terminated else None,
+        debut=blob.debut,
+        contract=blob.contract,
+        podiums=(blob.bronze_trophies + blob.silver_trophies + blob.gold_trophies),
+        wins=blob.gold_trophies,
+        championships=blob.championships,
+        grandmasters=blob.grandmasters,
+        league_name=blob.league.name if blob.league else "None",
+        is_rookie=blob.debut == current_season,
+        at_risk=blob.contract == current_season,
+        is_dead=blob.terminated is not None,
+        is_retired=blob.contract is not None and blob.contract < current_season,
+        is_grandmaster=grandmaster_id == blob.id,
+        color=blob.color,
+        parent=(
+            ParentDto(name=format_blob_name(blob.parent), color=blob.parent.color)
+            if blob.parent
+            else None
+        ),
+        money=blob.money if blob.integrity > 0 else None,
+        integrity_state=(
+            (
                 IntegrityState.GOOD
                 if blob.integrity > 0.7
-                else IntegrityState.AVERAGE
-                if blob.integrity > 0.4
-                else IntegrityState.POOR
-            ) if blob.integrity > 0 else None,
-            integrity_color=_get_color_indicator(blob.integrity / INITIAL_INTEGRITY) if blob.integrity > 0 else None,
-            current_activity=blob.current_activity if blob.integrity > 0 and blob.current_activity is not None else None,
-        )
+                else (
+                    IntegrityState.AVERAGE
+                    if blob.integrity > 0.4
+                    else IntegrityState.POOR
+                )
+            )
+            if blob.integrity > 0
+            else None
+        ),
+        integrity_color=(
+            _get_color_indicator(blob.integrity / INITIAL_INTEGRITY)
+            if blob.integrity > 0
+            else None
+        ),
+        current_activity=(
+            blob.current_activity
+            if blob.integrity > 0 and blob.current_activity is not None
+            else None
+        ),
+        current_standings_position=standings_position,
+    )
 
 
 def _get_color_indicator(relative_value: float) -> str:

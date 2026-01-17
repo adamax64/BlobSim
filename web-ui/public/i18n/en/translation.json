@@ -215,8 +215,6 @@
   "blob_details": {
     "birthdate": "Birthdate",
     "stats": {
-      "speed": "Speed",
-      "strength": "Strength",
       "integrity": "Integrity"
     },
     "parent": "Parent",
@@ -225,6 +223,9 @@
     "retired": "Retired",
     "money": "Money",
     "current_league": "Current League",
+    "contract": "Contract",
+    "contract_ending": "Contract expiring end of season",
+    "standings": "Standings",
     "on_queue": "Currently on queue",
     "podiums": "Podiums",
     "wins": "Wins",

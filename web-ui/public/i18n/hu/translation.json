@@ -215,8 +215,6 @@
   "blob_details": {
     "birthdate": "Születési dátum",
     "stats": {
-      "speed": "Sebesség",
-      "strength": "Erő",
       "integrity": "Integritás"
     },
     "parent": "Szülő",
@@ -225,6 +223,9 @@
     "retired": "Visszavonult",
     "money": "Pénz",
     "current_league": "Jelenlegi liga",
+    "contract": "Szerződés",
+    "contract_ending": "A szerződés a szezon végén lejár",
+    "standings": "Helyezés",
     "on_queue": "Jelenleg várakozási sorban",
     "podiums": "Dobogók",
     "wins": "Győzelmek",

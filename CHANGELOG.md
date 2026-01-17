@@ -370,3 +370,4 @@
 
 - changed blob icons on policy panel to material icons (their active colors remained the same)
 - title of policies panel changed to "Policies"
+- added contract and current standings information to blob details dialog
