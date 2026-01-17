@@ -365,3 +365,8 @@
   - Titles: displays the count of championships, wins, podiums etc.
   - Events: displays most wins by event type and record scores by league and event type
 - made round titles on standings table centered
+
+### 3.6.1
+
+- changed blob icons on policy panel to material icons (their active colors remained the same)
+- title of policies panel changed to "Policies"

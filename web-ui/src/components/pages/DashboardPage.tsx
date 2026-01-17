@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { NewsAndFooter } from '../dashboard-components/NewsAndFooter';
 import PoliciesPanel from '../dashboard-components/PoliciesPanel';
 import { usePolicies } from '../../context/PoliciesContext';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 export function DashboardPage() {
   const { t } = useTranslation();
@@ -26,8 +27,11 @@ export function DashboardPage() {
         </Card>
         <Card>
           <CardContent>
-            <Box display="flex" flexDirection="column" gap={1} alignItems={{ xs: 'center', xl: 'flex-start' }}>
-              <Typography variant="h6">{t('policies.title')}</Typography>
+            <Box display="flex" flexDirection="column" gap={1} alignItems="flex-start">
+              <Typography variant="h6" display="flex" alignItems="center" gap={1}>
+                <AccountBalanceIcon />
+                {t('policies.title')}
+              </Typography>
               <PoliciesPanel />
             </Box>
           </CardContent>

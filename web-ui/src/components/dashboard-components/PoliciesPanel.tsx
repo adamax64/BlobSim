@@ -1,25 +1,30 @@
-import React, { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Box, Tooltip, Typography, Paper } from '@mui/material';
-import { BlobIcon } from '../icons/BlobIcon';
 import { useTranslation } from 'react-i18next';
 import { PolicyType } from '../../../generated';
 import { formatToShort } from '../../utils/sim-time-utils';
 import { usePolicies } from '../../context/PoliciesContext';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import ElderlyIcon from '@mui/icons-material/Elderly';
+import { SvgIcon } from '@mui/material';
 
 export interface PolicyInfo {
   type: PolicyType;
   color: string;
+  icon: typeof SvgIcon;
   summary: string;
   name?: string; // Added name property
   effectUntil?: string;
 }
 
-const getPolicies = (): Pick<PolicyInfo, 'type' | 'color'>[] => {
+const getPolicies = (): Pick<PolicyInfo, 'type' | 'color' | 'icon'>[] => {
   return [
-    { type: 'FACTORY_MODERNIZATION', color: '#4caf50' },
-    { type: 'GYM_IMPROVEMENT', color: '#2196f3' },
-    { type: 'LABOUR_SUBSIDIES', color: '#ff9800' },
-    { type: 'PENSION_SCHEME', color: '#9c27b0' },
+    { type: 'FACTORY_MODERNIZATION', color: '#4caf50', icon: PrecisionManufacturingIcon },
+    { type: 'GYM_IMPROVEMENT', color: '#2196f3', icon: FitnessCenterIcon },
+    { type: 'LABOUR_SUBSIDIES', color: '#ff9800', icon: PaymentsIcon },
+    { type: 'PENSION_SCHEME', color: '#9c27b0', icon: ElderlyIcon },
   ];
 };
 
@@ -76,9 +81,10 @@ export const PoliciesPanel = () => {
               borderRadius: 1,
               border: !p.effectUntil ? '1px dashed rgba(0,0,0,0.2)' : undefined,
               opacity: !p.effectUntil ? 0.5 : 1,
+              backgroundColor: !p.effectUntil ? '#121212' : p.color,
             }}
           >
-            <BlobIcon size={28} color={!p.effectUntil ? '#bdbdbd' : p.color} />
+            <p.icon style={{ fontSize: 26, color: !p.effectUntil ? '#bdbdbd' : '#121212' }} />
           </Paper>
         </Tooltip>
       ))}
