@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 import os
 
 from controllers import (
@@ -41,6 +42,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# If the app is behind a TLS-terminating reverse proxy (nginx), trust proxy headers
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
+# Note: HTTPS redirect is handled by nginx (HTTP -> HTTPS redirect on port 80)
+# HTTPSRedirectMiddleware is not needed when behind a reverse proxy and would cause issues
+# since all requests from nginx appear as HTTP to the FastAPI app
+
+
+@app.middleware("http")
+async def hsts_middleware(request, call_next):
+    response = await call_next(request)
+    response.headers["Strict-Transport-Security"] = (
+        "max-age=63072000; includeSubDomains; preload"
+    )
+    return response
+
 
 startup()
 

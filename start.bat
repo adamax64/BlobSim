@@ -9,6 +9,5 @@ if not exist .\node_modules (
     exit
 )
 start "npm" cmd /c "npm run start"
-start http://localhost:5173
 
 echo Startup complete

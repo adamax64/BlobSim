@@ -1,0 +1,115 @@
+# Nginx configuration for BlobSim (Frontend + Backend API) with TLS termination
+# This is a TEMPLATE file. Use generate_nginx_config.ps1 to generate nginx.conf from environment variables.
+#
+# Architecture:
+#   - Frontend: Serves static SPA files from /path/to/web-ui/dist (or similar)
+#   - Backend API: Proxies /api/* and /docs/* to uvicorn on backend port
+#   - TLS: Single certificate terminates HTTPS for both
+#
+# Environment variables used (with defaults):
+#   NGINX_DOMAIN: Domain name(s) - e.g., "api.example.com" or "example.com"
+#   NGINX_CERT_PATH: Path to fullchain.pem - e.g., "C:/certs/fullchain.pem"
+#   NGINX_KEY_PATH: Path to privkey.pem - e.g., "C:/certs/privkey.pem"
+#   FRONTEND_ROOT: Path to frontend build dir - e.g., "d:/SoftwareDevelopement/BlobSim/web-ui/dist"
+#   BACKEND_HOST: Backend host - default: 127.0.0.1
+#   BACKEND_PORT: Backend port - default: 8000
+#
+# Generated file should be placed at: C:\nginx\conf\nginx.conf (Windows) or /etc/nginx/nginx.conf (Linux)
+
+# HTTP server block - redirect all traffic to HTTPS
+server {
+    listen 80;
+    server_name ${NGINX_DOMAIN};
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# HTTPS server block - TLS termination, frontend SPA + API proxy
+server {
+    listen 443 ssl http2;
+    server_name ${NGINX_DOMAIN_PRIMARY};
+
+    # SSL/TLS Configuration
+    ssl_certificate ${NGINX_CERT_PATH};
+    ssl_certificate_key ${NGINX_KEY_PATH};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Security headers
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
+    # ========================================
+    # Frontend: Serve SPA static files
+    # ========================================
+    root ${FRONTEND_ROOT};
+    index index.html;
+
+    # Cache static assets (js, css, images, fonts)
+    location ~* \.(js|css|svg|ico|png|jpg|jpeg|gif|webp|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # SPA routing: Fallback to index.html for client-side routing
+    # But exclude API routes from this fallback
+    location / {
+        # API routes are handled below; don't fall back to index.html for them
+        try_files $uri $uri/ /index.html;
+    }
+
+    # ========================================
+    # Backend: Proxy API requests to uvicorn
+    # ========================================
+    location /api/ {
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+        
+        # Headers for proxied requests
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        
+        # WebSocket support (if needed)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # Also proxy FastAPI docs if needed
+    location /docs {
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /redoc {
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /openapi.json {
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
