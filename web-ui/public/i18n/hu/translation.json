@@ -76,7 +76,8 @@
       "LABOUR": "Munka",
       "IDLE": "Tétlen",
       "ADMINISTRATION": "Adminisztráció",
-      "MINING": "Bányászat"
+      "MINING": "Bányászat",
+      "INTENSE_PRACTICE": "Intenzív gyakorlás"
     },
     "news_type": {
       "BLOB_CREATED": "Egy új blob lett létrehozva {{blobName}} néven!",

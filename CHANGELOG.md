@@ -318,7 +318,6 @@
 ### 3.4 - Grandmaster activity update
 
 - Added grandmaster "Administration" activity allowing grandmasters to randomly create temporary "policies" (Factory modernization, Gym improvements, Salary raise, Pension).
-
   - Policies have duration depending on grandmaster level (level 1 → 4 days; level 2 → 6 days; level >2 → 6 + (level - 2) days) and an applied level determining effect strength.
   - Effects: factory modernization speeds up factory progress; gym improvements increase practice/intense training efficiency; salary raises increase labour salary; pension schemes provide pension payouts to retired blobs.
   - Backend: new `policies` DB table, repository upsert, domain service to create/update policies, and an API endpoint (`GET /policies/`) returning active policies. Added Alembic migrations (policies table + ADMINISTRATION activity enum value) and unit tests.
@@ -372,3 +371,12 @@
 - title of policies panel changed to "Policies"
 - added contract and current standings information to blob details dialog
 - added visualization for maintenance and administartion activities
+
+### 3.7
+
+- Added traits
+  - TODO
+- Added states
+  - TODO
+- Added new activity "intense practice"
+  - More effective than normal practice

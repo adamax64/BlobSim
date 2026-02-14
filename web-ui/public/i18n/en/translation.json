@@ -76,7 +76,8 @@
       "LABOUR": "Labour",
       "IDLE": "Idle",
       "ADMINISTRATION": "Administration",
-      "MINING": "Mining"
+      "MINING": "Mining",
+      "INTENSE_PRACTICE": "Intense practice"
     },
     "news_type": {
       "BLOB_CREATED": "A new blob called {{blobName}} has been created!",

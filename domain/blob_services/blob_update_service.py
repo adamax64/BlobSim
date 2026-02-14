@@ -15,14 +15,22 @@ from data.persistence.blob_reposiotry import (
     get_youngest_blob_debuting_in_season,
 )
 from domain.enums.activity_type import ActivityType
-from domain.hall_of_fame_services.titles_chronology_service import get_current_grandmaster_id
+from domain.hall_of_fame_services.titles_chronology_service import (
+    get_current_grandmaster_id,
+)
 from domain.news_services.news_service import add_blob_terminated_news
-from domain.sim_data_service import get_current_calendar, get_event_next_day, get_sim_time
+from domain.sim_data_service import (
+    get_current_calendar,
+    get_event_next_day,
+    get_sim_time,
+)
 from data.persistence.policy_repository import get_active_policy_by_type
 from domain.policy_service import create_or_update_policy
 from domain.standings_service import get_last_place_from_season_by_league
 from data.persistence.league_repository import get_all_leagues_ordered_by_level
-from data.persistence.result_repository import get_most_recent_real_league_result_of_blob
+from data.persistence.result_repository import (
+    get_most_recent_real_league_result_of_blob,
+)
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
@@ -57,7 +65,8 @@ def update_all_blobs(session: Session):
 
     catchup_training_blob_ids = (
         _collect_catchup_train_ids(session)
-        if event_next_day is not None and event_next_day.event_type == EventType.CATCHUP_TRAINING
+        if event_next_day is not None
+        and event_next_day.event_type == EventType.CATCHUP_TRAINING
         else set()
     )
 
@@ -73,7 +82,9 @@ def update_all_blobs(session: Session):
         _terminate_blob(blob, current_time, session)
 
         is_grandmaster = get_current_grandmaster_id(session) == blob.id
-        _choose_activity_for_blob(blob, event_next_day, catchup_training_blob_ids, is_grandmaster)
+        _choose_activity_for_blob(
+            blob, event_next_day, catchup_training_blob_ids, is_grandmaster
+        )
 
         modified_blobs.append(blob)
 
@@ -95,11 +106,15 @@ def update_all_blobs(session: Session):
 def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
     blob = get_blob_by_id(session, blob_id)
     if blob:
-        blob.speed = _update_stat(blob.speed, multiplyer, blob.learning, blob.integrity, 0)
+        blob.speed = _update_stat(
+            blob.speed, multiplyer, blob.learning, blob.integrity, 0
+        )
         save_blob(session, blob)
 
 
-def _proceed_with_activity(blob: Blob, current_event: Calendar | None, session: Session) -> StatMultiplyers:
+def _proceed_with_activity(
+    blob: Blob, current_event: Calendar | None, session: Session
+) -> StatMultiplyers:
     global miners
 
     multiplyer = StatMultiplyers(strength=0, speed=0)
@@ -123,7 +138,9 @@ def _proceed_with_activity(blob: Blob, current_event: Calendar | None, session: 
 
         # apply active salary raise policies
         current_time = get_sim_time(session)
-        labour_subsidies = get_active_policy_by_type(session, PolicyType.LABOUR_SUBSIDIES, current_time)
+        labour_subsidies = get_active_policy_by_type(
+            session, PolicyType.LABOUR_SUBSIDIES, current_time
+        )
         if labour_subsidies:
             blob.money += 1
 
@@ -135,18 +152,39 @@ def _proceed_with_activity(blob: Blob, current_event: Calendar | None, session: 
     elif current_activity == ActivityType.PRACTICE:
         ratio = random.random()
         current_time = get_sim_time(session)
-        gym_improvement_level = get_active_policy_by_type(session, PolicyType.GYM_IMPROVEMENT, current_time)
+        gym_improvement_level = get_active_policy_by_type(
+            session, PolicyType.GYM_IMPROVEMENT, current_time
+        )
         practice_effect = PRACTICE_EFFECT
         if gym_improvement_level:
-            practice_effect += practice_effect * (0.05 * gym_improvement_level.applied_level)
+            practice_effect += practice_effect * (
+                0.05 * gym_improvement_level.applied_level
+            )
+        multiplyer.strength = practice_effect * ratio
+        multiplyer.speed = practice_effect * (1 - ratio)
+    elif current_activity == ActivityType.INTENSE_PRACTICE:
+        ratio = random.random()
+        current_time = get_sim_time(session)
+        gym_improvement_level = get_active_policy_by_type(
+            session, PolicyType.GYM_IMPROVEMENT, current_time
+        )
+        practice_effect = PRACTICE_EFFECT * 1.7
+        if gym_improvement_level:
+            practice_effect += practice_effect * (
+                0.05 * gym_improvement_level.applied_level
+            )
         multiplyer.strength = practice_effect * ratio
         multiplyer.speed = practice_effect * (1 - ratio)
     elif current_activity == ActivityType.INTENSE_TRAINING:
         practice_effect = PRACTICE_EFFECT * 1.1
         current_time = get_sim_time(session)
-        gym_improvement_level = get_active_policy_by_type(session, PolicyType.GYM_IMPROVEMENT, current_time)
+        gym_improvement_level = get_active_policy_by_type(
+            session, PolicyType.GYM_IMPROVEMENT, current_time
+        )
         if gym_improvement_level:
-            practice_effect += practice_effect * (0.05 * gym_improvement_level.applied_level)
+            practice_effect += practice_effect * (
+                0.05 * gym_improvement_level.applied_level
+            )
 
         multiplyer.strength = practice_effect
         multiplyer.speed = practice_effect
@@ -167,9 +205,9 @@ def _choose_activity_for_blob(
     blob: Blob,
     event_next_day: Calendar | None,
     catchup_training_blob_ids: set[int],
-    is_grandmaster: bool
+    is_grandmaster: bool,
 ) -> ActivityType:
-    """ Generate activity for blob for the next day """
+    """Generate activity for blob for the next day"""
     if blob.terminated is None:
         if blob.id in catchup_training_blob_ids:
             blob.current_activity = ActivityType.INTENSE_TRAINING
@@ -195,11 +233,17 @@ def _update_blob_stats(blob: Blob, multiplyer: StatMultiplyers):
             1.2 * tippingPoint * CYCLES_PER_SEASON
         )
 
-    blob.strength = _update_stat(blob.strength, multiplyer.strength, blob.learning, blob.integrity, atrophy)
-    blob.speed = _update_stat(blob.speed, multiplyer.speed, blob.learning, blob.integrity, atrophy)
+    blob.strength = _update_stat(
+        blob.strength, multiplyer.strength, blob.learning, blob.integrity, atrophy
+    )
+    blob.speed = _update_stat(
+        blob.speed, multiplyer.speed, blob.learning, blob.integrity, atrophy
+    )
 
 
-def _update_stat(stat: float, multiplyer: float, learning: float, integrity: float, atrophy: float) -> float:
+def _update_stat(
+    stat: float, multiplyer: float, learning: float, integrity: float, atrophy: float
+) -> float:
     """Update the stat of the blob based on the activity multiplyer."""
 
     return stat - atrophy + multiplyer * learning * (integrity / INITIAL_INTEGRITY)
@@ -214,7 +258,7 @@ def _terminate_blob(blob: Blob, current_time: int, session: Session):
 
 
 def _collect_catchup_train_ids(session: Session) -> set:
-    """ Collect blob ids that should receive catch-up training. """
+    """Collect blob ids that should receive catch-up training."""
     train_ids: set[int] = set()
 
     current_season = get_season(get_sim_time(session))
@@ -230,7 +274,9 @@ def _collect_catchup_train_ids(session: Session) -> set:
         # skip dropout/queue league (level 0)
         if league.level == 0:
             continue
-        last_place_id = get_last_place_from_season_by_league(league.id, prev_season, session)
+        last_place_id = get_last_place_from_season_by_league(
+            league.id, prev_season, session
+        )
         if last_place_id is not None:
             train_ids.add(last_place_id)
 
