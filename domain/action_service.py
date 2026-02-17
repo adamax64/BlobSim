@@ -1,33 +1,51 @@
-import random
 from data.db.db_engine import transactional
 from data.model.event_type import EventType
 from data.persistence.action_repository import (
     get_action_by_event_and_blob,
     get_all_actions_by_event,
-    save_action, save_all_actions,
+    save_action,
+    save_all_actions,
 )
 from data.persistence.event_repository import get_event_by_id
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.record_service import check_and_update_record
 from domain.sim_data_service import get_sim_time
-from domain.utils.action_utils import generate_race_score_for_contender
+from domain.utils.action_utils import (
+    compute_event_multiplier_from_contender,
+    generate_race_score_for_contender,
+    get_random_coefficient,
+)
 from domain.utils.league_utils import get_race_duration_by_size
 
 
 @transactional
-def create_action_for_quartered_event(contender: BlobCompetitorDto, event_id: int, session) -> tuple[str, float] | None:
+def create_action_for_quartered_event(
+    contender: BlobCompetitorDto, event_id: int, session
+) -> tuple[str, float] | None:
     """
     Generate score and update the action for given event and blob.
     Score is based on strength (70%) and speed (30%) attributes.
     Returns tuple of (name, score) if new record, None otherwise.
     """
-    score = contender.strength * random.random() * 0.7 + contender.speed * random.random() * 0.3
+    current_time = get_sim_time(session)
+    multiplier, focused = compute_event_multiplier_from_contender(
+        contender, current_time
+    )
+    adj_strength = contender.strength * multiplier
+    adj_speed = contender.speed * multiplier
+
+    score = (
+        adj_strength * get_random_coefficient(focused) * 0.7
+        + adj_speed * get_random_coefficient(focused) * 0.3
+    )
 
     record = None
     # Get event information to check for records
     event = get_event_by_id(session, event_id)
     if event:
-        is_new_record = check_and_update_record(event.league_id, event.type, contender.id, score, session)
+        is_new_record = check_and_update_record(
+            event.league_id, event.type, contender.id, score, session
+        )
         if is_new_record:
             record = (contender.name, score)
 
@@ -38,7 +56,9 @@ def create_action_for_quartered_event(contender: BlobCompetitorDto, event_id: in
 
 
 @transactional
-def create_actions_for_race(contenders: list[BlobCompetitorDto], event_id: int, tick: int, session) -> tuple[str, float] | None:
+def create_actions_for_race(
+    contenders: list[BlobCompetitorDto], event_id: int, tick: int, session
+) -> tuple[str, float] | None:
     """
     Generate score and update the actions for given event and the corresponding contenders.
     Returns tuple of (name, score) if new record, None otherwise.
@@ -58,10 +78,15 @@ def create_actions_for_race(contenders: list[BlobCompetitorDto], event_id: int, 
     event = get_event_by_id(session, event_id)
 
     for contender in contenders:
-        if event.type == EventType.SPRINT_RACE and sum(actions[contender.id].scores) >= race_duration:
+        if (
+            event.type == EventType.SPRINT_RACE
+            and sum(actions[contender.id].scores) >= race_duration
+        ):
             continue
 
-        score = generate_race_score_for_contender(contender, current_time, race_duration, tick)
+        score = generate_race_score_for_contender(
+            contender, current_time, race_duration, tick
+        )
         actions[contender.id].scores = actions[contender.id].scores + [score]
         if score > max_score:
             max_score = score
@@ -71,15 +96,19 @@ def create_actions_for_race(contenders: list[BlobCompetitorDto], event_id: int, 
     save_all_actions(session, actions.values())
 
     if event and max_scorer_id:
-        is_new_record = check_and_update_record(event.league_id, event.type, max_scorer_id, max_score, session)
+        is_new_record = check_and_update_record(
+            event.league_id, event.type, max_scorer_id, max_score, session
+        )
         if is_new_record:
             return max_scorer_name, max_score
     return None
 
 
 @transactional
-def create_actions_for_elimination_event(contenders: list[BlobCompetitorDto], event_id: int, session) -> tuple[str, float] | None:
-    """ Generate score by contender strngth and update the actions for elimination event. """
+def create_actions_for_elimination_event(
+    contenders: list[BlobCompetitorDto], event_id: int, session
+) -> tuple[str, float] | None:
+    """Generate score by contender strngth and update the actions for elimination event."""
 
     actions = get_all_actions_by_event(session, event_id)
     actions = {action.blob_id: action for action in actions}
@@ -88,7 +117,13 @@ def create_actions_for_elimination_event(contenders: list[BlobCompetitorDto], ev
     max_scorer_id = None
 
     for contender in contenders:
-        score = contender.strength * random.random()
+        # Apply state-based event modifiers (using states from DTO, no DB fetch)
+        multiplier, focused = compute_event_multiplier_from_contender(
+            contender, get_sim_time(session)
+        )
+        adj_strength = contender.strength * multiplier
+
+        score = adj_strength * get_random_coefficient(focused)
         actions[contender.id].scores = actions[contender.id].scores + [score]
         if score > max_score:
             max_score = score
@@ -99,7 +134,9 @@ def create_actions_for_elimination_event(contenders: list[BlobCompetitorDto], ev
     # Get event information to check for records
     event = get_event_by_id(session, event_id)
     if event and max_scorer_id:
-        is_new_record = check_and_update_record(event.league_id, event.type, max_scorer_id, max_score, session)
+        is_new_record = check_and_update_record(
+            event.league_id, event.type, max_scorer_id, max_score, session
+        )
         if is_new_record:
             return max_scorer_name, max_score
     return None

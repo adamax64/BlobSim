@@ -31,6 +31,7 @@ from data.persistence.league_repository import get_all_leagues_ordered_by_level
 from data.persistence.result_repository import (
     get_most_recent_real_league_result_of_blob,
 )
+from domain.utils.blob_utils import has_state, has_trait, compute_state_multiplier
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
@@ -43,6 +44,9 @@ from domain.utils.constants import (
     MAINTENANCE_EFFECT,
     PRACTICE_EFFECT,
 )
+from data.persistence.state_repository import create_state, save_state
+from data.model.trait_type import TraitType
+from data.model.state_type import StateType
 
 miners: list[Blob] = []
 
@@ -149,6 +153,16 @@ def _proceed_with_activity(
                 chance = 1
             if random.random() < chance:
                 blob.money += 1
+        # small chance to refresh TIRED state cooldown during labour
+        current_time = get_sim_time(session)
+        for st in blob.states:
+            if st.type == StateType.TIRED and st.effect_until >= current_time:
+                if random.random() < 0.05:
+                    st.effect_until = current_time + 2
+                    try:
+                        save_state(session, st)
+                    except Exception:
+                        pass
     elif current_activity == ActivityType.PRACTICE:
         ratio = random.random()
         current_time = get_sim_time(session)
@@ -160,8 +174,21 @@ def _proceed_with_activity(
             practice_effect += practice_effect * (
                 0.05 * gym_improvement_level.applied_level
             )
-        multiplyer.strength = practice_effect * ratio
-        multiplyer.speed = practice_effect * (1 - ratio)
+        current_time = get_sim_time(session)
+        state_multiplier = compute_state_multiplier(blob, current_time)
+
+        # injured state has a 15% chance to reset its cooldown (refresh duration)
+        for st in blob.states:
+            if st.type == StateType.INJURED and st.effect_until >= current_time:
+                if random.random() < 0.15:
+                    # refresh injured duration to 4 days from now
+                    st.effect_until = current_time + 4
+                    try:
+                        save_state(session, st)
+                    except Exception:
+                        pass
+        multiplyer.strength = practice_effect * ratio * state_multiplier
+        multiplyer.speed = practice_effect * (1 - ratio) * state_multiplier
     elif current_activity == ActivityType.INTENSE_PRACTICE:
         ratio = random.random()
         current_time = get_sim_time(session)
@@ -173,8 +200,46 @@ def _proceed_with_activity(
             practice_effect += practice_effect * (
                 0.05 * gym_improvement_level.applied_level
             )
-        multiplyer.strength = practice_effect * ratio
-        multiplyer.speed = practice_effect * (1 - ratio)
+        current_time = get_sim_time(session)
+        state_multiplier = compute_state_multiplier(blob, current_time)
+        multiplyer.strength = practice_effect * ratio * state_multiplier
+        multiplyer.speed = practice_effect * (1 - ratio) * state_multiplier
+        # small chance to refresh TIRED state cooldown during practice
+        for st in blob.states:
+            if (
+                st.type == StateType.TIRED
+                and getattr(st, "effect_until", 0) >= current_time
+            ):
+                if random.random() < 0.05:
+                    st.effect_until = current_time + 2
+                    try:
+                        save_state(session, st)
+                    except Exception:
+                        pass
+
+        # chance to gain states from intense practice
+        determined = has_trait(blob, TraitType.DETERMINED)
+        tired_chance = 0.4 if not determined else 0.2
+        injured_chance = 0.1 if not determined else 0.05
+
+        if random.random() < tired_chance:
+            if has_state(blob, StateType.TIRED):
+                # if already tired, extend tired duration by 2 days
+                current_time = get_sim_time(session)
+                for st in blob.states:
+                    if st.type == StateType.TIRED and st.effect_until >= current_time:
+                        st.effect_until += 2
+                        try:
+                            save_state(session, st)
+                        except Exception:
+                            pass
+            else:
+                effect_until = get_sim_time(session) + 2
+                create_state(session, blob.id, StateType.TIRED, effect_until)
+
+        if random.random() < injured_chance:
+            effect_until = get_sim_time(session) + 4
+            create_state(session, blob.id, StateType.INJURED, effect_until)
     elif current_activity == ActivityType.INTENSE_TRAINING:
         practice_effect = PRACTICE_EFFECT * 1.1
         current_time = get_sim_time(session)
@@ -186,8 +251,10 @@ def _proceed_with_activity(
                 0.05 * gym_improvement_level.applied_level
             )
 
-        multiplyer.strength = practice_effect
-        multiplyer.speed = practice_effect
+        current_time = get_sim_time(session)
+        state_multiplier = compute_state_multiplier(blob, current_time)
+        multiplyer.strength = practice_effect * state_multiplier
+        multiplyer.speed = practice_effect * state_multiplier
     elif current_activity == ActivityType.ADMINISTRATION:
         level = blob.grandmasters
         chosen = choose_random_policy_type()
@@ -220,7 +287,7 @@ def _choose_activity_for_blob(
             # grandmasters may enact policies
             if is_grandmaster:
                 extra_activities.append(ActivityType.ADMINISTRATION)
-            blob.current_activity = choose_activity(extra_activities)
+            blob.current_activity = choose_activity(blob, extra_activities)
 
 
 def _update_blob_stats(blob: Blob, multiplyer: StatMultiplyers):

@@ -1,8 +1,49 @@
 from data.model.blob import Blob
+from data.model.state_type import StateType
 from domain.dtos.blob_stats_dto import BlobStatsDto, IntegrityState
 from domain.dtos.parent_dto import ParentDto
 from domain.utils.constants import INITIAL_INTEGRITY
 from domain.utils.sim_time_utils import format_sim_time_short
+from data.model.trait_type import TraitType
+
+
+def has_trait(blob: Blob, trait_type: TraitType) -> bool:
+    """Return True if `blob.traits` contains a trait of given `trait_type`."""
+    return any(t.type == trait_type for t in blob.traits)
+
+
+def has_state(blob: Blob, state_type: StateType) -> bool:
+    """Return True if `blob.states` contains a state of given `state_type`."""
+    return any(s.type == state_type for s in blob.states)
+
+
+def compute_state_multiplier(blob: Blob, current_time: int) -> float:
+    """Compute the multiplicative modifier for training effects based on active states.
+
+    Multipliers:
+      - INJURED: *0.2 (-80%)
+      - TIRED: *0.5 (-50%)
+      - GLOOMY: *0.85 (-15%)
+      - FOCUSED: *1.2 (+20%)
+
+    States stack multiplicatively.
+    """
+    multiplier = 1.0
+    if blob is None:
+        return multiplier
+    for st in blob.states or []:
+        if st.effect_until < current_time:
+            continue
+        st_type: StateType = st.type
+        if st_type == StateType.INJURED:
+            multiplier *= 0.2
+        elif st_type == StateType.TIRED:
+            multiplier *= 0.5
+        elif st_type == StateType.GLOOMY:
+            multiplier *= 0.85
+        elif st_type == StateType.FOCUSED:
+            multiplier *= 1.2
+    return multiplier
 
 
 def format_blob_name(blob) -> str:

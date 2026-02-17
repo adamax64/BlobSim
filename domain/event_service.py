@@ -9,7 +9,7 @@ from data.persistence.event_repository import (
     get_event_by_date,
     get_event_by_id as repository_get_event_by_id,
     get_previous_event_by_league_id_and_season,
-    save_event
+    save_event,
 )
 from data.model.action import Action
 from data.persistence.action_repository import save_all_actions
@@ -26,8 +26,10 @@ from domain.utils.sim_time_utils import get_season
 
 
 @transactional
-def get_or_start_event(session: Session, league_id: int, is_event_concluded: bool) -> EventDto:
-    """ Get the current event or start a new one if there is none """
+def get_or_start_event(
+    session: Session, league_id: int, is_event_concluded: bool
+) -> EventDto:
+    """Get the current event or start a new one if there is none"""
 
     current_calendar_event = get_current_calendar(session)
     if current_calendar_event is None:
@@ -37,22 +39,36 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
 
     if event is None:
         season = get_season(time)
-        previous_event = get_previous_event_by_league_id_and_season(session, league_id, season)
+        previous_event = get_previous_event_by_league_id_and_season(
+            session, league_id, season
+        )
         current_round = 1 if previous_event is None else previous_event.round + 1
         event_type = current_calendar_event.event_type
-        event = save_event(session, Event(league_id=league_id, date=time, season=season, round=current_round, type=event_type))
+        event = save_event(
+            session,
+            Event(
+                league_id=league_id,
+                date=time,
+                season=season,
+                round=current_round,
+                type=event_type,
+            ),
+        )
 
         # Create Action records for each competitor with empty scores list
         competitors = _get_competitors(session, event, is_event_concluded)
-        actions = [Action(event_id=event.id, blob_id=competitor.id, scores=[]) for competitor in competitors]
+        actions = [
+            Action(event_id=event.id, blob_id=competitor.id, scores=[])
+            for competitor in competitors
+        ]
         random.shuffle(actions)
         save_all_actions(session, actions)
         add_ongoing_event_news(event.league.name, event.round, event.type, session)
 
-    actions = [ActionDto(
-        blob_id=action.blob_id,
-        scores=action.scores
-    ) for action in event.actions]
+    actions = [
+        ActionDto(blob_id=action.blob_id, scores=action.scores)
+        for action in event.actions
+    ]
 
     competitors = _get_competitors(session, event, is_event_concluded)
 
@@ -64,23 +80,25 @@ def get_or_start_event(session: Session, league_id: int, is_event_concluded: boo
         season=event.season,
         round=event.round,
         type=event.type,
-        isFinished=current_calendar_event.concluded
+        isFinished=current_calendar_event.concluded,
     )
 
 
 @transactional
-def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -> EventDto:
-    """ Get event by id """
+def get_event_by_id(
+    event_id: int, session: Session, check_date: bool = False
+) -> EventDto:
+    """Get event by id"""
     event = repository_get_event_by_id(session, event_id)
     if event is None:
         raise EventNotFoundException()
     if check_date and event.date < get_sim_time(session):
         raise NoCurrentEventException()
 
-    actions = [ActionDto(
-        blob_id=action.blob_id,
-        scores=action.scores
-    ) for action in event.actions]
+    actions = [
+        ActionDto(blob_id=action.blob_id, scores=action.scores)
+        for action in event.actions
+    ]
 
     competitors = _get_competitors(session, event, False)
     return EventDto(
@@ -91,26 +109,36 @@ def get_event_by_id(event_id: int, session: Session, check_date: bool = False) -
         season=event.season,
         round=event.round,
         type=event.type,
-        isFinished=None
+        isFinished=None,
     )
 
 
-def _get_competitors(session: Session, event: Event, is_event_concluded: bool) -> List[BlobCompetitorDto]:
+def _get_competitors(
+    session: Session, event: Event, is_event_concluded: bool
+) -> List[BlobCompetitorDto]:
     if not is_event_concluded:
-        return [BlobCompetitorDto(
-            id=player.id,
-            name=format_blob_name(player),
-            strength=player.strength,
-            speed=player.speed,
-            color=player.color
-        ) for player in event.league.players]
+        return [
+            BlobCompetitorDto(
+                id=player.id,
+                name=format_blob_name(player),
+                strength=player.strength,
+                speed=player.speed,
+                color=player.color,
+                states=player.states,
+            )
+            for player in event.league.players
+        ]
     else:
         blob_ids = set([action.blob_id for action in event.actions])
         blobs = get_all_by_ids(session, blob_ids)
-        return [BlobCompetitorDto(
-            id=blob.id,
-            name=format_blob_name(blob),
-            strength=blob.strength,
-            speed=blob.speed,
-            color=blob.color
-        ) for blob in blobs]
+        return [
+            BlobCompetitorDto(
+                id=blob.id,
+                name=format_blob_name(blob),
+                strength=blob.strength,
+                speed=blob.speed,
+                color=blob.color,
+                states=blob.states,
+            )
+            for blob in blobs
+        ]
