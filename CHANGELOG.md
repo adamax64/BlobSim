@@ -422,4 +422,6 @@
   - Trait conflict rules: `LAZY` will not be assigned to blobs that already have `HARD_WORKING` or `DETERMINED`, and vice-versa (prevents logically conflicting pairings)
 
 - Bugfixes:
-  - Hide standings label on blob details dialog when new season starts and there's no standings data available
+  - Hid standings label on blob details dialog when new season starts and there's no standings data available
+  - Fixed new season news description
+  - Fixed attendees on catchup training: dropout league members who already competed in dropout league last season are excluded

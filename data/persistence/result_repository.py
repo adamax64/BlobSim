@@ -9,19 +9,32 @@ from data.model.result import Result
 
 
 @transactional
-def get_results_of_league_by_season(league_id: int, season: int, session: Session) -> List[Result]:
-    results = session.query(Result).join(Result.event).filter(Event.league_id == league_id, Event.season == season).all()
+def get_results_of_league_by_season(
+    league_id: int, season: int, session: Session
+) -> List[Result]:
+    results = (
+        session.query(Result)
+        .join(Result.event)
+        .filter(Event.league_id == league_id, Event.season == season)
+        .all()
+    )
     return results
 
 
 @transactional
 def get_results_of_top_league_from_season(season: int, session: Session):
-    results = session.query(Result).filter(Result.season >= season, Result.league_id == 1).all()
+    results = (
+        session.query(Result)
+        .filter(Result.season >= season, Result.league_id == 1)
+        .all()
+    )
     return results
 
 
 @transactional
-def get_most_recent_real_league_result_of_blob(blob_id: int, session: Session) -> Result:
+def get_most_recent_real_league_result_of_blob(
+    blob_id: int, session: Session
+) -> Result:
     result = (
         session.query(Result)
         .join(Result.event)
@@ -34,8 +47,37 @@ def get_most_recent_real_league_result_of_blob(blob_id: int, session: Session) -
 
 
 @transactional
+def has_dropout_results_from_last_season(blob_id: int, session: Session) -> bool:
+    last_season = (
+        session.query(func.max(Event.season))
+        .join(Result)
+        .filter(Result.blob_id == blob_id)
+        .scalar()
+    )
+    if last_season is None:
+        return False
+    dropout_exists = (
+        session.query(Result)
+        .join(Result.event)
+        .filter(
+            Result.blob_id == blob_id,
+            Event.season == last_season,
+            Event.league_id == 3,  # id of dropout league
+            Result.position.isnot(None),
+        )
+        .first()
+    )
+    return dropout_exists is not None
+
+
+@transactional
 def get_results_of_event(event_id: int, session: Session) -> List[Result]:
-    results = session.query(Result).filter(Result.event_id == event_id).order_by(Result.position).all()
+    results = (
+        session.query(Result)
+        .filter(Result.event_id == event_id)
+        .order_by(Result.position)
+        .all()
+    )
     return results
 
 
@@ -52,7 +94,7 @@ def save_all_results(session: Session, results: List[Result]) -> List[Result]:
 def get_wins_by_event(session):
     """Return rows of (event_type, blob_id, wins) where wins is count of position==1."""
     return (
-        session.query(Event.type, Result.blob_id, func.count(Result.id).label('wins'))
+        session.query(Event.type, Result.blob_id, func.count(Result.id).label("wins"))
         .join(Result, Result.event_id == Event.id)
         .filter(Result.position == 1)
         .group_by(Event.type, Result.blob_id)

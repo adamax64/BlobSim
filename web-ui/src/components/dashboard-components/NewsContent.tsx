@@ -88,7 +88,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
           </Typography>
           {(newsItem.retired?.length ?? 0) > 0 && (
             <>
-              <Typography variant="body1">{t('enums.news_type.NEW_SEASON.headline')}</Typography>
+              <Typography variant="body1">{t('enums.news_type.NEW_SEASON.retirees')}</Typography>
               <ul>
                 {newsItem.retired?.map((b) => (
                   <li key={`${b.name}-retired`}>

@@ -30,6 +30,7 @@ from domain.standings_service import get_last_place_from_season_by_league
 from data.persistence.league_repository import get_all_leagues_ordered_by_level
 from data.persistence.result_repository import (
     get_most_recent_real_league_result_of_blob,
+    has_dropout_results_from_last_season,
 )
 from domain.utils.blob_utils import has_state, has_trait, compute_state_multiplier
 from domain.utils.policy_utils import choose_random_policy_type
@@ -398,8 +399,8 @@ def _collect_catchup_train_ids(session: Session) -> set:
     # from each real league, add last place blob from previous season standings
     leagues = get_all_leagues_ordered_by_level(session)
     for league in leagues:
-        # skip dropout/queue league (level 0)
-        if league.level == 0:
+        # skip queue league (level 10)
+        if league.level == 10:
             continue
         last_place_id = get_last_place_from_season_by_league(
             league.id, prev_season, session
@@ -412,7 +413,12 @@ def _collect_catchup_train_ids(session: Session) -> set:
     if dropout_league is not None:
         for b in dropout_league.players:
             recent = get_most_recent_real_league_result_of_blob(b.id, session)
-            if recent is not None and int(recent.event.league.id) != dropout_league.id:
+            was_in_dropout_before = has_dropout_results_from_last_season(b.id, session)
+            if (
+                recent is not None
+                and int(recent.event.league.id) != dropout_league.id
+                and not was_in_dropout_before
+            ):
                 train_ids.add(b.id)
 
     return train_ids
