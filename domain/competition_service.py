@@ -4,7 +4,12 @@ from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import save_all_results
 from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, SprintEventRecordDto
+from domain.dtos.event_record_dto import (
+    EliminationEventRecordDto,
+    EventRecordDto,
+    QuarteredEventRecordDto,
+    SprintEventRecordDto,
+)
 from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_event_ended_news
@@ -14,7 +19,7 @@ from domain.utils.constants import VICTORY_PRIZE
 
 @transactional
 def load_competition_data(session) -> EventDto:
-    """ Load the current event data from the database. If no event is found, start a new one. """
+    """Load the current event data from the database. If no event is found, start a new one."""
     league_id = get_current_calendar(session).league_id
     if league_id is None:
         raise NoCurrentEventException()
@@ -22,7 +27,9 @@ def load_competition_data(session) -> EventDto:
 
 
 @transactional
-def process_event_results(event: EventDto, event_records: list[EventRecordDto], session):
+def process_event_results(
+    event: EventDto, event_records: list[EventRecordDto], session
+):
     """
     Calculates the points for the contenders by position and event type, and saves them in result objects to the database.
     This function also administrates the trophies and medals, gives out the victory prize and saves a news entry about the event results.
@@ -53,15 +60,12 @@ def process_event_results(event: EventDto, event_records: list[EventRecordDto], 
     save_all_blobs(session, [res.blob for res in saved_results])
 
     conclude_calendar_event(session)
-    add_event_ended_news(
-        event.league.name,
-        event.round,
-        event.id,
-        session
-    )
+    add_event_ended_news(event.league.name, event.round, event.id, session)
 
 
-def _map_records_to_results(event_records: list[EventRecordDto], event_id: int) -> list[Result]:
+def _map_records_to_results(
+    event_records: list[EventRecordDto], event_id: int
+) -> list[Result]:
     results = []
 
     # For elimination events, find the blob with most wins
@@ -71,25 +75,29 @@ def _map_records_to_results(event_records: list[EventRecordDto], event_id: int) 
         bonus_points = _calculate_bonus_points(record, i + 1, max_wins)
 
         # Add bonus point for most wins in elimination events
-        results.append(Result(
-            event_id=event_id,
-            blob_id=record.blob.id,
-            position=i + 1,
-            points=_calculate_points(i + 1, len(event_records), bonus_points)
-        ))
+        results.append(
+            Result(
+                event_id=event_id,
+                blob_id=record.blob.id,
+                position=i + 1,
+                points=_calculate_points(i + 1, len(event_records), bonus_points),
+            )
+        )
     return results
 
 
 def _calculate_points(position: int, field_size: int, bonus_points: int) -> int:
     base = field_size - position + 1
     if position in (1, 2, 3) and field_size >= 7:
-        base += (4 - position)
+        base += 4 - position
     if field_size < 7 and position == 1:
         base += 1
     return base + bonus_points
 
 
-def _calculate_bonus_points(record: EventRecordDto, position: int, max_wins: int | None) -> int:
+def _calculate_bonus_points(
+    record: EventRecordDto, position: int, max_wins: int | None
+) -> int:
     if isinstance(record, QuarteredEventRecordDto):
         return sum(1 for quarter in record.quarters if quarter.best is True)
     elif isinstance(record, EliminationEventRecordDto):
@@ -115,5 +123,7 @@ def _get_max_tick_wins(event_records: list[EventRecordDto]) -> int | None:
     if not event_records or not isinstance(event_records[0], EliminationEventRecordDto):
         return None
     max_value = max((record.tick_wins for record in event_records), default=0)
-    occurrence_count = sum(1 for record in event_records if record.tick_wins == max_value)
+    occurrence_count = sum(
+        1 for record in event_records if record.tick_wins == max_value
+    )
     return max_value if occurrence_count == 1 else None

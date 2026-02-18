@@ -15,3 +15,9 @@ def save_trait(session: Session, trait: Trait) -> Trait:
     session.commit()
     session.refresh(trait)
     return trait
+
+
+@transactional
+def delete_trait(session: Session, trait_id: int):
+    session.query(Trait).filter(Trait.id == trait_id).delete()
+    session.commit()

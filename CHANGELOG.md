@@ -372,11 +372,51 @@
 - added contract and current standings information to blob details dialog
 - added visualization for maintenance and administartion activities
 
-### 3.7
+### 3.7 - Traits and States update
 
-- Added traits
-  - TODO
-- Added states
-  - TODO
-- Added new activity "intense practice"
-  - More effective than normal practice
+- Added traits system
+  - Each blob can have multiple traits that affect behavior and performance
+  - Three trait types:
+    - `HARD_WORKING`: increases preference for practice and labour activities
+    - `DETERMINED`: reduces negative effects of `INJURED` and `TIRED` states
+    - `LAZY`: increases preference for rest and free-time activities
+  - Traits influence activity selection weights dynamically
+  - Backend: new `traits` DB table, `TraitType` enum, `trait_repository`, and helper utilities
+
+- Added states system
+  - Each blob can have multiple active states with a duration (`effect_until` timestamp)
+  - States affect training and event outcomes multiplicatively when multiple are active
+  - Implemented state types and effects:
+    - `INJURED`:
+      - Training multiplier: ×0.2 (−80%)
+      - Event multiplier: ×0.6 (−40%)
+      - `DETERMINED` reduces training penalty (×0.5) and event penalty (×0.6→×0.6→ effectively handled in code as reduced chance/effect)
+      - 15% chance during `PRACTICE` to refresh duration
+    - `TIRED`:
+      - Training multiplier: ×0.5 (−50%)
+      - Event multiplier: ×0.8 (−20%)
+      - `DETERMINED` reduces training penalty (to ×0.7/adjusted) and event penalty (further reduced)
+      - 5% chance during `PRACTICE` and `LABOUR` to refresh duration
+    - `GLOOMY`:
+      - Training multiplier: ×0.85 (−15%)
+      - Event multiplier: ×0.95 (−5%)
+    - `FOCUSED`:
+      - Training multiplier: ×1.2 (+20%)
+      - In events: guarantees final strength/speed are at least 20% of the base stat (pre-modifiers)
+    - `INTENSE_PRACTICE` (logical activity-state): used to model the side effects of intense practice; can create `TIRED` and `INJURED` states
+  - Backend: new `states` DB table, `StateType` enum, `state_repository`, and helper utilities
+
+- Activity and training behavior updates
+  - New activity: `INTENSE_PRACTICE` — more efficient than regular practice (higher multiplier) but carries risk of `TIRED`/`INJURED`
+  - Activity selection now uses weighted probabilities influenced by traits and active states
+
+- Event scoring and DTOs
+  - Event score generation now applies state-based multipliers at scoring time
+  - `BlobCompetitorDto` now includes pre-loaded `states` to avoid repeated DB queries when scoring events
+  - `FOCUSED` state provides a floor for event stats (20% of base) to keep focused blobs competitive
+
+- Trait dynamics and randomization
+  - On blob creation: 45% chance to receive an initial trait — either `HARD_WORKING` or `DETERMINED`; if one is assigned, 15% chance to also receive the other
+  - Daily random states: if a blob has neither `GLOOMY` nor `FOCUSED`, it has a 1% chance to gain `GLOOMY` and a 1% chance to gain `FOCUSED` for the next day
+  - High-integrity trait drift: if a blob's integrity > `INITIAL_INTEGRITY - CYCLES_PER_SEASON * 2`, it has a small chance to gain or lose a trait (configurable; currently implemented as a low-percent chance per day)
+  - Trait conflict rules: `LAZY` will not be assigned to blobs that already have `HARD_WORKING` or `DETERMINED`, and vice-versa (prevents logically conflicting pairings)

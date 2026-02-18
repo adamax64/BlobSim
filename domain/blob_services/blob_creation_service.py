@@ -6,13 +6,26 @@ from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.persistence.blob_reposiotry import get_blob_by_id, save_blob
 from data.persistence.league_repository import get_queue
-from data.persistence.name_suggestion_repository import delete_suggestion, get_oldest_name
+from data.persistence.name_suggestion_repository import (
+    delete_suggestion,
+    get_oldest_name,
+)
 from domain.exceptions.name_occupied_exception import NameOccupiedException
-from domain.news_services.news_service import add_blob_created_news, add_blob_in_creation_news
-from domain.sim_data_service import get_sim_time, is_blob_created, reset_factory_progress
+from domain.news_services.news_service import (
+    add_blob_created_news,
+    add_blob_in_creation_news,
+)
+from domain.sim_data_service import (
+    get_sim_time,
+    is_blob_created,
+    reset_factory_progress,
+)
 from domain.utils.blob_utils import format_blob_name
 from domain.utils.color_utils import generate_random_color
 from domain.utils.constants import INITIAL_INTEGRITY
+from data.model.trait import Trait
+from data.model.trait_type import TraitType
+from data.persistence.trait_repository import save_trait
 
 
 @transactional
@@ -53,6 +66,24 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         saved_blob = save_blob(session, blob_obj)
         reset_factory_progress(session)
         add_blob_created_news(saved_blob.id, session)
+
+        # 45% chance to get an initial trait (HARD_WORKING or DETERMINED)
+        try:
+            if random.random() < 0.45:
+                initial = random.choice([t for t in TraitType])
+                save_trait(session, Trait(blob_id=saved_blob.id, type=initial))
+
+                # If initial is HARD_WORKING or DETERMINED, additional 15% chance to get the other
+                if initial in [TraitType.HARD_WORKING, TraitType.DETERMINED]:
+                    other = (
+                        TraitType.DETERMINED
+                        if initial == TraitType.HARD_WORKING
+                        else TraitType.HARD_WORKING
+                    )
+                    if random.random() < 0.15:
+                        save_trait(session, Trait(blob_id=saved_blob.id, type=other))
+        except Exception:
+            pass
     except IntegrityError:
         raise NameOccupiedException()
 
@@ -66,11 +97,18 @@ def _create_with_name_suggestion(session):
         add_blob_in_creation_news(session)
         return
     try:
-        create_blob(session, name_suggestion.first_name, name_suggestion.last_name, name_suggestion.parent_id)
+        create_blob(
+            session,
+            name_suggestion.first_name,
+            name_suggestion.last_name,
+            name_suggestion.parent_id,
+        )
         delete_suggestion(session, name_suggestion)
         format_blob_name(name_suggestion)
     except NameOccupiedException:
         session.close()
-        warning("There already exists a blob with suggested name, retrying creating blob...")
+        warning(
+            "There already exists a blob with suggested name, retrying creating blob..."
+        )
         delete_suggestion(session, name_suggestion)
         _create_with_name_suggestion()

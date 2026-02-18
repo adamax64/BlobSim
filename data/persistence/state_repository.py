@@ -27,3 +27,10 @@ def create_state(
     session.commit()
     session.refresh(state)
     return state
+
+
+@transactional
+def delete_expired_states(session: Session, current_time: int):
+    """Delete all states whose effect_until is strictly before current_time."""
+    session.query(State).filter(State.effect_until < current_time).delete(synchronize_session=False)
+    session.commit()

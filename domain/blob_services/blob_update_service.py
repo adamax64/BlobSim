@@ -45,6 +45,7 @@ from domain.utils.constants import (
     PRACTICE_EFFECT,
 )
 from data.persistence.state_repository import create_state, save_state
+from data.persistence.trait_repository import delete_trait, save_trait
 from data.model.trait_type import TraitType
 from data.model.state_type import StateType
 
@@ -86,6 +87,8 @@ def update_all_blobs(session: Session):
         _terminate_blob(blob, current_time, session)
 
         is_grandmaster = get_current_grandmaster_id(session) == blob.id
+        _apply_random_states(blob, session)
+        _apply_random_traits(blob, session)
         _choose_activity_for_blob(
             blob, event_next_day, catchup_training_blob_ids, is_grandmaster
         )
@@ -266,6 +269,63 @@ def _proceed_with_activity(
         pass  # Idle activity
 
     return multiplyer
+
+
+def _apply_random_states(blob: Blob, session: Session):
+    """Apply random state generation: 1% chance for GLOOMY and 1% chance for FOCUSED if not already present."""
+    current_time = get_sim_time(session)
+
+    if not has_state(blob, StateType.GLOOMY) and not has_state(blob, StateType.FOCUSED):
+        random_value = random.random()
+        if random_value < 0.01:
+            effect_until = current_time + 1
+            create_state(session, blob.id, StateType.GLOOMY, effect_until)
+        elif random.random() < 0.02:
+            effect_until = current_time + 1
+            create_state(session, blob.id, StateType.FOCUSED, effect_until)
+        session.refresh(blob)  # Refresh blob to get the latest states after creation
+
+
+def _apply_random_traits(blob: Blob, session: Session):
+    """Apply random trait changes: if integrity is high, 0.1% chance to either gain or lose a trait.
+
+    Trait conflict rules:
+    - LAZY cannot coexist with HARD_WORKING or DETERMINED
+    """
+    threshold = INITIAL_INTEGRITY - CYCLES_PER_SEASON * 2
+
+    if blob.integrity > threshold:
+        if random.random() < 0.001:
+            if random.random() < 0.5:
+                if blob.traits and len(blob.traits) > 0:
+                    lost_trait = random.choice(blob.traits)
+                    delete_trait(session, lost_trait.id)
+                    session.refresh(blob)
+            else:
+                available_traits = [t for t in TraitType if not has_trait(blob, t)]
+
+                # Filter out conflicting traits
+                has_lazy = has_trait(blob, TraitType.LAZY)
+                has_hardworking = has_trait(blob, TraitType.HARD_WORKING)
+                has_determined = has_trait(blob, TraitType.DETERMINED)
+
+                if has_lazy:
+                    # Remove HARD_WORKING and DETERMINED if blob has LAZY
+                    available_traits = [
+                        t
+                        for t in available_traits
+                        if t not in (TraitType.HARD_WORKING, TraitType.DETERMINED)
+                    ]
+                elif has_hardworking or has_determined:
+                    # Remove LAZY if blob has HARD_WORKING or DETERMINED
+                    available_traits = [
+                        t for t in available_traits if t != TraitType.LAZY
+                    ]
+
+                if len(available_traits) > 0:
+                    new_trait = random.choice(available_traits)
+                    save_trait(session, blob.id, new_trait)
+                    session.refresh(blob)
 
 
 def _choose_activity_for_blob(

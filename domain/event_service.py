@@ -16,6 +16,7 @@ from data.persistence.action_repository import save_all_actions
 from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
+from domain.dtos.state_dto import StateDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_ongoing_event_news
@@ -124,7 +125,10 @@ def _get_competitors(
                 strength=player.strength,
                 speed=player.speed,
                 color=player.color,
-                states=player.states,
+                states=[
+                    StateDto(type=state.type, effect_until=state.effect_until)
+                    for state in player.states
+                ],
             )
             for player in event.league.players
         ]
@@ -138,7 +142,10 @@ def _get_competitors(
                 strength=blob.strength,
                 speed=blob.speed,
                 color=blob.color,
-                states=blob.states,
+                states=[
+                    StateDto(type=state.type, effect_until=state.effect_until)
+                    for state in blob.states
+                ],
             )
             for blob in blobs
         ]

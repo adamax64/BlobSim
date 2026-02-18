@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.enums.state_type import StateTypeDto
+from domain.dtos.state_dto import StateDto
 
 
 @dataclass
@@ -10,4 +10,4 @@ class BlobCompetitorDto:
     strength: float
     speed: float
     color: str
-    states: list[StateTypeDto]
+    states: list[StateDto]

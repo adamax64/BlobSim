@@ -6,7 +6,13 @@ from domain.competition_service import (
     process_event_results as service_save_event_results,
 )
 from domain.dtos.event_dto import EventDto
-from domain.dtos.event_record_dto import EliminationEventRecordDto, EventRecordDto, QuarteredEventRecordDto, RaceEventRecordDto, SprintEventRecordDto
+from domain.dtos.event_record_dto import (
+    EliminationEventRecordDto,
+    EventRecordDto,
+    QuarteredEventRecordDto,
+    RaceEventRecordDto,
+    SprintEventRecordDto,
+)
 from domain.dtos.result_dto import ResultDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.result_service import get_results_for_event
@@ -36,7 +42,11 @@ async def get_results_for_event_route(event_id: int) -> list[ResultDto]:
 
 
 @router.post("/quartered-event-results")
-async def save_quartered(event: EventDto, event_records: list[QuarteredEventRecordDto], _=Depends(require_auth)) -> None:
+async def save_quartered(
+    event: EventDto,
+    event_records: list[QuarteredEventRecordDto],
+    _=Depends(require_auth),
+) -> None:
     """
     Save event results for quartered events.
     """
@@ -44,7 +54,9 @@ async def save_quartered(event: EventDto, event_records: list[QuarteredEventReco
 
 
 @router.post("/endurance-event-results")
-async def save_endurance(event: EventDto, event_records: list[RaceEventRecordDto], _=Depends(require_auth)) -> None:
+async def save_endurance(
+    event: EventDto, event_records: list[RaceEventRecordDto], _=Depends(require_auth)
+) -> None:
     """
     Save event results for endurance events.
     """
@@ -52,7 +64,9 @@ async def save_endurance(event: EventDto, event_records: list[RaceEventRecordDto
 
 
 @router.post("/sprint-event-results")
-async def save_sprint(event: EventDto, event_records: list[SprintEventRecordDto], _=Depends(require_auth)) -> None:
+async def save_sprint(
+    event: EventDto, event_records: list[SprintEventRecordDto], _=Depends(require_auth)
+) -> None:
     """
     Save event results for sprint events.
     """
@@ -60,7 +74,11 @@ async def save_sprint(event: EventDto, event_records: list[SprintEventRecordDto]
 
 
 @router.post("/elimination-event-results")
-async def save_elimination(event: EventDto, event_records: list[EliminationEventRecordDto], _=Depends(require_auth)) -> None:
+async def save_elimination(
+    event: EventDto,
+    event_records: list[EliminationEventRecordDto],
+    _=Depends(require_auth),
+) -> None:
     """
     Save event results for elimination events.
     """
