@@ -420,3 +420,6 @@
   - Daily random states: if a blob has neither `GLOOMY` nor `FOCUSED`, it has a 1% chance to gain `GLOOMY` and a 1% chance to gain `FOCUSED` for the next day
   - High-integrity trait drift: if a blob's integrity > `INITIAL_INTEGRITY - CYCLES_PER_SEASON * 2`, it has a small chance to gain or lose a trait (configurable; currently implemented as a low-percent chance per day)
   - Trait conflict rules: `LAZY` will not be assigned to blobs that already have `HARD_WORKING` or `DETERMINED`, and vice-versa (prevents logically conflicting pairings)
+
+- Bugfixes:
+  - Hide standings label on blob details dialog when new season starts and there's no standings data available

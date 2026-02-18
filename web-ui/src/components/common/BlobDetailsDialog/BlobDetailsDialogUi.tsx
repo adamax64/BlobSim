@@ -135,11 +135,13 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
                         )}
                       </Box>
                     </Grid>
-                    <Grid size={6}>
-                      <Typography variant="body1">
-                        <strong>{t('blob_details.standings')}:</strong> {blob.currentStandingsPosition}
-                      </Typography>
-                    </Grid>
+                    {blob.currentStandingsPosition && (
+                      <Grid size={6}>
+                        <Typography variant="body1">
+                          <strong>{t('blob_details.standings')}:</strong> {blob.currentStandingsPosition}
+                        </Typography>
+                      </Grid>
+                    )}
                   </Grid>
                 </>
               )

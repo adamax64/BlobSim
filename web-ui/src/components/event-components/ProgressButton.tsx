@@ -31,7 +31,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
   // Add key listener for spacebar to trigger progressEvent
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' || e.key === ' ') {
+      if ((e.code === 'Space' || e.key === ' ') && !disabled) {
         e.preventDefault();
         if (isStart) {
           onClickStart();
