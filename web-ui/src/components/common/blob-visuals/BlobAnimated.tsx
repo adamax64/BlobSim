@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { BlobStatsDto, StateType } from '../../../../generated';
+import { BlobStatsDto, StateType, ActivityTypeDbo } from '../../../../generated';
 import { BlobBase } from './blob-parts/BlobBase';
 import { TerminatedEyes } from './blob-parts/eyes/TerminatedEyes';
 import { Blink } from './blob-parts/eyes/Blink';
 import { mapActivityToTool } from './utils';
 import { OpenedEyes } from './blob-parts/eyes/OpenedEyes';
 import { Bruises } from './blob-parts/Bruises';
+import { ClosedEyes } from './blob-parts/eyes/ClosedEyes';
 
 type BlobAnimatedProps = {
   blob: BlobStatsDto;
@@ -68,8 +69,11 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
     if (blob.isDead) {
       return <TerminatedEyes />;
     }
+    if (blob.currentActivity === ActivityTypeDbo.Idle) {
+      return <ClosedEyes />;
+    }
     return eyesOpen ? <OpenedEyes blobStates={blob.states.map((s) => s.type)} /> : <Blink />;
-  }, [eyesOpen, blob.isDead]);
+  }, [eyesOpen, blob.isDead, blob.currentActivity]);
 
   return (
     <BlobBase
