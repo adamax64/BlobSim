@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { BlobStatsDto } from '../../../../generated';
+import { BlobStatsDto, StateType } from '../../../../generated';
 import { BlobBase } from './blob-parts/BlobBase';
 import { TerminatedEyes } from './blob-parts/eyes/TerminatedEyes';
 import { Blink } from './blob-parts/eyes/Blink';
 import { mapActivityToTool } from './utils';
 import { OpenedEyes } from './blob-parts/eyes/OpenedEyes';
+import { Bruises } from './blob-parts/Bruises';
 
 type BlobAnimatedProps = {
   blob: BlobStatsDto;
@@ -78,6 +79,7 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
       doSquash={!blob.isDead}
       hasCrown={blob.isGrandmaster ?? false}
       toolSlot={mapActivityToTool(blob.currentActivity)}
+      bruiseSlot={blob.states.find((s) => s.type === StateType.Injured) !== undefined ? <Bruises /> : undefined}
     />
   );
 };
