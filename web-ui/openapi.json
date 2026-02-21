@@ -789,7 +789,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BlobCompetitorDto"
+                "$ref": "#/components/schemas/BlobCompetitorDto-Input"
               }
             }
           }
@@ -902,7 +902,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/BlobCompetitorDto"
+                  "$ref": "#/components/schemas/BlobCompetitorDto-Input"
                 },
                 "title": "Contenders"
               }
@@ -1377,7 +1377,7 @@
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"
       },
-      "BlobCompetitorDto": {
+      "BlobCompetitorDto-Input": {
         "properties": {
           "id": {
             "type": "integer",
@@ -1401,7 +1401,48 @@
           },
           "states": {
             "items": {
-              "$ref": "#/components/schemas/StateType"
+              "$ref": "#/components/schemas/StateDto"
+            },
+            "type": "array",
+            "title": "States"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "strength",
+          "speed",
+          "color",
+          "states"
+        ],
+        "title": "BlobCompetitorDto"
+      },
+      "BlobCompetitorDto-Output": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "strength": {
+            "type": "number",
+            "title": "Strength"
+          },
+          "speed": {
+            "type": "number",
+            "title": "Speed"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
             },
             "type": "array",
             "title": "States"
@@ -1572,6 +1613,13 @@
               }
             ],
             "title": "Current Standings Position"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
+            },
+            "type": "array",
+            "title": "States"
           }
         },
         "type": "object",
@@ -1583,7 +1631,8 @@
           "championships",
           "grandmasters",
           "league_name",
-          "color"
+          "color",
+          "states"
         ],
         "title": "BlobStatsDto"
       },
@@ -1733,7 +1782,7 @@
       "EliminationEventRecordDto-Input": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
           },
           "last_score": {
             "anyOf": [
@@ -1766,7 +1815,7 @@
       "EliminationEventRecordDto-Output": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
           },
           "last_score": {
             "anyOf": [
@@ -1804,7 +1853,7 @@
           },
           "competitors": {
             "items": {
-              "$ref": "#/components/schemas/BlobCompetitorDto"
+              "$ref": "#/components/schemas/BlobCompetitorDto-Input"
             },
             "type": "array",
             "title": "Competitors"
@@ -1856,7 +1905,7 @@
           },
           "competitors": {
             "items": {
-              "$ref": "#/components/schemas/BlobCompetitorDto"
+              "$ref": "#/components/schemas/BlobCompetitorDto-Output"
             },
             "type": "array",
             "title": "Competitors"
@@ -2316,7 +2365,7 @@
       "QuarteredEventRecordDto-Input": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
           },
           "quarters": {
             "items": {
@@ -2351,7 +2400,7 @@
       "QuarteredEventRecordDto-Output": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
           },
           "quarters": {
             "items": {
@@ -2386,7 +2435,7 @@
       "RaceEventRecordDto-Input": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
           },
           "distance_records": {
             "items": {
@@ -2411,7 +2460,7 @@
       "RaceEventRecordDto-Output": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
           },
           "distance_records": {
             "items": {
@@ -2598,7 +2647,7 @@
       "SprintEventRecordDto-Input": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
           },
           "distance_records": {
             "items": {
@@ -2639,7 +2688,7 @@
       "SprintEventRecordDto-Output": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto"
+            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
           },
           "distance_records": {
             "items": {
@@ -2745,6 +2794,23 @@
           "points"
         ],
         "title": "StandingsResultDTO"
+      },
+      "StateDto": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/StateType"
+          },
+          "effect_until": {
+            "type": "string",
+            "title": "Effect Until"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "effect_until"
+        ],
+        "title": "StateDto"
       },
       "StateType": {
         "type": "string",
