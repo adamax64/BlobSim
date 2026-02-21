@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { BlobStatsDto, StateType } from '../../../../generated';
+import { BlobStatsDto } from '../../../../generated';
 import { BlobBase } from './blob-parts/BlobBase';
-import { IdleEyes } from './blob-parts/eyes/IdleEyes';
 import { TerminatedEyes } from './blob-parts/eyes/TerminatedEyes';
 import { Blink } from './blob-parts/eyes/Blink';
 import { mapActivityToTool } from './utils';
-import { GloomyEyebrows } from './blob-parts/eyes/GloomyEyebrows';
 import { OpenedEyes } from './blob-parts/eyes/OpenedEyes';
 
 type BlobAnimatedProps = {
