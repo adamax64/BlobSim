@@ -98,7 +98,19 @@
         "rookies": "The following blob(s) are making their debuts to the championship system:"
       },
       "NEW_GRANDMASTER": "A new eon is starting. Congratulations to {{grandmaster}} for being the grandmaster for the next four seasons."
+    },
+    "states": {
+      "TIRED": "Tired",
+      "INJURED": "Injured",
+      "GLOOMY": "Gloomy",
+      "FOCUSED": "Focused"
     }
+  },
+  "state_descriptions": {
+    "TIRED": "Training and event performance is slightly reduced",
+    "INJURED": "Training and event performance is significantly reduced",
+    "GLOOMY": "Training and event performance is slightly reduced. Blob is less likely to choose activities that require physical effort",
+    "FOCUSED": "Training and event performance is slightly increased."
   },
   "event": {
     "title": "{{leagueName}} Season {{season}} Round {{round}}",

@@ -98,7 +98,19 @@
         "rookies": "Az alábbi blob(ok) debütálnak az idei szezonban:"
       },
       "NEW_GRANDMASTER": "Új eon kezdődik. Gratulálunk {{grandmaster}}-nak/nek a nagymesterré nevezéssé a következő négy szezonra."
+    },
+    "states": {
+      "TIRED": "Kimerült",
+      "INJURED": "Sérült",
+      "GLOOMY": "Elkeseredett",
+      "FOCUSED": "Fókuszált"
     }
+  },
+  "state_descriptions": {
+    "TIRED": "A tréning és esemény teljesítménye kissé csökken.",
+    "INJURED": "A tréning és esemény teljesítménye jelentősen csökken.",
+    "GLOOMY": "A tréning és esemény teljesítménye kissé csökken. A blob kisebb valószínűséggel választja a fizikai erőfeszítéseket igényelő tevékenységeket.",
+    "FOCUSED": "A tréning és esemény teljesítménye kissé növekszik."
   },
   "event": {
     "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",

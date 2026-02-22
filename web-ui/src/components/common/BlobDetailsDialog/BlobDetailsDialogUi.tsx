@@ -19,6 +19,7 @@ import { IconName } from '../IconName';
 import { BlobStatsDto } from '../../../../generated';
 import { JSX } from 'react/jsx-runtime';
 import { useTranslation } from 'react-i18next';
+import { StateIcon } from './StateIcon';
 
 interface BlobDetailsDialogUiProps {
   open: boolean;
@@ -41,7 +42,14 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetai
       <Divider />
       <DialogContent>
         <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
-          {blobIcon}
+          <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+            <Box display="flex" width="100%">
+              {blob.states.map((state) => (
+                <StateIcon key={state.type} state={state} />
+              ))}
+            </Box>
+            {blobIcon}
+          </Box>
           <Box display="flex" flexDirection="column" gap={2} width="100%">
             <Grid container spacing={2} width="100%">
               <Grid size={6}>
