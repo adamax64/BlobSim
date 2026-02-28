@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { BlobStatsDto } from '../../../../generated';
+import { BlobStatsDto, StateType, ActivityTypeDbo } from '../../../../generated';
 import { BlobBase } from './blob-parts/BlobBase';
-import { IdleEyes } from './blob-parts/eyes/IdleEyes';
 import { TerminatedEyes } from './blob-parts/eyes/TerminatedEyes';
 import { Blink } from './blob-parts/eyes/Blink';
 import { mapActivityToTool } from './utils';
+import { OpenedEyes } from './blob-parts/eyes/OpenedEyes';
+import { Bruises } from './blob-parts/Bruises';
+import { ClosedEyes } from './blob-parts/eyes/ClosedEyes';
 
 type BlobAnimatedProps = {
   blob: BlobStatsDto;
@@ -67,8 +69,11 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
     if (blob.isDead) {
       return <TerminatedEyes />;
     }
-    return eyesOpen ? <IdleEyes /> : <Blink />;
-  }, [eyesOpen, blob.isDead]);
+    if (blob.currentActivity === ActivityTypeDbo.Idle) {
+      return <ClosedEyes />;
+    }
+    return eyesOpen ? <OpenedEyes blobStates={blob.states.map((s) => s.type)} /> : <Blink />;
+  }, [eyesOpen, blob.isDead, blob.currentActivity]);
 
   return (
     <BlobBase
@@ -78,6 +83,7 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
       doSquash={!blob.isDead}
       hasCrown={blob.isGrandmaster ?? false}
       toolSlot={mapActivityToTool(blob.currentActivity)}
+      bruiseSlot={blob.states.find((s) => s.type === StateType.Injured) !== undefined ? <Bruises /> : undefined}
     />
   );
 };

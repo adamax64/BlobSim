@@ -23,7 +23,7 @@ from domain.news_services.news_service import add_ongoing_event_news
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.blob_utils import format_blob_name
 from domain.utils.league_utils import map_league_to_dto
-from domain.utils.sim_time_utils import get_season
+from domain.utils.sim_time_utils import format_sim_time_short, get_season
 
 
 @transactional
@@ -126,7 +126,10 @@ def _get_competitors(
                 speed=player.speed,
                 color=player.color,
                 states=[
-                    StateDto(type=state.type, effect_until=state.effect_until)
+                    StateDto(
+                        type=state.type,
+                        effect_until=format_sim_time_short(state.effect_until),
+                    )
                     for state in player.states
                 ],
             )
@@ -143,7 +146,10 @@ def _get_competitors(
                 speed=blob.speed,
                 color=blob.color,
                 states=[
-                    StateDto(type=state.type, effect_until=state.effect_until)
+                    StateDto(
+                        type=state.type,
+                        effect_until=format_sim_time_short(state.effect_until),
+                    )
                     for state in blob.states
                 ],
             )
