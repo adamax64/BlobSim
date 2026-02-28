@@ -428,6 +428,6 @@
 
 ### 3.7.1
 
-- Added visualization for states on animated blob (except focused state)
+- Added visualization for states on animated blob
 - Added icons with explanatory tooltips for blob states and traits displayed over the animated blob on the blob details dialog
 - Added visuals for blob's `IDLE` activity type
