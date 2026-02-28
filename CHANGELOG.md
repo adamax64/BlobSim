@@ -378,7 +378,7 @@
   - Each blob can have multiple traits that affect behavior and performance
   - Three trait types:
     - `HARD_WORKING`: increases preference for practice and labour activities
-    - `DETERMINED`: reduces negative effects of `INJURED` and `TIRED` states
+    - `DETERMINED`: reduces negative effects of `INJURED` and `TIRED` states, more likely to do practice and intense practice
     - `LAZY`: increases preference for rest and free-time activities
   - Traits influence activity selection weights dynamically
   - Backend: new `traits` DB table, `TraitType` enum, `trait_repository`, and helper utilities
@@ -429,5 +429,5 @@
 ### 3.7.1
 
 - Added visualization for states on animated blob (except focused state)
-- Added icons with explanatory tooltips for blob states displayed over the animated blob on the blob details dialog
+- Added icons with explanatory tooltips for blob states and traits displayed over the animated blob on the blob details dialog
 - Added visuals for blob's `IDLE` activity type

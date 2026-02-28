@@ -1620,6 +1620,13 @@
             },
             "type": "array",
             "title": "States"
+          },
+          "traits": {
+            "items": {
+              "$ref": "#/components/schemas/TraitType"
+            },
+            "type": "array",
+            "title": "Traits"
           }
         },
         "type": "object",
@@ -1632,7 +1639,8 @@
           "grandmasters",
           "league_name",
           "color",
-          "states"
+          "states",
+          "traits"
         ],
         "title": "BlobStatsDto"
       },
@@ -2940,6 +2948,16 @@
           "token"
         ],
         "title": "Token"
+      },
+      "TraitType": {
+        "type": "string",
+        "enum": [
+          "HARD_WORKING",
+          "DETERMINED",
+          "LAZY"
+        ],
+        "title": "TraitType",
+        "description": "Enum for Trait Type"
       },
       "TransfersDto": {
         "properties": {
