@@ -3,6 +3,7 @@ from data.model.state_type import StateType
 from domain.dtos.blob_stats_dto import BlobStatsDto, IntegrityState
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.state_dto import StateDto
+from domain.dtos.trait_type_dto import TraitTypeDto
 from domain.utils.constants import INITIAL_INTEGRITY
 from domain.utils.sim_time_utils import format_sim_time_short
 from data.model.trait_type import TraitType
@@ -112,6 +113,10 @@ def map_to_blob_state_dto(
                 effect_until=format_sim_time_short(state.effect_until),
             )
             for state in blob.states
+        ],
+        traits=[
+            TraitTypeDto(trait.type)
+            for trait in blob.traits
         ],
     )
 

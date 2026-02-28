@@ -1,4 +1,4 @@
-export const EyeCircles = () => {
+export const ClosedEyes = () => {
   return (
     <>
       <path
@@ -8,8 +8,8 @@ export const EyeCircles = () => {
         strokeLinecap="butt"
         strokeLinejoin="miter"
         strokeOpacity={1}
-        d="m 40,42 a 10 35 180 0 0 10 0"
-        id="eye-circle1"
+        d="m 38,35 7,10 l 7,-10"
+        id="closed-eye1"
       />
       <path
         fill="none"
@@ -18,8 +18,8 @@ export const EyeCircles = () => {
         strokeLinecap="butt"
         strokeLinejoin="miter"
         strokeOpacity={1}
-        d="m 80,42 a 10 35 180 0 0 10 0"
-        id="eye-circle2"
+        d="m 78,35 7,10 l 7,-10"
+        id="closed-eye2"
       />
     </>
   );

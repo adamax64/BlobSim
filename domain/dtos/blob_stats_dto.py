@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.state_dto import StateDto
 from domain.enums.activity_type import ActivityType
+from domain.enums.trait_type import TraitTypeDto
 
 
 class IntegrityState(enum.Enum):
@@ -36,3 +37,4 @@ class BlobStatsDto(BaseModel):
     current_activity: ActivityType | None = None
     current_standings_position: int | None = None
     states: list[StateDto]
+    traits: list[TraitTypeDto]
