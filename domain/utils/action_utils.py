@@ -2,6 +2,7 @@ import random
 from functools import lru_cache
 
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.utils.sim_time_utils import get_sim_time_from
 
 
 def compute_event_multiplier_from_contender(
@@ -16,7 +17,10 @@ def compute_event_multiplier_from_contender(
     multiplier = 1.0
     focused = False
     for st in contender.states:
-        if st.effect_until < current_time:
+        effect_until_time = get_sim_time_from(
+            st.effect_until.season, st.effect_until.epoch, st.effect_until.cycle
+        )
+        if effect_until_time < current_time:
             continue
         st_type: StateType = st.type
         if st_type == StateType.INJURED:

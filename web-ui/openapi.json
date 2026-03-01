@@ -2809,8 +2809,7 @@
             "$ref": "#/components/schemas/StateType"
           },
           "effect_until": {
-            "type": "string",
-            "title": "Effect Until"
+            "$ref": "#/components/schemas/SimTimeDto"
           }
         },
         "type": "object",

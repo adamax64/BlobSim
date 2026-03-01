@@ -431,3 +431,7 @@
 - Added visualization for states on animated blob
 - Added icons with explanatory tooltips for blob states and traits displayed over the animated blob on the blob details dialog
 - Added visuals for blob's `IDLE` activity type
+
+### 3.7.2
+
+- fixed bug during race action generation
