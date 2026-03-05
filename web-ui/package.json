@@ -11,7 +11,11 @@
     "start": "vite --host 0.0.0.0",
     "generate-api": "openapi-generator-cli generate -i ./openapi.json -g typescript-fetch -o ./generated",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": "npm run typecheck"
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
@@ -27,7 +31,9 @@
     "eslint": "^8.50.0",
     "@typescript-eslint/parser": "^6.6.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-react": "^7.32.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.2",

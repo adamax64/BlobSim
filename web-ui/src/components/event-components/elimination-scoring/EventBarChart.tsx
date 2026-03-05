@@ -1,17 +1,9 @@
 import { Box, Card, Typography } from '@mui/material';
-import {
-  BarChart,
-  ChartsText,
-  ChartsTextProps,
-  ChartsTooltipContainer,
-  useAxesTooltip,
-  UseAxisTooltipReturnValue,
-} from '@mui/x-charts';
+import { BarChart, ChartsText, ChartsTextProps, ChartsTooltipContainer, useAxesTooltip } from '@mui/x-charts';
 import { IconName } from '../../common/IconName';
-import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
+import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import { BlobIcon } from '../../icons/BlobIcon';
-import { BlobCompetitorDto } from '../../../../generated';
-import { CartesianChartSeriesType } from '@mui/x-charts/internals';
+import { BlobCompetitorDtoInput } from '../../../../generated';
 
 interface EventBarChartProps {
   eventRecords: EventRecordDto[];
@@ -30,7 +22,7 @@ export const EventBarChart = ({ eventRecords, isMobile }: EventBarChartProps) =>
       yAxis={[
         {
           data: eventRecords.map((record) => record.blob),
-          valueFormatter: (value: BlobCompetitorDto) => value.color,
+          valueFormatter: (value: BlobCompetitorDtoInput) => value.color,
           tickLabelStyle: { display: 'contents' },
           colorMap: {
             colors: eventRecords.map((record) => record.blob.color),

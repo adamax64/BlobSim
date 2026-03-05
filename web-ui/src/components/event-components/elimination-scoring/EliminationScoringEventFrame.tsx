@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { ActionDto, BlobCompetitorDto, EventDto } from '../../../../generated';
+import type { ActionDto, BlobCompetitorDtoInput, EventDtoInput } from '../../../../generated';
 import { ActionsApi, CompetitionApi, EventRecordsApi } from '../../../../generated';
 import { useAuth } from '../../../context/AuthContext';
 import type { Dispatch, SetStateAction } from 'react';
@@ -18,7 +18,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { ProgressButton } from '../ProgressButton';
-import type { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
+import type { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { TickLoadingBar } from '../../common/StyledComponents';
@@ -33,7 +33,7 @@ interface SnackbarState {
 }
 
 interface EliminationScoringEventFrameProps {
-  event: EventDto;
+  event: EventDtoInput;
   setIsEventFinished: Dispatch<SetStateAction<boolean>>;
   isEventFinished: boolean;
 }
@@ -85,10 +85,10 @@ export const EliminationScoringEventFrame = ({
   const { mutate: createAction } = useMutation<
     { name: string; score: number } | undefined,
     Error,
-    { contenders: BlobCompetitorDto[] }
+    { contenders: BlobCompetitorDtoInput[] }
   >({
     mutationFn: ({ contenders }) =>
-      actionApi.eliminationActionsCreateEliminationPost({ eventId: event.id, blobCompetitorDto: contenders }),
+      actionApi.eliminationActionsCreateEliminationPost({ eventId: event.id, blobCompetitorDtoInput: contenders }),
     onSuccess: (data) => {
       if (data) {
         setSnackbarState({

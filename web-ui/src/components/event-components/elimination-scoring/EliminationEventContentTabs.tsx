@@ -2,7 +2,7 @@ import { Box, Paper, Tab, Tabs } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { EliminationEventTable } from './EliminationEventTable';
 import { EventBarChart } from './EventBarChart';
-import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
+import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import { useState } from 'react';
 
 interface EliminationEventContentTabsProps {

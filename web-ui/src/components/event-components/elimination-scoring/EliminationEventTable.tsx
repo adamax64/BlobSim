@@ -2,7 +2,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { useCallback } from 'react';
 import { roundToThreeDecimals } from '../event-utils';
 import { useTranslation } from 'react-i18next';
-import { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
+import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import { NarrowCell } from '../../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 

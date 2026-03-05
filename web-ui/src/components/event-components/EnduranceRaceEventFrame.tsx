@@ -17,11 +17,11 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
-import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../generated';
+import { ActionDto, ActionsApi, CompetitionApi, EventDtoInput, EventRecordsApi } from '../../../generated';
 import { ProgressButton } from './ProgressButton';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { RaceEventRecordDto as EventRecordDto } from '../../../generated/models/RaceEventRecordDto';
+import { RaceEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/RaceEventRecordDtoOutput';
 import { getRaceDurationBySize, roundToThreeDecimals, roundToOneDecimals } from './event-utils';
 import defaultConfig from '../../default-config';
 import { useAuth } from '../../context/AuthContext';
@@ -32,7 +32,7 @@ import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 import { SnackbarState } from './snackbar-state';
 
 interface EnduranceRaceEventFrameProps {
-  event: EventDto;
+  event: EventDtoInput;
   setIsEventFinished: Dispatch<SetStateAction<boolean>>;
   isEventFinished: boolean;
 }

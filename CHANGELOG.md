@@ -435,3 +435,7 @@
 ### 3.7.2
 
 - fixed bug during race action generation
+
+### 3.7.3
+
+- Fixed production bugs
