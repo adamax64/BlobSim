@@ -6,6 +6,7 @@ import CalendarMonth from '@mui/icons-material/CalendarMonth';
 import Dashboard from '@mui/icons-material/Dashboard';
 import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import Factory from '@mui/icons-material/Factory';
+import FormatListBulleted from '@mui/icons-material/FormatListBulleted';
 import StarIcon from '@mui/icons-material/Star';
 import { BlobPiktogram } from '../icons/BlobPiktogram';
 import { Link } from '@tanstack/react-router';
@@ -26,6 +27,8 @@ function getMenuIcon(page: string) {
       return <CalendarMonth />;
     case 'hall-of-fame':
       return <StarIcon />;
+    case 'results':
+      return <FormatListBulleted />;
     default:
       return null;
   }
@@ -86,7 +89,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
             © 2026 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v3.7.3
+            v3.8
           </Typography>
         </Box>
       </Box>

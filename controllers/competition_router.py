@@ -14,8 +14,9 @@ from domain.dtos.event_record_dto import (
     SprintEventRecordDto,
 )
 from domain.dtos.result_dto import ResultDto
+from domain.dtos.season_competition_dto import SeasonCompetitionDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
-from domain.result_service import get_results_for_event
+from domain.result_service import get_competitions_by_season, get_results_for_event
 from domain.sim_data_service import is_current_event_concluded
 from .auth_dependency import require_auth
 
@@ -39,6 +40,12 @@ async def get_current_event() -> EventDto:
 async def get_results_for_event_route(event_id: int) -> list[ResultDto]:
     """Get results for a specific event by id."""
     return get_results_for_event(event_id)
+
+
+@router.get("/results/season/{season}")
+async def get_competitions_by_season_route(season: int) -> list[SeasonCompetitionDto]:
+    """Get all competitions for the given season, ordered by date (sim time)."""
+    return get_competitions_by_season(season)
 
 
 @router.post("/quartered-event-results")

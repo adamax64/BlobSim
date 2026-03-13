@@ -439,3 +439,9 @@
 ### 3.7.3
 
 - Fixed production bugs
+
+### 3.8
+
+- Added "Results" page
+  - Lists all past events
+  - Filtered by season and optionally league

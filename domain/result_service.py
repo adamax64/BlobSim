@@ -1,15 +1,17 @@
 from typing import List
 
 from data.db.db_engine import transactional
+from data.persistence.event_repository import get_events_by_season
 from data.persistence.result_repository import get_results_of_event
 from domain.dtos.result_dto import ResultDto
+from domain.dtos.season_competition_dto import SeasonCompetitionDto
 from domain.utils.blob_utils import map_to_blob_state_dto
 from domain.hall_of_fame_services.titles_chronology_service import (
     get_current_grandmaster_id,
 )
 from domain.sim_data_service import get_sim_time
 from domain.standings_service import get_standings_by_league
-from domain.utils.sim_time_utils import get_season
+from domain.utils.sim_time_utils import convert_to_sim_time, get_season
 
 
 @transactional
@@ -45,3 +47,18 @@ def get_results_for_event(event_id: int, session) -> List[ResultDto]:
         )
 
     return mapped
+
+
+@transactional
+def get_competitions_by_season(season: int, session) -> List[SeasonCompetitionDto]:
+    """Return all competitions (events) for the given season, ordered by date."""
+    events = get_events_by_season(session, season, exclude_non_competition=True)
+    return [
+        SeasonCompetitionDto(
+            date=convert_to_sim_time(event.date),
+            league_name=event.league.name if event.league else "",
+            round=event.round,
+            event_type=event.type,
+        )
+        for event in events
+    ]

@@ -580,6 +580,53 @@
         }
       }
     },
+    "/competition/results/season/{season}": {
+      "get": {
+        "tags": [
+          "competition"
+        ],
+        "summary": "Get Competitions By Season",
+        "description": "Get all competitions for the given season, ordered by date (sim time).",
+        "operationId": "get_competitions_by_season_route_competition_results_season__season__get",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Season"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeasonCompetitionDto"
+                  },
+                  "title": "Response Get Competitions By Season Route Competition Results Season  Season  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/competition/quartered-event-results": {
       "post": {
         "tags": [
@@ -2585,6 +2632,32 @@
           "points"
         ],
         "title": "ResultDto"
+      },
+      "SeasonCompetitionDto": {
+        "properties": {
+          "date": {
+            "$ref": "#/components/schemas/SimTimeDto"
+          },
+          "league_name": {
+            "type": "string",
+            "title": "League Name"
+          },
+          "round": {
+            "type": "integer",
+            "title": "Round"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "league_name",
+          "round",
+          "event_type"
+        ],
+        "title": "SeasonCompetitionDto"
       },
       "ScoreDto": {
         "properties": {

@@ -272,7 +272,17 @@
     "factory": "Factory",
     "standings": "Standings",
     "calendar": "Calendar",
-    "hall-of-fame": "Hall of Fame"
+    "hall-of-fame": "Hall of Fame",
+    "results": "Results"
+  },
+  "results": {
+    "season": "Season",
+    "date": "Date",
+    "details": "League / Round / Event",
+    "league": "League",
+    "filter_all": "All",
+    "round": "Round",
+    "event_type": "Event Type"
   },
   "page_titles": {
     "dashboard": "Blob Championship System - Dashboard",
@@ -287,6 +297,8 @@
     "calendar_short": "BCS - Calendar",
     "hall-of-fame": "Blob Championship System - Hall of Fame",
     "hall-of-fame_short": "BCS - Hall of Fame",
+    "results": "Blob Championship System - Results",
+    "results_short": "BCS - Results",
     "login": "Admin Login",
     "login_short": "Admin Login"
   },

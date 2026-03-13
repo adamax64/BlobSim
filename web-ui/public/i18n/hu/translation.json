@@ -272,7 +272,17 @@
     "factory": "Blob Gyár",
     "standings": "Eredmények",
     "calendar": "Versenynaptár",
-    "hall-of-fame": "Hírességek Csarnoka"
+    "hall-of-fame": "Hírességek Csarnoka",
+    "results": "Eredmények"
+  },
+  "results": {
+    "season": "Szezon",
+    "date": "Dátum",
+    "details": "Liga / Forduló / Verseny",
+    "league": "Liga",
+    "filter_all": "Összes",
+    "round": "Forduló",
+    "event_type": "Versenytípus"
   },
   "page_titles": {
     "dashboard": "Blob Bajnokság - Kezdőlap",
@@ -287,6 +297,8 @@
     "calendar_short": "BCS - Versenynaptár",
     "hall-of-fame": "Blob Bajnokság - Hírességek Csarnoka",
     "hall-of-fame_short": "BCS - Hírességek Csarnoka",
+    "results": "Blob Bajnokság - Eredmények",
+    "results_short": "BCS - Eredmények",
     "login": "Admin Bejelentkezés",
     "login_short": "Admin Bejelentkezés"
   },

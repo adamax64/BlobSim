@@ -8,6 +8,7 @@ import { FactoryPage } from '../components/pages/FactoryPage';
 import { EventPage } from '../components/pages/EventPage';
 import { LoginPage } from '../components/pages/LoginPage';
 import { HallOfFamePage } from '../components/pages/HallOfFamePage';
+import { ResultsPage } from '../components/pages/ResultsPage';
 
 const RootRoute = createRootRoute({
   component: RootLayout,
@@ -52,6 +53,11 @@ export const routeTree = RootRoute.addChildren([
   createRoute({
     path: '/hall-of-fame',
     component: HallOfFamePage,
+    getParentRoute: () => RootRoute,
+  }),
+  createRoute({
+    path: '/results',
+    component: ResultsPage,
     getParentRoute: () => RootRoute,
   }),
   createRoute({
