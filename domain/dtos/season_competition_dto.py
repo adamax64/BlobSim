@@ -6,6 +6,7 @@ from domain.dtos.sim_time_dto import SimTimeDto
 
 @dataclass
 class SeasonCompetitionDto:
+    id: int
     date: SimTimeDto
     league_name: str
     round: int

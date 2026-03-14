@@ -445,3 +445,4 @@
 - Added "Results" page
   - Lists all past events
   - Filtered by season and optionally league
+  - "View results" button in the "Actions" column to view the results of that competition

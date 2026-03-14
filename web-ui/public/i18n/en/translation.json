@@ -282,7 +282,11 @@
     "league": "League",
     "filter_all": "All",
     "round": "Round",
-    "event_type": "Event Type"
+    "round_short": "R{{round}}",
+    "event_type": "Event Type",
+    "no_events": "No events found for the selected criteria",
+    "actions": "Actions",
+    "view_results": "View results"
   },
   "page_titles": {
     "dashboard": "Blob Championship System - Dashboard",

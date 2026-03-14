@@ -55,6 +55,7 @@ def get_competitions_by_season(season: int, session) -> List[SeasonCompetitionDt
     events = get_events_by_season(session, season, exclude_non_competition=True)
     return [
         SeasonCompetitionDto(
+            id=event.id,
             date=convert_to_sim_time(event.date),
             league_name=event.league.name if event.league else "",
             round=event.round,

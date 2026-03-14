@@ -282,7 +282,11 @@
     "league": "Liga",
     "filter_all": "Összes",
     "round": "Forduló",
-    "event_type": "Versenytípus"
+    "round_short": "{{round}}. F",
+    "event_type": "Versenytípus",
+    "no_events": "Nincs a kiválasztott kritériumoknak megfelelő esemény",
+    "actions": "Műveletek",
+    "view_results": "Eredmények megtekintése"
   },
   "page_titles": {
     "dashboard": "Blob Bajnokság - Kezdőlap",

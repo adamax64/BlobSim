@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CompetitionApi, LeagueDto, LeaguesApi, SeasonCompetitionDto } from '../../../generated';
+import { CompetitionApi, LeagueDto, LeaguesApi, SeasonCompetitionDto, ResultDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import {
@@ -20,11 +20,16 @@ import {
   TableRow,
   useMediaQuery,
   useTheme,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
+import { Preview } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useSimTime } from '../../context/SimTimeContext';
 import { formatToShort } from '../../utils/sim-time-utils';
+import { ResultsModal } from '../event-components/ResultsModal';
+import { NarrowCell } from '../common/StyledComponents';
 
 const ALL_LEAGUE = 'all';
 
@@ -35,6 +40,8 @@ export const ResultsPage = () => {
   const { simTime, loading: simTimeLoading, refreshSimTime } = useSimTime();
   const [season, setSeason] = useState<number>(1);
   const [selectedLeague, setSelectedLeague] = useState<string>(ALL_LEAGUE);
+  const [selectedCompetition, setSelectedCompetition] = useState<SeasonCompetitionDto | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const initialSeasonSet = useRef(false);
 
   const competitionApi = new CompetitionApi(defaultConfig);
@@ -136,7 +143,7 @@ export const ResultsPage = () => {
                     <TableRow>
                       <TableCell>{t('results.date')}</TableCell>
                       {isMobile ? (
-                        <TableCell>{t('results.details')}</TableCell>
+                        <NarrowCell>{t('results.details')}</NarrowCell>
                       ) : (
                         <>
                           <TableCell>{t('results.league')}</TableCell>
@@ -144,28 +151,49 @@ export const ResultsPage = () => {
                           <TableCell>{t('results.event_type')}</TableCell>
                         </>
                       )}
+                      <TableCell align="center">{t('results.actions')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {filteredCompetitions.map((row, index) => {
-                      const eventTypeLabel = t(`enums.event_types.${row.eventType}`);
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>{formatToShort(row.date)}</TableCell>
-                          {isMobile ? (
-                            <TableCell>
-                              {row.leagueName} · {t('results.round')} {row.round} · {eventTypeLabel}
+                    {filteredCompetitions.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={isMobile ? 3 : 5} align="center">
+                          {t('results.no_events')}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredCompetitions.map((row, index) => {
+                        const eventTypeLabel = t(`enums.event_types.${row.eventType}`);
+                        return (
+                          <TableRow key={index}>
+                            <TableCell>{formatToShort(row.date)}</TableCell>
+                            {isMobile ? (
+                              <NarrowCell>
+                                {row.leagueName} · {t('results.round_short', { round: row.round })} · {eventTypeLabel}
+                              </NarrowCell>
+                            ) : (
+                              <>
+                                <TableCell>{row.leagueName}</TableCell>
+                                <TableCell>{row.round}</TableCell>
+                                <TableCell>{eventTypeLabel}</TableCell>
+                              </>
+                            )}
+                            <TableCell align="center">
+                              <Tooltip title={t('results.view_results')}>
+                                <IconButton
+                                  onClick={() => {
+                                    setSelectedCompetition(row);
+                                    setIsModalOpen(true);
+                                  }}
+                                >
+                                  <Preview />
+                                </IconButton>
+                              </Tooltip>
                             </TableCell>
-                          ) : (
-                            <>
-                              <TableCell>{row.leagueName}</TableCell>
-                              <TableCell>{row.round}</TableCell>
-                              <TableCell>{eventTypeLabel}</TableCell>
-                            </>
-                          )}
-                        </TableRow>
-                      );
-                    })}
+                          </TableRow>
+                        );
+                      })
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -173,6 +201,14 @@ export const ResultsPage = () => {
           </Box>
         </CardContent>
       </Card>
+      <ResultsModal
+        eventId={selectedCompetition?.id ?? null}
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedCompetition(null);
+        }}
+      />
     </PageFrame>
   );
 };
