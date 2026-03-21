@@ -23,13 +23,14 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import { Preview } from '@mui/icons-material';
+import { Preview, Slideshow } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useSimTime } from '../../context/SimTimeContext';
 import { formatToShort } from '../../utils/sim-time-utils';
 import { ResultsModal } from '../event-components/ResultsModal';
 import { NarrowCell } from '../common/StyledComponents';
+import { Link } from '@tanstack/react-router';
 
 const ALL_LEAGUE = 'all';
 
@@ -188,6 +189,13 @@ export const ResultsPage = () => {
                                 >
                                   <Preview />
                                 </IconButton>
+                              </Tooltip>
+                              <Tooltip title={t('results.replay_event')}>
+                                <Link to="/replay/$eventId" params={{ eventId: row.id.toString() }}>
+                                  <IconButton>
+                                    <Slideshow />
+                                  </IconButton>
+                                </Link>
                               </Tooltip>
                             </TableCell>
                           </TableRow>

@@ -171,7 +171,7 @@ export const SprintRaceUI = ({
                     <DistanceProgress
                       variant="determinate"
                       value={Math.min(
-                        (record.distanceRecords?.[record.distanceRecords?.length - 1] / raceDuration) * 100,
+                        ((record.distanceRecords?.[record.distanceRecords?.length - 1] ?? 0) / raceDuration) * 100,
                         100,
                       )}
                       sx={{

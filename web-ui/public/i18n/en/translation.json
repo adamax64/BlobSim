@@ -127,6 +127,16 @@
     "title_short": "Championship event",
     "no_event_data": "No event data available"
   },
+  "replay": {
+    "title": "{{leagueName}} Season {{season}} Round {{round}} Replay",
+    "title_short": "Event Replay",
+    "no_event_data": "No event data available",
+    "step_back": "Previous tick",
+    "step_forward": "Next tick",
+    "jump_to_start": "Jump to start",
+    "jump_to_end": "Jump to end",
+    "go_back": "Go back to results"
+  },
   "endurance_race": {
     "tick": "Tick",
     "name": "Name",
@@ -139,7 +149,7 @@
     "name": "Name",
     "progress": "Progress",
     "delta_leader": "Delta leader",
-    "delta_time": "Delta interval/Overall time"
+    "delta_time": "Interval/Overall time"
   },
   "progress_button": {
     "start_competition": "Start Competition",
@@ -286,7 +296,8 @@
     "event_type": "Event Type",
     "no_events": "No events found for the selected criteria",
     "actions": "Actions",
-    "view_results": "View results"
+    "view_results": "View results",
+    "replay_event": "Replay event"
   },
   "page_titles": {
     "dashboard": "Blob Championship System - Dashboard",

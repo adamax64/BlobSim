@@ -127,6 +127,16 @@
     "title_short": "Verseny",
     "no_event_data": "Nincs elérhető esemény adat"
   },
+  "replay": {
+    "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló Visszajátszás",
+    "title_short": "Esemény Visszajátszás",
+    "no_event_data": "Nincs elérhető esemény adat",
+    "step_back": "Előző tick",
+    "step_forward": "Következő tick",
+    "jump_to_start": "Ugrás az elejére",
+    "jump_to_end": "Ugrás a végére",
+    "go_back": "Vissza az eredményekhez"
+  },
   "endurance_race": {
     "tick": "Tick",
     "name": "Név",
@@ -139,7 +149,7 @@
     "name": "Név",
     "progress": "Előrehaladás",
     "delta_leader": "Delta az éllovashoz",
-    "delta_time": "Delta intervallum/Össz. idő"
+    "delta_time": "Intervallum/Össz. idő"
   },
   "progress_button": {
     "start_competition": "Verseny indítása",
@@ -286,7 +296,8 @@
     "event_type": "Versenytípus",
     "no_events": "Nincs a kiválasztott kritériumoknak megfelelő esemény",
     "actions": "Műveletek",
-    "view_results": "Eredmények megtekintése"
+    "view_results": "Eredmények megtekintése",
+    "replay_event": "Esemény visszajátszása"
   },
   "page_titles": {
     "dashboard": "Blob Bajnokság - Kezdőlap",

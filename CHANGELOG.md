@@ -446,3 +446,7 @@
   - Lists all past events
   - Filtered by season and optionally league
   - "View results" button in the "Actions" column to view the results of that competition
+  - "Replay event" button in the "Actions" column to replay the competition
+- Added event replay page:
+  - Loads event records by event id and tick
+  - The user can step the ticks back and forth to view a specified moment of the competition

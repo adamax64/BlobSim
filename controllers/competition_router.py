@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 import traceback
+from controllers.auth_dependency import require_auth
 from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.competition_service import (
     load_competition_data,
@@ -17,8 +18,8 @@ from domain.dtos.result_dto import ResultDto
 from domain.dtos.season_competition_dto import SeasonCompetitionDto
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.result_service import get_competitions_by_season, get_results_for_event
+from domain.event_service import get_event_by_id
 from domain.sim_data_service import is_current_event_concluded
-from .auth_dependency import require_auth
 
 
 router = APIRouter(prefix="/competition", tags=["competition"])
@@ -34,6 +35,15 @@ async def get_current_event() -> EventDto:
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
+
+
+@router.get("/{event_id}")
+async def get_event_by_id_route(event_id: int) -> EventDto:
+    try:
+        return get_event_by_id(event_id, check_date=False)
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"{e}")
 
 
 @router.get("/results/event/{event_id}")

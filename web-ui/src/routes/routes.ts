@@ -9,6 +9,7 @@ import { EventPage } from '../components/pages/EventPage';
 import { LoginPage } from '../components/pages/LoginPage';
 import { HallOfFamePage } from '../components/pages/HallOfFamePage';
 import { ResultsPage } from '../components/pages/ResultsPage';
+import { ReplayPage } from '../components/pages/ReplayPage';
 
 const RootRoute = createRootRoute({
   component: RootLayout,
@@ -58,6 +59,11 @@ export const routeTree = RootRoute.addChildren([
   createRoute({
     path: '/results',
     component: ResultsPage,
+    getParentRoute: () => RootRoute,
+  }),
+  createRoute({
+    path: '/replay/$eventId',
+    component: ReplayPage,
     getParentRoute: () => RootRoute,
   }),
   createRoute({
