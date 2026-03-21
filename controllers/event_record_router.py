@@ -11,30 +11,30 @@ router = APIRouter(prefix="/event-records", tags=["event-records"])
 
 
 @router.get("/quartered", response_model=list[QuarteredEventRecordDto])
-def get_quartered(event_id: int) -> list[QuarteredEventRecordDto]:
+def get_quartered(event_id: int, playback_tick: int = None) -> list[QuarteredEventRecordDto]:
     """ Get quartered event records by actions. """
-    return _get_event_records(event_id)
+    return _get_event_records(event_id, playback_tick=playback_tick)
 
 
 @router.get("/endurance", response_model=list[RaceEventRecordDto])
-def get_endurance(event_id: int, is_playback: bool = False) -> list[RaceEventRecordDto]:
+def get_endurance(event_id: int, is_playback: bool = False, playback_tick: int = None) -> list[RaceEventRecordDto]:
     """ Get endurance race event records by actions. """
-    return _get_event_records(event_id, is_playback)
+    return _get_event_records(event_id, is_playback, playback_tick=playback_tick)
 
 
 @router.get("/sprint", response_model=list[SprintEventRecordDto])
-def get_sprint(event_id: int, is_playback: bool = False) -> list[RaceEventRecordDto]:
+def get_sprint(event_id: int, is_playback: bool = False, playback_tick: int = None) -> list[SprintEventRecordDto]:
     """ Get sprint race event records by actions. """
-    return _get_event_records(event_id, is_playback)
+    return _get_event_records(event_id, is_playback, playback_tick=playback_tick)
 
 
 @router.get("/elimination", response_model=list[EliminationEventRecordDto])
-def get_elimination(event_id: int) -> list[EliminationEventRecordDto]:
+def get_elimination(event_id: int, playback_tick: int = None) -> list[EliminationEventRecordDto]:
     """ Get elimination event records by actions. """
-    return _get_event_records(event_id)
+    return _get_event_records(event_id, playback_tick=playback_tick)
 
 
-def _get_event_records(event_id: int, is_playback: bool = False) -> list[EventRecordDto]:
+def _get_event_records(event_id: int, is_playback: bool = False, playback_tick: int = None) -> list[EventRecordDto]:
     event = None
     try:
         event = get_event_by_id(event_id)
@@ -48,7 +48,7 @@ def _get_event_records(event_id: int, is_playback: bool = False) -> list[EventRe
         raise HTTPException(status_code=404, detail="EVENT_NOT_FOUND")
 
     try:
-        return get_event_records(event.actions, event.competitors, event.type, is_playback)
+        return get_event_records(event.actions, event.competitors, event.type, is_playback, playback_tick)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error getting event records: {e.with_traceback(None)}")

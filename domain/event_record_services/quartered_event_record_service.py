@@ -7,7 +7,8 @@ from domain.dtos.event_record_dto import QuarteredEventRecordDto, ScoreDto
 def get_quartered_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
-    event_type: EventTypeDto
+    event_type: EventTypeDto,
+    playback_tick: int = None
 ) -> list[QuarteredEventRecordDto]:
     quarter_ends = _get_quarter_ends(len(competitors), event_type)
 
@@ -22,7 +23,7 @@ def get_quartered_event_records(
     ]
     actions_by_blob_id = {action.blob_id: action for action in actions}
 
-    current_tick = sum(len(action.scores) for action in actions)
+    current_tick = playback_tick if playback_tick is not None else sum(len(action.scores) for action in actions)
 
     quarter = 1
     for tick in range(current_tick + 1):

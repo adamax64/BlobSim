@@ -5,10 +5,11 @@ from domain.dtos.event_record_dto import EliminationEventRecordDto
 
 def get_elimination_event_records(
     actions: list[ActionDto],
-    competitors: list[BlobCompetitorDto]
+    competitors: list[BlobCompetitorDto],
+    playback_tick: int = None
 ) -> list[EliminationEventRecordDto]:
     competitors_by_id = {competitor.id: competitor for competitor in competitors}
-    current_tick = max((len(action.scores) for action in actions), default=0)
+    current_tick = playback_tick if playback_tick is not None else max((len(action.scores) for action in actions), default=0)
 
     if current_tick == 0:
         return [EliminationEventRecordDto(blob=competitor, last_score=None, eliminated=False, tick_wins=0) for competitor in competitors]

@@ -11,16 +11,17 @@ def get_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
     event_type: EventTypeDto,
-    is_playback: bool
+    is_playback: bool,
+    playback_tick: int = None
 ) -> list[EventRecordDto]:
     if (
         event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING
         or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING
     ):
-        return get_quartered_event_records(actions, competitors, event_type)
+        return get_quartered_event_records(actions, competitors, event_type, playback_tick)
     elif event_type == EventTypeDto.ENDURANCE_RACE:
-        return get_endurance_event_records(actions, competitors, is_playback)
+        return get_endurance_event_records(actions, competitors, is_playback, playback_tick)
     elif event_type == EventTypeDto.SPRINT_RACE:
-        return get_sprint_event_records(actions, competitors, is_playback)
+        return get_sprint_event_records(actions, competitors, is_playback, playback_tick)
     else:
-        return get_elimination_event_records(actions, competitors)
+        return get_elimination_event_records(actions, competitors, playback_tick)

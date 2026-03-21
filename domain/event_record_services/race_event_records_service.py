@@ -9,11 +9,12 @@ from domain.utils.league_utils import get_race_duration_by_size
 def get_endurance_event_records(
         actions: list[ActionDto],
         competitors: list[BlobCompetitorDto],
-        is_playback: bool
+        is_playback: bool,
+        playback_tick: int = None
         ) -> list[RaceEventRecordDto]:
     event_records_by_competitors = {competitor.id: RaceEventRecordDto(blob=competitor, distance_records=[]) for competitor in competitors}
 
-    current_tick = max((len(action.scores) for action in actions), default=0)
+    current_tick = playback_tick if playback_tick is not None else max((len(action.scores) for action in actions), default=0)
 
     for tick in range(current_tick):
         for action in actions:
@@ -44,7 +45,8 @@ def get_endurance_event_records(
 def get_sprint_event_records(
         actions: list[ActionDto],
         competitors: list[BlobCompetitorDto],
-        is_playback: bool
+        is_playback: bool,
+        playback_tick: int = None
         ) -> list[SprintEventRecordDto]:
     """Sprint race ordering: competitors finish when their cumulative distance reaches race length.
 
@@ -54,7 +56,7 @@ def get_sprint_event_records(
     """
     event_records_by_competitors = {competitor.id: SprintEventRecordDto(blob=competitor, distance_records=[]) for competitor in competitors}
 
-    current_tick = max((len(action.scores) for action in actions), default=0)
+    current_tick = playback_tick if playback_tick is not None else max((len(action.scores) for action in actions), default=0)
     race_length = get_race_duration_by_size(len(competitors))
 
     # Build cumulative distances per tick

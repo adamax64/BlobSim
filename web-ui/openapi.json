@@ -585,7 +585,7 @@
         "tags": [
           "competition"
         ],
-        "summary": "Get Competitions By Season",
+        "summary": "Get Competitions By Season Route",
         "description": "Get all competitions for the given season, ordered by date (sim time).",
         "operationId": "get_competitions_by_season_route_competition_results_season__season__get",
         "parameters": [
@@ -995,6 +995,15 @@
               "type": "integer",
               "title": "Event Id"
             }
+          },
+          {
+            "name": "playback_tick",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Playback Tick"
+            }
           }
         ],
         "responses": {
@@ -1051,6 +1060,15 @@
               "type": "boolean",
               "default": false,
               "title": "Is Playback"
+            }
+          },
+          {
+            "name": "playback_tick",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Playback Tick"
             }
           }
         ],
@@ -1109,6 +1127,15 @@
               "default": false,
               "title": "Is Playback"
             }
+          },
+          {
+            "name": "playback_tick",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Playback Tick"
+            }
           }
         ],
         "responses": {
@@ -1155,6 +1182,15 @@
             "schema": {
               "type": "integer",
               "title": "Event Id"
+            }
+          },
+          {
+            "name": "playback_tick",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Playback Tick"
             }
           }
         ],
@@ -2633,32 +2669,6 @@
         ],
         "title": "ResultDto"
       },
-      "SeasonCompetitionDto": {
-        "properties": {
-          "date": {
-            "$ref": "#/components/schemas/SimTimeDto"
-          },
-          "league_name": {
-            "type": "string",
-            "title": "League Name"
-          },
-          "round": {
-            "type": "integer",
-            "title": "Round"
-          },
-          "event_type": {
-            "$ref": "#/components/schemas/EventType"
-          }
-        },
-        "type": "object",
-        "required": [
-          "date",
-          "league_name",
-          "round",
-          "event_type"
-        ],
-        "title": "SeasonCompetitionDto"
-      },
       "ScoreDto": {
         "properties": {
           "score": {
@@ -2696,6 +2706,37 @@
         },
         "type": "object",
         "title": "ScoreDto"
+      },
+      "SeasonCompetitionDto": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "date": {
+            "$ref": "#/components/schemas/SimTimeDto"
+          },
+          "league_name": {
+            "type": "string",
+            "title": "League Name"
+          },
+          "round": {
+            "type": "integer",
+            "title": "Round"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "date",
+          "league_name",
+          "round",
+          "event_type"
+        ],
+        "title": "SeasonCompetitionDto"
       },
       "SimTimeDto": {
         "properties": {
