@@ -51,25 +51,25 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
   return (
     <Box position="fixed" right={0} bottom={0} padding={2} zIndex={1000}>
       {isStart && (
-        <Fab variant="extended" color="primary" onClick={onClickStart} disabled={disabled}>
+        <Fab variant="extended" size="small" color="primary" onClick={onClickStart} disabled={disabled}>
           <PlayArrowRounded />
           {t('progress_button.start_competition')}
         </Fab>
       )}
       {!isStart && !isEnd && (
-        <Fab variant="extended" color="primary" onClick={onClickNext} disabled={disabled}>
+        <Fab variant="extended" size="small" color="primary" onClick={onClickNext} disabled={disabled}>
           <PlayArrowRounded />
           {t('progress_button.next')}
         </Fab>
       )}
       {isEnd && !isEventFinished && (
-        <Fab variant="extended" color="primary" onClick={onClickEnd} disabled={disabled}>
+        <Fab variant="extended" size="small" color="primary" onClick={onClickEnd} disabled={disabled}>
           <SkipNextRounded />
           {t('progress_button.conclude_event')}
         </Fab>
       )}
       {isEventFinished && (
-        <Fab variant="extended" color="primary" onClick={() => navigate({ to: '/' })} disabled={disabled}>
+        <Fab variant="extended" size="small" color="primary" onClick={() => navigate({ to: '/' })} disabled={disabled}>
           <ArrowBackIosNewRoundedIcon />
           {t('progress_button.back_to_dashboard')}
         </Fab>

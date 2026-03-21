@@ -1,4 +1,5 @@
 import { AccordionSummary, LinearProgress, styled, TableCell } from '@mui/material';
+import { width } from '@mui/system';
 
 export const TickLoadingBar = styled(LinearProgress)({
   height: 8,
@@ -11,6 +12,9 @@ export const NarrowCell = styled(TableCell)(({}) => ({
 }));
 
 export const DistanceProgress = styled(LinearProgress)({
+  '&.MuiLinearProgress-root': {
+    width: '100%',
+  },
   height: 24,
   borderRadius: 2,
 });

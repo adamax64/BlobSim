@@ -1,9 +1,10 @@
 import { Box, Card, Typography } from '@mui/material';
 import { BarChart, ChartsText, ChartsTextProps, ChartsTooltipContainer, useAxesTooltip } from '@mui/x-charts';
-import { IconName } from '../../common/IconName';
-import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
-import { BlobIcon } from '../../icons/BlobIcon';
-import { BlobCompetitorDtoInput } from '../../../../generated';
+import { IconName } from '../../../common/IconName';
+import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../../generated/models/EliminationEventRecordDtoOutput';
+import { BlobIcon } from '../../../icons/BlobIcon';
+import { BlobCompetitorDtoInput } from '../../../../../generated';
+import { forwardRef } from 'react';
 
 interface EventBarChartProps {
   eventRecords: EventRecordDto[];
@@ -12,29 +13,36 @@ interface EventBarChartProps {
 
 export const EventBarChart = ({ eventRecords, isMobile }: EventBarChartProps) => {
   return (
-    <BarChart
-      height={33 * (eventRecords?.length ?? 0) + 35}
-      series={[
-        {
-          data: eventRecords.map((record) => record.lastScore ?? 0),
-        },
-      ]}
-      yAxis={[
-        {
-          data: eventRecords.map((record) => record.blob),
-          valueFormatter: (value: BlobCompetitorDtoInput) => value.color,
-          tickLabelStyle: { display: 'contents' },
-          colorMap: {
-            colors: eventRecords.map((record) => record.blob.color),
-            type: 'ordinal',
+    <Box
+      sx={{
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <BarChart
+        height={33 * (eventRecords?.length ?? 0) + 35}
+        series={[
+          {
+            data: eventRecords.map((record) => record.lastScore ?? 0),
           },
-        },
-      ]}
-      layout="horizontal"
-      margin={{ top: 12, right: 16, bottom: 0, left: isMobile ? 0 : -24 }}
-      xAxis={[{ position: 'top' }]}
-      slots={{ tooltip: CustomTooltip, axisTickLabel: CustomAxisTickLabel(isMobile) }}
-    />
+        ]}
+        yAxis={[
+          {
+            data: eventRecords.map((record) => record.blob),
+            valueFormatter: (value: BlobCompetitorDtoInput) => value.color,
+            tickLabelStyle: { display: 'contents' },
+            colorMap: {
+              colors: eventRecords.map((record) => record.blob.color),
+              type: 'ordinal',
+            },
+          },
+        ]}
+        layout="horizontal"
+        margin={{ top: 12, right: 16, bottom: 0, left: isMobile ? 0 : -24 }}
+        xAxis={[{ position: 'top' }]}
+        slots={{ tooltip: CustomTooltip, axisTickLabel: CustomAxisTickLabel(isMobile) }}
+      />
+    </Box>
   );
 };
 

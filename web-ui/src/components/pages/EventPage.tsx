@@ -4,9 +4,9 @@ import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Card, CircularProgress } from '@mui/material';
-import { QuarteredEventFrame } from '../event-components/QuarteredEventFrame';
-import { EnduranceRaceEventFrame } from '../event-components/EnduranceRaceEventFrame';
-import { SprintRaceEventFrame } from '../event-components/SprintRaceEventFrame';
+import { QuarteredEventFrame } from '../event-components/quartered-event/QuarteredEventFrame';
+import { EnduranceRaceEventFrame } from '../event-components/endurance-race/EnduranceRaceEventFrame';
+import { SprintRaceEventFrame } from '../event-components/sprint-race/SprintRaceEventFrame';
 import { useTranslation } from 'react-i18next';
 import { EliminationScoringEventFrame } from '../event-components/elimination-scoring/EliminationScoringEventFrame';
 
