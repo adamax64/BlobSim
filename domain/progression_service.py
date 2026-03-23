@@ -17,11 +17,11 @@ from domain.news_services.news_service import (
 )
 from domain.sim_data_service import is_unconcluded_event_today
 from domain.standings_service import get_grandmaster_standings
-from domain.utils.sim_time_utils import get_season, is_season_end
+from domain.utils.sim_time_utils import format_sim_time_short, get_season, is_season_end
 
 
 @transactional
-def progress_simulation(session: Session):
+def progress_simulation(session: Session) -> str:
     """
     Advances the simulation by one time unit, updating simulation data and handling season transitions.
     This function performs the following steps:
@@ -31,6 +31,9 @@ def progress_simulation(session: Session):
     3. Increments the simulation time by one unit.
     4. If there is an unconcluded event scheduled for today:
        - Adds a news entry about the starting event, including the league name, round, and event type.
+
+    Returns:
+        A string representation of the current simulation time after progression.
     """
 
     sim_data = get_sim_data(session)
@@ -56,6 +59,8 @@ def progress_simulation(session: Session):
 
     _check_and_add_event_news(sim_data.sim_time, session)
     check_factory_and_create_blob(session)
+
+    return format_sim_time_short(sim_data.sim_time)
 
 
 def _inagruate_grandmaster(current_season: int, session: Session):

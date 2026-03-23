@@ -6,3 +6,4 @@ fastapi[standard]
 PyJWT
 python-dotenv
 psycopg2-binary
+apscheduler

@@ -440,8 +440,12 @@
 
 - Fixed production bugs
 
-### 3.8
+### 4.0 - Cronjob update
 
+- From now on the simulation progress can be controlled via schedulers!
+  - Simulation time is progressec every midnight
+  - On competition days one competition tick is simulated every 3 minutes between 12:00 AM and 18:00 PM
+  - Can be enabled and diabled by environment variable
 - Added "Results" page
   - Lists all past events
   - Filtered by season and optionally league

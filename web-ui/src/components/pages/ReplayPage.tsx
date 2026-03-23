@@ -76,7 +76,7 @@ export const ReplayPage = () => {
       case EventType.EnduranceRace:
         return <ReplayEnduranceRaceFrame event={event} tick={currentTick} />;
       case EventType.SprintRace:
-        return <ReplaySprintRaceFrame event={event} tick={currentTick} />;
+        return <ReplaySprintRaceFrame event={event} tick={currentTick} maxTick={maxTick ?? 0} />;
       case EventType.EliminationScoring:
         return <ReplayEliminationScoringFrame event={event} tick={currentTick} />;
       default:

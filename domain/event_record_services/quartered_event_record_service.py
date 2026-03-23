@@ -8,22 +8,26 @@ def get_quartered_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
     event_type: EventTypeDto,
-    playback_tick: int = None
+    playback_tick: int = None,
 ) -> list[QuarteredEventRecordDto]:
-    quarter_ends = _get_quarter_ends(len(competitors), event_type)
+    quarter_ends = get_quarter_ends(len(competitors), event_type)
 
     # Create a mapping from blob_id to BlobCompetitorDto for quick lookup
     blob_map = {blob.id: blob for blob in competitors}
     records = [
         QuarteredEventRecordDto(
             blob=blob_map.get(blob_id),
-            quarters=[ScoreDto(), ScoreDto(), ScoreDto(), ScoreDto()]
+            quarters=[ScoreDto(), ScoreDto(), ScoreDto(), ScoreDto()],
         )
         for blob_id in blob_map.keys()
     ]
     actions_by_blob_id = {action.blob_id: action for action in actions}
 
-    current_tick = playback_tick if playback_tick is not None else sum(len(action.scores) for action in actions)
+    current_tick = (
+        playback_tick
+        if playback_tick is not None
+        else sum(len(action.scores) for action in actions)
+    )
 
     quarter = 1
     for tick in range(current_tick + 1):
@@ -35,8 +39,12 @@ def get_quartered_event_records(
         record = _get_current_record(
             records,
             quarter_tick,
-            quarter_ends[0] if quarter == 1 else quarter_ends[quarter - 1] - quarter_ends[quarter - 2],
-            event_type
+            (
+                quarter_ends[0]
+                if quarter == 1
+                else quarter_ends[quarter - 1] - quarter_ends[quarter - 2]
+            ),
+            event_type,
         )
         # If the tick is the current tick, set the record to current
         if tick == current_tick:
@@ -46,7 +54,13 @@ def get_quartered_event_records(
             continue
 
         score = record.quarters[quarter - 1]
-        action_score = _get_current_score(actions_by_blob_id.get(record.blob.id), quarter_tick, quarter, event_type, len(competitors))
+        action_score = _get_current_score(
+            actions_by_blob_id.get(record.blob.id),
+            quarter_tick,
+            quarter,
+            event_type,
+            len(competitors),
+        )
         if score.score is None or score.score < action_score:
             score.score = action_score
             if tick == current_tick - 1:
@@ -64,36 +78,7 @@ def get_quartered_event_records(
     return records
 
 
-def _get_current_score(action: ActionDto, tick: int, quarter: int, event_type: EventTypeDto, field_size: int) -> float:
-    eliminations = _get_eliminations(field_size)
-    quarter_index = quarter - 1
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
-        return action.scores[(quarter_index) * 2 + (1 if tick >= field_size - (eliminations * (quarter_index)) else 0)]
-    else:
-        return action.scores[quarter_index]
-
-
-def _get_current_record(
-    records: list[QuarteredEventRecordDto],
-    tick: int,
-    quarter_length: int,
-    event_type: EventTypeDto
-) -> QuarteredEventRecordDto:
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
-        return records[int(tick - quarter_length / 2) if tick >= quarter_length / 2 else tick]
-    else:
-        return records[tick]
-
-
-def _get_current_quarter(quarter_ends: list[int], tick: int) -> int:
-    ''' Returns the current quarter based on the tick. (1-4)'''
-    for i, end in enumerate(quarter_ends):
-        if tick < end:
-            return i + 1
-    return 5
-
-
-def _get_quarter_ends(field_size: int, event_type: EventTypeDto) -> list[int]:
+def get_quarter_ends(field_size: int, event_type: EventTypeDto) -> list[int]:
     eliminations = _get_eliminations(field_size)
     multiplyer = 1
     if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
@@ -102,8 +87,48 @@ def _get_quarter_ends(field_size: int, event_type: EventTypeDto) -> list[int]:
         multiplyer * (field_size),
         multiplyer * (2 * field_size - eliminations),
         multiplyer * (3 * field_size - 3 * eliminations),
-        multiplyer * (4 * field_size - 6 * eliminations)
+        multiplyer * (4 * field_size - 6 * eliminations),
     ]
+
+
+def _get_current_score(
+    action: ActionDto,
+    tick: int,
+    quarter: int,
+    event_type: EventTypeDto,
+    field_size: int,
+) -> float:
+    eliminations = _get_eliminations(field_size)
+    quarter_index = quarter - 1
+    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
+        return action.scores[
+            (quarter_index) * 2
+            + (1 if tick >= field_size - (eliminations * (quarter_index)) else 0)
+        ]
+    else:
+        return action.scores[quarter_index]
+
+
+def _get_current_record(
+    records: list[QuarteredEventRecordDto],
+    tick: int,
+    quarter_length: int,
+    event_type: EventTypeDto,
+) -> QuarteredEventRecordDto:
+    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
+        return records[
+            int(tick - quarter_length / 2) if tick >= quarter_length / 2 else tick
+        ]
+    else:
+        return records[tick]
+
+
+def _get_current_quarter(quarter_ends: list[int], tick: int) -> int:
+    """Returns the current quarter based on the tick. (1-4)"""
+    for i, end in enumerate(quarter_ends):
+        if tick < end:
+            return i + 1
+    return 5
 
 
 def _get_eliminations(field_size: int) -> int:
@@ -112,9 +137,9 @@ def _get_eliminations(field_size: int) -> int:
 
 def _quartered_sort_lambda(index: int):
     return lambda x: (
-                    x.quarters[index].score is not None,
-                    x.quarters[index].score if x.quarters[index] is not None else -1
-                )
+        x.quarters[index].score is not None,
+        x.quarters[index].score if x.quarters[index] is not None else -1,
+    )
 
 
 def _is_eliminated(quarter: int, field_size: int, position: int) -> bool:

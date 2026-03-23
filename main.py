@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 import os
+from contextlib import asynccontextmanager
 
 from controllers import (
     action_router,
@@ -19,9 +20,41 @@ from controllers import (
     standings_router,
 )
 from domain.startup_service import startup
+from cronjobs.progress_simulation import run_progress_simulation
+from cronjobs.progress_competition import progress_competition
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
-app = FastAPI()
+
+# Read cronjobs setting from environment variable (recommended for fastapi dev)
+ENABLE_CRONJOBS = os.getenv("ENABLE_CRONJOBS", "false").lower() == "true"
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: start the scheduler if enabled
+    if ENABLE_CRONJOBS:
+        scheduler.add_job(
+            run_progress_simulation, CronTrigger(hour=0, minute=0)
+        )  # Run daily at midnight
+        scheduler.add_job(
+            progress_competition,
+            CronTrigger(minute="*/3", hour="12-18"),
+        )  # Run every 3 minutes from 12:00 to 18:00
+        scheduler.start()
+        print("[INFO] Scheduler started.")
+    else:
+        print("[INFO] Cronjobs are disabled.")
+    yield
+    # Shutdown: stop the scheduler
+    if ENABLE_CRONJOBS:
+        scheduler.shutdown()
+        print("[INFO] Scheduler stopped.")
+
+
+app = FastAPI(lifespan=lifespan)
 app.title = "Blob Championship System API"
+scheduler = AsyncIOScheduler()
 
 origins = [
     "http://localhost",
@@ -60,6 +93,7 @@ async def hsts_middleware(request, call_next):
 
 
 startup()
+
 
 app.include_router(sim_data_router.router)
 app.include_router(blobs_router.router)

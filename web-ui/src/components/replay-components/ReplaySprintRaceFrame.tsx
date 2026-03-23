@@ -9,9 +9,10 @@ import { SprintRaceUI } from '../event-components/sprint-race/SprintRaceUI';
 interface ReplaySprintRaceFrameProps {
   event: EventDtoOutput;
   tick: number;
+  maxTick: number;
 }
 
-export const ReplaySprintRaceFrame: React.FC<ReplaySprintRaceFrameProps> = ({ event, tick }) => {
+export const ReplaySprintRaceFrame: React.FC<ReplaySprintRaceFrameProps> = ({ event, tick, maxTick }) => {
   const [eventRecordsCache, setEventRecordsCache] = useState<Map<number, EventRecordDto[]>>(new Map());
   const [displayedRecords, setDisplayedRecords] = useState<EventRecordDto[]>([]);
   const raceDuration = useMemo(() => getRaceDurationBySize(event.competitors.length), [event.competitors.length]);
@@ -48,7 +49,7 @@ export const ReplaySprintRaceFrame: React.FC<ReplaySprintRaceFrameProps> = ({ ev
       loadingNextTick={isPending && !eventRecordsCache.has(tick)}
       isEventFinished={false}
       eventType={event.type}
-      isEnd={tick >= raceDuration}
+      isEnd={tick >= maxTick}
     />
   );
 };
