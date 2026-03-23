@@ -4,7 +4,7 @@ import { ActionsApi, CompetitionApi, EventRecordsApi } from '../../../../generat
 import { useAuth } from '../../../context/AuthContext';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Snackbar, useMediaQuery, useTheme } from '@mui/material';
+import { Alert, Snackbar } from '@mui/material';
 import { ProgressButton } from '../shared/ProgressButton';
 import type { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../../default-config';

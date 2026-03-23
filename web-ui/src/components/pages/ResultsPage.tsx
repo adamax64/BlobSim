@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CompetitionApi, LeagueDto, LeaguesApi, SeasonCompetitionDto, ResultDto } from '../../../generated';
+import { CompetitionApi, LeagueDto, LeaguesApi, SeasonCompetitionDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import {
@@ -23,7 +23,8 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import { Preview, Slideshow } from '@mui/icons-material';
+import Preview from '@mui/icons-material/Preview';
+import Slideshow from '@mui/icons-material/Slideshow';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useSimTime } from '../../context/SimTimeContext';

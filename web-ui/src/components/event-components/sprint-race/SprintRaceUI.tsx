@@ -1,11 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import {
   Box,
-  Paper,
-  Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Typography,
@@ -13,7 +10,9 @@ import {
   useMediaQuery,
   Tooltip,
 } from '@mui/material';
-import { Straighten, ChangeHistory as ChangeHistoryIcon, AccessAlarm as AccessAlarmIcon } from '@mui/icons-material';
+import Straighten from '@mui/icons-material/Straighten';
+import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import type { SprintEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/SprintEventRecordDtoOutput';
 import { EventType } from '../../../../generated';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';

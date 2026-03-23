@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { EventRecordsApi, EventDtoOutput, EventType } from '../../../generated';
+import { EventRecordsApi, EventDtoOutput } from '../../../generated';
 import { SprintEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/SprintEventRecordDtoOutput';
 import { getRaceDurationBySize } from '../event-components/event-utils';
 import defaultConfig from '../../default-config';

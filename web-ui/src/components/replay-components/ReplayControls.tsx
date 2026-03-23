@@ -1,5 +1,9 @@
 import { Box, Fab, Tooltip } from '@mui/material';
-import { SkipPrevious, SkipNext, FirstPage, LastPage, ArrowBack } from '@mui/icons-material';
+import SkipPrevious from '@mui/icons-material/SkipPrevious';
+import SkipNext from '@mui/icons-material/SkipNext';
+import FirstPage from '@mui/icons-material/FirstPage';
+import LastPage from '@mui/icons-material/LastPage';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
 

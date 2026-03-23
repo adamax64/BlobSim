@@ -1,4 +1,4 @@
-import { Box, Paper, Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { EliminationEventTable } from './EliminationEventTable';
 import { EventBarChart } from './EventBarChart';

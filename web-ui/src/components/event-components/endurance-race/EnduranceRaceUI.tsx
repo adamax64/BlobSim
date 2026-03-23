@@ -14,7 +14,7 @@ import type { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../gen
 import { EventType } from '../../../../generated';
 import { TickLoadingBar } from '../../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
-import { Straighten } from '@mui/icons-material';
+import Straighten from '@mui/icons-material/Straighten';
 import { useCallback } from 'react';
 import { roundToOneDecimals, roundToThreeDecimals } from '../event-utils';
 import { NarrowCell } from '../../common/StyledComponents';

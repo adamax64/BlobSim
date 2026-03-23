@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { EventRecordsApi, EventDtoOutput, EventType } from '../../../generated';
+import { EventRecordsApi, EventDtoOutput } from '../../../generated';
 import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../default-config';
 import { EliminationScoringUI } from '../event-components/elimination-scoring/EliminationScoringUI';

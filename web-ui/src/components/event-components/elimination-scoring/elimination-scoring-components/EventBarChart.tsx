@@ -4,7 +4,6 @@ import { IconName } from '../../../common/IconName';
 import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../../generated/models/EliminationEventRecordDtoOutput';
 import { BlobIcon } from '../../../icons/BlobIcon';
 import { BlobCompetitorDtoInput } from '../../../../../generated';
-import { forwardRef } from 'react';
 
 interface EventBarChartProps {
   eventRecords: EventRecordDto[];
