@@ -143,7 +143,7 @@ def progress_competition(session):
             else:
                 print(f"[INFO] No active competitors for event {event.id}")
         else:
-            print(f"[INFO] Event type not supported for progression yet")
+            print("[INFO] Event type not supported for progression yet")
 
         # Check if event should be concluded
         event_records = get_event_records(
@@ -152,7 +152,7 @@ def progress_competition(session):
             event.type,
             is_playback=False,
         )
-        print(len(event_records[0].distance_records))
+
         if should_conclude_event(event, event_records, session):
             process_event_results(event, event_records, session)
             conclude_calendar_event(session)
