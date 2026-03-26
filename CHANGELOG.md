@@ -454,3 +454,7 @@
 - Added event replay page:
   - Loads event records by event id and tick
   - The user can step the ticks back and forth to view a specified moment of the competition
+
+### 4.0.1
+
+- Fixed scheduler not working for elimination scoring
