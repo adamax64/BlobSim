@@ -119,7 +119,7 @@ def progress_competition(session):
             else:
                 print(f"[WARNING] No active competitors for event {event.id}")
 
-        elif event.type == EventType.ELIMINATION:
+        elif event.type == EventType.ELIMINATION_SCORING:
             # Get event records to determine which competitors are still active
             event_records = get_event_records(
                 event.actions, event.competitors, event.type, is_playback=False
