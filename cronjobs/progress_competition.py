@@ -51,7 +51,7 @@ def should_conclude_event(event: EventDto, event_records, session) -> bool:
             if event_records
             else False
         )
-    elif event.type == EventType.ELIMINATION:
+    elif event.type == EventType.ELIMINATION_SCORING:
         # Conclude when only one competitor is not eliminated
         remaining = sum(
             1
