@@ -35,8 +35,8 @@ async def lifespan(app: FastAPI):
     # Startup: start the scheduler if enabled
     if ENABLE_CRONJOBS:
         scheduler.add_job(
-            run_progress_simulation, CronTrigger(hour=0, minute=0)
-        )  # Run daily at midnight
+            run_progress_simulation, CronTrigger(hour=6, minute=0)
+        )  # Run daily at 6 AM
         scheduler.add_job(
             progress_competition,
             CronTrigger(minute="*/3", hour="12-18"),

@@ -53,6 +53,7 @@ def get_results_for_event(event_id: int, session) -> List[ResultDto]:
 def get_competitions_by_season(season: int, session) -> List[SeasonCompetitionDto]:
     """Return all competitions (events) for the given season, ordered by date."""
     events = get_events_by_season(session, season, exclude_non_competition=True)
+    sorted_events = sorted(events, key=lambda e: e.date, reverse=True)
     return [
         SeasonCompetitionDto(
             id=event.id,
@@ -61,5 +62,5 @@ def get_competitions_by_season(season: int, session) -> List[SeasonCompetitionDt
             round=event.round,
             event_type=event.type,
         )
-        for event in events
+        for event in sorted_events
     ]

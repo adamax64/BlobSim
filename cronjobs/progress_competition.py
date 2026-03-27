@@ -1,5 +1,3 @@
-from types import TracebackType
-
 from data.db.db_engine import transactional
 from data.model.event_type import EventType
 from domain.competition_service import load_competition_data, process_event_results
@@ -12,7 +10,6 @@ from domain.dtos.event_dto import EventDto
 from domain.event_record_services.quartered_event_record_service import get_quarter_ends
 from domain.sim_data_service import is_unconcluded_event_today
 from domain.event_record_services.event_record_service import get_event_records
-from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_record_dto import (
     EliminationEventRecordDto,
     QuarteredEventRecordDto,
@@ -155,7 +152,6 @@ def progress_competition(session):
 
         if should_conclude_event(event, event_records, session):
             process_event_results(event, event_records, session)
-            conclude_calendar_event(session)
             print(f"[INFO] Concluded event {event.id}")
 
     except Exception as e:

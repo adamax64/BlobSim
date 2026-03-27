@@ -462,3 +462,9 @@
 ### 4.0.2
 
 - Fixed replay bug of elimination scoring events
+
+### 4.0.3
+
+- Fixed sorting on elimination scoring replay
+- Fixed double conclusion of event in scheduler
+- Sort events on results page by date in descending order

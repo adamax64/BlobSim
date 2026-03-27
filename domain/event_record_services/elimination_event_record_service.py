@@ -14,11 +14,13 @@ def get_elimination_event_records(
     if current_tick == 0:
         return [EliminationEventRecordDto(blob=competitor, last_score=None, eliminated=False, tick_wins=0) for competitor in competitors]
 
+    current_tick_actions = [ActionDto(action.blob_id, action.scores[:current_tick]) for action in actions]
+
     # Calculate tick wins for each blob
     tick_wins_by_blob = {}
     for tick in range(current_tick):
         tick_scores = []
-        for action in actions:
+        for action in current_tick_actions:
             if len(action.scores) > tick:
                 tick_scores.append((action.blob_id, action.scores[tick]))
         if tick_scores:
@@ -27,11 +29,11 @@ def get_elimination_event_records(
             tick_wins_by_blob[winner_blob_id] = tick_wins_by_blob.get(winner_blob_id, 0) + 1
 
     elimination_records = []
-    sorted_actions = sorted(actions, key=(lambda a: (len(a.scores), a.scores[-1])), reverse=True)
+    sorted_actions = sorted(current_tick_actions, key=(lambda a: (len(a.scores), a.scores[-1])), reverse=True)
     for action in sorted_actions:
         elimination_records.append(EliminationEventRecordDto(
             blob=competitors_by_id.get(action.blob_id),
-            last_score=None if len(action.scores) < current_tick else action.scores[current_tick - 1],
+            last_score=None if len(action.scores) < current_tick else action.scores[-1],
             eliminated=len(action.scores) < current_tick,
             tick_wins=tick_wins_by_blob.get(action.blob_id, 0)
         ))
