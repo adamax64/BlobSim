@@ -458,3 +458,7 @@
 ### 4.0.1
 
 - Fixed scheduler not working for elimination scoring
+
+### 4.0.2
+
+- Fixed replay bug of elimination scoring events

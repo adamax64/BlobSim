@@ -31,7 +31,7 @@ def get_elimination_event_records(
     for action in sorted_actions:
         elimination_records.append(EliminationEventRecordDto(
             blob=competitors_by_id.get(action.blob_id),
-            last_score=None if len(action.scores) < current_tick else action.scores[-1],
+            last_score=None if len(action.scores) < current_tick else action.scores[current_tick - 1],
             eliminated=len(action.scores) < current_tick,
             tick_wins=tick_wins_by_blob.get(action.blob_id, 0)
         ))
