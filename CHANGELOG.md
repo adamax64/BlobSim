@@ -468,3 +468,7 @@
 - Fixed sorting on elimination scoring replay
 - Fixed double conclusion of event in scheduler
 - Sort events on results page by date in descending order
+
+### 4.0.4
+
+- Fixed missing season conclusion after last competition of league

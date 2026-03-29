@@ -1,5 +1,6 @@
 from data.db.db_engine import transactional
 from data.model.event_type import EventType
+from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.competition_service import load_competition_data, process_event_results
 from domain.action_service import (
     create_actions_for_race,
@@ -152,6 +153,8 @@ def progress_competition(session):
 
         if should_conclude_event(event, event_records, session):
             process_event_results(event, event_records, session)
+            end_season_if_over(event.league, event.season)
+            end_eon_if_over(event.season, event.league)
             print(f"[INFO] Concluded event {event.id}")
 
     except Exception as e:
