@@ -39,6 +39,7 @@ from domain.utils.activity_utils import choose_activity
 from domain.utils.constants import (
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
+    GRANDMASTER_SALARY,
     INITIAL_INTEGRITY,
     LABOUR_SALARY,
     MAINTENANCE_COST,
@@ -263,7 +264,7 @@ def _proceed_with_activity(
         level = blob.grandmasters
         chosen = choose_random_policy_type()
         create_or_update_policy(session, chosen, level)
-        blob.money += 2  # grandmaster salary
+        blob.money += GRANDMASTER_SALARY
     elif current_activity == ActivityType.MINING:
         miners.append(blob)
     else:

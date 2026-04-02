@@ -472,3 +472,7 @@
 ### 4.0.4
 
 - Fixed missing season conclusion after last competition of league
+
+### 4.0.5
+
+- Inflate cost for maintanence because blobs now can earn money easier than the cost was first determined
