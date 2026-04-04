@@ -1,4 +1,4 @@
-import { createTheme, PaletteOptions, Theme } from '@mui/material/styles';
+import { createTheme, PaletteOptions, Theme, responsiveFontSizes } from '@mui/material/styles';
 
 type Mode = 'light' | 'dark';
 
@@ -30,33 +30,32 @@ export function createAppTheme(mode: Mode) {
 
   const palette: PaletteOptions = mode === 'dark' ? darkPalette : lightPalette;
 
-  return createTheme({
-    palette,
-    typography: {
-      h6: { fontSize: '1.15rem' },
-    },
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: ({ palette: themePalette }: Theme) => ({
-          ':root': {
-            '--row-gold-bg': themePalette.gold?.main,
-            '--row-gold-text': themePalette.gold?.contrastText,
-            '--row-silver-bg': themePalette.silver?.main,
-            '--row-silver-text': themePalette.silver?.contrastText,
-            '--row-bronze-bg': themePalette.bronze?.main,
-            '--row-bronze-text': themePalette.bronze?.contrastText,
-            '--row-inactive-bg': themePalette.inactive?.main,
-            '--row-inactive-text': themePalette.inactive?.contrastText,
-            '--cell-overtake-bg': themePalette.overtake?.main,
-            '--cell-overtake-text': themePalette.overtake?.contrastText,
-            '--cell-fell-behind-bg': themePalette.fellBehind?.main,
-            '--cell-fell-behind-text': themePalette.fellBehind?.contrastText,
-            '--column-active-bg': themePalette.active?.main,
-          },
-        }),
+  return responsiveFontSizes(
+    createTheme({
+      palette,
+      components: {
+        MuiCssBaseline: {
+          styleOverrides: ({ palette: themePalette }: Theme) => ({
+            ':root': {
+              '--row-gold-bg': themePalette.gold?.main,
+              '--row-gold-text': themePalette.gold?.contrastText,
+              '--row-silver-bg': themePalette.silver?.main,
+              '--row-silver-text': themePalette.silver?.contrastText,
+              '--row-bronze-bg': themePalette.bronze?.main,
+              '--row-bronze-text': themePalette.bronze?.contrastText,
+              '--row-inactive-bg': themePalette.inactive?.main,
+              '--row-inactive-text': themePalette.inactive?.contrastText,
+              '--cell-overtake-bg': themePalette.overtake?.main,
+              '--cell-overtake-text': themePalette.overtake?.contrastText,
+              '--cell-fell-behind-bg': themePalette.fellBehind?.main,
+              '--cell-fell-behind-text': themePalette.fellBehind?.contrastText,
+              '--column-active-bg': themePalette.active?.main,
+            },
+          }),
+        },
       },
-    },
-  });
+    }),
+  );
 }
 
 export type { Mode };

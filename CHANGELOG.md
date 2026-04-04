@@ -476,3 +476,9 @@
 ### 4.0.5
 
 - Inflate cost for maintanence because blobs now can earn money easier than the cost was first determined
+
+### 4.0.6
+
+- Added link to ended event news
+- Added textbox to replay controls to set exact tick in the replay
+- Fixed bug of "Jump to end" button not getting disabled in max tick

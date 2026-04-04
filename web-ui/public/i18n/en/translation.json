@@ -87,7 +87,8 @@
       "ONGOING_EVENT": "An ongoing chamionship event is taking place: {{leagueName}} Round {{round}}, {{eventType}}.",
       "EVENT_ENDED": {
         "headline": "{{leagueName}} Round {{round}} has ended.",
-        "results": "See results"
+        "results": "See results",
+        "replay": "Watch replay"
       },
       "SEASON_ENDED": "Season ended for {{leagueName}}. Congratulations to {{winner}} for winning the championship.",
       "ROOKIE_OF_THE_YEAR": "Congratulations to {{winner}} for being rookie of the year.",
@@ -135,7 +136,8 @@
     "step_forward": "Next tick",
     "jump_to_start": "Jump to start",
     "jump_to_end": "Jump to end",
-    "go_back": "Go back to results"
+    "go_back": "Go back to results",
+    "set_tick": "Set tick"
   },
   "endurance_race": {
     "tick": "Tick",

@@ -87,7 +87,8 @@
       "ONGOING_EVENT": "Folyamatban lévő verseny: {{leagueName}} {{round}}. forduló, {{eventType}}.",
       "EVENT_ENDED": {
         "headline": "Véget ért a {{leagueName}} {{round}}. fordulója.",
-        "results": "Eredmények megtekintése"
+        "results": "Eredmények megtekintése",
+        "replay": "Visszajátszás megtekintése"
       },
       "SEASON_ENDED": "Végetért a szezon a {{leagueName}} mezőnyének. Gratulálunk {{winner}}-nak/nek a bajnoki győzelemért.",
       "ROOKIE_OF_THE_YEAR": "Gratulálunk {{winner}}-nak/nek az év újonca címért.",
@@ -135,7 +136,8 @@
     "step_forward": "Következő tick",
     "jump_to_start": "Ugrás az elejére",
     "jump_to_end": "Ugrás a végére",
-    "go_back": "Vissza az eredményekhez"
+    "go_back": "Vissza az eredményekhez",
+    "set_tick": "Ugrás a tickre"
   },
   "endurance_race": {
     "tick": "Tick",

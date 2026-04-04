@@ -2,6 +2,7 @@ import { Typography, Box, Link } from '@mui/material';
 import { NewsDto, NewsType } from '../../../generated';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
 import { InlineTranslatedBlob } from '../../components/common/InlineTranslatedBlob';
 import ResultsModal from '../event-components/ResultsModal';
@@ -12,6 +13,7 @@ type NewsContentProps = {
 
 export const NewsContent = ({ newsItem }: NewsContentProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [resultsOpen, setResultsOpen] = useState(false);
   const [resultsEventId, setResultsEventId] = useState<number | null>(null);
 
@@ -59,6 +61,26 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
             }}
           >
             {t('enums.news_type.EVENT_ENDED.results')}
+          </Link>
+          <Typography variant="body1" sx={{ display: 'inline', mx: 1 }}>
+            •
+          </Typography>
+          <Link
+            href="#"
+            variant="body1"
+            onClick={(e) => {
+              e.preventDefault();
+              const eid = newsItem.eventId ?? null;
+              if (eid == null) {
+                // nothing to navigate
+                // eslint-disable-next-line no-console
+                console.warn('News item has no eventId');
+                return;
+              }
+              navigate({ to: `/replay/${eid}` });
+            }}
+          >
+            {t('enums.news_type.EVENT_ENDED.replay')}
           </Link>
           <ResultsModal eventId={resultsEventId} open={resultsOpen} onClose={() => setResultsOpen(false)} />
         </>
