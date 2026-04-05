@@ -482,3 +482,4 @@
 - Added link to ended event news
 - Added textbox to replay controls to set exact tick in the replay
 - Fixed bug of "Jump to end" button not getting disabled in max tick
+- Persist replay state to local storage
