@@ -39,8 +39,8 @@ async def lifespan(app: FastAPI):
         )  # Run daily at 6 AM
         scheduler.add_job(
             progress_competition,
-            CronTrigger(minute="*/3", hour="12-18"),
-        )  # Run every 3 minutes from 12:00 to 18:00
+            CronTrigger(minute="*/3", hour="12-17"),
+        )  # Run every 3 minutes from 12:00 to 17:57
         scheduler.start()
         print("[INFO] Scheduler started.")
     else:

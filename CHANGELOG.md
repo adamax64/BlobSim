@@ -477,9 +477,13 @@
 
 - Inflate cost for maintanence because blobs now can earn money easier than the cost was first determined
 
-### 4.0.6
+### 4.1 - Slipstream update
 
+- Added slipstream effect to race event simulations
+  - Applied if distance to blob ahead is under 1 octave, but more than a blob length (1/8 octave) + a small gap
+  - Calculated by a formula: `f(x)=((1)/(96 x+4))-0.01` where `x` is the distance to blob ahead
 - Added link to ended event news
 - Added textbox to replay controls to set exact tick in the replay
 - Fixed bug of "Jump to end" button not getting disabled in max tick
 - Persist replay state to local storage
+- Fixed scheduler simulating events after 18:00

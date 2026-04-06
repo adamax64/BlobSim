@@ -77,6 +77,29 @@ def create_actions_for_race(
 
     event = get_event_by_id(session, event_id)
 
+    # Calculate current positions based on cumulative scores
+    current_sums = {
+        contender.id: sum(actions[contender.id].scores) for contender in contenders
+    }
+    sorted_contenders = sorted(
+        contenders, key=lambda c: current_sums[c.id], reverse=True
+    )
+
+    # Calculate slipstream boosts (only if tick > 1)
+    boosts = {contender.id: 0.0 for contender in contenders}
+    if tick > 1:
+        for i, contender in enumerate(sorted_contenders):
+            if i == 0:
+                boosts[contender.id] = 0.0  # Leader gets no boost
+            else:
+                ahead = sorted_contenders[i - 1]
+                distance = current_sums[ahead.id] - current_sums[contender.id]
+                if 0.13 <= distance < 1.0:
+                    boost = 1 / (96 * distance + 4) - 0.01
+                    boosts[contender.id] = boost
+                else:
+                    boosts[contender.id] = 0.0
+
     for contender in contenders:
         if (
             event.type == EventType.SPRINT_RACE
@@ -84,8 +107,11 @@ def create_actions_for_race(
         ):
             continue
 
-        score = generate_race_score_for_contender(
-            contender, current_time, race_duration, tick
+        score = (
+            generate_race_score_for_contender(
+                contender, current_time, race_duration, tick
+            )
+            + boosts[contender.id]
         )
         actions[contender.id].scores = actions[contender.id].scores + [score]
         if score > max_score:
