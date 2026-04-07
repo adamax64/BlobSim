@@ -91,9 +91,10 @@ def get_event_by_id(
 ) -> EventDto:
     """Get event by id"""
     event = repository_get_event_by_id(session, event_id)
+    is_event_concluded = event.date < get_sim_time(session)
     if event is None:
         raise EventNotFoundException()
-    if check_date and event.date < get_sim_time(session):
+    if check_date and is_event_concluded:
         raise NoCurrentEventException()
 
     actions = [
@@ -101,7 +102,7 @@ def get_event_by_id(
         for action in event.actions
     ]
 
-    competitors = _get_competitors(session, event, False)
+    competitors = _get_competitors(session, event, is_event_concluded)
     return EventDto(
         id=event.id,
         league=map_league_to_dto(event.league, competitors),
