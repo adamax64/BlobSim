@@ -10,6 +10,7 @@ import { LoginPage } from '../components/pages/LoginPage';
 import { HallOfFamePage } from '../components/pages/HallOfFamePage';
 import { ResultsPage } from '../components/pages/ResultsPage';
 import { ReplayPage } from '../components/pages/ReplayPage';
+import { AdminPage } from '../components/pages/AdminPage';
 
 const RootRoute = createRootRoute({
   component: RootLayout,
@@ -69,6 +70,17 @@ export const routeTree = RootRoute.addChildren([
   createRoute({
     path: '/event',
     component: EventPage,
+    getParentRoute: () => RootRoute,
+  }),
+  createRoute({
+    path: '/admin',
+    component: AdminPage,
+    beforeLoad: () => {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        throw redirect({ to: '/login' });
+      }
+    },
     getParentRoute: () => RootRoute,
   }),
 ]);

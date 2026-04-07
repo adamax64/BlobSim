@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 
 from controllers import (
     action_router,
+    admin_router,
     auth_router,
     blobs_router,
     calendar_router,
@@ -20,41 +21,49 @@ from controllers import (
     standings_router,
 )
 from domain.startup_service import startup
-from cronjobs.progress_simulation import run_progress_simulation
-from cronjobs.progress_competition import progress_competition
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
+from domain.admin_service import get_enabled_cronjobs
+from domain.scheduler_service import (
+    start_scheduler,
+    stop_scheduler,
+    is_scheduler_running,
+)
 
 
 # Read cronjobs setting from environment variable (recommended for fastapi dev)
 ENABLE_CRONJOBS = os.getenv("ENABLE_CRONJOBS", "false").lower() == "true"
 
 
+def get_cronjobs_enabled_setting() -> bool:
+    """
+    Get the cronjobs enabled setting from the database.
+    Falls back to environment variable if database is not available.
+    """
+    try:
+        return get_enabled_cronjobs()
+    except Exception as e:
+        print(f"[WARNING] Failed to read cronjobs setting from database: {e}")
+        print(f"[INFO] Falling back to environment variable ENABLE_CRONJOBS")
+        return ENABLE_CRONJOBS
+
+
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_: FastAPI):
+    # Get cronjobs setting from database
+    cronjobs_enabled = get_cronjobs_enabled_setting()
+
     # Startup: start the scheduler if enabled
-    if ENABLE_CRONJOBS:
-        scheduler.add_job(
-            run_progress_simulation, CronTrigger(hour=6, minute=0)
-        )  # Run daily at 6 AM
-        scheduler.add_job(
-            progress_competition,
-            CronTrigger(minute="*/3", hour="12-17"),
-        )  # Run every 3 minutes from 12:00 to 17:57
-        scheduler.start()
-        print("[INFO] Scheduler started.")
+    if cronjobs_enabled:
+        start_scheduler()
     else:
         print("[INFO] Cronjobs are disabled.")
     yield
     # Shutdown: stop the scheduler
-    if ENABLE_CRONJOBS:
-        scheduler.shutdown()
-        print("[INFO] Scheduler stopped.")
+    if is_scheduler_running():
+        stop_scheduler()
 
 
 app = FastAPI(lifespan=lifespan)
 app.title = "Blob Championship System API"
-scheduler = AsyncIOScheduler()
 
 origins = [
     "http://localhost",
@@ -106,5 +115,6 @@ app.include_router(event_record_router.router)
 app.include_router(hall_of_fame_router.router)
 app.include_router(calendar_router.router)
 app.include_router(auth_router.router)
+app.include_router(admin_router.router)
 app.include_router(news_router.router)
 app.include_router(policies_router.router)

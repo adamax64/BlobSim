@@ -285,7 +285,8 @@
     "standings": "Eredmények",
     "calendar": "Versenynaptár",
     "hall-of-fame": "Hírességek Csarnoka",
-    "results": "Eredmények"
+    "results": "Eredmények",
+    "admin": "Admin"
   },
   "results": {
     "season": "Szezon",
@@ -317,7 +318,9 @@
     "results": "Blob Bajnokság - Eredmények",
     "results_short": "BCS - Eredmények",
     "login": "Admin Bejelentkezés",
-    "login_short": "Admin Bejelentkezés"
+    "login_short": "Admin Bejelentkezés",
+    "admin": "Admin Beállítások",
+    "admin_short": "Admin Beállítások"
   },
   "error": {
     "generic": "Hiba történt"
@@ -329,5 +332,24 @@
   "theme": {
     "switch_to_light": "Váltás világos módra",
     "switch_to_dark": "Váltás sötét módra"
+  },
+  "admin": {
+    "database_management": "Adatbázis Kezelés",
+    "database_dump_description": "Töltse le az adatbázis teljes SQL dump-ját biztonsági mentés vagy elemzés céljából.",
+    "download_database_dump": "Adatbázis Dump Letöltése",
+    "not_authenticated": "Ehhez a művelethez adminisztrátorként kell bejelentkeznie",
+    "download_success": "Az adatbázis dump sikeresen letöltve",
+    "download_failed": "Az adatbázis dump letöltése sikertelen",
+    "cronjobs_management": "Háttérfeladatok Kezelése",
+    "cronjobs_description": "Automatikus háttérfeladatok engedélyezése vagy letiltása (szimuláció előrehaladása, verseny frissítések).",
+    "cronjobs_enabled": "Háttérfeladatok Engedélyezve",
+    "cronjobs_disabled": "Háttérfeladatok Letiltva",
+    "enabled": "Engedélyezve",
+    "disabled": "Letiltva",
+    "cronjobs_load_failed": "Nem sikerült betölteni a háttérfeladat engedélyezés állapotát",
+    "cronjobs_enabled_success": "Háttérfeladatok engedélyezve",
+    "cronjobs_disabled_success": "Háttérfeladatok letiltva",
+    "cronjobs_toggle_failed": "Nem sikerült átváltani a cronjobs állapotát",
+    "loading": "Betöltés..."
   }
 }

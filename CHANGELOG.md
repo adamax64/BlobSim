@@ -492,3 +492,11 @@
 
 - Fixed event replay not working from older seasons
 - Added favicon.png to cover edge cases when favicon.ico does not work
+
+### 4.2 - Admin settings update
+
+- Added admin endpoint to download the entire database as a SQL dump. Requires admin authentication.
+- Added "Admin" page to the frontend, accessible only when logged in as admin, with a button to download the database dump.
+- Added admin endpoints to get and set the enabled state of cronjobs.
+- Added cronjobs management UI to the admin page with a toggle switch to enable/disable automated background tasks.
+- Reworked cronjob management so the admin is able to turn on and off cronjobs from the admin UI

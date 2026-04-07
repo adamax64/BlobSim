@@ -1412,6 +1412,100 @@
         ]
       }
     },
+    "/admin/db-dump": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Download Database Dump",
+        "description": "Download the entire database as a SQL dump.\nRequires admin authentication.",
+        "operationId": "download_database_dump_admin_db_dump_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/cronjobs-enabled": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Get Cronjobs Enabled",
+        "description": "Get the current state of enabled cronjobs.\nRequires admin authentication.",
+        "operationId": "get_cronjobs_enabled_admin_cronjobs_enabled_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Set Cronjobs Enabled",
+        "description": "Set the enabled state of cronjobs.\nRequires admin authentication.",
+        "operationId": "set_cronjobs_enabled_admin_cronjobs_enabled_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "enabled",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "title": "Enabled"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/news/": {
       "get": {
         "tags": [

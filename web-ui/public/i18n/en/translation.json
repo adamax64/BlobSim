@@ -285,7 +285,8 @@
     "standings": "Standings",
     "calendar": "Calendar",
     "hall-of-fame": "Hall of Fame",
-    "results": "Results"
+    "results": "Results",
+    "admin": "Admin"
   },
   "results": {
     "season": "Season",
@@ -317,7 +318,9 @@
     "results": "Blob Championship System - Results",
     "results_short": "BCS - Results",
     "login": "Admin Login",
-    "login_short": "Admin Login"
+    "login_short": "Admin Login",
+    "admin": "Admin Settings",
+    "admin_short": "Admin Settings"
   },
   "error": {
     "generic": "An error occurred"
@@ -329,5 +332,24 @@
   "theme": {
     "switch_to_light": "Switch to light mode",
     "switch_to_dark": "Switch to dark mode"
+  },
+  "admin": {
+    "database_management": "Database Management",
+    "database_dump_description": "Download a complete SQL dump of the database for backup or analysis purposes.",
+    "download_database_dump": "Download Database Dump",
+    "not_authenticated": "You must be logged in as admin to perform this action",
+    "download_success": "Database dump downloaded successfully",
+    "download_failed": "Failed to download database dump",
+    "cronjobs_management": "Cronjobs Management",
+    "cronjobs_description": "Enable or disable automated background tasks (simulation progress, competition updates).",
+    "cronjobs_enabled": "Cronjobs Enabled",
+    "cronjobs_disabled": "Cronjobs Disabled",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "cronjobs_load_failed": "Failed to load cronjobs status",
+    "cronjobs_enabled_success": "Cronjobs have been enabled",
+    "cronjobs_disabled_success": "Cronjobs have been disabled",
+    "cronjobs_toggle_failed": "Failed to toggle cronjobs",
+    "loading": "Loading..."
   }
 }

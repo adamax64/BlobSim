@@ -12,6 +12,8 @@ import { BlobPiktogram } from '../icons/BlobPiktogram';
 import { Link } from '@tanstack/react-router';
 import { AppPage, MENU_ITEMS } from './constants';
 import { useCurrentPage } from '../../context/CurrentPageContext';
+import { useAuth } from '../../context/AuthContext';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 function getMenuIcon(page: string) {
   switch (page) {
@@ -29,6 +31,8 @@ function getMenuIcon(page: string) {
       return <StarIcon />;
     case 'results':
       return <FormatListBulleted />;
+    case 'admin':
+      return <SettingsIcon />;
     default:
       return null;
   }
@@ -42,6 +46,7 @@ type AppSidebarProps = {
 export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
   const { setCurrentPage } = useCurrentPage();
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
 
   const handleMenuItemClick = (menuItem: AppPage) => {
     setCurrentPage(menuItem);
@@ -53,7 +58,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
   return (
     <>
       <List>
-        {MENU_ITEMS.map((text, _) => (
+        {MENU_ITEMS.filter((text) => text !== 'admin' || isAuthenticated).map((text, _) => (
           <ListItem key={text}>
             <Box display="flex" gap={1} color="text.primary">
               {getMenuIcon(text)}
@@ -89,7 +94,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
             © 2026 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v4.1.1
+            v4.2
           </Typography>
         </Box>
       </Box>
