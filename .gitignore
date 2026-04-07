@@ -2,6 +2,7 @@
 /*.db
 **/__pycache__/*
 *.png
+!web-ui/favicon.png
 **/node_modules/*
 /.pytest_cache
 /venv

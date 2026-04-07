@@ -487,3 +487,8 @@
 - Fixed bug of "Jump to end" button not getting disabled in max tick
 - Persist replay state to local storage
 - Fixed scheduler simulating events after 18:00
+
+### 4.1.1
+
+- Fixed event replay not working from older seasons
+- Added favicon.png to cover edge cases when favicon.ico does not work
