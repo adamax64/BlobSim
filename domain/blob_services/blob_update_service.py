@@ -340,7 +340,11 @@ def _choose_activity_for_blob(
     if blob.terminated is None:
         if blob.id in catchup_training_blob_ids:
             blob.current_activity = ActivityType.INTENSE_TRAINING
-        elif event_next_day is not None and blob.league_id == event_next_day.league_id:
+        elif (
+            event_next_day is not None
+            and event_next_day.league_id is not None
+            and blob.league_id == event_next_day.league_id
+        ):
             blob.current_activity = ActivityType.EVENT
         else:
             extra_activities = []
