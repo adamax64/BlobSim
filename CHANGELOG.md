@@ -500,3 +500,7 @@
 - Added admin endpoints to get and set the enabled state of cronjobs.
 - Added cronjobs management UI to the admin page with a toggle switch to enable/disable automated background tasks.
 - Reworked cronjob management so the admin is able to turn on and off cronjobs from the admin UI
+
+### 4.2.1
+
+- Fixed blobs getting "Competing" activity on catchup training days
