@@ -77,7 +77,8 @@
       "IDLE": "Tétlen",
       "ADMINISTRATION": "Adminisztráció",
       "MINING": "Bányászat",
-      "INTENSE_PRACTICE": "Intenzív gyakorlás"
+      "INTENSE_PRACTICE": "Intenzív gyakorlás",
+      "APPLY_FOR_HEIR": "Utód igénylése"
     },
     "news_type": {
       "BLOB_CREATED": "Egy új blob lett létrehozva {{blobName}} néven!",

@@ -72,7 +72,6 @@ async def download_database_dump(_: str = Depends(require_auth)):
     env["PGPASSWORD"] = POSTGRES_PASSWORD
 
     try:
-        print(f"Running command: {' '.join(cmd)}")
         # Run pg_dump
         result = subprocess.run(
             cmd,
@@ -81,7 +80,6 @@ async def download_database_dump(_: str = Depends(require_auth)):
             env=env,
             timeout=300,  # 5 minute timeout
         )
-        print(f"pg_dump return code: {result.returncode}")
 
         if result.returncode != 0:
             raise HTTPException(

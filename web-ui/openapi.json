@@ -1591,7 +1591,8 @@
           "LABOUR",
           "IDLE",
           "ADMINISTRATION",
-          "MINING"
+          "MINING",
+          "APPLY_FOR_HEIR"
         ],
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"

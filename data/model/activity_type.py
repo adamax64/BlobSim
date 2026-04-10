@@ -17,3 +17,5 @@ class ActivityTypeDbo(enum.Enum):
 
     ADMINISTRATION = "ADMINISTRATION"
     MINING = "MINING"
+
+    APPLY_FOR_HEIR = "APPLY_FOR_HEIR"

@@ -2,9 +2,9 @@ import { AppBar, Box, Button, Toolbar } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
 import { useNavigate } from '@tanstack/react-router';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { SimDataApi } from '../../../generated';
+import { FactoryApi, NameSuggestionDto, SimDataApi } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -37,16 +37,34 @@ export const ControlButtonsFooter = ({
   const { refreshPolicies } = usePolicies();
 
   const [open, setOpen] = useState(false);
+  const [prefilledSuggestion, setPrefilledSuggestion] = useState<NameSuggestionDto>();
 
   const simDataApi = new SimDataApi(defaultConfig);
+  const factoryApi = new FactoryApi(defaultConfig);
+
+  const { mutate: getNameSuggestions } = useMutation({
+    mutationFn: () => factoryApi.getNameSuggestionsFactoryNameSuggestionsGet(),
+    onSuccess: (data) => {
+      const suggestionWithParent = data
+        .filter((suggestion) => suggestion.parentId)
+        .sort((a, b) => a.created.getTime() - b.created.getTime())[0];
+      setPrefilledSuggestion(suggestionWithParent);
+    },
+  });
+
   const { mutate: progressSimulation, isPending: isProgressingSimulation } = useMutation({
     mutationFn: () => simDataApi.progressSimDataSimulatePost(),
     onSuccess: () => {
       fetchNews();
       refreshSimTime();
       refreshPolicies();
+      getNameSuggestions();
     },
   });
+
+  useEffect(() => {
+    getNameSuggestions();
+  }, []);
 
   const handleDialogClose = (update?: boolean) => {
     setOpen(false);
@@ -92,8 +110,14 @@ export const ControlButtonsFooter = ({
           )}
         </Box>
       </Toolbar>
-      {/* TODO: handle blob with parent creation */}
-      <BlobNamingDialog open={open} onClose={handleDialogClose} mode="create" />
+      <BlobNamingDialog
+        open={open}
+        onClose={handleDialogClose}
+        prefilledLastName={prefilledSuggestion?.lastName}
+        nameId={prefilledSuggestion?.id}
+        parentId={prefilledSuggestion?.parentId ?? undefined}
+        mode="create"
+      />
     </AppBar>
   );
 };

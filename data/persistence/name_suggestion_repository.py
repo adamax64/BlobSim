@@ -32,6 +32,18 @@ def get_oldest_name(session: Session) -> NameSuggestion:
 
 
 @transactional
+def get_suggestion_by_details(
+    session: Session,
+    last_name: str,
+    parent_id: int | None,
+) -> NameSuggestion:
+    return session.query(NameSuggestion).filter(
+        NameSuggestion.last_name == last_name,
+        NameSuggestion.parent_id == parent_id,
+    ).first()
+
+
+@transactional
 def delete_suggestion(session: Session, name: NameSuggestion):
     session.delete(name)
     session.commit()

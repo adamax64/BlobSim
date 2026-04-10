@@ -23,6 +23,8 @@ export const mapActivityToTool = (activity?: ActivityTypeDbo | null): JSX.Elemen
       return <Scroll />;
     case ActivityTypeDbo.IntensePractice:
       return <DoubleDumbbells />;
+    case ActivityTypeDbo.ApplyForHeir:
+      return <Scroll />;
     default:
       return undefined;
   }

@@ -83,7 +83,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
                     if random.random() < 0.15:
                         save_trait(session, Trait(blob_id=saved_blob.id, type=other))
         except Exception:
-            pass
+            pass            
     except IntegrityError:
         raise NameOccupiedException()
 
@@ -93,7 +93,7 @@ def _create_with_name_suggestion(session):
     """Try to create new blob with suggested names. Retry if there is already a blob with suggested name"""
 
     name_suggestion = get_oldest_name(session)
-    if name_suggestion is None:
+    if name_suggestion is None or name_suggestion.first_name is None:
         add_blob_in_creation_news(session)
         return
     try:

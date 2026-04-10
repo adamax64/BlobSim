@@ -1,4 +1,5 @@
 from data.model.blob import Blob
+from data.model.retirement_focus_type import RetirementFocusType
 from data.model.state_type import StateType
 from domain.enums.activity_type import ActivityType
 import random
@@ -31,7 +32,7 @@ def choose_activity(
     activities = FREE_ACTIVITIES + extra_activities
 
     # base weights corresponding to FREE_ACTIVITIES
-    base = [10, 10, 10, 10, 1]
+    base = _get_base_weights(blob)
 
     # start with base weights
     weights = base.copy()
@@ -46,9 +47,25 @@ def choose_activity(
                 weight = weight / 2 + 1
             if has_state(blob, StateType.TIRED) or has_state(blob, StateType.GLOOMY):
                 weight /= 2
-            weights.append(weight)
+        elif activity == ActivityType.MAINTENANCE:
+            weight = 10
+            if (
+                blob.retirement_focus is not None
+                and blob.retirement_focus.focus_type
+                == RetirementFocusType.PROLONGED_LIFE
+            ):
+                weight *= 3
+        elif activity == ActivityType.APPLY_FOR_HEIR:
+            weight = 10
+            if (
+                blob.retirement_focus is not None
+                and blob.retirement_focus.focus_type == RetirementFocusType.LEGACY
+            ):
+                weight *= 5
         else:
-            weights.append(10)
+            weight = 10
+
+        weights.append(weight)
 
     # adjust weights based on traits and states
     hard_working = has_trait(blob, TraitType.HARD_WORKING)
@@ -84,3 +101,12 @@ def choose_activity(
         weights[idx_idle] *= 2
 
     return random.choices(activities, weights=weights, k=1)[0]
+
+
+def _get_base_weights(blob: Blob) -> list[float]:
+    """Get the base weights for activities."""
+    if blob.retirement_focus is not None:
+        # at the moment both focuses have the same base weights
+        return [0, 10, 10, 10, 0]
+
+    return [10, 10, 10, 10, 1]

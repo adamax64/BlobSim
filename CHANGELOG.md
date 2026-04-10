@@ -504,3 +504,14 @@
 ### 4.2.1
 
 - Fixed blobs getting "Competing" activity on catchup training days
+
+### 4.3 - Retirement update
+
+- Added retirement focus to blobs
+  - It is a purpose they can go for after retirement
+  - At the moment all focus types focus on money saving
+  - Blobs with retirement focus no longer practice since they no longer compete
+- Two types of retirement focus
+  - Legacy: if retired blob does not have any children they can save money for a heir
+  - prolonged life: retired blob saves money for maintenance to live longer
+- Fixed blob creation with parent on dashboard blob naming dialog

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 import random
 from sqlalchemy.orm import Session
 
@@ -6,13 +7,21 @@ from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.model.calendar import Calendar
 from data.model.event_type import EventType
+from data.model.name_suggestion import NameSuggestion
 from data.model.policy_type import PolicyType
+from data.model.retirement_focus_type import RetirementFocusType
+from data.model.trait import Trait
 from data.persistence.blob_reposiotry import (
     get_all_blobs_by_name,
     get_blob_by_id,
     save_all_blobs,
     save_blob,
     get_youngest_blob_debuting_in_season,
+)
+from data.persistence.name_suggestion_repository import save_suggestion
+from data.persistence.retirement_focus_repository import (
+    remove_retirement_focus,
+    set_retirement_focus,
 )
 from domain.enums.activity_type import ActivityType
 from domain.hall_of_fame_services.titles_chronology_service import (
@@ -40,6 +49,7 @@ from domain.utils.constants import (
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
     GRANDMASTER_SALARY,
+    HEIR_COST,
     INITIAL_INTEGRITY,
     LABOUR_SALARY,
     MAINTENANCE_COST,
@@ -267,6 +277,21 @@ def _proceed_with_activity(
         blob.money += GRANDMASTER_SALARY
     elif current_activity == ActivityType.MINING:
         miners.append(blob)
+    elif current_activity == ActivityType.APPLY_FOR_HEIR:
+        if blob.money >= HEIR_COST:
+            blob.money -= HEIR_COST
+            # save name suggestion with parent id
+            save_suggestion(
+                session,
+                NameSuggestion(
+                    last_name=blob.last_name, parent_id=blob.id, created=datetime.now()
+                ),
+            )
+            remove_retirement_focus(session, blob.id)
+            if random.random() < 0.5:
+                set_retirement_focus(
+                    session, blob.id, RetirementFocusType.PROLONGED_LIFE
+                )
     else:
         pass  # Idle activity
 
@@ -326,7 +351,7 @@ def _apply_random_traits(blob: Blob, session: Session):
 
                 if len(available_traits) > 0:
                     new_trait = random.choice(available_traits)
-                    save_trait(session, blob.id, new_trait)
+                    save_trait(session, Trait(blob_id=blob.id, type=new_trait))
                     session.refresh(blob)
 
 
@@ -348,8 +373,13 @@ def _choose_activity_for_blob(
             blob.current_activity = ActivityType.EVENT
         else:
             extra_activities = []
-            if blob.money >= MAINTENANCE_COST:
+            if blob.money >= MAINTENANCE_COST and (
+                blob.retirement_focus is None
+                or blob.retirement_focus.focus_type != RetirementFocusType.LEGACY
+            ):
                 extra_activities.append(ActivityType.MAINTENANCE)
+            if blob.money >= HEIR_COST:
+                extra_activities.append(ActivityType.APPLY_FOR_HEIR)
             # grandmasters may enact policies
             if is_grandmaster:
                 extra_activities.append(ActivityType.ADMINISTRATION)

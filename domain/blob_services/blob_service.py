@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from data.db.db_engine import transactional
+from data.persistence.name_suggestion_repository import delete_suggestion, get_suggestion_by_details
 from domain.blob_services.blob_fetching_service import fetch_all_blobs
 from domain.dtos.blob_stats_dto import BlobStatsDto
 from domain.blob_services.blob_creation_service import create_blob as service_create_blob
@@ -27,6 +28,14 @@ def get_all_blobs(
 def create_blob(session, first_name: str, last_name: str, parent_id: int | None = None):
     """Create a new blob with random stats and add it to the queue."""
     service_create_blob(session, first_name, last_name, parent_id)
+    if parent_id is not None:
+        suggestion = get_suggestion_by_details(
+            session,
+            last_name,
+            parent_id,
+        )
+        if suggestion is not None:
+            delete_suggestion(session, suggestion)
 
 
 @transactional

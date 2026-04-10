@@ -53,3 +53,6 @@ class Blob(Base):
     current_activity = Column(Enum(ActivityTypeDbo), default=ActivityTypeDbo.IDLE)
     traits = relationship("Trait", viewonly=True)
     states = relationship("State", viewonly=True)
+    retirement_focus = relationship(
+        "RetirementFocus", uselist=False, backref="blob", viewonly=True
+    )
