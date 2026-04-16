@@ -42,7 +42,7 @@ def get_cronjobs_enabled_setting() -> bool:
         return get_enabled_cronjobs()
     except Exception as e:
         print(f"[WARNING] Failed to read cronjobs setting from database: {e}")
-        print(f"[INFO] Falling back to environment variable ENABLE_CRONJOBS")
+        print("[INFO] Falling back to environment variable ENABLE_CRONJOBS")
         return ENABLE_CRONJOBS
 
 

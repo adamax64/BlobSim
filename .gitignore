@@ -9,3 +9,4 @@
 **/generated/*
 .env
 /backups/*
+**/nginx_processed.conf
