@@ -3,11 +3,9 @@ import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { NewsCard } from './NewsCard';
-import { ControlButtonsFooter } from './ControlButtonsFooter';
+import { ProgressButton } from './ProgressButton';
 
-export const NewsAndFooter = () => {
-  const [canCreateBlob, setCanCreateBlob] = useState(false);
-  const [canStartEvent, setCanStartEvent] = useState(false);
+export const NewsAndActions = () => {
   const [canContinue, setCanContinue] = useState(false);
   const [loadingSkeletonVisible, setLoadingSkeletonVisible] = useState(false);
 
@@ -35,22 +33,19 @@ export const NewsAndFooter = () => {
     const isEventStarting =
       news?.some((entry) => entry.type === NewsType.EventStarted || entry.type === NewsType.OngoingEvent) ?? false;
 
-    setCanCreateBlob(isBlobInCreation);
-    setCanStartEvent(isEventStarting);
     setCanContinue(!isBlobInCreation && !isEventStarting);
   }, [news]);
 
   return (
     <>
-      <NewsCard news={news} loadingSkeletonVisible={loadingSkeletonVisible} />
-      <ControlButtonsFooter
-        fetchNews={fetchNews}
-        setLoadingSkeletonVisible={setLoadingSkeletonVisible}
-        isLoadingNews={loadingSkeletonVisible}
-        canCreateBlob={canCreateBlob}
-        canStartEvent={canStartEvent}
-        canContinue={canContinue}
-      />
+      <NewsCard news={news} loadingSkeletonVisible={loadingSkeletonVisible} fetchNews={fetchNews} />
+      {canContinue ? (
+        <ProgressButton
+          fetchNews={fetchNews}
+          setLoadingSkeletonVisible={setLoadingSkeletonVisible}
+          isLoadingNews={loadingSkeletonVisible}
+        />
+      ) : null}
     </>
   );
 };

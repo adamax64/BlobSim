@@ -3,7 +3,7 @@ import { PageFrame } from '../common/PageFrame';
 import { SimTimeDisplay } from '../common/SimTimeDisplay';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useTranslation } from 'react-i18next';
-import { NewsAndFooter } from '../dashboard-components/NewsAndFooter';
+import { NewsAndActions } from '../dashboard-components/NewsAndActions';
 import PoliciesPanel from '../dashboard-components/PoliciesPanel';
 import { usePolicies } from '../../context/PoliciesContext';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
@@ -37,7 +37,7 @@ export function DashboardPage() {
           </CardContent>
         </Card>
       </Box>
-      <NewsAndFooter />
+      <NewsAndActions />
     </PageFrame>
   );
 }

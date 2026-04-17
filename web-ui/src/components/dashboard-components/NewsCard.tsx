@@ -1,15 +1,17 @@
-import { Box, Card, CardContent, Divider, Grid, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Divider, Grid, Skeleton, Typography } from '@mui/material';
 import { NewsDto } from '../../../generated';
 import { NewsContent } from './NewsContent';
 import { useTranslation } from 'react-i18next';
 import { formatToShort } from '../../utils/sim-time-utils';
+import { NewsActionButton } from './NewsActionButton';
 
 type NewsCardProps = {
   news: NewsDto[] | undefined;
   loadingSkeletonVisible: boolean;
+  fetchNews: () => void;
 };
 
-export const NewsCard = ({ news, loadingSkeletonVisible }: NewsCardProps) => {
+export const NewsCard = ({ news, loadingSkeletonVisible, fetchNews }: NewsCardProps) => {
   const { t } = useTranslation();
 
   return (
@@ -17,7 +19,7 @@ export const NewsCard = ({ news, loadingSkeletonVisible }: NewsCardProps) => {
       <CardContent>
         <Box display="flex" flexDirection="column" gap={1.5}>
           <Typography variant="h6">{t('dashboard.news')}</Typography>
-          <Box sx={{ height: 'calc(100vh - 384px)', overflowY: 'auto' }}>
+          <Box sx={{ height: 'calc(100vh - 310px)', overflowY: 'auto' }}>
             <Grid container>
               {loadingSkeletonVisible ? (
                 <NewsCardSkeleton />
@@ -32,6 +34,7 @@ export const NewsCard = ({ news, loadingSkeletonVisible }: NewsCardProps) => {
                     <Divider orientation="vertical" />
                     <Grid size={{ xs: 8, lg: 9, xl: 10 }} sx={{ paddingY: 1.5 }}>
                       <NewsContent newsItem={newsItem} />
+                      <NewsActionButton newsItem={newsItem} fetchNews={fetchNews} />
                     </Grid>
                   </Grid>
                 ))

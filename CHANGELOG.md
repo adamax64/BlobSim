@@ -515,3 +515,10 @@
   - Legacy: if retired blob does not have any children they can save money for a heir
   - prolonged life: retired blob saves money for maintenance to live longer
 - Fixed blob creation with parent on dashboard blob naming dialog
+
+### 4.3.1
+
+- Minor redesign of the dashboard page:
+  - The footer is removed, its buttons are distributed to other places:
+    - The progress button is now a FAB in the bottom right corner
+    - The create blob button and proceed to event buttons are now displayed in the news card under their respective news items
