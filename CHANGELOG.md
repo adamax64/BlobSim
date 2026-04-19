@@ -523,8 +523,11 @@
     - The progress button is now a FAB in the bottom right corner
     - The create blob button and proceed to event buttons are now displayed in the news card under their respective news items
 
-### 4.3.2
+### 4.4
 
+- Added replay functionality to event page
+  - If the event automatically started by the scheduler the user can replay the event from tick 0
+  - If user is admin, they can only progress the event by the progress button if the replay caught up with the presently current tick
 - Fixed bug of hall of fame records returning 500 because of KeyError
 - Fixed bug of hall of fame championship counts showing season winners from all leagues instead of just the top league
 - Speed skill update after overtakes are now applied during action creation

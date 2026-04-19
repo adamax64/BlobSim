@@ -1,15 +1,15 @@
 import { Snackbar, Alert } from '@mui/material';
 import { ActionDto, ActionsApi, CompetitionApi, EventDtoInput, EventRecordsApi } from '../../../../generated';
-import { ProgressButton } from '../shared/ProgressButton';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { SprintEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/SprintEventRecordDtoOutput';
 import { getRaceDurationBySize } from '../event-utils';
 import defaultConfig from '../../../default-config';
-import { useAuth } from '../../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { SnackbarState } from '../snackbar-state';
 import { SprintRaceUI } from './SprintRaceUI';
+import { useReplayState } from '../../../hooks/useReplayState';
+import { EventControls } from '../shared/EventControls';
 
 interface SprintRaceEventFrameProps {
   event: EventDtoInput;
@@ -22,10 +22,10 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
   setIsEventFinished,
   isEventFinished,
 }) => {
-  const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
+  const { replayTick, setReplayTick } = useReplayState(event.id);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -44,9 +44,10 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
   const { data: eventRecords, mutate: getEventRecords } = useMutation<
     EventRecordDto[],
     Error,
-    { eventId: number; isPlayback: boolean }
+    { eventId: number; playbackTick?: number }
   >({
-    mutationFn: ({ eventId, isPlayback }) => eventRecordsApi.getSprintEventRecordsSprintGet({ eventId, isPlayback }),
+    mutationFn: ({ eventId, playbackTick }) =>
+      eventRecordsApi.getSprintEventRecordsSprintGet({ eventId, playbackTick }),
     onSuccess: (data) => {
       setLoadingNextTick(false);
       setEventRecordsCache(data);
@@ -75,7 +76,8 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
         setSnackbarOpen(true);
       }
       setTick((prev) => prev + 1);
-      getEventRecords({ eventId: event.id, isPlayback: false });
+      setReplayTick((prev) => prev + 1);
+      getEventRecords({ eventId: event.id });
     },
     onError: (error) => {
       setLoadingNextTick(false);
@@ -99,8 +101,8 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
   });
 
   useEffect(() => {
-    getEventRecords({ eventId: event.id, isPlayback: true });
-  }, [event.id]);
+    getEventRecords({ eventId: event.id, playbackTick: replayTick });
+  }, [event.id, replayTick]);
 
   const progressEvent = useCallback(() => {
     if (eventRecords && !isEventFinished) {
@@ -118,20 +120,21 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
 
   return (
     <>
-      {isAuthenticated && (
-        <ProgressButton
-          isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
-          isEnd={isEnd}
-          isEventFinished={isEventFinished}
-          disabled={loadingNextTick}
-          onClickStart={progressEvent}
-          onClickNext={progressEvent}
-          onClickEnd={finishEvent}
-        />
-      )}
+      <EventControls
+        tick={tick}
+        replayTick={replayTick}
+        setReplayTick={setReplayTick}
+        isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
+        isEnd={isEnd}
+        isEventFinished={isEventFinished}
+        progressButtonDisabled={loadingNextTick || replayTick < tick}
+        onClickStart={progressEvent}
+        onClickNext={progressEvent}
+        onClickEnd={finishEvent}
+      />
       <SprintRaceUI
         eventRecords={eventRecords ?? eventRecordsCache}
-        tick={tick}
+        tick={replayTick}
         raceDuration={raceDuration}
         loadingNextTick={loadingNextTick}
         isEventFinished={isEventFinished}

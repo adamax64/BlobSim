@@ -1,15 +1,15 @@
 import { Snackbar, Alert } from '@mui/material';
 import { ActionDto, ActionsApi, CompetitionApi, EventDtoInput, EventRecordsApi } from '../../../../generated';
-import { ProgressButton } from '../shared/ProgressButton';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/RaceEventRecordDtoOutput';
 import { getRaceDurationBySize } from '../event-utils';
 import defaultConfig from '../../../default-config';
-import { useAuth } from '../../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { SnackbarState } from '../snackbar-state';
 import { EnduranceRaceUI } from './EnduranceRaceUI';
+import { useReplayState } from '../../../hooks/useReplayState';
+import { EventControls } from '../shared/EventControls';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDtoInput;
@@ -22,10 +22,10 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   setIsEventFinished,
   isEventFinished,
 }) => {
-  const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
+  const { replayTick, setReplayTick } = useReplayState(event.id);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -44,10 +44,10 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const { data: eventRecords, mutate: getEventRecords } = useMutation<
     EventRecordDto[],
     Error,
-    { eventId: number; isPlayback: boolean }
+    { eventId: number; playbackTick?: number }
   >({
-    mutationFn: ({ eventId, isPlayback }) =>
-      eventRecordsApi.getEnduranceEventRecordsEnduranceGet({ eventId, isPlayback }),
+    mutationFn: ({ eventId, playbackTick }) =>
+      eventRecordsApi.getEnduranceEventRecordsEnduranceGet({ eventId, playbackTick }),
     onSuccess: (data) => {
       setLoadingNextTick(false);
       setEventRecordsCache(data);
@@ -76,7 +76,8 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
         setSnackbarOpen(true);
       }
       setTick((prev) => prev + 1);
-      getEventRecords({ eventId: event.id, isPlayback: false });
+      setReplayTick((prev) => prev + 1);
+      getEventRecords({ eventId: event.id });
     },
     onError: (error) => {
       setLoadingNextTick(false);
@@ -100,8 +101,8 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   });
 
   useEffect(() => {
-    getEventRecords({ eventId: event.id, isPlayback: true });
-  }, [event.id]);
+    getEventRecords({ eventId: event.id, playbackTick: replayTick });
+  }, [event.id, replayTick]);
 
   const progressEvent = useCallback(() => {
     if (eventRecords && !isEventFinished) {
@@ -114,20 +115,21 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
 
   return (
     <>
-      {isAuthenticated && (
-        <ProgressButton
-          isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
-          isEnd={tick >= raceDuration}
-          isEventFinished={isEventFinished}
-          disabled={loadingNextTick}
-          onClickStart={progressEvent}
-          onClickNext={progressEvent}
-          onClickEnd={finishEvent}
-        />
-      )}
+      <EventControls
+        tick={tick}
+        replayTick={replayTick}
+        setReplayTick={setReplayTick}
+        isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
+        isEnd={tick >= raceDuration}
+        isEventFinished={isEventFinished}
+        progressButtonDisabled={loadingNextTick || replayTick < tick}
+        onClickStart={progressEvent}
+        onClickNext={progressEvent}
+        onClickEnd={finishEvent}
+      />
       <EnduranceRaceUI
         eventRecords={eventRecords ?? eventRecordsCache}
-        tick={tick}
+        tick={replayTick}
         loadingNextTick={loadingNextTick}
         isEventFinished={isEventFinished}
         eventType={event.type}

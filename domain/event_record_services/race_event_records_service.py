@@ -7,7 +7,6 @@ from domain.utils.league_utils import get_race_duration_by_size
 def get_endurance_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
-    is_playback: bool,
     playback_tick: int = None,
 ) -> list[RaceEventRecordDto]:
     event_records_by_competitors = {
@@ -52,7 +51,6 @@ def get_endurance_event_records(
 def get_sprint_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
-    is_playback: bool,
     playback_tick: int = None,
 ) -> list[SprintEventRecordDto]:
     """Sprint race ordering: competitors finish when their cumulative distance reaches race length.

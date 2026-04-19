@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import type { ActionDto, BlobCompetitorDtoInput, EventDtoInput } from '../../../../generated';
 import { ActionsApi, CompetitionApi, EventRecordsApi } from '../../../../generated';
-import { useAuth } from '../../../context/AuthContext';
 import type { Dispatch, SetStateAction } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
-import { ProgressButton } from '../shared/ProgressButton';
 import type { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { EliminationScoringUI } from './EliminationScoringUI';
+import { useReplayState } from '../../../hooks/useReplayState';
+import { EventControls } from '../shared/EventControls';
 
 interface SnackbarState {
   message: string | null;
@@ -28,7 +28,6 @@ export const EliminationScoringEventFrame = ({
   setIsEventFinished,
   isEventFinished,
 }: EliminationScoringEventFrameProps) => {
-  const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -39,6 +38,7 @@ export const EliminationScoringEventFrame = ({
   });
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
+  const { replayTick, setReplayTick } = useReplayState(event.id);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
 
@@ -46,8 +46,13 @@ export const EliminationScoringEventFrame = ({
   const eventRecordsApi = new EventRecordsApi(defaultConfig);
   const competitionApi = new CompetitionApi(defaultConfig);
 
-  const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
-    mutationFn: (eventId: number) => eventRecordsApi.getEliminationEventRecordsEliminationGet({ eventId }),
+  const { data: eventRecords, mutate: getEventRecords } = useMutation<
+    EventRecordDto[],
+    Error,
+    { eventId: number; playbackTick?: number }
+  >({
+    mutationFn: ({ eventId, playbackTick }) =>
+      eventRecordsApi.getEliminationEventRecordsEliminationGet({ eventId, playbackTick }),
     onSuccess: (data) => {
       setLoadingNextTick(false);
       setEventRecordsCache(data);
@@ -81,8 +86,9 @@ export const EliminationScoringEventFrame = ({
         setSnackbarOpen(true);
       }
       setTick((prev) => prev + 1);
+      setReplayTick((prev) => prev + 1);
       setLoadingNextTick(false);
-      getEventRecords(event.id);
+      getEventRecords({ eventId: event.id });
     },
     onError: (error) => {
       setLoadingNextTick(false);
@@ -114,8 +120,8 @@ export const EliminationScoringEventFrame = ({
   });
 
   useEffect(() => {
-    getEventRecords(event.id);
-  }, [event.id]);
+    getEventRecords({ eventId: event.id, playbackTick: replayTick });
+  }, [event.id, replayTick]);
 
   const progressEvent = useCallback(() => {
     if (eventRecords && !isEventFinished) {
@@ -128,20 +134,21 @@ export const EliminationScoringEventFrame = ({
 
   return (
     <>
-      {isAuthenticated && (
-        <ProgressButton
-          isStart={tick === 0}
-          isEnd={tick >= event.actions.length - 1}
-          isEventFinished={isEventFinished}
-          disabled={loadingNextTick}
-          onClickStart={progressEvent}
-          onClickNext={progressEvent}
-          onClickEnd={finishEvent}
-        />
-      )}
+      <EventControls
+        tick={tick}
+        replayTick={replayTick}
+        setReplayTick={setReplayTick}
+        isStart={tick === 0}
+        isEnd={tick >= event.actions.length - 1}
+        isEventFinished={isEventFinished}
+        progressButtonDisabled={loadingNextTick || replayTick < tick}
+        onClickStart={progressEvent}
+        onClickNext={progressEvent}
+        onClickEnd={finishEvent}
+      />
       <EliminationScoringUI
         eventRecords={eventRecords ?? eventRecordsCache}
-        tick={tick}
+        tick={replayTick}
         loadingNextTick={loadingNextTick}
         isEventFinished={isEventFinished}
         eventType={event.type}

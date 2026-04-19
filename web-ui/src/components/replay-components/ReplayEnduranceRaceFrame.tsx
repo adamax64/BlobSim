@@ -22,7 +22,6 @@ export const ReplayEnduranceRaceFrame: React.FC<ReplayEnduranceRaceFrameProps> =
     mutationFn: (playbackTick: number) =>
       eventRecordsApi.getEnduranceEventRecordsEnduranceGet({
         eventId: event.id,
-        isPlayback: true,
         playbackTick,
       }),
     onSuccess: (data, playbackTick) => {

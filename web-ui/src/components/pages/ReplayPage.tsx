@@ -12,6 +12,7 @@ import { ReplayQuarteredEventFrame } from '../replay-components/ReplayQuarteredE
 import { ReplayEliminationScoringFrame } from '../replay-components/ReplayEliminationScoringFrame';
 import { ReplayControls } from '../replay-components/ReplayControls';
 import { useNavigate } from '@tanstack/react-router';
+import { useReplayState } from '../../hooks/useReplayState';
 
 export const ReplayPage = () => {
   const { eventId } = useParams({ from: '/replay/$eventId' });
@@ -19,7 +20,7 @@ export const ReplayPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [currentTick, setCurrentTick] = useState(0);
+  const { replayTick: currentTick, setReplayTick: setCurrentTick } = useReplayState(Number(eventId), 0);
   const [maxTick, setMaxTick] = useState<number | undefined>();
 
   const {
@@ -37,19 +38,6 @@ export const ReplayPage = () => {
   }, [eventId, loadEvent]);
 
   useEffect(() => {
-    if (eventId) {
-      const storageKey = 'replay_ticks';
-      const storedData = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      const eventEntry = storedData.find((entry: any) => entry.eventId === eventId);
-      if (eventEntry) {
-        setCurrentTick(eventEntry.tick);
-      } else {
-        setCurrentTick(0);
-      }
-    }
-  }, [eventId]);
-
-  useEffect(() => {
     if (event) {
       if (event.type === EventType.QuarteredOneShotScoring || event.type === EventType.QuarteredTwoShotScoring) {
         const totalActions = event.actions.reduce((sum, action) => sum + action.scores.length, 0);
@@ -60,26 +48,6 @@ export const ReplayPage = () => {
       }
     }
   }, [event]);
-
-  useEffect(() => {
-    if (eventId) {
-      const storageKey = 'replay_ticks';
-      let storedData = JSON.parse(localStorage.getItem(storageKey) || '[]');
-
-      // Remove existing entry for this eventId if it exists
-      storedData = storedData.filter((entry: any) => entry.eventId !== eventId);
-
-      // Add new entry at the end
-      storedData.push({ eventId, tick: currentTick });
-
-      // Keep only the last 16 entries
-      if (storedData.length > 16) {
-        storedData = storedData.slice(-16);
-      }
-
-      localStorage.setItem(storageKey, JSON.stringify(storedData));
-    }
-  }, [currentTick, eventId]);
 
   const eventContent = useCallback(() => {
     if (loadingEvent) {

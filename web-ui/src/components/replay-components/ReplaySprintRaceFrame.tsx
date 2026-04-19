@@ -23,7 +23,6 @@ export const ReplaySprintRaceFrame: React.FC<ReplaySprintRaceFrameProps> = ({ ev
     mutationFn: (playbackTick: number) =>
       eventRecordsApi.getSprintEventRecordsSprintGet({
         eventId: event.id,
-        isPlayback: true,
         playbackTick,
       }),
     onSuccess: (data, playbackTick) => {

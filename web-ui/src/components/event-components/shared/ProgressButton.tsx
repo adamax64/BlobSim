@@ -49,7 +49,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
   }, [isStart, isEnd, isEventFinished, onClickStart, onClickNext, onClickEnd]);
 
   return (
-    <Box position="fixed" right={0} bottom={0} padding={2} zIndex={1000}>
+    <>
       {isStart && (
         <Fab variant="extended" size="small" color="primary" onClick={onClickStart} disabled={disabled}>
           <PlayArrowRounded />
@@ -74,6 +74,6 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
           {t('progress_button.back_to_dashboard')}
         </Fab>
       )}
-    </Box>
+    </>
   );
 };

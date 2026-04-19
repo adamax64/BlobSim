@@ -1095,16 +1095,6 @@
             }
           },
           {
-            "name": "is_playback",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false,
-              "title": "Is Playback"
-            }
-          },
-          {
             "name": "playback_tick",
             "in": "query",
             "required": false,
@@ -1158,16 +1148,6 @@
             "schema": {
               "type": "integer",
               "title": "Event Id"
-            }
-          },
-          {
-            "name": "is_playback",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false,
-              "title": "Is Playback"
             }
           },
           {

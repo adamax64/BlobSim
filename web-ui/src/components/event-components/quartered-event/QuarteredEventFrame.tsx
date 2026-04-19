@@ -10,13 +10,13 @@ import {
 } from '../../../../generated';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { getCurrentQuarter, getQuarterEnds } from '../event-utils';
-import { ProgressButton } from '../shared/ProgressButton';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
-import { useAuth } from '../../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { SnackbarState } from '../snackbar-state';
 import { QuarteredEventUI } from './QuarteredEventUI';
+import { useReplayState } from '../../../hooks/useReplayState';
+import { EventControls } from '../shared/EventControls';
 
 interface QuarteredEventFrameProps {
   event: EventDtoInput;
@@ -29,10 +29,10 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   setIsEventFinished,
   isEventFinished,
 }) => {
-  const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(event.actions.reduce((sum, action) => sum + action.scores.length, 0));
+  const { replayTick, setReplayTick } = useReplayState(event.id);
   const [isPerforming, setIsPerforming] = useState(false);
   const [quarter, setQuarter] = useState(0);
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
@@ -55,8 +55,13 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   const eventRecordsApi = new EventRecordsApi(defaultConfig);
   const competitionApi = new CompetitionApi(defaultConfig);
 
-  const { data: eventRecords, mutate: getEventRecords } = useMutation<EventRecordDto[], Error, number>({
-    mutationFn: (eventId: number) => eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId }),
+  const { data: eventRecords, mutate: getEventRecords } = useMutation<
+    EventRecordDto[],
+    Error,
+    { eventId: number; playbackTick?: number }
+  >({
+    mutationFn: ({ eventId, playbackTick }) =>
+      eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId, playbackTick }),
     onSuccess: (data) => {
       setIsPerforming(false);
       setEventRecordsCache(data);
@@ -93,7 +98,8 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
         setSnackbarOpen(true);
       }
       setTick((prev: number) => prev + 1);
-      getEventRecords(event.id);
+      setReplayTick((prev) => prev + 1);
+      getEventRecords({ eventId: event.id });
     },
     onError: (error) => {
       setIsPerforming(false);
@@ -125,12 +131,12 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   });
 
   useEffect(() => {
-    getEventRecords(event.id);
-  }, [event.id]);
+    getEventRecords({ eventId: event.id, playbackTick: replayTick });
+  }, [event.id, replayTick]);
 
   useEffect(() => {
-    setQuarter(getCurrentQuarter(quarterEnds, tick));
-  }, [tick, quarterEnds]);
+    setQuarter(getCurrentQuarter(quarterEnds, replayTick));
+  }, [replayTick, quarterEnds]);
 
   useEffect(() => {
     if (eventRecords) {
@@ -151,17 +157,18 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
 
   return (
     <>
-      {isAuthenticated && (
-        <ProgressButton
-          isStart={tick === 0}
-          isEnd={quarter > 4}
-          isEventFinished={isEventFinished}
-          disabled={isPerforming}
-          onClickStart={progressEvent}
-          onClickNext={progressEvent}
-          onClickEnd={finishEvent}
-        />
-      )}
+      <EventControls
+        tick={tick}
+        replayTick={replayTick}
+        setReplayTick={setReplayTick}
+        isStart={tick === 0}
+        isEnd={quarter > 4}
+        isEventFinished={isEventFinished}
+        progressButtonDisabled={isPerforming || replayTick < tick}
+        onClickStart={progressEvent}
+        onClickNext={progressEvent}
+        onClickEnd={finishEvent}
+      />
       <QuarteredEventUI
         eventRecords={eventRecords ?? eventRecordsCache}
         quarter={quarter}
