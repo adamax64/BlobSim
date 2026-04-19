@@ -16,6 +16,8 @@ from domain.utils.action_utils import (
     get_random_coefficient,
 )
 from domain.utils.league_utils import get_race_duration_by_size
+from domain.blob_services.blob_update_service import update_blob_speed_by_id
+from domain.utils.constants import OVERTAKE_EFFECT
 
 
 @transactional
@@ -120,6 +122,24 @@ def create_actions_for_race(
             max_scorer_id = contender.id
 
     save_all_actions(session, actions.values())
+
+    # Apply overtake learning: compare previous positions to current positions
+    if tick > 1:
+        previous_positions = {c.id: i + 1 for i, c in enumerate(sorted_contenders)}
+        current_sums_after = {
+            contender.id: sum(actions[contender.id].scores) for contender in contenders
+        }
+        current_sorted = sorted(
+            contenders, key=lambda c: current_sums_after[c.id], reverse=True
+        )
+        for i, contender in enumerate(current_sorted):
+            current_position = i + 1
+            prev_position = previous_positions.get(contender.id, current_position)
+            overtakes = prev_position - current_position
+            if overtakes > 0:
+                update_blob_speed_by_id(contender.id, overtakes * OVERTAKE_EFFECT)
+            elif overtakes < 0:
+                update_blob_speed_by_id(contender.id, overtakes * OVERTAKE_EFFECT)
 
     if event and max_scorer_id:
         is_new_record = check_and_update_record(

@@ -1,21 +1,12 @@
-import {
-  Box,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Tooltip,
-} from '@mui/material';
+import { Box, TableBody, TableCell, TableHead, TableRow, useTheme, useMediaQuery, Tooltip } from '@mui/material';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { useTranslation } from 'react-i18next';
 import type { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/RaceEventRecordDtoOutput';
 import { EventType } from '../../../../generated';
 import { TickLoadingBar } from '../../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import Straighten from '@mui/icons-material/Straighten';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { roundToOneDecimals, roundToThreeDecimals } from '../event-utils';
 import { NarrowCell } from '../../common/StyledComponents';
 import { EventCardFrame } from '../shared/EventCardFrame';
@@ -86,11 +77,20 @@ export const EnduranceRaceUI = ({
     return '';
   };
 
+  const tickDisplay = useMemo(() => {
+    if (isMobile) {
+      return (
+        <Box display="flex" alignItems="flex-start" gap={0.5}>
+          <AccessAlarmIcon fontSize="small" /> {tick} / {raceDuration}
+        </Box>
+      );
+    } else {
+      return `${t('endurance_race.tick')}: ${tick} / ${raceDuration}`;
+    }
+  }, [t, tick, raceDuration]);
+
   return (
-    <EventCardFrame eventType={eventType}>
-      <Typography fontSize={18} fontWeight={600} paddingBottom={2}>
-        {t('endurance_race.tick')}: {tick} / {raceDuration}
-      </Typography>
+    <EventCardFrame eventType={eventType} tickDisplay={tickDisplay}>
       <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={2}>
         <TickLoadingBar />
       </Box>

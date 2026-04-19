@@ -16,11 +16,10 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import type { SprintEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/SprintEventRecordDtoOutput';
 import { EventType } from '../../../../generated';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { roundToOneDecimals, roundToThreeDecimals, roundToTwoDecimals } from '../event-utils';
 import { DistanceProgress, NarrowCell, TickLoadingBar } from '../../common/StyledComponents';
 import { EventCardFrame } from '../shared/EventCardFrame';
-import { useMemo } from 'react';
 import { EventTable } from '../shared/EventTable';
 
 type SprintRaceUIProps = {
@@ -109,11 +108,20 @@ export const SprintRaceUI = ({
     return '';
   };
 
+  const tickDisplay = useMemo(() => {
+    if (isMobile) {
+      return (
+        <Box display="flex" alignItems="flex-start" gap={0.5}>
+          <AccessAlarmIcon fontSize="small" /> {tick} / {raceDuration}
+        </Box>
+      );
+    } else {
+      return `${t('sprint_race.tick')}: ${tick} / ${raceDuration}`;
+    }
+  }, [isMobile, t, tick, raceDuration]);
+
   return (
-    <EventCardFrame eventType={eventType}>
-      <Typography fontSize={18} fontWeight={600} paddingBottom={2}>
-        {t('sprint_race.tick')}: {tick} / {raceDuration}
-      </Typography>
+    <EventCardFrame eventType={eventType} tickDisplay={tickDisplay}>
       <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={2}>
         <TickLoadingBar />
       </Box>

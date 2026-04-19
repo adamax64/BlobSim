@@ -90,6 +90,8 @@ def _get_champion_counts(
     champions = get_all_champions(session)
     champion_counts = {}
     for champ in champions:
+        if champ.league.level != 1:
+            continue
         if champ.blob not in champion_counts:
             champion_counts[champ.blob] = 0
         champion_counts[champ.blob] += 1

@@ -44,7 +44,7 @@ def get_all_records_service(session) -> list[RecordDto]:
                 record.competitor,
                 current_season,
                 grandmaster_id,
-                standings_position=standings_by_league[record.league.id].get(
+                standings_position=standings_by_league[record.competitor.league.id].get(
                     record.competitor.id
                 ),
             ),

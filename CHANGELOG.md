@@ -522,3 +522,10 @@
   - The footer is removed, its buttons are distributed to other places:
     - The progress button is now a FAB in the bottom right corner
     - The create blob button and proceed to event buttons are now displayed in the news card under their respective news items
+
+### 4.3.2
+
+- Fixed bug of hall of fame records returning 500 because of KeyError
+- Fixed bug of hall of fame championship counts showing season winners from all leagues instead of just the top league
+- Speed skill update after overtakes are now applied during action creation
+- Moved tick counter to the event card subtitle for better visibility
