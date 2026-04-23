@@ -97,7 +97,7 @@ def progress_competition(session):
         ]:
             # Get event records to determine which competitors are still active
             event_records = get_event_records(
-                event.actions, event.competitors, event.type, is_playback=False
+                event.actions, event.competitors, event.type
             )
 
             next_blob = next(
@@ -120,7 +120,7 @@ def progress_competition(session):
         elif event.type == EventType.ELIMINATION_SCORING:
             # Get event records to determine which competitors are still active
             event_records = get_event_records(
-                event.actions, event.competitors, event.type, is_playback=False
+                event.actions, event.competitors, event.type
             )
 
             # Filter active (non-eliminated) competitors
@@ -147,8 +147,7 @@ def progress_competition(session):
         event_records = get_event_records(
             get_all_actions_by_event(session, event.id),
             event.competitors,
-            event.type,
-            is_playback=False,
+            event.type
         )
 
         if should_conclude_event(event, event_records, session):
