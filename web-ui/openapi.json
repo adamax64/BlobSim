@@ -1955,6 +1955,17 @@
           "is_current": {
             "type": "boolean",
             "title": "Is Current"
+          },
+          "event_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Id"
           }
         },
         "type": "object",

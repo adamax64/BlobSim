@@ -52,7 +52,8 @@
     "season_title": "{{season}}. szezon",
     "epoch_cycle": "Epoch\\Ciklus",
     "event_title": "{{leagueName}} {{round}}. forduló {{eventType}}",
-    "jump_to_event": "Ugrás az eseményhez"
+    "jump_to_event": "Ugrás az eseményhez",
+    "show_results": "Eredmények megtekintése"
   },
   "enums": {
     "event_types": {

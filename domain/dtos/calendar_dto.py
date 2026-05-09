@@ -14,3 +14,4 @@ class CalendarDto:
     event_type: EventTypeDto
     is_next: bool
     is_current: bool
+    event_id: int | None = None

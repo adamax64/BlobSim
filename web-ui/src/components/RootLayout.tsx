@@ -1,14 +1,14 @@
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box } from '@mui/material';
 import { Outlet } from '@tanstack/react-router';
 import { useState } from 'react';
 import { DesktopMenu } from './root-components/DesktopMenu';
 import { MobileMenu } from './root-components/MobileMenu';
 import { AppHeader } from './root-components/AppHeader';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export const RootLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
+  const isMobile = useIsMobile();
 
   return (
     <Box display="flex" height="100dvh" flexDirection="column">

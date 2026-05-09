@@ -532,3 +532,13 @@
 - Fixed bug of hall of fame championship counts showing season winners from all leagues instead of just the top league
 - Speed skill update after overtakes are now applied during action creation
 - Moved tick counter to the event card subtitle for better visibility
+
+### 4.5 - Calendar UI update
+
+- Redesigned mobile view event calendar
+  - Mobile view has the same table calendar format as the desktop
+  - Event chips are renamed to event widget due to component restructuring
+  - Event widgets on mobile only display an icon resembling the event type
+  - On click of the evend widget on mobile displays the event widget content the desktop variant has
+- Dropout league event widget color changed to yellow both on mobile and desktop
+- Clicking on the checkmark icon on concluded events displays the result modal for corresponding event

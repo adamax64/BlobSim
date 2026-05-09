@@ -52,7 +52,8 @@
     "season_title": "Season {{season}}",
     "epoch_cycle": "Epoch\\Cycle",
     "event_title": "{{leagueName}} Round {{round}} {{eventType}}",
-    "jump_to_event": "Jump to event"
+    "jump_to_event": "Jump to event",
+    "show_results": "Show results"
   },
   "enums": {
     "event_types": {

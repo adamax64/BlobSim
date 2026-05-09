@@ -16,7 +16,8 @@ import { useSimTime } from '../../context/SimTimeContext';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CalendarDto } from '../../../generated';
-import { EventChip } from './EventChip';
+import { EventWidget } from './event-widget/EventWidget';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 const TableCellWithBorder = styled(TableCell)(({ theme }) => ({
   borderRight: `1px solid ${theme.palette.divider}`,
@@ -28,17 +29,24 @@ const TableCellWithBorder = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.action.selected,
     transition: 'background-color 200ms',
   },
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(0.5),
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(1),
+  },
 }));
 
-interface DesktopCalendarProps {
+interface EventCalendarProps {
   calendar: CalendarDto[] | undefined;
 }
 
-export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) => {
+export const EventCalendar: React.FC<EventCalendarProps> = ({ calendar }) => {
   const { t } = useTranslation();
   const { simTime, refreshSimTime } = useSimTime();
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const currentEpochRowRef = useRef<HTMLTableRowElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!simTime) {
@@ -73,11 +81,14 @@ export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) =>
 
   return (
     <Card sx={{ padding: 2 }}>
-      <CardHeader title={t('calendar.season_title', { season: calendar?.[0]?.date.season })} />
+      <CardHeader
+        title={t('calendar.season_title', { season: calendar?.[0]?.date.season })}
+        sx={{ padding: 0, paddingBottom: 2 }}
+      />
       <TableContainer
         component={Paper}
         ref={tableContainerRef}
-        sx={{ maxHeight: 'calc(100vh - 208px)', overflowY: 'auto' }}
+        sx={{ maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}
       >
         <Table stickyHeader>
           <TableHead>
@@ -106,7 +117,11 @@ export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) =>
               const epoch = i;
               const isCurrentEpoch = simTime?.epoch === epoch;
               return (
-                <TableRow key={i} sx={{ height: 72 }} ref={isCurrentEpoch ? currentEpochRowRef : undefined}>
+                <TableRow
+                  key={i}
+                  sx={{ height: isMobile ? 48 : 72 }}
+                  ref={isCurrentEpoch ? currentEpochRowRef : undefined}
+                >
                   <TableCellWithBorder align="center">{epoch}</TableCellWithBorder>
                   {[0, 1, 2, 3].map((cycle) => (
                     <TableCellWithBorder
@@ -115,11 +130,10 @@ export const DesktopCalendar: React.FC<DesktopCalendarProps> = ({ calendar }) =>
                       width="25%"
                       className={applyCurrentClass(epoch, cycle)}
                     >
-                      <EventChip
+                      <EventWidget
                         calendar={calendar}
                         epoch={epoch}
                         cycle={cycle}
-                        t={t}
                         isToday={simTime?.epoch === epoch && simTime?.cycle === cycle}
                       />
                     </TableCellWithBorder>

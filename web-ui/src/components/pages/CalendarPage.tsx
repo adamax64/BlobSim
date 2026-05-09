@@ -3,17 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import { CalendarApi, CalendarDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useMediaQuery, useTheme } from '@mui/material';
-import { MobileCalendar } from '../calendar-components/MobileCalendar';
-import { DesktopCalendar } from '../calendar-components/DesktopCalendar';
+import { EventCalendar } from '../calendar-components/EventCalendar';
 
 export const CalendarPage = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   const calendarApi = new CalendarApi(defaultConfig);
-  const { t } = useTranslation();
   const {
     data: calendar,
     mutate: loadCalendar,
@@ -28,7 +21,7 @@ export const CalendarPage = () => {
 
   return (
     <PageFrame showLoading={isCalendarLoading} pageName="calendar">
-      {isMobile ? <MobileCalendar calendar={calendar} /> : <DesktopCalendar calendar={calendar} />}
+      <EventCalendar calendar={calendar} />
     </PageFrame>
   );
 };
