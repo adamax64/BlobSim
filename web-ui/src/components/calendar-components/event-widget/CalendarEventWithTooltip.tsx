@@ -19,8 +19,6 @@ export const CalendarEventWithTooltip: React.FC<CalendarEventWithTooltipProps> =
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = (event: Event | SyntheticEvent<Element, Event>) => {
-    console.log(event.target);
-
     setOpen(false);
   };
 
