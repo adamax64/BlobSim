@@ -542,3 +542,8 @@
   - On click of the evend widget on mobile displays the event widget content the desktop variant has
 - Dropout league event widget color changed to yellow both on mobile and desktop
 - Clicking on the checkmark icon on concluded events displays the result modal for corresponding event
+
+### 4.5.1
+
+- Minor UI fixes on mobile calendar
+- Fixed overlap issue with result modal and blob details modal

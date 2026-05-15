@@ -88,7 +88,7 @@ export const EventCalendar: React.FC<EventCalendarProps> = ({ calendar }) => {
       <TableContainer
         component={Paper}
         ref={tableContainerRef}
-        sx={{ maxHeight: 'calc(100vh - 80px)', overflowY: 'auto' }}
+        sx={{ maxHeight: 'calc(100% - 48px)', overflowY: 'auto' }}
       >
         <Table stickyHeader>
           <TableHead>

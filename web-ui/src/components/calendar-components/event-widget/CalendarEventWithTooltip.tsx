@@ -46,7 +46,7 @@ export const CalendarEventWithTooltip: React.FC<CalendarEventWithTooltipProps> =
 
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
-      <Box>
+      <Box width="100%">
         <Tooltip
           describeChild
           onClose={handleTooltipClose}
