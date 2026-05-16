@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.model.calendar import Calendar
+from data.model.event import Event
 from data.model.event_type import EventType
 from data.model.name_suggestion import NameSuggestion
 from data.model.policy_type import PolicyType
@@ -29,18 +30,23 @@ from domain.hall_of_fame_services.titles_chronology_service import (
 )
 from domain.news_services.news_service import add_blob_terminated_news
 from domain.sim_data_service import (
-    get_current_calendar,
     get_event_next_day,
     get_sim_time,
 )
 from data.persistence.policy_repository import get_active_policy_by_type
 from domain.policy_service import create_or_update_policy
-from domain.standings_service import get_last_place_from_season_by_league
-from data.persistence.league_repository import get_all_leagues_ordered_by_level
+from domain.standings_service import get_last_place_from_season_by_league, get_standings
+from data.persistence.league_repository import get_all_leagues_ordered_by_level, get_queue
 from data.persistence.result_repository import (
     get_most_recent_real_league_result_of_blob,
     has_dropout_results_from_last_season,
 )
+from data.persistence.event_repository import get_event_by_date
+from data.persistence.action_repository import get_action_by_event_and_blob
+from domain.event_record_services.race_event_records_service import (
+    compute_sprint_finish_time,
+)
+from domain.utils.league_utils import get_race_duration_by_size
 from domain.utils.blob_utils import has_state, has_trait, compute_state_multiplier
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
@@ -75,7 +81,6 @@ def update_all_blobs(session: Session):
     global miners
     """Update all blobs living in the simulation and yield the progress in percentage."""
 
-    current_event = get_current_calendar(session)
     event_next_day = get_event_next_day(session)
 
     blobs = get_all_blobs_by_name(session)
@@ -88,6 +93,7 @@ def update_all_blobs(session: Session):
     )
 
     current_time = get_sim_time(session)
+    current_event = get_event_by_date(session, current_time)
 
     modified_blobs = []
     miners = []
@@ -132,7 +138,7 @@ def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
 
 
 def _proceed_with_activity(
-    blob: Blob, current_event: Calendar | None, session: Session
+    blob: Blob, current_event: Event | None, session: Session
 ) -> StatMultiplyers:
     global miners
 
@@ -140,9 +146,13 @@ def _proceed_with_activity(
     current_activity: ActivityType = blob.current_activity
 
     if current_activity == ActivityType.EVENT:
-        if current_event.event_type == EventType.ENDURANCE_RACE:
+        if current_event.type == EventType.ENDURANCE_RACE:
             multiplyer.speed = COMPETITION_EFFECT
-        elif current_event.event_type == EventType.ELIMINATION_SCORING:
+        elif current_event.type == EventType.SPRINT_RACE:
+            multiplyer.speed = COMPETITION_EFFECT * _sprint_competition_time_multiplier(
+                blob.id, current_event, session
+            )
+        elif current_event.type == EventType.ELIMINATION_SCORING:
             multiplyer.strength = COMPETITION_EFFECT
         else:
             multiplyer.strength = COMPETITION_EFFECT * 0.7
@@ -296,6 +306,26 @@ def _proceed_with_activity(
         pass  # Idle activity
 
     return multiplyer
+
+
+def _sprint_competition_time_multiplier(blob_id: int, event: Event | None, session: Session) -> float:
+    """Scale competition effect by finish time relative to max race distance (ticks)."""
+    if event is None:
+        return 1.0
+
+    action = get_action_by_event_and_blob(session, event.id, blob_id)
+    if action is None or not action.scores:
+        return 1.0
+
+    previous_distance = sum(action.scores)
+    score = action.scores[-1]
+    race_length = get_race_duration_by_size(len(event.actions))
+    if previous_distance + score <= race_length:
+        return 1.0
+
+    tick = len(action.scores) - 1
+    finish_time = compute_sprint_finish_time(previous_distance, score, tick, race_length)
+    return finish_time / race_length
 
 
 def _apply_random_states(blob: Blob, session: Session):
@@ -455,5 +485,25 @@ def _collect_catchup_train_ids(session: Session) -> set:
                 and not was_in_dropout_before
             ):
                 train_ids.add(b.id)
+    
+    # blobs on queue who born before the current season
+    queue = get_queue(session)
+    if queue is not None:
+        for blob in queue.players:
+            if get_season(blob.born) < current_season:
+                train_ids.add(blob.id)
+    
+    # blobs who has ending contract and finished outside the top 50% last season
+    for league in leagues:
+        if league.level == 10:
+            continue
+        blobs_in_danger = filter(lambda x: x.contract == current_season, league.players)
+        standings = get_standings(league.id, current_season - 1, current_season, session)
+        top_50_points_treshold = standings[-(len(standings) // 2)].total_points
+        standings_by_blob = {standing.blob_id: standing for standing in standings}
+        for blob in blobs_in_danger:
+            standings = standings_by_blob.get(blob.id, None)
+            if standings is None or standings.total_points <= top_50_points_treshold:
+                train_ids.add(blob.id)
 
     return train_ids

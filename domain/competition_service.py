@@ -14,6 +14,7 @@ from domain.event_service import get_or_start_event
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.news_services.news_service import add_event_ended_news
 from domain.sim_data_service import get_current_calendar
+from domain.standings_service import invalidate_standings_cache
 from domain.utils.constants import VICTORY_PRIZE
 
 
@@ -59,6 +60,7 @@ def process_event_results(
         result.blob.points += result.points
     save_all_blobs(session, [res.blob for res in saved_results])
 
+    invalidate_standings_cache(event.league.id, event.season)
     conclude_calendar_event(session)
     add_event_ended_news(event.league.name, event.round, event.id, session)
 

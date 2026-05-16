@@ -9,11 +9,32 @@ from domain.dtos.standings_dto import StandingsDTO
 from domain.dtos.standings_result_dto import StandingsResultDTO
 from domain.utils.league_utils import get_number_of_rounds_by_size
 
+_standings_cache: dict[tuple[int, int, int], list[StandingsDTO]] = {}
+
+
+def invalidate_standings_cache(
+    league_id: int | None = None, season: int | None = None
+) -> None:
+    """Drop cached standings. Omit both args to clear the entire cache."""
+    if league_id is None and season is None:
+        _standings_cache.clear()
+        return
+
+    for key in list(_standings_cache):
+        if (league_id is None or key[0] == league_id) and (
+            season is None or key[1] == season
+        ):
+            del _standings_cache[key]
+
 
 @transactional
 def get_standings(
     league_id: int, season: int, current_season: int, session
 ) -> list[StandingsDTO]:
+    cache_key = (league_id, season, current_season)
+    if cache_key in _standings_cache:
+        return _standings_cache[cache_key]
+
     results = get_results_of_league_by_season(league_id, season, session)
 
     if len(results) == 0:
@@ -51,6 +72,7 @@ def get_standings(
         )
 
     standings.sort(key=_sort_by_position(len(standings)), reverse=True)
+    _standings_cache[cache_key] = standings
     return standings
 
 

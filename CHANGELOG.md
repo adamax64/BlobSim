@@ -547,3 +547,11 @@
 
 - Minor UI fixes on mobile calendar
 - Fixed overlap issue with result modal and blob details modal
+
+### 4.6 - Catchup update
+
+- The following blobs additionally attend the catchup trainings:
+  - Blobs on queue who born before the current season start
+  - Blobs with ending contracts who ended outside of the top 50% of their current league standings last season
+- After sprint races blobs get skill increase proportionally to their finish time
+  - This way slower blobs gain more experience because they raced for a longer time

@@ -4,6 +4,14 @@ from domain.dtos.event_record_dto import RaceEventRecordDto, SprintEventRecordDt
 from domain.utils.league_utils import get_race_duration_by_size
 
 
+def compute_sprint_finish_time(previous_distance: float, score: float, tick: int, race_length: float) -> float:
+    """Return fractional tick time when previous_distance + score reaches race_length"""
+    if score > 0:
+        remaining = race_length - previous_distance
+        return float(tick) + float(remaining) / score
+    return float("inf")
+
+
 def get_endurance_event_records(
     actions: list[ActionDto],
     competitors: list[BlobCompetitorDto],
@@ -90,14 +98,9 @@ def get_sprint_event_records(
                     not competitor.is_finished
                     and competitor.distance_records[-1] >= race_length
                 ):
-                    score = action.scores[tick]
-                    remaining = race_length - previous_distance
-                    if score > 0:
-                        # store absolute finish time: tick + fractional part within the tick
-                        competitor.time = float(tick) + float(remaining) / score
-                    else:
-                        # should not happen, but safeguard against division by zero
-                        competitor.time = float("inf")
+                    competitor.time = compute_sprint_finish_time(
+                        previous_distance, action.scores[tick], tick, race_length
+                    )
                     competitor.is_finished = True
         # store previous_position near the end similar to endurance logic
         if tick == current_tick - 2:
