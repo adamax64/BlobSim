@@ -27,12 +27,12 @@ const desktopColumns = (t: (key: string) => string): GridColDef[] => [
     flex: 1.5,
   },
   { field: 'born', headerName: t('blobs_grid.born'), resizable: false, flex: 1 },
-  { field: 'debut', headerName: t('blobs_grid.debut'), resizable: false, flex: 0.8 },
-  { field: 'contract', headerName: t('blobs_grid.contract'), resizable: false, flex: 0.8 },
-  { field: 'podiums', headerName: t('blobs_grid.podiums'), resizable: false, flex: 0.8 },
-  { field: 'wins', headerName: t('blobs_grid.wins'), resizable: false, flex: 0.8 },
-  { field: 'championships', headerName: t('blobs_grid.championships'), resizable: false, flex: 0.8 },
-  { field: 'grandmasters', headerName: t('blobs_grid.grandmasters'), resizable: false, flex: 0.8 },
+  { field: 'debut', headerName: t('blobs_grid.debut'), resizable: false, flex: 0.6 },
+  { field: 'contract', headerName: t('blobs_grid.contract'), resizable: false, flex: 0.6 },
+  { field: 'podiums', headerName: t('blobs_grid.podiums'), resizable: false, flex: 0.6 },
+  { field: 'wins', headerName: t('blobs_grid.wins'), resizable: false, flex: 0.6 },
+  { field: 'championships', headerName: t('blobs_grid.championships'), resizable: false, flex: 0.6 },
+  { field: 'grandmasters', headerName: t('blobs_grid.grandmasters'), resizable: false, flex: 0.6 },
   { field: 'leagueName', headerName: t('blobs_grid.league'), resizable: false, flex: 1.5 },
 ];
 

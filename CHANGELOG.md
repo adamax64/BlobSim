@@ -555,3 +555,9 @@
   - Blobs with ending contracts who ended outside of the top 50% of their current league standings last season
 - After sprint races blobs get skill increase proportionally to their finish time
   - This way slower blobs gain more experience because they raced for a longer time
+
+### 4.6.1
+
+- Added justify content 'space between' to event widget content for better appearance
+- Fixed background color for row and card of retired blob on Blobs page
+- Narrowed column width for the following statistics on the blob stats grid: debut, contract, podiums, wins, championships, grandmasters

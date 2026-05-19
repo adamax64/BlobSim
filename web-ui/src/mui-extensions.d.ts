@@ -9,6 +9,7 @@ declare module '@mui/material/styles' {
     overtake: Palette['primary'];
     fellBehind: Palette['primary'];
     active: Palette['primary'];
+    retired: Palette['primary'];
   }
   interface PaletteOptions {
     gold?: PaletteOptions['primary'];
@@ -18,5 +19,6 @@ declare module '@mui/material/styles' {
     overtake?: PaletteOptions['primary'];
     fellBehind?: PaletteOptions['primary'];
     active?: PaletteOptions['primary'];
+    retired?: PaletteOptions['primary'];
   }
 }

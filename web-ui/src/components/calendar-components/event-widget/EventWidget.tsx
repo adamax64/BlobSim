@@ -2,7 +2,7 @@ import { CalendarDto, EventType } from '../../../../generated';
 import { CalendarEventContentUI } from './CalendarEventContentUI';
 import { CalendarEventWithTooltip } from './CalendarEventWithTooltip';
 import { useIsMobile } from '../../../hooks/useIsMobile';
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 
 interface EventWidgetProps {
   calendar: CalendarDto[] | undefined;
@@ -60,7 +60,9 @@ export const EventWidget: React.FC<EventWidgetProps> = ({ calendar, epoch, cycle
       {isMobile ? (
         <CalendarEventWithTooltip event={event} isToday={isToday} />
       ) : (
-        <CalendarEventContentUI event={event} isToday={isToday} />
+        <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+          <CalendarEventContentUI event={event} isToday={isToday} />
+        </Box>
       )}
     </Paper>
   );

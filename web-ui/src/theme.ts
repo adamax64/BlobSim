@@ -14,6 +14,7 @@ export function createAppTheme(mode: Mode) {
     overtake: { main: '#d4f8e8', contrastText: '#007700' },
     fellBehind: { main: '#ffe6b3', contrastText: '#a65c00' },
     active: { main: '#e9f3ff', contrastText: '#1976d2' },
+    retired: { main: '#f0f0f0', contrastText: '#7a7a7a' },
   };
 
   const darkPalette: PaletteOptions = {
@@ -26,6 +27,7 @@ export function createAppTheme(mode: Mode) {
     overtake: { main: '#1a3d2e', contrastText: '#4ade80' },
     fellBehind: { main: '#4a3a1f', contrastText: '#fbbf24' },
     active: { main: '#1e3a5f', contrastText: '#90caf9' },
+    retired: { main: '#3a3a3a', contrastText: '#ffffff' },
   };
 
   const palette: PaletteOptions = mode === 'dark' ? darkPalette : lightPalette;
@@ -50,6 +52,7 @@ export function createAppTheme(mode: Mode) {
               '--cell-fell-behind-bg': themePalette.fellBehind?.main,
               '--cell-fell-behind-text': themePalette.fellBehind?.contrastText,
               '--column-active-bg': themePalette.active?.main,
+              '--row-retired-bg': themePalette.retired?.main,
             },
           }),
         },

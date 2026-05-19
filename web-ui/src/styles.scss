@@ -11,11 +11,7 @@ body {
 }
 
 .row-retired {
-  background-color: #f0f0f0;
-}
-
-.row-at-risk {
-  background-color: #fae8dc;
+  background-color: var(--row-retired-bg);
 }
 
 .row-gold {
