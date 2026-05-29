@@ -59,6 +59,8 @@
     "event_types": {
       "QUARTERED_ONE_SHOT_SCORING": "Quartered One Shot High Jump",
       "QUARTERED_TWO_SHOT_SCORING": "Quartered Two Shot High Jump",
+      "QUARTERED_ONE_SHOT_SCORING_V2": "Quartered One Shot High Jump",
+      "QUARTERED_TWO_SHOT_SCORING_V2": "Quartered Two Shot High Jump",
       "ENDURANCE_RACE": "Endurance Race",
       "SPRINT_RACE": "Sprint Race",
       "ELIMINATION_SCORING": "Elimination Scoring",

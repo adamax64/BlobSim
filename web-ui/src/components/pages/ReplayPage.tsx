@@ -73,6 +73,8 @@ export const ReplayPage = () => {
     switch (event.type) {
       case EventType.QuarteredTwoShotScoring:
       case EventType.QuarteredOneShotScoring:
+      case EventType.QuarteredOneShotScoringV2:
+      case EventType.QuarteredTwoShotScoringV2:
         return <ReplayQuarteredEventFrame event={event} tick={currentTick} />;
       case EventType.EnduranceRace:
         return <ReplayEnduranceRaceFrame event={event} tick={currentTick} />;

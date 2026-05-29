@@ -8,6 +8,7 @@ from domain.action_service import (
     create_actions_for_elimination_event,
 )
 from domain.dtos.event_dto import EventDto
+from domain.event_record_services.event_type_checks import is_quartered_event
 from domain.event_record_services.quartered_event_record_service import get_quarter_ends
 from domain.sim_data_service import is_unconcluded_event_today
 from domain.event_record_services.event_record_service import get_event_records
@@ -57,10 +58,7 @@ def should_conclude_event(event: EventDto, event_records, session) -> bool:
             if isinstance(record, EliminationEventRecordDto) and not record.eliminated
         )
         return remaining <= 1
-    elif event.type in [
-        EventType.QUARTERED_ONE_SHOT_SCORING,
-        EventType.QUARTERED_TWO_SHOT_SCORING,
-    ]:
+    elif is_quartered_event(event.type):
         quarter_ends = get_quarter_ends(len(event.competitors), event.type)
         current_tick = (
             sum(
@@ -91,10 +89,7 @@ def progress_competition(session):
             create_actions_for_race(event.competitors, event.id, tick, session)
             print(f"[INFO] Progressed competition for event {event.id}, tick {tick}")
 
-        elif event.type in [
-            EventType.QUARTERED_ONE_SHOT_SCORING,
-            EventType.QUARTERED_TWO_SHOT_SCORING,
-        ]:
+        elif is_quartered_event(event.type):
             # Get event records to determine which competitors are still active
             event_records = get_event_records(
                 event.actions, event.competitors, event.type
@@ -145,9 +140,7 @@ def progress_competition(session):
 
         # Check if event should be concluded
         event_records = get_event_records(
-            get_all_actions_by_event(session, event.id),
-            event.competitors,
-            event.type
+            get_all_actions_by_event(session, event.id), event.competitors, event.type
         )
 
         if should_conclude_event(event, event_records, session):

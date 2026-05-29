@@ -57,6 +57,8 @@ export const EventPage = () => {
     switch (event.type) {
       case EventType.QuarteredTwoShotScoring:
       case EventType.QuarteredOneShotScoring:
+      case EventType.QuarteredOneShotScoringV2:
+      case EventType.QuarteredTwoShotScoringV2:
         return (
           <QuarteredEventFrame
             event={event}

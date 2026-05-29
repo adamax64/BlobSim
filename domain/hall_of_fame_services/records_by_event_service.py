@@ -1,4 +1,5 @@
 from data.db.db_engine import transactional
+from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.records_by_event_dto import (
     RecordsByEventDto,
     RecordsByLeagueDto,
@@ -56,8 +57,12 @@ def _get_wins_by_event(session) -> list[WinsByEventDto]:
     grandmaster_id = get_current_grandmaster_id(session)
 
     best: dict = {}
+    merged_event_type = {
+        EventTypeDto.QUARTERED_ONE_SHOT_SCORING: EventTypeDto.QUARTERED_ONE_SHOT_SCORING_V2,
+        EventTypeDto.QUARTERED_TWO_SHOT_SCORING: EventTypeDto.QUARTERED_TWO_SHOT_SCORING_V2,
+    }
     for event_type, blob_id, wins in rows:
-        key = event_type
+        key = merged_event_type.get(event_type, event_type)
         if (
             key not in best
             or wins > best[key][1]

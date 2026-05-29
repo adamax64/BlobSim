@@ -5,6 +5,7 @@ from domain.dtos.event_record_dto import EventRecordDto
 from domain.event_record_services.elimination_event_record_service import (
     get_elimination_event_records,
 )
+from domain.event_record_services.event_type_checks import is_quartered_event
 from domain.event_record_services.quartered_event_record_service import (
     get_quartered_event_records,
 )
@@ -20,10 +21,7 @@ def get_event_records(
     event_type: EventTypeDto,
     playback_tick: int = None,
 ) -> list[EventRecordDto]:
-    if (
-        event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING
-        or event_type == EventTypeDto.QUARTERED_ONE_SHOT_SCORING
-    ):
+    if is_quartered_event(event_type):
         return get_quartered_event_records(
             actions, competitors, event_type, playback_tick
         )

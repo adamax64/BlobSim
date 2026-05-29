@@ -2176,7 +2176,9 @@
           "ENDURANCE_RACE",
           "SPRINT_RACE",
           "ELIMINATION_SCORING",
-          "CATCHUP_TRAINING"
+          "CATCHUP_TRAINING",
+          "QUARTERED_ONE_SHOT_SCORING_V2",
+          "QUARTERED_TWO_SHOT_SCORING_V2"
         ],
         "title": "EventType"
       },

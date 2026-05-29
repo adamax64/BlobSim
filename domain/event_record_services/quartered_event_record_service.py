@@ -2,6 +2,10 @@ from domain.dtos.action_dto import ActionDto
 from domain.dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.event_record_dto import QuarteredEventRecordDto, ScoreDto
+from domain.event_record_services.event_type_checks import (
+    is_quartered_event_v1,
+    is_quartered_two_shot_event,
+)
 
 
 def get_quartered_event_records(
@@ -50,7 +54,9 @@ def get_quartered_event_records(
         if tick == current_tick:
             record.next = True
             for i, record in enumerate(records):
-                record.eliminated = _is_eliminated(quarter - 1, len(competitors), i + 1)
+                record.eliminated = _is_eliminated(
+                    quarter - 1, len(competitors), i + 1, event_type
+                )
             continue
 
         score = record.quarters[quarter - 1]
@@ -79,9 +85,9 @@ def get_quartered_event_records(
 
 
 def get_quarter_ends(field_size: int, event_type: EventTypeDto) -> list[int]:
-    eliminations = _get_eliminations(field_size)
+    eliminations = _get_eliminations(field_size, event_type)
     multiplyer = 1
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
+    if is_quartered_two_shot_event(event_type):
         multiplyer = 2
     return [
         multiplyer * (field_size),
@@ -98,9 +104,9 @@ def _get_current_score(
     event_type: EventTypeDto,
     field_size: int,
 ) -> float:
-    eliminations = _get_eliminations(field_size)
+    eliminations = _get_eliminations(field_size, event_type)
     quarter_index = quarter - 1
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
+    if is_quartered_two_shot_event(event_type):
         return action.scores[
             (quarter_index) * 2
             + (1 if tick >= field_size - (eliminations * (quarter_index)) else 0)
@@ -115,7 +121,7 @@ def _get_current_record(
     quarter_length: int,
     event_type: EventTypeDto,
 ) -> QuarteredEventRecordDto:
-    if event_type == EventTypeDto.QUARTERED_TWO_SHOT_SCORING:
+    if is_quartered_two_shot_event(event_type):
         return records[
             int(tick - quarter_length / 2) if tick >= quarter_length / 2 else tick
         ]
@@ -131,8 +137,11 @@ def _get_current_quarter(quarter_ends: list[int], tick: int) -> int:
     return 5
 
 
-def _get_eliminations(field_size: int) -> int:
-    return int((field_size - 3) / 3) if field_size < 15 else int(field_size / 4)
+def _get_eliminations(field_size: int, event_type: EventTypeDto) -> int:
+    if is_quartered_event_v1(event_type):
+        return int((field_size - 3) / 3) if field_size < 15 else int(field_size / 4)
+    # For V2 events, we want to eliminate slightly more aggressively to keep the event time inside the 120 tick timeframe
+    return int((field_size - 3) / 3) if field_size < 15 else round(field_size / 4)
 
 
 def _quartered_sort_lambda(index: int):
@@ -142,7 +151,9 @@ def _quartered_sort_lambda(index: int):
     )
 
 
-def _is_eliminated(quarter: int, field_size: int, position: int) -> bool:
-    eliminations = quarter * _get_eliminations(field_size)
+def _is_eliminated(
+    quarter: int, field_size: int, position: int, event_type: EventTypeDto
+) -> bool:
+    eliminations = quarter * _get_eliminations(field_size, event_type)
     threshold = field_size - eliminations
     return position > threshold

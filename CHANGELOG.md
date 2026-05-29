@@ -561,3 +561,9 @@
 - Added justify content 'space between' to event widget content for better appearance
 - Fixed background color for row and card of retired blob on Blobs page
 - Narrowed column width for the following statistics on the blob stats grid: debut, contract, podiums, wins, championships, grandmasters
+
+### 4.6.2
+
+- Fixed scheduler not working after manual restart
+- Added new version of quartered events where the elimination counts are altered
+  - This way a 23 big field will finish a two shot scoring event under 120 ticks

@@ -36,9 +36,11 @@ def start_scheduler():
 def stop_scheduler():
     """Stop the cronjobs scheduler if running."""
     global _scheduler_instance
-    if _scheduler_instance and _scheduler_instance.running:
-        _scheduler_instance.shutdown(wait=False)
-        print("[INFO] Scheduler stopped dynamically.")
+    if _scheduler_instance:
+        if _scheduler_instance.running:
+            _scheduler_instance.shutdown(wait=False)
+            print("[INFO] Scheduler stopped dynamically.")
+        _scheduler_instance = None
 
 
 def is_scheduler_running() -> bool:

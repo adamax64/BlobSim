@@ -59,6 +59,8 @@
     "event_types": {
       "QUARTERED_ONE_SHOT_SCORING": "Egypróbás Magasugrás",
       "QUARTERED_TWO_SHOT_SCORING": "Kétpróbás Magasugrás",
+      "QUARTERED_ONE_SHOT_SCORING_V2": "Egypróbás Magasugrás",
+      "QUARTERED_TWO_SHOT_SCORING_V2": "Kétpróbás Magasugrás",
       "ENDURANCE_RACE": "Hosszútávú verseny",
       "SPRINT_RACE": "Sprintverseny",
       "ELIMINATION_SCORING": "Kieséses verseny",
