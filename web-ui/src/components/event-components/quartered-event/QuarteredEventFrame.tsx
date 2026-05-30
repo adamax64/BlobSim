@@ -131,6 +131,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   });
 
   useEffect(() => {
+    setIsPerforming(true);
     getEventRecords({ eventId: event.id, playbackTick: replayTick });
   }, [event.id, replayTick]);
 

@@ -120,6 +120,7 @@ export const EliminationScoringEventFrame = ({
   });
 
   useEffect(() => {
+    setLoadingNextTick(true);
     getEventRecords({ eventId: event.id, playbackTick: replayTick });
   }, [event.id, replayTick]);
 

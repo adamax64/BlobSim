@@ -101,6 +101,7 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
   });
 
   useEffect(() => {
+    setLoadingNextTick(true);
     getEventRecords({ eventId: event.id, playbackTick: replayTick });
   }, [event.id, replayTick]);
 

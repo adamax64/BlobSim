@@ -574,3 +574,4 @@
 - Added loading state to blob details dialog
 - Added keyboard shortcuts to replay and event controls in desktop mode
 - Modified progress button texts to be shorter on mobile
+- Show loading state for event record loading if those records not manually generated
