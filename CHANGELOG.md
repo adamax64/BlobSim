@@ -567,3 +567,7 @@
 - Fixed scheduler not working after manual restart
 - Added new version of quartered events where the elimination counts are altered
   - This way a 23 big field will finish a two shot scoring event under 120 ticks
+
+### 4.6.3
+
+- Fixed missing icons for V2 quartered events on mobile calendar

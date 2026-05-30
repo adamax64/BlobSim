@@ -30,6 +30,8 @@ export const CalendarEventWithTooltip: React.FC<CalendarEventWithTooltipProps> =
     switch (event.eventType) {
       case EventType.QuarteredOneShotScoring:
       case EventType.QuarteredTwoShotScoring:
+      case EventType.QuarteredOneShotScoringV2:
+      case EventType.QuarteredTwoShotScoringV2:
         return <HeightIcon />;
       case EventType.EnduranceRace:
         return <AccessAlarmIcon />;
