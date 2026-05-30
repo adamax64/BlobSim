@@ -39,7 +39,12 @@ export const ReplayPage = () => {
 
   useEffect(() => {
     if (event) {
-      if (event.type === EventType.QuarteredOneShotScoring || event.type === EventType.QuarteredTwoShotScoring) {
+      if (
+        event.type === EventType.QuarteredOneShotScoring ||
+        event.type === EventType.QuarteredTwoShotScoring ||
+        event.type === EventType.QuarteredOneShotScoringV2 ||
+        event.type === EventType.QuarteredTwoShotScoringV2
+      ) {
         const totalActions = event.actions.reduce((sum, action) => sum + action.scores.length, 0);
         setMaxTick(totalActions);
       } else {
