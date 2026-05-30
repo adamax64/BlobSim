@@ -252,6 +252,7 @@
     }
   },
   "blob_details": {
+    "loading": "Loading...",
     "birthdate": "Birthdate",
     "stats": {
       "integrity": "Integrity"

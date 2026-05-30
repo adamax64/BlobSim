@@ -1,203 +1,33 @@
-import Cake from '@mui/icons-material/Cake';
 import Close from '@mui/icons-material/Close';
-import Handyman from '@mui/icons-material/Handyman';
-import WarningIcon from '@mui/icons-material/Warning';
-import {
-  Box,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Grid,
-  IconButton,
-  Paper,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { getContrastYIQ } from '../../../utils/color-utils';
-import { IconName } from '../IconName';
+import { Dialog, DialogTitle, Divider, IconButton } from '@mui/material';
 import { BlobStatsDto } from '../../../../generated';
-import { JSX } from 'react/jsx-runtime';
 import { useTranslation } from 'react-i18next';
-import { StateIcon } from './StateIcon';
-import { TraitIcon } from './TraitIcon';
-
+import { BlobAnimated } from '../blob-visuals/BlobAnimated';
+import BlobDetailsDialogContent from './BlobDetailsDialogContent/BlobDetailsDialogContent';
+import LoadingDialogContent from './LoadingDialogContent/LoadingDialogContent';
 interface BlobDetailsDialogUiProps {
   open: boolean;
   onClose: () => void;
-  blob: BlobStatsDto;
-  blobIcon: JSX.Element;
+  blob?: BlobStatsDto;
 }
 
-export const BlobDetailsDialogUi = ({ open, onClose, blob, blobIcon }: BlobDetailsDialogUiProps) => {
+export const BlobDetailsDialogUi = ({ open, onClose, blob }: BlobDetailsDialogUiProps) => {
   const { t } = useTranslation();
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth sx={{ zIndex: 1601 }}>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {blob.name}
+        {blob?.name ?? t('blob_details.loading')}
         <IconButton onClick={onClose} size="small">
           <Close />
         </IconButton>
       </DialogTitle>
       <Divider />
-      <DialogContent>
-        <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
-          <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-            <Box display="flex" width="100%">
-              <Box display="flex" width="100%">
-                {blob.states.map((state) => (
-                  <StateIcon key={state.type} state={state} />
-                ))}
-              </Box>
-              <Box display="flex" width="100%" justifyContent="flex-end">
-                {blob.traits.map((trait) => (
-                  <TraitIcon key={trait} trait={trait} />
-                ))}
-              </Box>
-            </Box>
-            {blobIcon}
-          </Box>
-          <Box display="flex" flexDirection="column" gap={2} width="100%">
-            <Grid container spacing={2} width="100%">
-              <Grid size={6}>
-                <Tooltip title={t('blob_details.birthdate')} placement="top">
-                  <Box display="flex" width="fit-content" gap={1}>
-                    <Cake />
-                    <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                      {blob.born}
-                    </Typography>
-                  </Box>
-                </Tooltip>
-              </Grid>
-              {!blob.isDead && (
-                <>
-                  <Grid size={6}>
-                    <Tooltip title={t('blob_details.stats.integrity')} placement="top">
-                      <Box display="flex" gap={1}>
-                        <Handyman />
-                        <Paper sx={{ backgroundColor: blob.integrityColor, padding: '0px 16px' }}>
-                          <Typography
-                            variant="body1"
-                            color={getContrastYIQ(blob.integrityColor!)}
-                            sx={{ transform: 'translateY(1px)' }}
-                          >
-                            {t(`enums.integrity_state.${blob.integrityState}`)}
-                          </Typography>
-                        </Paper>
-                      </Box>
-                    </Tooltip>
-                  </Grid>
-                </>
-              )}
-              {blob.isDead && (
-                <Grid size={6}>
-                  <Tooltip title={t('blob_details.terminated')} placement="top">
-                    <Box display="flex" gap={1}>
-                      <Handyman />
-                      <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                        {blob.terminated}
-                      </Typography>
-                    </Box>
-                  </Tooltip>
-                </Grid>
-              )}
-              {blob.debut && (
-                <Grid size={6}>
-                  <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                    <strong>{t('blob_details.debut')}</strong>: {blob.debut}
-                  </Typography>
-                </Grid>
-              )}
-              {blob.isRetired && (
-                <Grid size={6}>
-                  <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                    <strong>{t('blob_details.retired')}</strong>: {blob.contract}
-                  </Typography>
-                </Grid>
-              )}
-              {!blob.isDead && (
-                <Grid size={6}>
-                  <Typography variant="body1">
-                    <strong>{t('blob_details.money')}:</strong> {blob.money}
-                  </Typography>
-                </Grid>
-              )}
-            </Grid>
-
-            {blob.parent && (
-              <Typography variant="body1" component="div">
-                <strong>{t('blob_details.parent')}:</strong>{' '}
-                <IconName name={blob.parent.name} color={blob.parent.color} size={24} />
-              </Typography>
-            )}
-
-            {!!blob.debut ? (
-              !blob.isRetired && (
-                <>
-                  <Typography variant="body1">
-                    <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
-                  </Typography>
-                  <Grid container spacing={2} width="100%">
-                    <Grid size={6}>
-                      <Box display="flex" gap={0.75} alignItems="center">
-                        <Typography variant="body1">
-                          <strong>{t('blob_details.contract')}:</strong> {blob.contract}
-                        </Typography>
-                        {blob.atRisk && (
-                          <Tooltip title={t('blob_details.contract_ending')}>
-                            <WarningIcon fontSize="small" color="warning" />
-                          </Tooltip>
-                        )}
-                      </Box>
-                    </Grid>
-                    {blob.currentStandingsPosition && (
-                      <Grid size={6}>
-                        <Typography variant="body1">
-                          <strong>{t('blob_details.standings')}:</strong> {blob.currentStandingsPosition}
-                        </Typography>
-                      </Grid>
-                    )}
-                  </Grid>
-                </>
-              )
-            ) : (
-              <Typography variant="body1">{t('blob_details.on_queue')}</Typography>
-            )}
-
-            {blob.podiums > 0 && (
-              <Typography variant="body1">
-                <strong>{t('blob_details.podiums')}:</strong> {blob.podiums}
-              </Typography>
-            )}
-
-            {blob.wins > 0 && (
-              <Typography variant="body1">
-                <strong>{t('blob_details.wins')}:</strong> {blob.wins}
-              </Typography>
-            )}
-
-            {blob.championships > 0 && (
-              <Typography variant="body1">
-                <strong>{t('blob_details.championships')}:</strong> {blob.championships}
-              </Typography>
-            )}
-
-            {blob.grandmasters > 0 && (
-              <Typography variant="body1">
-                <strong>{t('blob_details.grandmasters')}:</strong> {blob.grandmasters}
-              </Typography>
-            )}
-
-            {!blob.isDead && blob.currentActivity && (
-              <Typography variant="body1">
-                <strong>{t('blob_details.current_activity')}:</strong>{' '}
-                {t(`enums.activity_type.${blob.currentActivity}`)}
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      </DialogContent>
+      {blob ? (
+        <BlobDetailsDialogContent blob={blob} blobIcon={<BlobAnimated blob={blob} size={180} />} />
+      ) : (
+        <LoadingDialogContent />
+      )}
     </Dialog>
   );
 };

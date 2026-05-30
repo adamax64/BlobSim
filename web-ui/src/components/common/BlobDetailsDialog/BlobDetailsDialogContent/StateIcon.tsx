@@ -1,5 +1,5 @@
 import Battery20 from '@mui/icons-material/Battery20';
-import { StateDto, StateType } from '../../../../generated';
+import { StateDto, StateType } from '../../../../../generated';
 import HeartBroken from '@mui/icons-material/HeartBroken';
 import MoodBad from '@mui/icons-material/MoodBad';
 import OfflineBolt from '@mui/icons-material/OfflineBolt';

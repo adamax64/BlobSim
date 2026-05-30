@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TraitType } from '../../../../generated';
+import { TraitType } from '../../../../../generated';
 import Engineering from '@mui/icons-material/Engineering';
 import AutoGraph from '@mui/icons-material/AutoGraph';
 import Hotel from '@mui/icons-material/Hotel';

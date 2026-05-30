@@ -252,6 +252,7 @@
     }
   },
   "blob_details": {
+    "loading": "Betöltés...",
     "birthdate": "Születési dátum",
     "stats": {
       "integrity": "Integritás"

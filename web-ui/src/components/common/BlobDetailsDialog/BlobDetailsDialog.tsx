@@ -33,14 +33,5 @@ export const BlobDetailsDialog = ({ open, onClose, cachedBlob, blobId }: BlobDet
     }
   }, [cachedBlob]);
 
-  if (!blob) return null;
-
-  return (
-    <BlobDetailsDialogUi
-      open={open}
-      onClose={onClose}
-      blob={blob!}
-      blobIcon={<BlobAnimated blob={blob} size={180} />}
-    />
-  );
+  return <BlobDetailsDialogUi open={open} onClose={onClose} blob={blob} />;
 };

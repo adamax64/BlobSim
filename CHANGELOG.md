@@ -568,6 +568,7 @@
 - Added new version of quartered events where the elimination counts are altered
   - This way a 23 big field will finish a two shot scoring event under 120 ticks
 
-### 4.6.3
+### 4.6.3 - UI improvements update
 
 - Fixed missing icons for V2 quartered events on mobile calendar
+- Added loading state to blob details dialog
