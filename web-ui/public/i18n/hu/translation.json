@@ -141,7 +141,11 @@
     "jump_to_start": "Ugrás az elejére",
     "jump_to_end": "Ugrás a végére",
     "go_back": "Vissza az eredményekhez",
-    "set_tick": "Ugrás a tickre"
+    "set_tick": "Ugrás a tickre",
+    "shortcuts": "Gyorsbillentyűk:\nBackspace — Vissza\nHome — Ugrás az elejére\nBal nyíl — Előző tick\nJobb nyíl — Következő tick\nEnd — Ugrás a végére"
+  },
+  "event_controls": {
+    "shortcuts": "Gyorsbillentyűk:\nBal nyíl — Előző tick\nJobb nyíl — Következő tick"
   },
   "endurance_race": {
     "tick": "Tick",
@@ -159,9 +163,12 @@
   },
   "progress_button": {
     "start_competition": "Verseny indítása",
+    "start_competition_short": "Indítás",
     "next": "Következő",
     "conclude_event": "Esemény lezárása",
-    "back_to_dashboard": "Vissza a kezdőlapra"
+    "conclude_event_short": "Lezárás",
+    "back_to_dashboard": "Vissza a kezdőlapra",
+    "back_to_dashboard_short": "Kezdőlap"
   },
   "quartered_event": {
     "name": "Név",

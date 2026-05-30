@@ -1,10 +1,11 @@
-import { Box, Fab, Tooltip } from '@mui/material';
-import SkipNext from '@mui/icons-material/SkipNext';
-import SkipPrevious from '@mui/icons-material/SkipPrevious';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import { useTranslation } from 'react-i18next';
 import { ProgressButton } from './ProgressButton';
 import { useAuth } from '../../../context/AuthContext';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { StepBackButton, StepForwardButton } from '../../common/ReplayStepButtons';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 
 interface EventControlsProps {
   // Replay navigation
@@ -36,6 +37,7 @@ export const EventControls: React.FC<EventControlsProps> = ({
 }) => {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   const handlePreviousTick = () => {
     if (replayTick > 0) {
@@ -48,6 +50,41 @@ export const EventControls: React.FC<EventControlsProps> = ({
       setReplayTick((prev) => prev + 1);
     }
   };
+
+  const shortcutTooltip = t('event_controls.shortcuts');
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) {
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      if (
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement ||
+        (activeElement instanceof HTMLElement && activeElement.isContentEditable)
+      ) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          handlePreviousTick();
+          event.preventDefault();
+          break;
+        case 'ArrowRight':
+          handleNextTick();
+          event.preventDefault();
+          break;
+        default:
+          return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNextTick, handlePreviousTick]);
 
   return (
     <Box
@@ -62,16 +99,8 @@ export const EventControls: React.FC<EventControlsProps> = ({
         zIndex: 1000,
       }}
     >
-      <Tooltip title={t('replay.step_back')}>
-        <Fab size="small" onClick={handlePreviousTick} disabled={replayTick <= 0}>
-          <SkipPrevious />
-        </Fab>
-      </Tooltip>
-      <Tooltip title={t('replay.step_forward')}>
-        <Fab size="small" onClick={handleNextTick} disabled={replayTick >= tick}>
-          <SkipNext />
-        </Fab>
-      </Tooltip>
+      <StepBackButton onClick={handlePreviousTick} disabled={replayTick <= 0} />
+      <StepForwardButton onClick={handleNextTick} disabled={replayTick >= tick} />
       {isAuthenticated && (
         <ProgressButton
           isStart={isStart}
@@ -82,6 +111,19 @@ export const EventControls: React.FC<EventControlsProps> = ({
           onClickNext={onClickNext}
           onClickEnd={onClickEnd}
         />
+      )}
+      {!isMobile && (
+        <Tooltip
+          title={
+            <Box component="span" sx={{ whiteSpace: 'pre-line', fontSize: '0.85rem', lineHeight: 1.4 }}>
+              {shortcutTooltip}
+            </Box>
+          }
+        >
+          <IconButton size="small" sx={{ color: 'text.secondary' }}>
+            <InfoOutlined fontSize="small" />
+          </IconButton>
+        </Tooltip>
       )}
     </Box>
   );

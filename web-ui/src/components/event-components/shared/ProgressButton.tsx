@@ -5,6 +5,7 @@ import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 
 interface ProgressButtonProps {
   isStart: boolean;
@@ -27,6 +28,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
 }: ProgressButtonProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   // Add key listener for spacebar to trigger progressEvent
   useEffect(() => {
@@ -53,7 +55,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
       {isStart && (
         <Fab variant="extended" size="small" color="primary" onClick={onClickStart} disabled={disabled}>
           <PlayArrowRounded />
-          {t('progress_button.start_competition')}
+          {isMobile ? t('progress_button.start_competition_short') : t('progress_button.start_competition')}
         </Fab>
       )}
       {!isStart && !isEnd && (
@@ -65,13 +67,13 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
       {isEnd && !isEventFinished && (
         <Fab variant="extended" size="small" color="primary" onClick={onClickEnd} disabled={disabled}>
           <SkipNextRounded />
-          {t('progress_button.conclude_event')}
+          {isMobile ? t('progress_button.conclude_event_short') : t('progress_button.conclude_event')}
         </Fab>
       )}
       {isEventFinished && (
         <Fab variant="extended" size="small" color="primary" onClick={() => navigate({ to: '/' })} disabled={disabled}>
           <ArrowBackIosNewRoundedIcon />
-          {t('progress_button.back_to_dashboard')}
+          {isMobile ? t('progress_button.back_to_dashboard_short') : t('progress_button.back_to_dashboard')}
         </Fab>
       )}
     </>

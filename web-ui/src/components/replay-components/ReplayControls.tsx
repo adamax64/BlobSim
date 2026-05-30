@@ -1,11 +1,15 @@
-import { Box, Fab, TextField, Tooltip } from '@mui/material';
-import SkipPrevious from '@mui/icons-material/SkipPrevious';
-import SkipNext from '@mui/icons-material/SkipNext';
-import FirstPage from '@mui/icons-material/FirstPage';
-import LastPage from '@mui/icons-material/LastPage';
-import ArrowBack from '@mui/icons-material/ArrowBack';
+import { Box, IconButton, TextField, Tooltip } from '@mui/material';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useState } from 'react';
+import {
+  GoBackButton,
+  JumpToEndButton,
+  JumpToStartButton,
+  StepBackButton,
+  StepForwardButton,
+} from '../common/ReplayStepButtons';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface ReplayControlsProps {
   currentTick: number;
@@ -44,6 +48,7 @@ const TickInput: React.FC<{
 
 export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, maxTick, setCurrentTick, onGoBack }) => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [inputValue, setInputValue] = useState(currentTick.toString());
 
   useEffect(() => {
@@ -80,6 +85,51 @@ export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, max
     }
   }, [inputValue, maxTick, setCurrentTick, currentTick]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) {
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      if (
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement ||
+        (activeElement instanceof HTMLElement && activeElement.isContentEditable)
+      ) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'Backspace':
+          onGoBack();
+          event.preventDefault();
+          break;
+        case 'Home':
+          handleJumpToStart();
+          event.preventDefault();
+          break;
+        case 'ArrowLeft':
+          handleStepBack();
+          event.preventDefault();
+          break;
+        case 'ArrowRight':
+          handleStepForward();
+          event.preventDefault();
+          break;
+        case 'End':
+          handleJumpToEnd();
+          event.preventDefault();
+          break;
+        default:
+          return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onGoBack, handleJumpToStart, handleStepBack, handleStepForward, handleJumpToEnd]);
+
   return (
     <Box
       sx={{
@@ -92,21 +142,9 @@ export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, max
         zIndex: 1000,
       }}
     >
-      <Tooltip title={t('replay.go_back')}>
-        <Fab size="small" onClick={onGoBack}>
-          <ArrowBack />
-        </Fab>
-      </Tooltip>
-      <Tooltip title={t('replay.jump_to_start')}>
-        <Fab size="small" onClick={handleJumpToStart} disabled={currentTick <= 0}>
-          <FirstPage />
-        </Fab>
-      </Tooltip>
-      <Tooltip title={t('replay.step_back')}>
-        <Fab size="small" onClick={handleStepBack} disabled={currentTick <= 0}>
-          <SkipPrevious />
-        </Fab>
-      </Tooltip>
+      <GoBackButton onClick={onGoBack} />
+      <JumpToStartButton onClick={handleJumpToStart} disabled={currentTick <= 0} />
+      <StepBackButton onClick={handleStepBack} disabled={currentTick <= 0} />
       <Tooltip title={t('replay.set_tick')}>
         <TickInput
           maxTick={maxTick}
@@ -120,16 +158,21 @@ export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, max
           onBlur={handleBlur}
         />
       </Tooltip>
-      <Tooltip title={t('replay.step_forward')}>
-        <Fab size="small" onClick={handleStepForward} disabled={maxTick === undefined || currentTick >= maxTick}>
-          <SkipNext />
-        </Fab>
-      </Tooltip>
-      <Tooltip title={t('replay.jump_to_end')}>
-        <Fab size="small" onClick={handleJumpToEnd} disabled={maxTick === undefined || currentTick >= maxTick}>
-          <LastPage />
-        </Fab>
-      </Tooltip>
+      <StepForwardButton onClick={handleStepForward} disabled={maxTick === undefined || currentTick >= maxTick} />
+      <JumpToEndButton onClick={handleJumpToEnd} disabled={maxTick === undefined || currentTick >= maxTick} />
+      {!isMobile && (
+        <Tooltip
+          title={
+            <Box component="span" sx={{ whiteSpace: 'pre-line', fontSize: '0.85rem', lineHeight: 1.4 }}>
+              {t('replay.shortcuts')}
+            </Box>
+          }
+        >
+          <IconButton size="small" sx={{ color: 'text.secondary' }}>
+            <InfoOutlined fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
     </Box>
   );
 };

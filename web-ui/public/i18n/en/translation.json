@@ -141,7 +141,11 @@
     "jump_to_start": "Jump to start",
     "jump_to_end": "Jump to end",
     "go_back": "Go back to results",
-    "set_tick": "Set tick"
+    "set_tick": "Set tick",
+    "shortcuts": "Keyboard shortcuts:\nBackspace — Go back\nHome — Jump to start\nLeft arrow — Previous tick\nRight arrow — Next tick\nEnd — Jump to end"
+  },
+  "event_controls": {
+    "shortcuts": "Keyboard shortcuts:\nLeft arrow — Previous tick\nRight arrow — Next tick"
   },
   "endurance_race": {
     "tick": "Tick",
@@ -159,9 +163,12 @@
   },
   "progress_button": {
     "start_competition": "Start Competition",
+    "start_competition_short": "Start",
     "next": "Next",
     "conclude_event": "Conclude Event",
-    "back_to_dashboard": "Back to Dashboard"
+    "conclude_event_short": "Conclude",
+    "back_to_dashboard": "Back to Dashboard",
+    "back_to_dashboard_short": "Dashboard"
   },
   "quartered_event": {
     "name": "Name",

@@ -572,3 +572,5 @@
 
 - Fixed missing icons for V2 quartered events on mobile calendar
 - Added loading state to blob details dialog
+- Added keyboard shortcuts to replay and event controls in desktop mode
+- Modified progress button texts to be shorter on mobile
