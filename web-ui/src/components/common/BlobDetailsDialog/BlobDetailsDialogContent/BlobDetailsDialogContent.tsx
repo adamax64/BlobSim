@@ -2,8 +2,9 @@ import Cake from '@mui/icons-material/Cake';
 import Handyman from '@mui/icons-material/Handyman';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Box, DialogContent, Grid, Paper, Tooltip, Typography } from '@mui/material';
-import { StateIcon } from './StateIcon';
-import { TraitIcon } from './TraitIcon';
+import RetirementFocusIcon from './RetirementFocusIcon';
+import StateIcon from './StateIcon';
+import TraitIcon from './TraitIcon';
 import { getContrastYIQ } from '../../../../utils/color-utils';
 import { useTranslation } from 'react-i18next';
 import { BlobStatsDto } from '../../../../../generated';
@@ -98,6 +99,16 @@ const BlobDetailsDialogContent = ({ blob, blobIcon }: BlobDetailsDialogContentPr
                 <Typography variant="body1">
                   <strong>{t('blob_details.money')}:</strong> {blob.money}
                 </Typography>
+              </Grid>
+            )}
+            {blob.retirementFocus && (
+              <Grid size={6}>
+                <Box display="flex" gap={1} alignItems="center">
+                  <Typography variant="body1">
+                    <strong>{t('blob_details.retirement_focus')}:</strong>
+                  </Typography>
+                  <RetirementFocusIcon retirementFocus={blob.retirementFocus} />
+                </Box>
               </Grid>
             )}
           </Grid>

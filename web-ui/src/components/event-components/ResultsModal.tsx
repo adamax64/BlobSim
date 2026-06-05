@@ -40,7 +40,7 @@ export const ResultsModal = ({ eventId, open, onClose }: ResultsModalProps) => {
   }, [open, eventId]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" sx={{ zIndex: 1600 }}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         Event Results
         <IconButton onClick={onClose} size="small">

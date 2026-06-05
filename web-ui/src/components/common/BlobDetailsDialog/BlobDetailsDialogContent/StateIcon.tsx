@@ -3,15 +3,16 @@ import { StateDto, StateType } from '../../../../../generated';
 import HeartBroken from '@mui/icons-material/HeartBroken';
 import MoodBad from '@mui/icons-material/MoodBad';
 import OfflineBolt from '@mui/icons-material/OfflineBolt';
-import { Tooltip, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
+import DialogTooltip from './DialogTooltip';
 
 interface StateIconProps {
   state: StateDto;
 }
 
-export const StateIcon = ({ state }: StateIconProps) => {
+const StateIcon = ({ state }: StateIconProps) => {
   const { t } = useTranslation();
 
   let stateIcon;
@@ -34,15 +35,16 @@ export const StateIcon = ({ state }: StateIconProps) => {
   }
 
   return (
-    <Tooltip
+    <DialogTooltip
+      icon={stateIcon}
       title={
         <React.Fragment>
           <Typography sx={{ fontWeight: 700 }}>{t(`enums.states.${state.type}`)}</Typography>
           <Typography variant="body2">{t(`state_descriptions.${state.type}`)}</Typography>
         </React.Fragment>
       }
-    >
-      {stateIcon}
-    </Tooltip>
+    />
   );
 };
+
+export default StateIcon;

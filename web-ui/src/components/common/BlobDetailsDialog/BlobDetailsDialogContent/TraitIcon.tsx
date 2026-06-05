@@ -3,14 +3,15 @@ import { TraitType } from '../../../../../generated';
 import Engineering from '@mui/icons-material/Engineering';
 import AutoGraph from '@mui/icons-material/AutoGraph';
 import Hotel from '@mui/icons-material/Hotel';
-import { Tooltip, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react';
+import DialogTooltip from './DialogTooltip';
 
 interface TraitIconProps {
   trait: TraitType;
 }
 
-export const TraitIcon = ({ trait }: TraitIconProps) => {
+const TraitIcon = ({ trait }: TraitIconProps) => {
   const { t } = useTranslation();
 
   let traitIcon;
@@ -27,15 +28,16 @@ export const TraitIcon = ({ trait }: TraitIconProps) => {
   }
 
   return (
-    <Tooltip
+    <DialogTooltip
+      icon={traitIcon}
       title={
         <React.Fragment>
           <Typography sx={{ fontWeight: 700 }}>{t(`enums.traits.${trait}`)}</Typography>
           <Typography variant="body2">{t(`trait_descriptions.${trait}`)}</Typography>
         </React.Fragment>
       }
-    >
-      {traitIcon}
-    </Tooltip>
+    />
   );
 };
+
+export default TraitIcon;

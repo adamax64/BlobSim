@@ -114,6 +114,10 @@
       "HARD_WORKING": "Hard Working",
       "DETERMINED": "Determined",
       "LAZY": "Lazy"
+    },
+    "retirement_focus": {
+      "LEGACY": "Legacy",
+      "PROLONGED_LIFE": "Prolonged life"
     }
   },
   "state_descriptions": {
@@ -278,7 +282,8 @@
     "wins": "Wins",
     "championships": "Championships",
     "grandmasters": "Grandmasters",
-    "current_activity": "Current Activity"
+    "current_activity": "Current Activity",
+    "retirement_focus": "Retirement focus"
   },
   "blob_naming": {
     "create_title": "Create new blob",

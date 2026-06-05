@@ -57,6 +57,9 @@ export const CalendarEventWithTooltip: React.FC<CalendarEventWithTooltipProps> =
           disableHoverListener
           disableTouchListener
           arrow
+          slotProps={{
+            popper: { sx: { zIndex: 1299 } },
+          }}
           title={
             <Box display="flex" gap={1}>
               <CalendarEventContentUI event={event} isToday={isToday} />

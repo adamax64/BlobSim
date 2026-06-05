@@ -115,6 +115,11 @@ def map_to_blob_state_dto(
             for state in blob.states
         ],
         traits=[TraitTypeDto(trait.type) for trait in blob.traits],
+        retirement_focus=(
+            blob.retirement_focus.focus_type
+            if blob.retirement_focus is not None
+            else None
+        ),
     )
 
 

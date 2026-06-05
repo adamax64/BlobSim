@@ -15,7 +15,7 @@ export const BlobDetailsDialogUi = ({ open, onClose, blob }: BlobDetailsDialogUi
   const { t } = useTranslation();
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth sx={{ zIndex: 1601 }}>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         {blob?.name ?? t('blob_details.loading')}
         <IconButton onClick={onClose} size="small">

@@ -1827,6 +1827,16 @@
             },
             "type": "array",
             "title": "Traits"
+          },
+          "retirement_focus": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RetirementFocusTypeDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -3201,6 +3211,14 @@
         ],
         "title": "TraitType",
         "description": "Enum for Trait Type"
+      },
+      "RetirementFocusTypeDto": {
+        "type": "string",
+        "enum": [
+          "LEGACY",
+          "PROLONGED_LIFE"
+        ],
+        "title": "RetirementFocusTypeDto"
       },
       "TransfersDto": {
         "properties": {

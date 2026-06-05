@@ -114,6 +114,10 @@
       "HARD_WORKING": "Szorgos",
       "DETERMINED": "Eltökélt",
       "LAZY": "Lusta"
+    },
+    "retirement_focus": {
+      "LEGACY": "Örökség",
+      "PROLONGED_LIFE": "Hosszabb élet"
     }
   },
   "state_descriptions": {
@@ -278,7 +282,8 @@
     "wins": "Győzelmek",
     "championships": "Bajnokságok",
     "grandmasters": "Nagymesteri címek",
-    "current_activity": "Jelenlegi tevékenység"
+    "current_activity": "Jelenlegi tevékenység",
+    "retirement_focus": "Nyugdíj fókusz"
   },
   "blob_naming": {
     "create_title": "Új blob létrehozása",
