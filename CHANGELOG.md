@@ -576,3 +576,9 @@
 - Modified progress button texts to be shorter on mobile
 - Show loading state for event record loading if those records not manually generated
 - Fix max tick estimation for quartered events
+
+### 4.6.4
+
+- Raised cost of maintenance to 52 coins
+- Added retirement focus to blob details dialog
+- Fixed tooltip issues regarding blob details dialog
