@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { SnackbarState } from '../snackbar-state';
 import { SprintRaceUI } from './SprintRaceUI';
 import { useReplayState } from '../../../hooks/useReplayState';
+import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventControls } from '../shared/EventControls';
 
 interface SprintRaceEventFrameProps {
@@ -100,10 +101,11 @@ export const SprintRaceEventFrame: React.FC<SprintRaceEventFrameProps> = ({
     },
   });
 
-  useEffect(() => {
-    setLoadingNextTick(true);
-    getEventRecords({ eventId: event.id, playbackTick: replayTick });
-  }, [event.id, replayTick]);
+  useReplayTickDelay(
+    replayTick,
+    () => getEventRecords({ eventId: event.id, playbackTick: replayTick }),
+    setLoadingNextTick,
+  );
 
   const progressEvent = useCallback(() => {
     if (eventRecords && !isEventFinished) {

@@ -1,13 +1,22 @@
+import { EventType } from '../../../generated';
+
 /**
  * Determines the number of contenders eliminated in each quarter based on the field size.
  */
-export function getEliminations(fieldSize: number): number {
+export function getEliminations(fieldSize: number, eventType: EventType): number {
+  if (([EventType.QuarteredOneShotScoringV2, EventType.QuarteredTwoShotScoringV2] as EventType[]).includes(eventType)) {
+    return fieldSize < 15 ? Math.floor((fieldSize - 3) / 3) : Math.round(fieldSize / 4);
+  }
   return fieldSize < 15 ? Math.floor((fieldSize - 3) / 3) : Math.floor(fieldSize / 4);
 }
 
-export function getQuarterEnds(fieldSize: number, isOneshot: boolean): number[] {
-  const eliminations = getEliminations(fieldSize);
-  const multiplier = isOneshot ? 1 : 2;
+export function getQuarterEnds(fieldSize: number, eventType: EventType): number[] {
+  const eliminations = getEliminations(fieldSize, eventType);
+  const multiplier = ([EventType.QuarteredOneShotScoring, EventType.QuarteredOneShotScoringV2] as EventType[]).includes(
+    eventType,
+  )
+    ? 1
+    : 2;
 
   return [
     multiplier * fieldSize,

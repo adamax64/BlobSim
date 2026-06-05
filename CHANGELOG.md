@@ -585,7 +585,9 @@ Business features, changes:
 - When blobs get injured they have a 0-20% chance to loose 1 integiry
   - depends on integrity: the older a blob is, the higher the chance of loosing 1 integrity
 - Added retirement focus to blob details dialog
+- When the user steps the replay forward it has the same delayed loading effect as the progress event
 - Fixed tooltip issues regarding blob details dialog
+- Fixed elimination count calculation on frontend for V2 quartered events
 
 Technical changes:
 

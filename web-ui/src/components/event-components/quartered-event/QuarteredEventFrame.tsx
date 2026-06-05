@@ -3,7 +3,6 @@ import {
   ActionsApi,
   BlobCompetitorDtoInput,
   EventDtoInput,
-  EventType,
   QuarteredEventRecordDtoInput as EventRecordDto,
   CompetitionApi,
   EventRecordsApi,
@@ -16,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { SnackbarState } from '../snackbar-state';
 import { QuarteredEventUI } from './QuarteredEventUI';
 import { useReplayState } from '../../../hooks/useReplayState';
+import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventControls } from '../shared/EventControls';
 
 interface QuarteredEventFrameProps {
@@ -45,10 +45,9 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
     anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
   });
 
-  const isOneShot = useMemo(() => event.type === EventType.QuarteredOneShotScoring, [event.type]);
   const quarterEnds = useMemo(
-    () => getQuarterEnds(event.competitors.length, isOneShot),
-    [isOneShot, event.competitors.length],
+    () => getQuarterEnds(event.competitors.length, event.type),
+    [event.type, event.competitors.length],
   );
 
   const actionApi = new ActionsApi(defaultConfig);
@@ -62,8 +61,9 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   >({
     mutationFn: ({ eventId, playbackTick }) =>
       eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId, playbackTick }),
-    onSuccess: (data) => {
+    onSuccess: (data, { playbackTick }) => {
       setIsPerforming(false);
+      setQuarter(getCurrentQuarter(quarterEnds, playbackTick ?? tick));
       setEventRecordsCache(data);
       return data;
     },
@@ -130,14 +130,11 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
     },
   });
 
-  useEffect(() => {
-    setIsPerforming(true);
-    getEventRecords({ eventId: event.id, playbackTick: replayTick });
-  }, [event.id, replayTick]);
-
-  useEffect(() => {
-    setQuarter(getCurrentQuarter(quarterEnds, replayTick));
-  }, [replayTick, quarterEnds]);
+  useReplayTickDelay(
+    replayTick,
+    () => getEventRecords({ eventId: event.id, playbackTick: replayTick }),
+    setIsPerforming,
+  );
 
   useEffect(() => {
     if (eventRecords) {

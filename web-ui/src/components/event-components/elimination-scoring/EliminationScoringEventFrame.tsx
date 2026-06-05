@@ -9,6 +9,7 @@ import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { EliminationScoringUI } from './EliminationScoringUI';
 import { useReplayState } from '../../../hooks/useReplayState';
+import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventControls } from '../shared/EventControls';
 
 interface SnackbarState {
@@ -119,17 +120,19 @@ export const EliminationScoringEventFrame = ({
     },
   });
 
-  useEffect(() => {
-    setLoadingNextTick(true);
-    getEventRecords({ eventId: event.id, playbackTick: replayTick });
-  }, [event.id, replayTick]);
+  useReplayTickDelay(
+    replayTick,
+    () => getEventRecords({ eventId: event.id, playbackTick: replayTick }),
+    setLoadingNextTick,
+  );
 
   const progressEvent = useCallback(() => {
     if (eventRecords && !isEventFinished) {
       setLoadingNextTick(true);
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         createAction({ contenders: eventRecords.filter((record) => !record.eliminated).map((record) => record.blob) });
       }, 1000);
+      return () => clearTimeout(timer);
     }
   }, [eventRecords, isEventFinished, createAction]);
 
