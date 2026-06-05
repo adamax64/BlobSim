@@ -10,7 +10,6 @@ class TestBlobUpdateService(unittest.TestCase):
 
     @patch('domain.blob_services.blob_update_service.save_all_blobs')
     @patch('domain.blob_services.blob_update_service.get_all_blobs_by_name')
-    @patch('domain.blob_services.blob_update_service.get_current_calendar')
     @patch('domain.blob_services.blob_update_service.get_event_next_day')
     @patch('domain.blob_services.blob_update_service.get_sim_time')
     @patch('domain.blob_services.blob_update_service.get_current_grandmaster_id')
@@ -18,7 +17,6 @@ class TestBlobUpdateService(unittest.TestCase):
         self,
         mock_get_sim_time,
         mock_get_event_next_day,
-        mock_get_current_calendar,
         mock_get_current_grandmaster_id,
         mock_get_all_blobs_by_name,
         mock_save_all_blobs,
@@ -29,7 +27,6 @@ class TestBlobUpdateService(unittest.TestCase):
         b3 = create_blob_model_mock(id=3, money=2, current_activity=ActivityType.MINING)
 
         mock_get_all_blobs_by_name.return_value = [b1, b2, b3]
-        mock_get_current_calendar.return_value = None
         mock_get_event_next_day.return_value = None
         mock_get_sim_time.return_value = 0
         mock_get_current_grandmaster_id.return_value = None

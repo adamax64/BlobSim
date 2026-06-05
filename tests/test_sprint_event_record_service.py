@@ -26,7 +26,7 @@ class TestSprintEventRecordService(unittest.TestCase):
             ActionDto(blob_id=2, scores=[30, 40]),  # finishes at tick 1
         ]
 
-        records = get_sprint_event_records(actions, competitors, is_playback=False)
+        records = get_sprint_event_records(actions, competitors)
 
         self.assertEqual(records[0].blob.id, 1)  # Blob1 finished earlier
         self.assertEqual(records[1].blob.id, 2)
@@ -55,7 +55,7 @@ class TestSprintEventRecordService(unittest.TestCase):
             ActionDto(blob_id=2, scores=[50, 20]),
         ]
 
-        records = get_sprint_event_records(actions, competitors, is_playback=False)
+        records = get_sprint_event_records(actions, competitors)
 
         self.assertEqual(records[0].blob.id, 2)
         self.assertEqual(records[1].blob.id, 1)
@@ -81,7 +81,7 @@ class TestSprintEventRecordService(unittest.TestCase):
             ActionDto(blob_id=2, scores=[60]),  # finished
         ]
 
-        records = get_sprint_event_records(actions, competitors, is_playback=False)
+        records = get_sprint_event_records(actions, competitors)
 
         rec1 = next(r for r in records if r.blob.id == 1)
         rec2 = next(r for r in records if r.blob.id == 2)

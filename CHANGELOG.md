@@ -590,3 +590,4 @@ Business features, changes:
 Technical changes:
 
 - Refactored activity choosing logic to be more maintainable
+- Maintained tests

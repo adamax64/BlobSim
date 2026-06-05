@@ -14,6 +14,7 @@ from domain.dtos.league_dto import LeagueDto
 from data.model.league import League
 from data.model.blob import Blob
 from domain.utils.constants import MAX_FIELD_SIZE, QUEUE_LEVEL
+from tests.utils import create_blob_model_mock
 
 
 def mock_blob(contract, league_id=None, integrity=1000, blob_id=0, born=0):
@@ -177,7 +178,7 @@ class TestLeagueService(unittest.TestCase):
 
     def test_retire_blobs(self):
         session = MagicMock(spec=Session)
-        league = League(id=1, name='League 1', players=[mock_blob(5), mock_blob(7, integrity=10)], level=1)
+        league = League(id=1, name='League 1', players=[create_blob_model_mock(contract=5), create_blob_model_mock(contract=7, integrity=10)], level=1)
         leagues = [league]
 
         _retire_blobs(session, leagues, 5)
