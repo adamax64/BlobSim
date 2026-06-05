@@ -1,11 +1,14 @@
+from collections.abc import Callable
+from dataclasses import dataclass
+
+import random
+
 from data.model.blob import Blob
 from data.model.retirement_focus_type import RetirementFocusType
 from data.model.state_type import StateType
-from domain.enums.activity_type import ActivityType
-import random
-
-from domain.utils.blob_utils import has_state, has_trait
 from data.model.trait_type import TraitType
+from domain.enums.activity_type import ActivityType
+from domain.utils.blob_utils import has_state, has_trait
 
 
 FREE_ACTIVITIES = [
@@ -16,97 +19,173 @@ FREE_ACTIVITIES = [
     ActivityType.INTENSE_PRACTICE,
 ]
 
-idx_practice = 0
-idx_labour = 1
-idx_idle = 2
-idx_intense_practice = 4
+DEFAULT_ACTIVITY_WEIGHT = 10
+INTENSE_PRACTICE_BASE_WEIGHT = 1
+TRAIT_MULTIPLIER = 2
+DETERMINED_INTENSE_PRACTICE_MULTIPLIER = 10
+PROLONGED_LIFE_MAINTENANCE_MULTIPLIER = 3
+LEGACY_HEIR_MULTIPLIER = 5
+
+DEFAULT_FREE_BASE_WEIGHTS: dict[ActivityType, float] = {
+    ActivityType.PRACTICE: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.LABOUR: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.IDLE: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.MINING: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.INTENSE_PRACTICE: INTENSE_PRACTICE_BASE_WEIGHT,
+}
+
+RETIREMENT_FOCUS_FREE_BASE_WEIGHTS: dict[ActivityType, float] = {
+    ActivityType.PRACTICE: 0,
+    ActivityType.LABOUR: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.IDLE: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.MINING: DEFAULT_ACTIVITY_WEIGHT,
+    ActivityType.INTENSE_PRACTICE: 0,
+}
+
+
+@dataclass(frozen=True)
+class WeightRule:
+    condition: Callable[[Blob], bool]
+    adjustments: dict[ActivityType, Callable[[float], float]]
+
+
+def _multiply(factor: float) -> Callable[[float], float]:
+    return lambda weight: weight * factor
+
+
+def _divide(factor: float) -> Callable[[float], float]:
+    return lambda weight: weight / factor
+
+
+def _set(weight: float) -> Callable[[float], float]:
+    return lambda _: weight
+
+
+def _lazy_administration(weight: float) -> float:
+    return weight / 2 + 1
+
+
+EXTRA_ACTIVITY_RULES: list[WeightRule] = [
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.DETERMINED),
+        adjustments={ActivityType.ADMINISTRATION: _multiply(TRAIT_MULTIPLIER)},
+    ),
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.LAZY),
+        adjustments={ActivityType.ADMINISTRATION: _lazy_administration},
+    ),
+    WeightRule(
+        condition=lambda blob: has_state(blob, StateType.TIRED)
+        or has_state(blob, StateType.GLOOMY),
+        adjustments={ActivityType.ADMINISTRATION: _divide(TRAIT_MULTIPLIER)},
+    ),
+    WeightRule(
+        condition=lambda blob: (
+            blob.retirement_focus is not None
+            and blob.retirement_focus.focus_type
+            == RetirementFocusType.PROLONGED_LIFE
+        ),
+        adjustments={
+            ActivityType.MAINTENANCE: _multiply(PROLONGED_LIFE_MAINTENANCE_MULTIPLIER)
+        },
+    ),
+    WeightRule(
+        condition=lambda blob: (
+            blob.retirement_focus is not None
+            and blob.retirement_focus.focus_type == RetirementFocusType.LEGACY
+        ),
+        adjustments={ActivityType.APPLY_FOR_HEIR: _multiply(LEGACY_HEIR_MULTIPLIER)},
+    ),
+]
+
+FREE_ACTIVITY_RULES: list[WeightRule] = [
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.HARD_WORKING),
+        adjustments={ActivityType.LABOUR: _multiply(TRAIT_MULTIPLIER)},
+    ),
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.DETERMINED),
+        adjustments={
+            ActivityType.PRACTICE: _multiply(TRAIT_MULTIPLIER),
+            ActivityType.INTENSE_PRACTICE: _multiply(
+                DETERMINED_INTENSE_PRACTICE_MULTIPLIER
+            ),
+        },
+    ),
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.LAZY),
+        adjustments={
+            ActivityType.LABOUR: _divide(TRAIT_MULTIPLIER),
+            ActivityType.PRACTICE: _divide(TRAIT_MULTIPLIER),
+            ActivityType.INTENSE_PRACTICE: _set(0),
+        },
+    ),
+    WeightRule(
+        condition=lambda blob: has_state(blob, StateType.INJURED),
+        adjustments={
+            ActivityType.LABOUR: _set(0),
+            ActivityType.PRACTICE: _divide(TRAIT_MULTIPLIER),
+            ActivityType.INTENSE_PRACTICE: _set(0),
+        },
+    ),
+    WeightRule(
+        condition=lambda blob: has_state(blob, StateType.TIRED),
+        adjustments={
+            ActivityType.PRACTICE: _divide(TRAIT_MULTIPLIER),
+            ActivityType.INTENSE_PRACTICE: _set(0),
+        },
+    ),
+    WeightRule(
+        condition=lambda blob: has_state(blob, StateType.GLOOMY),
+        adjustments={ActivityType.IDLE: _multiply(TRAIT_MULTIPLIER)},
+    ),
+]
 
 
 def choose_activity(
-    blob: Blob, extra_activities: list[ActivityType] = []
+    blob: Blob, extra_activities: list[ActivityType] | None = None
 ) -> ActivityType:
-    """Choose an activity for `blob` with weights adjusted by traits.
-
-    `session` is passed to query traits via the persistence layer.
-    """
-    activities = FREE_ACTIVITIES + extra_activities
-
-    # base weights corresponding to FREE_ACTIVITIES
-    base = _get_base_weights(blob)
-
-    # start with base weights
-    weights = base.copy()
-
-    # ensure weights list extends for extra activities
-    for activity in extra_activities:
-        if activity == ActivityType.ADMINISTRATION:
-            weight = 10
-            if has_trait(blob, TraitType.DETERMINED):
-                weight *= 2
-            if has_trait(blob, TraitType.LAZY):
-                weight = weight / 2 + 1
-            if has_state(blob, StateType.TIRED) or has_state(blob, StateType.GLOOMY):
-                weight /= 2
-        elif activity == ActivityType.MAINTENANCE:
-            weight = 10
-            if (
-                blob.retirement_focus is not None
-                and blob.retirement_focus.focus_type
-                == RetirementFocusType.PROLONGED_LIFE
-            ):
-                weight *= 3
-        elif activity == ActivityType.APPLY_FOR_HEIR:
-            weight = 10
-            if (
-                blob.retirement_focus is not None
-                and blob.retirement_focus.focus_type == RetirementFocusType.LEGACY
-            ):
-                weight *= 5
-        else:
-            weight = 10
-
-        weights.append(weight)
-
-    # adjust weights based on traits and states
-    hard_working = has_trait(blob, TraitType.HARD_WORKING)
-    determined = has_trait(blob, TraitType.DETERMINED)
-    lazy = has_trait(blob, TraitType.LAZY)
-
-    injured = has_state(blob, StateType.INJURED)
-    tired = has_state(blob, StateType.TIRED)
-    gloomy = has_state(blob, StateType.GLOOMY)
-
-    if hard_working:
-        weights[idx_labour] *= 2
-
-    if determined:
-        weights[idx_practice] *= 2
-        weights[idx_intense_practice] *= 10
-
-    if lazy:
-        weights[idx_labour] /= 2
-        weights[idx_practice] /= 2
-        weights[idx_intense_practice] = 0
-
-    if injured:
-        weights[idx_labour] = 0
-        weights[idx_practice] /= 2
-        weights[idx_intense_practice] = 0
-
-    if tired:
-        weights[idx_practice] /= 2
-        weights[idx_intense_practice] = 0
-
-    if gloomy:
-        weights[idx_idle] *= 2
-
-    return random.choices(activities, weights=weights, k=1)[0]
+    """Choose an activity for `blob` with weights adjusted by traits and states."""
+    activities = FREE_ACTIVITIES + (extra_activities or [])
+    weights = compute_weights(blob, activities)
+    return random.choices(
+        activities, weights=[weights[activity] for activity in activities], k=1
+    )[0]
 
 
-def _get_base_weights(blob: Blob) -> list[float]:
-    """Get the base weights for activities."""
-    if blob.retirement_focus is not None:
-        # at the moment both focuses have the same base weights
-        return [0, 10, 10, 10, 0]
+def compute_weights(
+    blob: Blob, activities: list[ActivityType]
+) -> dict[ActivityType, float]:
+    """Compute final activity weights for the given activity pool."""
+    weights = _get_initial_weights(blob, activities)
+    _apply_rules(blob, weights, EXTRA_ACTIVITY_RULES)
+    _apply_rules(blob, weights, FREE_ACTIVITY_RULES)
+    return weights
 
-    return [10, 10, 10, 10, 1]
+
+def _get_initial_weights(
+    blob: Blob, activities: list[ActivityType]
+) -> dict[ActivityType, float]:
+    base_weights = (
+        RETIREMENT_FOCUS_FREE_BASE_WEIGHTS
+        if blob.retirement_focus is not None
+        else DEFAULT_FREE_BASE_WEIGHTS
+    )
+
+    weights: dict[ActivityType, float] = {}
+    for activity in activities:
+        weights[activity] = base_weights.get(activity, DEFAULT_ACTIVITY_WEIGHT)
+    return weights
+
+
+def _apply_rules(
+    blob: Blob,
+    weights: dict[ActivityType, float],
+    rules: list[WeightRule],
+) -> None:
+    for rule in rules:
+        if not rule.condition(blob):
+            continue
+        for activity, adjust in rule.adjustments.items():
+            if activity in weights:
+                weights[activity] = adjust(weights[activity])
