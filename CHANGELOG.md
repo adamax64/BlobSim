@@ -580,5 +580,7 @@
 ### 4.6.4
 
 - Raised cost of maintenance to 52 coins
+- When blobs get injured they have a 0-20% chance to loose 1 integiry
+  - depends on integrity: the older a blob is, the higher the chance of loosing 1 integrity
 - Added retirement focus to blob details dialog
 - Fixed tooltip issues regarding blob details dialog

@@ -264,6 +264,9 @@ def _proceed_with_activity(
 
         if random.random() < injured_chance:
             effect_until = get_sim_time(session) + 4
+            # 0-20% chance to loose 1 integrity depending on integrity
+            if random.random() < max(0, (1 - blob.integrity / INITIAL_INTEGRITY) * 0.2):
+                blob.integrity -= 1
             create_state(session, blob.id, StateType.INJURED, effect_until)
     elif current_activity == ActivityType.INTENSE_TRAINING:
         practice_effect = PRACTICE_EFFECT * 1.1
