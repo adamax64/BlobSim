@@ -36,7 +36,10 @@ from domain.sim_data_service import (
 from data.persistence.policy_repository import get_active_policy_by_type
 from domain.policy_service import create_or_update_policy
 from domain.standings_service import get_last_place_from_season_by_league, get_standings
-from data.persistence.league_repository import get_all_leagues_ordered_by_level, get_queue
+from data.persistence.league_repository import (
+    get_all_leagues_ordered_by_level,
+    get_queue,
+)
 from data.persistence.result_repository import (
     get_most_recent_real_league_result_of_blob,
     has_dropout_results_from_last_season,
@@ -56,6 +59,7 @@ from domain.utils.constants import (
     CYCLES_PER_SEASON,
     GRANDMASTER_SALARY,
     HEIR_COST,
+    PREMIUM_PRACTICE_COST,
     INITIAL_INTEGRITY,
     LABOUR_SALARY,
     MAINTENANCE_COST,
@@ -108,7 +112,7 @@ def update_all_blobs(session: Session):
         _apply_random_states(blob, session)
         _apply_random_traits(blob, session)
         _choose_activity_for_blob(
-            blob, event_next_day, catchup_training_blob_ids, is_grandmaster
+            blob, event_next_day, catchup_training_blob_ids, is_grandmaster, session
         )
 
         modified_blobs.append(blob)
@@ -140,8 +144,6 @@ def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
 def _proceed_with_activity(
     blob: Blob, current_event: Event | None, session: Session
 ) -> StatMultiplyers:
-    global miners
-
     multiplyer = StatMultiplyers(strength=0, speed=0)
     current_activity: ActivityType = blob.current_activity
 
@@ -189,100 +191,34 @@ def _proceed_with_activity(
                     except Exception:
                         pass
     elif current_activity == ActivityType.PRACTICE:
-        ratio = random.random()
         current_time = get_sim_time(session)
-        gym_improvement_level = get_active_policy_by_type(
-            session, PolicyType.GYM_IMPROVEMENT, current_time
-        )
-        practice_effect = PRACTICE_EFFECT
-        if gym_improvement_level:
-            practice_effect += practice_effect * (
-                0.05 * gym_improvement_level.applied_level
-            )
-        current_time = get_sim_time(session)
-        state_multiplier = compute_state_multiplier(blob, current_time)
+        practice_effect = _get_practice_effect(session)
+        _reset_injured_state(blob, session, current_time)
+        multiplyer = _practice_multiplyer(practice_effect, blob, session)
+    elif current_activity == ActivityType.PREMIUM_PRACTICE:
+        free = _is_premium_practice_free(blob, session)
 
-        # injured state has a 15% chance to reset its cooldown (refresh duration)
-        for st in blob.states:
-            if st.type == StateType.INJURED and st.effect_until >= current_time:
-                if random.random() < 0.15:
-                    # refresh injured duration to 4 days from now
-                    st.effect_until = current_time + 4
-                    try:
-                        save_state(session, st)
-                    except Exception:
-                        pass
-        multiplyer.strength = practice_effect * ratio * state_multiplier
-        multiplyer.speed = practice_effect * (1 - ratio) * state_multiplier
+        multiplier = 1.2 if has_state(blob, StateType.INJURED) else 1.6
+
+        if free:
+            practice_effect = _get_practice_effect(session, multiplier)
+            multiplyer = _practice_multiplyer(practice_effect, blob, session)
+        elif blob.money >= PREMIUM_PRACTICE_COST:
+            blob.money -= PREMIUM_PRACTICE_COST
+            practice_effect = _get_practice_effect(session, multiplier)
+            multiplyer = _practice_multiplyer(practice_effect, blob, session)
+        else:
+            practice_effect = _get_practice_effect(session)
+            multiplyer = _practice_multiplyer(practice_effect, blob, session)
     elif current_activity == ActivityType.INTENSE_PRACTICE:
-        ratio = random.random()
         current_time = get_sim_time(session)
-        gym_improvement_level = get_active_policy_by_type(
-            session, PolicyType.GYM_IMPROVEMENT, current_time
-        )
-        practice_effect = PRACTICE_EFFECT * 1.7
-        if gym_improvement_level:
-            practice_effect += practice_effect * (
-                0.05 * gym_improvement_level.applied_level
-            )
-        current_time = get_sim_time(session)
-        state_multiplier = compute_state_multiplier(blob, current_time)
-        multiplyer.strength = practice_effect * ratio * state_multiplier
-        multiplyer.speed = practice_effect * (1 - ratio) * state_multiplier
-        # small chance to refresh TIRED state cooldown during practice
-        for st in blob.states:
-            if (
-                st.type == StateType.TIRED
-                and getattr(st, "effect_until", 0) >= current_time
-            ):
-                if random.random() < 0.05:
-                    st.effect_until = current_time + 2
-                    try:
-                        save_state(session, st)
-                    except Exception:
-                        pass
-
-        # chance to gain states from intense practice
-        determined = has_trait(blob, TraitType.DETERMINED)
-        tired_chance = 0.4 if not determined else 0.2
-        injured_chance = 0.1 if not determined else 0.05
-
-        if random.random() < tired_chance:
-            if has_state(blob, StateType.TIRED):
-                # if already tired, extend tired duration by 2 days
-                current_time = get_sim_time(session)
-                for st in blob.states:
-                    if st.type == StateType.TIRED and st.effect_until >= current_time:
-                        st.effect_until += 2
-                        try:
-                            save_state(session, st)
-                        except Exception:
-                            pass
-            else:
-                effect_until = get_sim_time(session) + 2
-                create_state(session, blob.id, StateType.TIRED, effect_until)
-
-        if random.random() < injured_chance:
-            effect_until = get_sim_time(session) + 4
-            # 0-20% chance to loose 1 integrity depending on integrity
-            if random.random() < max(0, (1 - blob.integrity / INITIAL_INTEGRITY) * 0.2):
-                blob.integrity -= 1
-            create_state(session, blob.id, StateType.INJURED, effect_until)
+        practice_effect = _get_practice_effect(session, 1.7)
+        multiplyer = _practice_multiplyer(practice_effect, blob, session)
+        _refresh_tired_state(blob, current_time, session)
+        _apply_intense_practice_state_changes(blob, session)
     elif current_activity == ActivityType.INTENSE_TRAINING:
-        practice_effect = PRACTICE_EFFECT * 1.1
-        current_time = get_sim_time(session)
-        gym_improvement_level = get_active_policy_by_type(
-            session, PolicyType.GYM_IMPROVEMENT, current_time
-        )
-        if gym_improvement_level:
-            practice_effect += practice_effect * (
-                0.05 * gym_improvement_level.applied_level
-            )
-
-        current_time = get_sim_time(session)
-        state_multiplier = compute_state_multiplier(blob, current_time)
-        multiplyer.strength = practice_effect * state_multiplier
-        multiplyer.speed = practice_effect * state_multiplier
+        practice_effect = _get_practice_effect(session, 1.1)
+        multiplyer = _practice_multiplyer(practice_effect, blob, session, ratio=False)
     elif current_activity == ActivityType.ADMINISTRATION:
         level = blob.grandmasters
         chosen = choose_random_policy_type()
@@ -311,7 +247,109 @@ def _proceed_with_activity(
     return multiplyer
 
 
-def _sprint_competition_time_multiplier(blob_id: int, event: Event | None, session: Session) -> float:
+def _is_premium_practice_free(blob: Blob, session: Session) -> bool:
+    if blob.league.level == 10:
+        return True
+
+    current_season = get_season(get_sim_time(session))
+    if blob.contract == current_season and blob.league_id is not None:
+        standings = get_standings(
+            blob.league_id, current_season - 1, current_season, session
+        )
+        if standings:
+            top_50_points_treshold = standings[-(len(standings) // 2)].total_points
+            standings_by_blob = {standing.blob_id: standing for standing in standings}
+            s = standings_by_blob.get(blob.id, None)
+            if s is None or s.total_points <= top_50_points_treshold:
+                return True
+
+    return False
+
+
+def _get_practice_effect(session: Session, multiplier: float = 1.0) -> float:
+    current_time = get_sim_time(session)
+    gym_improvement_level = get_active_policy_by_type(
+        session, PolicyType.GYM_IMPROVEMENT, current_time
+    )
+    practice_effect = PRACTICE_EFFECT * multiplier
+    if gym_improvement_level:
+        practice_effect += practice_effect * (
+            0.05 * gym_improvement_level.applied_level
+        )
+    return practice_effect
+
+
+def _practice_multiplyer(
+    practice_effect: float, blob: Blob, session: Session, ratio: bool = True
+) -> StatMultiplyers:
+    current_time = get_sim_time(session)
+    state_multiplier = compute_state_multiplier(blob, current_time)
+    if ratio:
+        split = random.random()
+        return StatMultiplyers(
+            strength=practice_effect * split * state_multiplier,
+            speed=practice_effect * (1 - split) * state_multiplier,
+        )
+    return StatMultiplyers(
+        strength=practice_effect * state_multiplier,
+        speed=practice_effect * state_multiplier,
+    )
+
+
+def _reset_injured_state(blob: Blob, session: Session, current_time: int):
+    for st in blob.states:
+        if st.type == StateType.INJURED and st.effect_until >= current_time:
+            if random.random() < 0.15:
+                st.effect_until = current_time + 4
+                try:
+                    save_state(session, st)
+                except Exception:
+                    pass
+
+
+def _refresh_tired_state(blob: Blob, current_time: int, session: Session):
+    for st in blob.states:
+        if (
+            st.type == StateType.TIRED
+            and getattr(st, "effect_until", 0) >= current_time
+        ):
+            if random.random() < 0.05:
+                st.effect_until = current_time + 2
+                try:
+                    save_state(session, st)
+                except Exception:
+                    pass
+
+
+def _apply_intense_practice_state_changes(blob: Blob, session: Session):
+    determined = has_trait(blob, TraitType.DETERMINED)
+    tired_chance = 0.4 if not determined else 0.2
+    injured_chance = 0.1 if not determined else 0.05
+
+    if random.random() < tired_chance:
+        if has_state(blob, StateType.TIRED):
+            current_time = get_sim_time(session)
+            for st in blob.states:
+                if st.type == StateType.TIRED and st.effect_until >= current_time:
+                    st.effect_until += 2
+                    try:
+                        save_state(session, st)
+                    except Exception:
+                        pass
+        else:
+            effect_until = get_sim_time(session) + 2
+            create_state(session, blob.id, StateType.TIRED, effect_until)
+
+    if random.random() < injured_chance:
+        effect_until = get_sim_time(session) + 4
+        if random.random() < max(0, (1 - blob.integrity / INITIAL_INTEGRITY) * 0.2):
+            blob.integrity -= 1
+        create_state(session, blob.id, StateType.INJURED, effect_until)
+
+
+def _sprint_competition_time_multiplier(
+    blob_id: int, event: Event | None, session: Session
+) -> float:
     """Scale competition effect by finish time relative to max race distance (ticks)."""
     if event is None:
         return 1.0
@@ -327,7 +365,9 @@ def _sprint_competition_time_multiplier(blob_id: int, event: Event | None, sessi
         return 1.0
 
     tick = len(action.scores) - 1
-    finish_time = compute_sprint_finish_time(previous_distance, score, tick, race_length)
+    finish_time = compute_sprint_finish_time(
+        previous_distance, score, tick, race_length
+    )
     return finish_time / race_length
 
 
@@ -393,6 +433,7 @@ def _choose_activity_for_blob(
     event_next_day: Calendar | None,
     catchup_training_blob_ids: set[int],
     is_grandmaster: bool,
+    session: Session,
 ) -> ActivityType:
     """Generate activity for blob for the next day"""
     if blob.terminated is None:
@@ -411,12 +452,25 @@ def _choose_activity_for_blob(
                 or blob.retirement_focus.focus_type != RetirementFocusType.LEGACY
             ):
                 extra_activities.append(ActivityType.MAINTENANCE)
+
+            free_premium_practice = None
+            if blob.contract is not None and blob.contract >= get_season(
+                get_sim_time(session)
+            ):
+                free_premium_practice = _is_premium_practice_free(blob, session)
+                if free_premium_practice or blob.money >= PREMIUM_PRACTICE_COST:
+                    extra_activities.append(ActivityType.PREMIUM_PRACTICE)
+
             if blob.money >= HEIR_COST:
                 extra_activities.append(ActivityType.APPLY_FOR_HEIR)
+
             # grandmasters may enact policies
             if is_grandmaster:
                 extra_activities.append(ActivityType.ADMINISTRATION)
-            blob.current_activity = choose_activity(blob, extra_activities)
+
+            blob.current_activity = choose_activity(
+                blob, extra_activities, free_premium_practice
+            )
 
 
 def _update_blob_stats(blob: Blob, multiplyer: StatMultiplyers):
@@ -488,20 +542,22 @@ def _collect_catchup_train_ids(session: Session) -> set:
                 and not was_in_dropout_before
             ):
                 train_ids.add(b.id)
-    
+
     # blobs on queue who born before the current season
     queue = get_queue(session)
     if queue is not None:
         for blob in queue.players:
             if get_season(blob.born) < current_season:
                 train_ids.add(blob.id)
-    
+
     # blobs who has ending contract and finished outside the top 50% last season
     for league in leagues:
         if league.level == 10:
             continue
         blobs_in_danger = filter(lambda x: x.contract == current_season, league.players)
-        standings = get_standings(league.id, current_season - 1, current_season, session)
+        standings = get_standings(
+            league.id, current_season - 1, current_season, session
+        )
         top_50_points_treshold = standings[-(len(standings) // 2)].total_points
         standings_by_blob = {standing.blob_id: standing for standing in standings}
         for blob in blobs_in_danger:

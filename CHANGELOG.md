@@ -593,3 +593,17 @@ Technical changes:
 
 - Refactored activity choosing logic to be more maintainable
 - Maintained tests
+
+# 4.7 - Intense practice update
+
+- Blobs has a new type of activity to do between competitions: Premium practice
+  - It is more effective than normal practice but, intense practice is still sligthly more effective
+  - The cost of doing premium practice is 36 coins
+  - The following blobs get free access to rpemium practice:
+    - Blobs on queue (not yet debuted)
+    - Blobs in danger: their contract is ending on current season and they are in th ebottom 50% in the standings (menaing they won't get a contract extension)
+  - If not free, blobs only have a small probability of choosing premium practice
+  - Blobs with free access to premium practice will always choose premium practice over normal practice (they will never choose normal practice if free premium practice is available)
+  - When injured blobs attend on premium practice:
+    - Their skills increase less than for healthy blobs (but still more than on normal practice)
+    - Their injured state won't reset like on normal practice

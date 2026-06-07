@@ -1567,6 +1567,7 @@
           "MAINTENANCE",
           "INTENSE_TRAINING",
           "PRACTICE",
+          "PREMIUM_PRACTICE",
           "INTENSE_PRACTICE",
           "LABOUR",
           "IDLE",
@@ -1831,7 +1832,7 @@
           "retirement_focus": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/RetirementFocusTypeDto"
+                "$ref": "#/components/schemas/RetirementFocusType"
               },
               {
                 "type": "null"
@@ -2809,6 +2810,14 @@
         ],
         "title": "ResultDto"
       },
+      "RetirementFocusType": {
+        "type": "string",
+        "enum": [
+          "LEGACY",
+          "PROLONGED_LIFE"
+        ],
+        "title": "RetirementFocusType"
+      },
       "ScoreDto": {
         "properties": {
           "score": {
@@ -3211,14 +3220,6 @@
         ],
         "title": "TraitType",
         "description": "Enum for Trait Type"
-      },
-      "RetirementFocusTypeDto": {
-        "type": "string",
-        "enum": [
-          "LEGACY",
-          "PROLONGED_LIFE"
-        ],
-        "title": "RetirementFocusTypeDto"
       },
       "TransfersDto": {
         "properties": {

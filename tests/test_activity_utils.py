@@ -8,7 +8,7 @@ from domain.enums.activity_type import ActivityType
 from domain.utils.activity_utils import (
     DEFAULT_ACTIVITY_WEIGHT,
     FREE_ACTIVITIES,
-    INTENSE_PRACTICE_BASE_WEIGHT,
+    INTENSE_OR_PREMIUM_PRACTICE_BASE_WEIGHT,
     compute_weights,
 )
 from tests.utils import create_blob_model_mock
@@ -46,7 +46,8 @@ class TestActivityUtils(unittest.TestCase):
         self.assertEqual(weights[ActivityType.IDLE], DEFAULT_ACTIVITY_WEIGHT)
         self.assertEqual(weights[ActivityType.MINING], DEFAULT_ACTIVITY_WEIGHT)
         self.assertEqual(
-            weights[ActivityType.INTENSE_PRACTICE], INTENSE_PRACTICE_BASE_WEIGHT
+            weights[ActivityType.INTENSE_PRACTICE],
+            INTENSE_OR_PREMIUM_PRACTICE_BASE_WEIGHT,
         )
 
     def test_retirement_focus_reduces_practice_weights(self):
@@ -122,9 +123,7 @@ class TestActivityUtils(unittest.TestCase):
         blob.states = [_state(StateType.TIRED)]
         blob.retirement_focus = None
 
-        weights = compute_weights(
-            blob, FREE_ACTIVITIES + [ActivityType.ADMINISTRATION]
-        )
+        weights = compute_weights(blob, FREE_ACTIVITIES + [ActivityType.ADMINISTRATION])
 
         # 10 -> x2 (determined) -> /2+1 (lazy) -> /2 (tired)
         self.assertEqual(weights[ActivityType.ADMINISTRATION], 5.5)
@@ -133,9 +132,7 @@ class TestActivityUtils(unittest.TestCase):
         blob = create_blob_model_mock()
         blob.traits = []
         blob.states = []
-        blob.retirement_focus = _retirement_focus(
-            RetirementFocusType.PROLONGED_LIFE
-        )
+        blob.retirement_focus = _retirement_focus(RetirementFocusType.PROLONGED_LIFE)
 
         weights = compute_weights(blob, FREE_ACTIVITIES + [ActivityType.MAINTENANCE])
 
@@ -147,9 +144,7 @@ class TestActivityUtils(unittest.TestCase):
         blob.states = []
         blob.retirement_focus = _retirement_focus(RetirementFocusType.LEGACY)
 
-        weights = compute_weights(
-            blob, FREE_ACTIVITIES + [ActivityType.APPLY_FOR_HEIR]
-        )
+        weights = compute_weights(blob, FREE_ACTIVITIES + [ActivityType.APPLY_FOR_HEIR])
 
         self.assertEqual(
             weights[ActivityType.APPLY_FOR_HEIR], DEFAULT_ACTIVITY_WEIGHT * 5

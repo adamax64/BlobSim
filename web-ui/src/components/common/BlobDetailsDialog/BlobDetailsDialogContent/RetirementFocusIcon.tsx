@@ -1,11 +1,11 @@
 import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import AddAlarmIcon from '@mui/icons-material/AddAlarm';
 import { useTranslation } from 'react-i18next';
-import { RetirementFocusTypeDto } from '../../../../../generated';
+import { RetirementFocusType } from '../../../../../generated';
 import DialogTooltip from './DialogTooltip';
 
 interface RetirementFocusIconProps {
-  retirementFocus: RetirementFocusTypeDto;
+  retirementFocus: RetirementFocusType;
 }
 
 const RetirementFocusIcon = ({ retirementFocus }: RetirementFocusIconProps) => {
@@ -13,10 +13,10 @@ const RetirementFocusIcon = ({ retirementFocus }: RetirementFocusIconProps) => {
 
   let focusIcon;
   switch (retirementFocus) {
-    case RetirementFocusTypeDto.Legacy:
+    case RetirementFocusType.Legacy:
       focusIcon = <EmojiEvents />;
       break;
-    case RetirementFocusTypeDto.ProlongedLife:
+    case RetirementFocusType.ProlongedLife:
       focusIcon = <AddAlarmIcon />;
       break;
   }

@@ -81,7 +81,8 @@
       "ADMINISTRATION": "Administration",
       "MINING": "Mining",
       "INTENSE_PRACTICE": "Intense practice",
-      "APPLY_FOR_HEIR": "Applying for heir"
+      "APPLY_FOR_HEIR": "Applying for heir",
+      "PREMIUM_PRACTICE": "Premium practice"
     },
     "news_type": {
       "BLOB_CREATED": "A new blob called {{blobName}} has been created!",
