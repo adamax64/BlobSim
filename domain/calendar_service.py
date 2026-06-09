@@ -14,7 +14,7 @@ from data.persistence.event_repository import get_event_by_date
 from data.persistence.league_repository import get_all_real_leagues
 from data.persistence.sim_data_repository import get_sim_data
 from domain.dtos.calendar_dto import CalendarDto
-from domain.utils.event_utils import pick_random_event_type
+from domain.utils.event_utils import build_random_event_type_sequence
 from domain.utils.league_utils import (
     HALF_SEASON,
     INACTIVE_SEASON,
@@ -106,10 +106,11 @@ def recreate_calendar_for_next_season(session: Session, next_season: int):
         rounds = get_number_of_rounds_by_size(field_size)
         if rounds == INACTIVE_SEASON:
             continue
+        random_event_types = iter(build_random_event_type_sequence(rounds))
         if rounds >= MINIMAL_SEASON:  # epochs 6, 13, 21, 28
             calendar.append(
                 _create_calendar_record(
-                    next_season, 6, cycle, league.id, EventType.ELIMINATION_SCORING
+                    next_season, 6, cycle, league.id, random_event_types=random_event_types
                 )
             )
             calendar.append(
@@ -118,52 +119,56 @@ def recreate_calendar_for_next_season(session: Session, next_season: int):
                     13,
                     cycle,
                     league.id,
-                    EventType.QUARTERED_ONE_SHOT_SCORING,
+                    random_event_types=random_event_types,
                 )
             )
             calendar.append(
                 _create_calendar_record(
-                    next_season, 21, cycle, league.id, EventType.SPRINT_RACE
+                    next_season, 21, cycle, league.id, random_event_types=random_event_types
                 )
             )
             calendar.append(
                 _create_calendar_record(
-                    next_season, 28, cycle, league.id, EventType.ENDURANCE_RACE
+                    next_season, 28, cycle, league.id, random_event_types=random_event_types
                 )
             )
         if rounds >= SHORT_SEASON:  # epochs 3, 10, 18, 25
-            calendar.append(_create_calendar_record(next_season, 3, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 10, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 18, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 25, cycle, league.id))
+            calendar.append(_create_calendar_record(next_season, 3, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 10, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 18, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 25, cycle, league.id, random_event_types=random_event_types))
         if rounds >= HALF_SEASON:  # epochs 8, 15, 23, 30
-            calendar.append(_create_calendar_record(next_season, 8, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 15, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 23, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 30, cycle, league.id))
+            calendar.append(_create_calendar_record(next_season, 8, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 15, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 23, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 30, cycle, league.id, random_event_types=random_event_types))
         if rounds >= MEDIUM_SEASON:  # epochs 5, 12, 20, 27
-            calendar.append(_create_calendar_record(next_season, 5, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 12, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 20, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 27, cycle, league.id))
+            calendar.append(_create_calendar_record(next_season, 5, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 12, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 20, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 27, cycle, league.id, random_event_types=random_event_types))
         if rounds >= LONG_SEASON:  # epochs 7, 14, 22, 29
-            calendar.append(_create_calendar_record(next_season, 7, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 14, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 22, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 29, cycle, league.id))
+            calendar.append(_create_calendar_record(next_season, 7, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 14, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 22, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 29, cycle, league.id, random_event_types=random_event_types))
         if rounds == MAXIMAL_SEASON:  # epochs 4, 11, 19, 26
-            calendar.append(_create_calendar_record(next_season, 4, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 11, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 19, cycle, league.id))
-            calendar.append(_create_calendar_record(next_season, 26, cycle, league.id))
+            calendar.append(_create_calendar_record(next_season, 4, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 11, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 19, cycle, league.id, random_event_types=random_event_types))
+            calendar.append(_create_calendar_record(next_season, 26, cycle, league.id, random_event_types=random_event_types))
 
     calendar.sort(key=lambda x: x.date)
     save_all_calendar_records(session, calendar)
 
 
-def _create_calendar_record(season, epoch, cycle, league_id, event_type=None):
+def _create_calendar_record(
+    season, epoch, cycle, league_id, event_type=None, random_event_types=None
+):
     if event_type is None:
-        event_type = pick_random_event_type()
+        if random_event_types is None:
+            raise ValueError("random_event_types is required when event_type is not set")
+        event_type = next(random_event_types)
     return Calendar(
         date=get_sim_time_from(season, epoch, cycle),
         league_id=league_id,

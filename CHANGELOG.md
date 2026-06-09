@@ -607,3 +607,10 @@ Technical changes:
   - When injured blobs attend on premium practice:
     - Their skills increase less than for healthy blobs (but still more than on normal practice)
     - Their injured state won't reset like on normal practice
+
+# 4.8 - Calendar creation update
+
+- The event type randomizer is reworked:
+  - No fixed events on epochs 6, 13, 21 and 28 for all leagues
+  - All event types should appear at least once per league if there are more competitions for that league than event types
+  - Fixed issue that calendar recreation logic still worked with old versions of quartered event types
