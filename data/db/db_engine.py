@@ -43,10 +43,14 @@ from data.model import (
     calendar,
     event,
     event_type,
+    item,
     league,
     result,
+    retirement_focus,
     sim_data,
     name_suggestion,
+    state,
+    trait,
 )  # noqa: F401, E402
 
 

@@ -56,3 +56,4 @@ class Blob(Base):
     retirement_focus = relationship(
         "RetirementFocus", uselist=False, backref="blob", viewonly=True
     )
+    items = relationship("Item", viewonly=True)
