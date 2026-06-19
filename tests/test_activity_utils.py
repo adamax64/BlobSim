@@ -150,6 +150,17 @@ class TestActivityUtils(unittest.TestCase):
             weights[ActivityType.APPLY_FOR_HEIR], DEFAULT_ACTIVITY_WEIGHT * 5
         )
 
+    def test_full_inventory_blocks_adventure(self):
+        blob = create_blob_model_mock()
+        blob.traits = []
+        blob.states = []
+        blob.retirement_focus = None
+
+        weights = compute_weights(blob, FREE_ACTIVITIES, adventure_blocked=True)
+
+        self.assertEqual(weights[ActivityType.ADVENTURE], 0)
+        self.assertEqual(weights[ActivityType.PRACTICE], DEFAULT_ACTIVITY_WEIGHT)
+
     def test_compute_weights_does_not_add_extra_activity_entries(self):
         blob = create_blob_model_mock()
         blob.traits = [

@@ -158,22 +158,30 @@ def choose_activity(
     blob: Blob,
     extra_activities: list[ActivityType] | None = None,
     free_premium_practice: bool = False,
+    adventure_blocked: bool = False,
 ) -> ActivityType:
     """Choose an activity for `blob` with weights adjusted by traits and states."""
     activities = FREE_ACTIVITIES + (extra_activities or [])
-    weights = compute_weights(blob, activities, free_premium_practice)
+    weights = compute_weights(
+        blob, activities, free_premium_practice, adventure_blocked
+    )
     return random.choices(
         activities, weights=[weights[activity] for activity in activities], k=1
     )[0]
 
 
 def compute_weights(
-    blob: Blob, activities: list[ActivityType], free_premium_practice: bool
+    blob: Blob,
+    activities: list[ActivityType],
+    free_premium_practice: bool = False,
+    adventure_blocked: bool = False,
 ) -> dict[ActivityType, float]:
     """Compute final activity weights for the given activity pool."""
     weights = _get_initial_weights(blob, activities, free_premium_practice)
     _apply_rules(blob, weights, EXTRA_ACTIVITY_RULES)
     _apply_rules(blob, weights, FREE_ACTIVITY_RULES)
+    if adventure_blocked and ActivityType.ADVENTURE in weights:
+        weights[ActivityType.ADVENTURE] = 0
     return weights
 
 

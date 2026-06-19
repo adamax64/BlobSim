@@ -1,12 +1,42 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
-from domain.blob_services.blob_update_service import update_all_blobs
+from domain.blob_services.blob_update_service import _proceed_with_activity, update_all_blobs
 from domain.enums.activity_type import ActivityType
+from data.model.item_type import ItemType
 from tests.utils import create_blob_model_mock
 
 
 class TestBlobUpdateService(unittest.TestCase):
+
+    @patch('domain.blob_services.blob_update_service.grant_item_to_blob')
+    @patch('domain.blob_services.blob_update_service.choose_random_item_type')
+    def test_adventure_grants_item_on_successful_roll(
+        self, mock_choose_item_type, mock_grant_item
+    ):
+        mock_choose_item_type.return_value = ItemType.COOKIE
+        blob = create_blob_model_mock(
+            id=1, current_activity=ActivityType.ADVENTURE
+        )
+        session = MagicMock()
+
+        with patch('random.random', return_value=0.4):
+            _proceed_with_activity(blob, None, session)
+
+        mock_choose_item_type.assert_called_once()
+        mock_grant_item.assert_called_once_with(blob, ItemType.COOKIE, session)
+
+    @patch('domain.blob_services.blob_update_service.grant_item_to_blob')
+    def test_adventure_does_not_grant_item_on_failed_roll(self, mock_grant_item):
+        blob = create_blob_model_mock(
+            id=1, current_activity=ActivityType.ADVENTURE
+        )
+        session = MagicMock()
+
+        with patch('random.random', return_value=0.5):
+            _proceed_with_activity(blob, None, session)
+
+        mock_grant_item.assert_not_called()
 
     @patch('domain.blob_services.blob_update_service.save_all_blobs')
     @patch('domain.blob_services.blob_update_service.get_all_blobs_by_name')

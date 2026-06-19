@@ -54,6 +54,8 @@ from domain.utils.blob_utils import has_state, has_trait, compute_state_multipli
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
+from domain.item_service import grant_item_to_blob, is_inventory_full
+from domain.utils.item_utils import choose_random_item_type
 from domain.utils.constants import (
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
@@ -241,6 +243,9 @@ def _proceed_with_activity(
                 set_retirement_focus(
                     session, blob.id, RetirementFocusType.PROLONGED_LIFE
                 )
+    elif current_activity == ActivityType.ADVENTURE:
+        if random.random() < 0.5:
+            grant_item_to_blob(blob, choose_random_item_type(), session)
     else:
         pass  # Idle activity
 
@@ -478,7 +483,10 @@ def _choose_activity_for_blob(
                 extra_activities.append(ActivityType.ADMINISTRATION)
 
             blob.current_activity = choose_activity(
-                blob, extra_activities, free_premium_practice
+                blob,
+                extra_activities,
+                free_premium_practice,
+                adventure_blocked=is_inventory_full(blob, session),
             )
 
 
