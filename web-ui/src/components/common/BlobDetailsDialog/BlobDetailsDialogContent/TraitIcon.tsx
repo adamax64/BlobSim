@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { TraitType } from '../../../../../generated';
 import Engineering from '@mui/icons-material/Engineering';
 import AutoGraph from '@mui/icons-material/AutoGraph';
-import Hotel from '@mui/icons-material/Hotel';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Explore from '@mui/icons-material/Explore';
 import { Typography } from '@mui/material';
 import React from 'react';
@@ -24,7 +24,7 @@ const TraitIcon = ({ trait }: TraitIconProps) => {
       traitIcon = <AutoGraph />;
       break;
     case TraitType.Lazy:
-      traitIcon = <Hotel />;
+      traitIcon = <BeachAccessIcon />;
       break;
     case TraitType.Adventurous:
       traitIcon = <Explore />;
