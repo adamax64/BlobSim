@@ -82,7 +82,8 @@
       "MINING": "Bányászat",
       "INTENSE_PRACTICE": "Intenzív gyakorlás",
       "APPLY_FOR_HEIR": "Utód igénylése",
-      "PREMIUM_PRACTICE": "Prémium gyakorlás"
+      "PREMIUM_PRACTICE": "Prémium gyakorlás",
+      "ADVENTURE": "Adventure"
     },
     "news_type": {
       "BLOB_CREATED": "Egy új blob lett létrehozva {{blobName}} néven!",
@@ -114,7 +115,8 @@
     "traits": {
       "HARD_WORKING": "Szorgos",
       "DETERMINED": "Eltökélt",
-      "LAZY": "Lusta"
+      "LAZY": "Lusta",
+      "ADVENTUROUS": "Kalandor"
     },
     "retirement_focus": {
       "LEGACY": "Örökség",
@@ -130,7 +132,8 @@
   "trait_descriptions": {
     "HARD_WORKING": "Gyakrabban választ munka és edzés tevékenységet",
     "DETERMINED": "Kevésbé érzékeny a kimerültség és sérülés hatására, és gyakrabban választ edzés és intenzív edzés tevékenységet",
-    "LAZY": "Kisebb eséllyel választ munka és edzés tevékenységet"
+    "LAZY": "Kisebb eséllyel választ munka és edzés tevékenységet",
+    "ADVENTUROUS": "Nagyobb eséllyel megy felfedezőútra"
   },
   "event": {
     "title": "{{leagueName}} {{season}}. szezon {{round}}. forduló",

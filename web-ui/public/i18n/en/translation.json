@@ -82,7 +82,8 @@
       "MINING": "Mining",
       "INTENSE_PRACTICE": "Intense practice",
       "APPLY_FOR_HEIR": "Applying for heir",
-      "PREMIUM_PRACTICE": "Premium practice"
+      "PREMIUM_PRACTICE": "Premium practice",
+      "ADVENTURE": "Adventure"
     },
     "news_type": {
       "BLOB_CREATED": "A new blob called {{blobName}} has been created!",
@@ -114,7 +115,8 @@
     "traits": {
       "HARD_WORKING": "Hard Working",
       "DETERMINED": "Determined",
-      "LAZY": "Lazy"
+      "LAZY": "Lazy",
+      "ADVENTUROUS": "Adventurous"
     },
     "retirement_focus": {
       "LEGACY": "Legacy",
@@ -130,7 +132,8 @@
   "trait_descriptions": {
     "HARD_WORKING": "More likely to choose practice and labour activities",
     "DETERMINED": "Less likely to be affected by tiredness and injury, more likely to choose practice and intense practice activities",
-    "LAZY": "Less likely to choose practice and labour activities"
+    "LAZY": "Less likely to choose practice and labour activities",
+    "ADVENTUROUS": "More likely to go adventuring"
   },
   "event": {
     "title": "{{leagueName}} Season {{season}} Round {{round}}",

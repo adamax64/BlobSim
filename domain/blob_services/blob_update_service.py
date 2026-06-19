@@ -248,7 +248,7 @@ def _proceed_with_activity(
 
 
 def _is_premium_practice_free(blob: Blob, session: Session) -> bool:
-    if blob.league.level == 10:
+    if blob.league and blob.league.level == 10:
         return True
 
     current_season = get_season(get_sim_time(session))
@@ -390,17 +390,23 @@ def _apply_random_traits(blob: Blob, session: Session):
     """Apply random trait changes: if integrity is high, 0.1% chance to either gain or lose a trait.
 
     Trait conflict rules:
-    - LAZY cannot coexist with HARD_WORKING or DETERMINED
+    - LAZY cannot coexist with HARD_WORKING, ADVENTUROUS or DETERMINED
     """
     threshold = INITIAL_INTEGRITY - CYCLES_PER_SEASON * 2
 
     if blob.integrity > threshold:
         if random.random() < 0.001:
-            if random.random() < 0.5:
-                if blob.traits and len(blob.traits) > 0:
-                    lost_trait = random.choice(blob.traits)
-                    delete_trait(session, lost_trait.id)
-                    session.refresh(blob)
+            # Currently the LAZY trait counters every other trait so it can only be lost
+            # If this changes, the LAZY condition should be removed
+            if blob.traits and (has_trait(blob, TraitType.LAZY) or len(blob.traits) == 3):
+                lost_trait = random.choice(blob.traits)
+                delete_trait(session, lost_trait.id)
+                session.refresh(blob)
+
+            if random.random() < 0.5 and blob.traits and len(blob.traits) > 0:
+                lost_trait = random.choice(blob.traits)
+                delete_trait(session, lost_trait.id)
+                session.refresh(blob)
             else:
                 available_traits = [t for t in TraitType if not has_trait(blob, t)]
 
@@ -408,15 +414,16 @@ def _apply_random_traits(blob: Blob, session: Session):
                 has_lazy = has_trait(blob, TraitType.LAZY)
                 has_hardworking = has_trait(blob, TraitType.HARD_WORKING)
                 has_determined = has_trait(blob, TraitType.DETERMINED)
+                has_adventorous = has_trait(blob, TraitType.ADVENTUROUS)
 
                 if has_lazy:
                     # Remove HARD_WORKING and DETERMINED if blob has LAZY
                     available_traits = [
                         t
                         for t in available_traits
-                        if t not in (TraitType.HARD_WORKING, TraitType.DETERMINED)
+                        if t not in (TraitType.HARD_WORKING, TraitType.DETERMINED, TraitType.ADVENTUROUS)
                     ]
-                elif has_hardworking or has_determined:
+                elif has_hardworking or has_determined or has_adventorous:
                     # Remove LAZY if blob has HARD_WORKING or DETERMINED
                     available_traits = [
                         t for t in available_traits if t != TraitType.LAZY
@@ -454,7 +461,9 @@ def _choose_activity_for_blob(
                 extra_activities.append(ActivityType.MAINTENANCE)
 
             free_premium_practice = None
-            if blob.contract is not None and blob.contract >= get_season(
+            if blob.league and blob.league.level == 10:
+                free_premium_practice = True
+            elif blob.contract is not None and blob.contract >= get_season(
                 get_sim_time(session)
             ):
                 free_premium_practice = _is_premium_practice_free(blob, session)

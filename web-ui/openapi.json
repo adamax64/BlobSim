@@ -1571,6 +1571,7 @@
           "INTENSE_PRACTICE",
           "LABOUR",
           "IDLE",
+          "ADVENTURE",
           "ADMINISTRATION",
           "MINING",
           "APPLY_FOR_HEIR"
@@ -3216,7 +3217,8 @@
         "enum": [
           "HARD_WORKING",
           "DETERMINED",
-          "LAZY"
+          "LAZY",
+          "ADVENTUROUS"
         ],
         "title": "TraitType",
         "description": "Enum for Trait Type"

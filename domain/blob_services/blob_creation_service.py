@@ -28,6 +28,9 @@ from data.model.trait_type import TraitType
 from data.persistence.trait_repository import save_trait
 
 
+POSITIVE_TRAITS = [TraitType.HARD_WORKING, TraitType.DETERMINED, TraitType.ADVENTUROUS]
+
+
 @transactional
 def check_factory_and_create_blob(session):
     if is_blob_created(session):
@@ -67,21 +70,17 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         reset_factory_progress(session)
         add_blob_created_news(saved_blob.id, session)
 
-        # 45% chance to get an initial trait (HARD_WORKING or DETERMINED)
+        # 45% chance to get an initial trait
         try:
             if random.random() < 0.45:
                 initial = random.choice([t for t in TraitType])
                 save_trait(session, Trait(blob_id=saved_blob.id, type=initial))
 
-                # If initial is HARD_WORKING or DETERMINED, additional 15% chance to get the other
-                if initial in [TraitType.HARD_WORKING, TraitType.DETERMINED]:
-                    other = (
-                        TraitType.DETERMINED
-                        if initial == TraitType.HARD_WORKING
-                        else TraitType.HARD_WORKING
-                    )
-                    if random.random() < 0.15:
-                        save_trait(session, Trait(blob_id=saved_blob.id, type=other))
+                # If initial is HARD_WORKING, ADVENTUROUS or DETERMINED, additional 15% chance to get the other
+                if initial in POSITIVE_TRAITS and random.random() < 0.15:
+                    others = [t for t in POSITIVE_TRAITS if t != initial]
+                    additional = random.choice(others)
+                    save_trait(session, Trait(blob_id=saved_blob.id, type=additional))
         except Exception:
             pass            
     except IntegrityError:

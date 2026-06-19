@@ -3,6 +3,7 @@ import { TraitType } from '../../../../../generated';
 import Engineering from '@mui/icons-material/Engineering';
 import AutoGraph from '@mui/icons-material/AutoGraph';
 import Hotel from '@mui/icons-material/Hotel';
+import Explore from '@mui/icons-material/Explore';
 import { Typography } from '@mui/material';
 import React from 'react';
 import DialogTooltip from './DialogTooltip';
@@ -25,6 +26,8 @@ const TraitIcon = ({ trait }: TraitIconProps) => {
     case TraitType.Lazy:
       traitIcon = <Hotel />;
       break;
+    case TraitType.Adventurous:
+      traitIcon = <Explore />;
   }
 
   return (

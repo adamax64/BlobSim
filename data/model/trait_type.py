@@ -9,3 +9,4 @@ class TraitType(enum.Enum):
     HARD_WORKING = "HARD_WORKING"
     DETERMINED = "DETERMINED"
     LAZY = "LAZY"
+    ADVENTUROUS = "ADVENTUROUS"

@@ -16,6 +16,7 @@ FREE_ACTIVITIES = [
     ActivityType.IDLE,
     ActivityType.MINING,
     ActivityType.INTENSE_PRACTICE,
+    ActivityType.ADVENTURE,
 ]
 
 DEFAULT_ACTIVITY_WEIGHT = 10
@@ -31,6 +32,7 @@ DEFAULT_FREE_BASE_WEIGHTS: dict[ActivityType, float] = {
     ActivityType.IDLE: DEFAULT_ACTIVITY_WEIGHT,
     ActivityType.MINING: DEFAULT_ACTIVITY_WEIGHT,
     ActivityType.INTENSE_PRACTICE: INTENSE_OR_PREMIUM_PRACTICE_BASE_WEIGHT,
+    ActivityType.ADVENTURE: DEFAULT_ACTIVITY_WEIGHT,
 }
 
 RETIREMENT_FOCUS_FREE_BASE_WEIGHTS: dict[ActivityType, float] = {
@@ -39,6 +41,7 @@ RETIREMENT_FOCUS_FREE_BASE_WEIGHTS: dict[ActivityType, float] = {
     ActivityType.IDLE: DEFAULT_ACTIVITY_WEIGHT,
     ActivityType.MINING: DEFAULT_ACTIVITY_WEIGHT,
     ActivityType.INTENSE_PRACTICE: 0,
+    ActivityType.ADVENTURE: DEFAULT_ACTIVITY_WEIGHT
 }
 
 
@@ -120,7 +123,12 @@ FREE_ACTIVITY_RULES: list[WeightRule] = [
             ActivityType.LABOUR: _divide(TRAIT_MULTIPLIER),
             ActivityType.PRACTICE: _divide(TRAIT_MULTIPLIER),
             ActivityType.INTENSE_PRACTICE: _set(0),
+            ActivityType.ADVENTURE: _divide(TRAIT_MULTIPLIER),
         },
+    ),
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.ADVENTUROUS),
+        adjustments={ActivityType.ADVENTURE: _multiply(TRAIT_MULTIPLIER)}
     ),
     WeightRule(
         condition=lambda blob: has_state(blob, StateType.INJURED),
@@ -128,6 +136,7 @@ FREE_ACTIVITY_RULES: list[WeightRule] = [
             ActivityType.LABOUR: _set(0),
             ActivityType.PRACTICE: _divide(TRAIT_MULTIPLIER),
             ActivityType.INTENSE_PRACTICE: _set(0),
+            ActivityType.ADVENTURE: _set(0),
         },
     ),
     WeightRule(
@@ -135,6 +144,7 @@ FREE_ACTIVITY_RULES: list[WeightRule] = [
         adjustments={
             ActivityType.PRACTICE: _divide(TRAIT_MULTIPLIER),
             ActivityType.INTENSE_PRACTICE: _set(0),
+            ActivityType.ADVENTURE: _divide(DEFAULT_ACTIVITY_WEIGHT)
         },
     ),
     WeightRule(
