@@ -110,7 +110,12 @@
       "TIRED": "Tired",
       "INJURED": "Injured",
       "GLOOMY": "Gloomy",
-      "FOCUSED": "Focused"
+      "FOCUSED": "Focused",
+      "COOKIE_BOOST": "Cookie boost",
+      "ENERGY_CELL_BOOST": "Energy cell boost",
+      "CACHE_BOOST": "Cache boost",
+      "POWER_BANK_BOOST": "Power bank boost",
+      "OVERCLOCKING_DEVICE_BOOST": "Overclock boost"
     },
     "traits": {
       "HARD_WORKING": "Hard Working",
@@ -127,7 +132,12 @@
     "TIRED": "Training and event performance is slightly reduced",
     "INJURED": "Training and event performance is significantly reduced",
     "GLOOMY": "Training and event performance is slightly reduced. Blob is less likely to choose activities that require physical effort",
-    "FOCUSED": "Training and event performance is slightly increased."
+    "FOCUSED": "Training and event performance is slightly increased.",
+    "COOKIE_BOOST": "Strength and speed are increased for this event.",
+    "ENERGY_CELL_BOOST": "Minimum performance is increased for this event.",
+    "CACHE_BOOST": "Minimum performance is increased for this event.",
+    "POWER_BANK_BOOST": "Minimum performance and skills are increased for this event.",
+    "OVERCLOCKING_DEVICE_BOOST": "Strength and speed are increased for this event."
   },
   "trait_descriptions": {
     "HARD_WORKING": "More likely to choose practice and labour activities",

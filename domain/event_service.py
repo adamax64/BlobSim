@@ -19,6 +19,7 @@ from domain.dtos.event_dto import EventDto
 from domain.dtos.state_dto import StateDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException
+from domain.item_service import apply_pre_event_items
 from domain.news_services.news_service import add_ongoing_event_news
 from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.blob_utils import format_blob_name
@@ -58,12 +59,21 @@ def get_or_start_event(
 
         # Create Action records for each competitor with empty scores list
         competitors = _get_competitors(session, event, is_event_concluded)
-        actions = [
-            Action(event_id=event.id, blob_id=competitor.id, scores=[])
-            for competitor in competitors
-        ]
+        actions = []
+        for competitor in competitors:
+            apply_pre_event_items(competitor.id, session)
+            actions.append(
+                Action(
+                    event_id=event.id,
+                    blob_id=competitor.id,
+                    scores=[],
+                )
+            )
+        for player in event.league.players:
+            session.refresh(player)
         random.shuffle(actions)
         save_all_actions(session, actions)
+        session.refresh(event)
         add_ongoing_event_news(event.league.name, event.round, event.type, session)
 
     actions = [
@@ -120,39 +130,27 @@ def _get_competitors(
 ) -> List[BlobCompetitorDto]:
     if not is_event_concluded:
         return [
-            BlobCompetitorDto(
-                id=player.id,
-                name=format_blob_name(player),
-                strength=player.strength,
-                speed=player.speed,
-                color=player.color,
-                states=[
-                    StateDto(
-                        type=state.type,
-                        effect_until=convert_to_sim_time(state.effect_until),
-                    )
-                    for state in player.states
-                ],
-            )
+            _map_competitor(player)
             for player in event.league.players
         ]
-    else:
-        blob_ids = set([action.blob_id for action in event.actions])
-        blobs = get_all_by_ids(session, blob_ids)
-        return [
-            BlobCompetitorDto(
-                id=blob.id,
-                name=format_blob_name(blob),
-                strength=blob.strength,
-                speed=blob.speed,
-                color=blob.color,
-                states=[
-                    StateDto(
-                        type=state.type,
-                        effect_until=convert_to_sim_time(state.effect_until),
-                    )
-                    for state in blob.states
-                ],
+
+    blob_ids = set([action.blob_id for action in event.actions])
+    blobs = get_all_by_ids(session, blob_ids)
+    return [_map_competitor(blob) for blob in blobs]
+
+
+def _map_competitor(blob) -> BlobCompetitorDto:
+    return BlobCompetitorDto(
+        id=blob.id,
+        name=format_blob_name(blob),
+        strength=blob.strength,
+        speed=blob.speed,
+        color=blob.color,
+        states=[
+            StateDto(
+                type=state.type,
+                effect_until=convert_to_sim_time(state.effect_until),
             )
-            for blob in blobs
-        ]
+            for state in blob.states
+        ],
+    )

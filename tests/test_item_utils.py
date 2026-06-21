@@ -32,7 +32,7 @@ class TestItemUtils(unittest.TestCase):
             get_item_durability(ItemType.POWER_BANK), DEFAULT_UNCONSUMABLE_DURABILITY
         )
         self.assertEqual(
-            get_item_durability(ItemType.OVERCLOCKING_SCRIPT),
+            get_item_durability(ItemType.OVERCLOCKING_DEVICE),
             DEFAULT_UNCONSUMABLE_DURABILITY,
         )
 
@@ -58,7 +58,7 @@ class TestItemUtils(unittest.TestCase):
         self.assertEqual(get_item_sell_value(ItemType.COOKIE), 1)
         self.assertEqual(get_item_sell_value(ItemType.ENERGY_CELL), 5)
         self.assertEqual(get_item_sell_value(ItemType.SACK_OF_MONEY), 10)
-        self.assertEqual(get_item_sell_value(ItemType.OVERCLOCKING_SCRIPT), 20)
+        self.assertEqual(get_item_sell_value(ItemType.OVERCLOCKING_DEVICE), 20)
 
     def test_rarity_rank_order(self):
         self.assertLess(

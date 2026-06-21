@@ -174,7 +174,7 @@ class TestItemService(unittest.TestCase):
         mock_get_items.return_value = [
             common_item,
             _item(2, ItemType.POWER_BANK, 2),
-            _item(3, ItemType.OVERCLOCKING_SCRIPT, 2),
+            _item(3, ItemType.OVERCLOCKING_DEVICE, 2),
         ]
         blob = create_blob_model_mock(id=1, money=0)
         session = MagicMock()
@@ -193,7 +193,7 @@ class TestItemService(unittest.TestCase):
     ):
         mock_get_items.return_value = [
             _item(1, ItemType.POWER_BANK, 2),
-            _item(2, ItemType.OVERCLOCKING_SCRIPT, 2),
+            _item(2, ItemType.OVERCLOCKING_DEVICE, 2),
             _item(3, ItemType.PROCESSOR_PASTE, 10),
         ]
         blob = create_blob_model_mock(id=1, money=0)

@@ -12,9 +12,12 @@ from data.persistence.item_repository import (
     save_item,
     update_item,
 )
-from data.persistence.state_repository import delete_state
+from data.persistence.state_repository import create_state, delete_state
 from domain.sim_data_service import get_sim_time
 from domain.utils.item_utils import (
+    INFINITE_DURABILITY,
+    PRE_EVENT_ITEM_STATE_TYPES,
+    PRE_EVENT_ITEM_TYPES,
     get_inventory_capacity,
     get_item_durability,
     get_item_rarity_rank,
@@ -22,13 +25,17 @@ from domain.utils.item_utils import (
     is_consumable,
 )
 
+OVERCLOCK_DEPLETED_INJURY_CHANCE = 0.3
+INJURED_STATE_DURATION = 4
+EVENT_ITEM_STATE_DURATION = 1
+
 MONEY_REWARDS: dict[ItemType, int] = {
     ItemType.COIN: 1,
     ItemType.BAG_OF_MONEY: 5,
     ItemType.TREASURE_CHEST: 20,
 }
 
-ENERGY_CELL_TARGET_TYPES = {ItemType.POWER_BANK, ItemType.OVERCLOCKING_SCRIPT}
+ENERGY_CELL_TARGET_TYPES = {ItemType.POWER_BANK, ItemType.OVERCLOCKING_DEVICE}
 
 
 def grant_item_to_blob(blob: Blob, item_type: ItemType, session: Session) -> None:
@@ -52,6 +59,56 @@ def grant_item_to_blob(blob: Blob, item_type: ItemType, session: Session) -> Non
 def is_inventory_full(blob: Blob, session: Session) -> bool:
     items = get_items_of_blob(session, blob.id)
     return len(items) >= get_inventory_capacity(items)
+
+
+def apply_pre_event_items(blob_id: int, session: Session) -> None:
+    effect_until = get_sim_time(session) + EVENT_ITEM_STATE_DURATION
+
+    for item in list(get_items_of_blob(session, blob_id)):
+        if item.type not in PRE_EVENT_ITEM_TYPES or not _can_use_pre_event_item(item):
+            continue
+
+        if (
+            item.type == ItemType.OVERCLOCKING_DEVICE
+            and item.durability == 0
+            and random.random() < OVERCLOCK_DEPLETED_INJURY_CHANCE
+        ):
+            create_state(
+                session,
+                blob_id,
+                StateType.INJURED,
+                get_sim_time(session) + INJURED_STATE_DURATION,
+            )
+
+        create_state(
+            session,
+            blob_id,
+            PRE_EVENT_ITEM_STATE_TYPES[item.type],
+            effect_until,
+        )
+        _consume_item_after_use(session, item)
+
+
+def _can_use_pre_event_item(item: Item) -> bool:
+    if is_consumable(item.type):
+        return True 
+    if item.type == ItemType.OVERCLOCKING_DEVICE:
+        # If Durability is 0 blobs don't always use because it is dangerous
+        return item.durability > 0 or random.random() < OVERCLOCK_DEPLETED_INJURY_CHANCE
+    return item.durability > 0
+
+
+def _consume_item_after_use(session: Session, item: Item) -> None:
+    # TODO: use cache cleaner or energy cell if reasonable
+    if is_consumable(item.type):
+        delete_item(session, item.id)
+        return
+    if item.durability == INFINITE_DURABILITY:
+        return
+    if item.durability > 0:
+        item.durability -= 1
+    
+    update_item(session, item)
 
 
 def _add_item_to_inventory(blob: Blob, item_type: ItemType, session: Session) -> None:

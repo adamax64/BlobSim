@@ -110,7 +110,12 @@
       "TIRED": "Kimerült",
       "INJURED": "Sérült",
       "GLOOMY": "Elkeseredett",
-      "FOCUSED": "Fókuszált"
+      "FOCUSED": "Fókuszált",
+      "COOKIE_BOOST": "Süti boost",
+      "ENERGY_CELL_BOOST": "Energiacella boost",
+      "CACHE_BOOST": "Gyorsítótár boost",
+      "POWER_BANK_BOOST": "Power bank boost",
+      "OVERCLOCKING_DEVICE_BOOST": "Overclock boost"
     },
     "traits": {
       "HARD_WORKING": "Szorgos",
@@ -127,7 +132,12 @@
     "TIRED": "A tréning és esemény teljesítménye kissé csökken.",
     "INJURED": "A tréning és esemény teljesítménye jelentősen csökken.",
     "GLOOMY": "A tréning és esemény teljesítménye kissé csökken. A blob kisebb valószínűséggel választja a fizikai erőfeszítéseket igényelő tevékenységeket.",
-    "FOCUSED": "A tréning és esemény teljesítménye kissé növekszik."
+    "FOCUSED": "A tréning és esemény teljesítménye kissé növekszik.",
+    "COOKIE_BOOST": "Erő és sebesség növekedés erre az eseményre.",
+    "ENERGY_CELL_BOOST": "Minimális teljesítmány növekszik erre az eseményre.",
+    "CACHE_BOOST": "Minimális teljesítmény növekszik erre az eseményre.",
+    "POWER_BANK_BOOST": "Minimális teljesítmény és a képességek megnőnek erre az eseményre.",
+    "OVERCLOCKING_DEVICE_BOOST": "Erő és sebesség növekedés erre az eseményre."
   },
   "trait_descriptions": {
     "HARD_WORKING": "Gyakrabban választ munka és edzés tevékenységet",

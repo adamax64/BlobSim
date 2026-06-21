@@ -1,6 +1,7 @@
 import random
 
 from data.model.item_type import ItemType
+from data.model.state_type import StateType
 
 DEFAULT_UNCONSUMABLE_DURABILITY = 3
 INFINITE_DURABILITY = -1
@@ -50,12 +51,40 @@ ITEM_RARITY_TIERS: dict[str, tuple[ItemType, ...]] = {
     ),
     "legendary": (
         ItemType.TREASURE_CHEST,
-        ItemType.OVERCLOCKING_SCRIPT,
+        ItemType.OVERCLOCKING_DEVICE,
         ItemType.EXTERNAL_STORAGE,
     ),
 }
 
 RARITY_WEIGHTS = [60, 20, 16, 4]
+
+PRE_EVENT_ITEM_TYPES = {
+    ItemType.COOKIE,
+    ItemType.ENERGY_CELL,
+    ItemType.CACHE,
+    ItemType.POWER_BANK,
+    ItemType.OVERCLOCKING_DEVICE,
+}
+
+PRE_EVENT_ITEM_STATE_TYPES: dict[ItemType, StateType] = {
+    ItemType.COOKIE: StateType.COOKIE_BOOST,
+    ItemType.ENERGY_CELL: StateType.ENERGY_CELL_BOOST,
+    ItemType.CACHE: StateType.CACHE_BOOST,
+    ItemType.POWER_BANK: StateType.POWER_BANK_BOOST,
+    ItemType.OVERCLOCKING_DEVICE: StateType.OVERCLOCKING_DEVICE_BOOST,
+}
+
+PRE_EVENT_SKILL_STATE_BONUSES: dict[StateType, float] = {
+    StateType.COOKIE_BOOST: 0.04,
+    StateType.POWER_BANK_BOOST: 0.02,
+    StateType.OVERCLOCKING_DEVICE_BOOST: 0.10,
+}
+
+PRE_EVENT_MIN_SCORE_STATE_BONUSES: dict[StateType, float] = {
+    StateType.ENERGY_CELL_BOOST: 0.05,
+    StateType.CACHE_BOOST: 0.05,
+    StateType.POWER_BANK_BOOST: 0.10,
+}
 
 
 def get_item_rarity(item_type: ItemType) -> str:

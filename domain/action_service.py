@@ -12,6 +12,8 @@ from domain.record_service import check_and_update_record
 from domain.sim_data_service import get_sim_time
 from domain.utils.action_utils import (
     compute_event_multiplier_from_contender,
+    compute_item_min_score_boost,
+    compute_item_skill_multiplier,
     generate_race_score_for_contender,
     get_random_coefficient,
 )
@@ -33,12 +35,14 @@ def create_action_for_quartered_event(
     multiplier, focused = compute_event_multiplier_from_contender(
         contender, current_time
     )
-    adj_strength = contender.strength * multiplier
-    adj_speed = contender.speed * multiplier
+    skill_multiplier = compute_item_skill_multiplier(contender, current_time)
+    min_score_boost = compute_item_min_score_boost(contender, current_time)
+    adj_strength = contender.strength * multiplier * skill_multiplier
+    adj_speed = contender.speed * multiplier * skill_multiplier
 
     score = (
-        adj_strength * get_random_coefficient(focused) * 0.7
-        + adj_speed * get_random_coefficient(focused) * 0.3
+        adj_strength * get_random_coefficient(focused, min_score_boost) * 0.7
+        + adj_speed * get_random_coefficient(focused, min_score_boost) * 0.3
     )
 
     record = None
@@ -164,12 +168,15 @@ def create_actions_for_elimination_event(
 
     for contender in contenders:
         # Apply state-based event modifiers (using states from DTO, no DB fetch)
+        current_time = get_sim_time(session)
         multiplier, focused = compute_event_multiplier_from_contender(
-            contender, get_sim_time(session)
+            contender, current_time
         )
-        adj_strength = contender.strength * multiplier
+        skill_multiplier = compute_item_skill_multiplier(contender, current_time)
+        min_score_boost = compute_item_min_score_boost(contender, current_time)
+        adj_strength = contender.strength * multiplier * skill_multiplier
 
-        score = adj_strength * get_random_coefficient(focused)
+        score = adj_strength * get_random_coefficient(focused, min_score_boost)
         actions[contender.id].scores = actions[contender.id].scores + [score]
         if score > max_score:
             max_score = score
