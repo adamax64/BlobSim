@@ -614,3 +614,51 @@ Technical changes:
   - No fixed events on epochs 6, 13, 21 and 28 for all leagues
   - All event types should appear at least once per league if there are more competitions for that league than event types
   - Fixed issue that calendar recreation logic still worked with old versions of quartered event types
+
+# 5.0 - Adventure update
+
+- New activity: Adventure
+  - 50% chance to find loot, 5% chance for injury
+  - Loot can be of different rarity (chances after loot was found):
+    - Common: 60%
+    - Rare: 20%
+    - Epic: 16%
+    - Legendary: 4%
+- New traid: Adventurous - goes on adventures more likely
+- Added inventory and item mechanic to blobs
+  - Inventory not visible on UI (yet)
+  - But can be seen if a blob used item(s) on events
+  - Items:
+    - Unconsumables:
+
+    | Name             | Rarity    | Effect                                                                                                                                                   |
+    | ---------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | Cache            | Rare      | Increases minimal generated score by 5%                                                                                                                  |
+    | Power Bank       | Epic      | Increases minimal generated score by 10% and skills by 2%                                                                                                |
+    | Processor Paste  | Epic      | Chance of not loosing integrity is determined by durability \* 5 in % (16 durability, used once per cycle, removed instantly if reaches zero durability) |
+    | Repair Kit       | Epic      | Removes injured trait (consumes instantly when injury trait is gained)                                                                                   |
+    | Overclock Device | Legendary | Increases skills by 5%, (3 durability, but blob can decide to use it at 0 durability, but then it risks injury)                                          |
+    | External Storage | Legendary | Inventory size is increased by 3                                                                                                                         |
+    - Consumables:
+
+    | Name            | Rarity    | Effect                                                                                                                                                          |
+    | --------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | Cookie          | Common    | Increases skills by 5%                                                                                                                                          |
+    | Coin            | Common    | Increases money by 1 (instantly consumed)                                                                                                                       |
+    | Energy Cell     | Rare      | Minimal generated score increased by 5% or resets durability of Power banks or Overclocking devices if the blob owns it (in that case it is consumed instantly) |
+    | Bag of Money    | Rare      | Increases money by 5 (instantly consumed)                                                                                                                       |
+    | Cache Cleaner   | Rare      | Resets cache charge                                                                                                                                             |
+    | Maintenance Kit | Epic      | Increases integrity by 3 (instantly consumed)                                                                                                                   |
+    | Sack of Money   | Epic      | Increases money by 10 (instantly consumed)                                                                                                                      |
+    | Repair Kit      | Epic      | Removes injured trait (consumes instantly when injury trait is gained)                                                                                          |
+    | Treasure Chest  | Legendary | Increases money by 20 (instantly consumed)                                                                                                                      |
+
+  - For each item that grants an effect during event the effect is implemented as a new state
+
+- UI adjustments:
+  - changed icon for lazy trait
+  - replaced loading bar with circular progress in card header on event page
+    - the circular progress is visible when the user scrolls down making the page more responsive
+- Bugfixes:
+  - Fixed trait change bug that made trait change far less likely
+  - Fixed bug about blobs on queue don't have access to free premium practice
