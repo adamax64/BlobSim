@@ -12,14 +12,16 @@ from data.persistence.item_repository import (
     save_item,
     update_item,
 )
-from data.persistence.state_repository import create_state, delete_state
+from data.persistence.state_repository import create_state, delete_state, get_states_of_blob
 from domain.sim_data_service import get_sim_time
 from domain.utils.item_utils import (
+    DEFAULT_UNCONSUMABLE_DURABILITY,
     INFINITE_DURABILITY,
     PRE_EVENT_ITEM_STATE_TYPES,
     PRE_EVENT_ITEM_TYPES,
     get_inventory_capacity,
     get_item_durability,
+    get_item_from_list_by_type,
     get_item_rarity_rank,
     get_item_sell_value,
     is_consumable,
@@ -64,8 +66,10 @@ def is_inventory_full(blob: Blob, session: Session) -> bool:
 def apply_pre_event_items(blob_id: int, session: Session) -> None:
     effect_until = get_sim_time(session) + EVENT_ITEM_STATE_DURATION
 
-    for item in list(get_items_of_blob(session, blob_id)):
-        if item.type not in PRE_EVENT_ITEM_TYPES or not _can_use_pre_event_item(item):
+    items = get_items_of_blob(session, blob_id)
+    for item in items:
+        blob_states = [state.type for state in get_states_of_blob(session, blob_id)]
+        if item.type not in PRE_EVENT_ITEM_TYPES or PRE_EVENT_ITEM_STATE_TYPES[item.type] in blob_states or not _can_use_pre_event_item(item):
             continue
 
         if (
@@ -86,7 +90,7 @@ def apply_pre_event_items(blob_id: int, session: Session) -> None:
             PRE_EVENT_ITEM_STATE_TYPES[item.type],
             effect_until,
         )
-        _consume_item_after_use(session, item)
+        _consume_item_after_use(session, item, items)
 
 
 def _can_use_pre_event_item(item: Item) -> bool:
@@ -98,8 +102,7 @@ def _can_use_pre_event_item(item: Item) -> bool:
     return item.durability > 0
 
 
-def _consume_item_after_use(session: Session, item: Item) -> None:
-    # TODO: use cache cleaner or energy cell if reasonable
+def _consume_item_after_use(session: Session, item: Item, items: list[Item]) -> None:
     if is_consumable(item.type):
         delete_item(session, item.id)
         return
@@ -107,6 +110,15 @@ def _consume_item_after_use(session: Session, item: Item) -> None:
         return
     if item.durability > 0:
         item.durability -= 1
+        if item.durability == 0:
+            cache_cleaner = get_item_from_list_by_type(items, ItemType.CACHE_CLEANER)
+            energy_cell = get_item_from_list_by_type(items, ItemType.ENERGY_CELL)
+            if item.type == ItemType.CACHE and cache_cleaner != None:
+                item.durability = DEFAULT_UNCONSUMABLE_DURABILITY
+                delete_item(session, cache_cleaner.id)
+            elif (item.type == ItemType.POWER_BANK or item.type == ItemType.OVERCLOCKING_DEVICE) and energy_cell != None:
+                item.durability = DEFAULT_UNCONSUMABLE_DURABILITY
+                delete_item(session, energy_cell.id)
     
     update_item(session, item)
 

@@ -1,5 +1,6 @@
 import random
 
+from data.model.item import Item
 from data.model.item_type import ItemType
 from data.model.state_type import StateType
 
@@ -126,3 +127,10 @@ def get_item_durability(item_type: ItemType) -> int:
     if item_type in UNCONSUMABLE_DURABILITY_OVERRIDES:
         return UNCONSUMABLE_DURABILITY_OVERRIDES[item_type]
     return DEFAULT_UNCONSUMABLE_DURABILITY
+
+
+def get_item_from_list_by_type(items: list[Item], item_type: ItemType) -> Item | None:
+    for item in items:
+        if item.type == item_type:
+            return item
+    return None

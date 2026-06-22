@@ -32,14 +32,16 @@ class TestPreEventItems(unittest.TestCase):
     @patch("domain.item_service.create_state")
     @patch("domain.item_service._consume_item_after_use")
     @patch("domain.item_service.get_items_of_blob")
+    @patch("domain.item_service.get_states_of_blob")
     @patch("domain.item_service.get_sim_time", return_value=100)
     def test_cookie_and_power_bank_create_item_states(
-        self, mock_get_sim_time, mock_get_items, mock_consume, mock_create_state
+        self, mock_get_sim_time, mock_get_states_of_blob, mock_get_items, mock_consume, mock_create_state
     ):
         mock_get_items.return_value = [
             _item(1, ItemType.COOKIE, 1),
             _item(2, ItemType.POWER_BANK, 2),
         ]
+        mock_get_states_of_blob.return_value = []
         session = MagicMock()
 
         apply_pre_event_items(1, session)
@@ -55,14 +57,16 @@ class TestPreEventItems(unittest.TestCase):
     @patch("domain.item_service.create_state")
     @patch("domain.item_service._consume_item_after_use")
     @patch("domain.item_service.get_items_of_blob")
+    @patch("domain.item_service.get_states_of_blob")
     @patch("domain.item_service.get_sim_time", return_value=100)
     def test_energy_cell_and_cache_create_min_score_states(
-        self, mock_get_sim_time, mock_get_items, mock_consume, mock_create_state
+        self, mock_get_sim_time, mock_get_states_of_blob, mock_get_items, mock_consume, mock_create_state
     ):
         mock_get_items.return_value = [
             _item(1, ItemType.ENERGY_CELL, 1),
             _item(2, ItemType.CACHE, 2),
         ]
+        mock_get_states_of_blob.return_value = []
         session = MagicMock()
 
         apply_pre_event_items(1, session)
@@ -74,10 +78,12 @@ class TestPreEventItems(unittest.TestCase):
 
     @patch("domain.item_service.create_state")
     @patch("domain.item_service.get_items_of_blob")
+    @patch("domain.item_service.get_states_of_blob")
     def test_unconsumable_with_zero_durability_is_not_used(
-        self, mock_get_items, mock_create_state
+        self, mock_get_states_of_blob, mock_get_items, mock_create_state
     ):
         mock_get_items.return_value = [_item(1, ItemType.CACHE, 0)]
+        mock_get_states_of_blob.return_value = []
         session = MagicMock()
 
         apply_pre_event_items(1, session)
