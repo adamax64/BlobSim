@@ -42,10 +42,7 @@ export const EliminationScoringUI = ({
   }, [isMobile, tick, t]);
 
   return (
-    <EventCardFrame eventType={eventType} tickDisplay={tickDisplay}>
-      <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={isMobile ? 0 : 2}>
-        <TickLoadingBar />
-      </Box>
+    <EventCardFrame eventType={eventType} tickDisplay={tickDisplay} showLoader={loadingNextTick}>
       {isMobile ? (
         <EliminationEventContentTabs
           eventRecords={eventRecords}

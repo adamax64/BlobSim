@@ -121,10 +121,7 @@ export const SprintRaceUI = ({
   }, [isMobile, t, tick, raceDuration]);
 
   return (
-    <EventCardFrame eventType={eventType} tickDisplay={tickDisplay}>
-      <Box visibility={loadingNextTick ? 'visible' : 'hidden'} marginBottom={2}>
-        <TickLoadingBar />
-      </Box>
+    <EventCardFrame eventType={eventType} tickDisplay={tickDisplay} showLoader={loadingNextTick}>
       <EventTable>
         <TableHead>
           <TableRow>
