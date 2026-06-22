@@ -2,6 +2,7 @@ import random
 
 from sqlalchemy.orm import Session
 
+from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.model.item import Item
 from data.model.item_type import ItemType
@@ -14,6 +15,7 @@ from data.persistence.item_repository import (
 )
 from data.persistence.state_repository import create_state, delete_state, get_states_of_blob
 from domain.sim_data_service import get_sim_time
+from domain.state_service import apply_injury
 from domain.utils.item_utils import (
     DEFAULT_UNCONSUMABLE_DURABILITY,
     INFINITE_DURABILITY,
@@ -28,7 +30,6 @@ from domain.utils.item_utils import (
 )
 
 OVERCLOCK_DEPLETED_INJURY_CHANCE = 0.3
-INJURED_STATE_DURATION = 4
 EVENT_ITEM_STATE_DURATION = 1
 
 MONEY_REWARDS: dict[ItemType, int] = {
@@ -63,6 +64,7 @@ def is_inventory_full(blob: Blob, session: Session) -> bool:
     return len(items) >= get_inventory_capacity(items)
 
 
+@transactional
 def apply_pre_event_items(blob_id: int, session: Session) -> None:
     effect_until = get_sim_time(session) + EVENT_ITEM_STATE_DURATION
 
@@ -77,12 +79,7 @@ def apply_pre_event_items(blob_id: int, session: Session) -> None:
             and item.durability == 0
             and random.random() < OVERCLOCK_DEPLETED_INJURY_CHANCE
         ):
-            create_state(
-                session,
-                blob_id,
-                StateType.INJURED,
-                get_sim_time(session) + INJURED_STATE_DURATION,
-            )
+            apply_injury(blob_id, session)
 
         create_state(
             session,

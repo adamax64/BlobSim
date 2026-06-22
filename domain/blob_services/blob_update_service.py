@@ -8,6 +8,7 @@ from data.model.blob import Blob
 from data.model.calendar import Calendar
 from data.model.event import Event
 from data.model.event_type import EventType
+from data.model.item_type import ItemType
 from data.model.name_suggestion import NameSuggestion
 from data.model.policy_type import PolicyType
 from data.model.retirement_focus_type import RetirementFocusType
@@ -19,6 +20,7 @@ from data.persistence.blob_reposiotry import (
     save_blob,
     get_youngest_blob_debuting_in_season,
 )
+from data.persistence.item_repository import delete_item, update_item
 from data.persistence.name_suggestion_repository import save_suggestion
 from data.persistence.retirement_focus_repository import (
     remove_retirement_focus,
@@ -49,13 +51,14 @@ from data.persistence.action_repository import get_action_by_event_and_blob
 from domain.event_record_services.race_event_records_service import (
     compute_sprint_finish_time,
 )
+from domain.state_service import apply_injury
 from domain.utils.league_utils import get_race_duration_by_size
 from domain.utils.blob_utils import has_state, has_trait, compute_state_multiplier
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
 from domain.item_service import grant_item_to_blob, is_inventory_full
-from domain.utils.item_utils import choose_random_item_type
+from domain.utils.item_utils import choose_random_item_type, get_item_from_list_by_type
 from domain.utils.constants import (
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
@@ -107,7 +110,7 @@ def update_all_blobs(session: Session):
         multiplyer = _proceed_with_activity(blob, current_event, session)
 
         _update_blob_stats(blob, multiplyer)
-        blob.integrity -= 1
+        _update_blob_integrity(blob, session)
         _terminate_blob(blob, current_time, session)
 
         is_grandmaster = get_current_grandmaster_id(session) == blob.id
@@ -141,6 +144,20 @@ def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
             blob.speed, multiplyer, blob.learning, blob.integrity, 0
         )
         save_blob(session, blob)
+
+
+def _update_blob_integrity(blob: Blob, session: Session):
+    processor_paste = get_item_from_list_by_type(blob.items, ItemType.PROCESSOR_PASTE)
+    if processor_paste:
+        chance = 5 * processor_paste.durability / 100
+        if processor_paste.durability == 0:
+            delete_item(session, processor_paste.id)
+        else:
+            update_item(session, processor_paste)
+        if random.random() < chance:
+            return
+
+    blob.integrity -= 1
 
 
 def _proceed_with_activity(
@@ -246,6 +263,8 @@ def _proceed_with_activity(
     elif current_activity == ActivityType.ADVENTURE:
         if random.random() < 0.5:
             grant_item_to_blob(blob, choose_random_item_type(), session)
+        elif random.random() < 0.1:
+            apply_injury(blob.id, session)
     else:
         pass  # Idle activity
 
@@ -346,10 +365,7 @@ def _apply_intense_practice_state_changes(blob: Blob, session: Session):
             create_state(session, blob.id, StateType.TIRED, effect_until)
 
     if random.random() < injured_chance:
-        effect_until = get_sim_time(session) + 4
-        if random.random() < max(0, (1 - blob.integrity / INITIAL_INTEGRITY) * 0.2):
-            blob.integrity -= 1
-        create_state(session, blob.id, StateType.INJURED, effect_until)
+        apply_injury(blob.id, session)
 
 
 def _sprint_competition_time_multiplier(
