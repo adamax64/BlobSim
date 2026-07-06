@@ -4,7 +4,7 @@ import traceback
 
 from domain.blob_services.blob_fetching_service import fetch_blob_by_id
 from domain.blob_services.blob_service import get_all_blobs, create_blob as service_create_blob
-from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
 from .auth_dependency import require_auth
 

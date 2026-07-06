@@ -1,6 +1,6 @@
 from data.model.blob import Blob
 from data.model.state_type import StateType
-from domain.dtos.blob_stats_dto import BlobStatsDto, IntegrityState
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto, IntegrityState
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.state_dto import StateDto
 from domain.dtos.trait_type_dto import TraitTypeDto

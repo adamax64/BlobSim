@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 from domain.dtos.league_dto import LeagueDto
 
 

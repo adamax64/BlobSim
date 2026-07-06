@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from data.model.news_type import NewsType
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.sim_time_dto import SimTimeDto
-from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 
 
 NewsTypeDto = NewsType

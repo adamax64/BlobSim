@@ -7,7 +7,7 @@ from data.persistence.action_repository import (
     save_all_actions,
 )
 from data.persistence.event_repository import get_event_by_id
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.record_service import check_and_update_record
 from domain.sim_data_service import get_sim_time
 from domain.utils.action_utils import (

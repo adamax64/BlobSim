@@ -4,7 +4,7 @@ from data.persistence.blob_reposiotry import (
     get_all_blobs_by_name,
     get_blob_by_id,
 )
-from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 from domain.hall_of_fame_services.titles_chronology_service import (
     get_current_grandmaster_id,
 )

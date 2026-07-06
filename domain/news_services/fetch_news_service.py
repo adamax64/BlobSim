@@ -5,7 +5,7 @@ from data.model.news import News
 from data.persistence.news_repository import get_all_news
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.news_dto import NewsDto, NewsTypeDto, TransfersDto
-from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 from domain.utils.sim_time_utils import convert_to_sim_time
 from domain.blob_services.blob_fetching_service import fetch_blob_by_id
 

@@ -1,7 +1,7 @@
 import random
 from functools import lru_cache
 
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.utils.item_utils import (
     PRE_EVENT_MIN_SCORE_STATE_BONUSES,
     PRE_EVENT_SKILL_STATE_BONUSES,

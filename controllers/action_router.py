@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 import traceback
 
 from domain.action_service import create_actions_for_elimination_event, create_actions_for_race, create_action_for_quartered_event
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.event_service import get_event_by_id
 from domain.exceptions.event_not_found_exception import EventNotFoundException
 from domain.exceptions.no_current_event_exception import NoCurrentEventException

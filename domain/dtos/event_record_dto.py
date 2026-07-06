@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 
 
 @dataclass

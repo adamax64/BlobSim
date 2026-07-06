@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from data.db.db_engine import transactional
 from data.persistence.name_suggestion_repository import delete_suggestion, get_suggestion_by_details
 from domain.blob_services.blob_fetching_service import fetch_all_blobs
-from domain.dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 from domain.blob_services.blob_creation_service import create_blob as service_create_blob
 from domain.blob_services.blob_update_service import update_all_blobs
 

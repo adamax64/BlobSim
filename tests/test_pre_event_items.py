@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 from data.model.item_type import ItemType
 from data.model.state_type import StateType
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.dtos.state_dto import StateDto
 from domain.item_service import apply_pre_event_items

@@ -4,7 +4,7 @@ from domain.event_record_services.race_event_records_service import (
     get_sprint_event_records,
 )
 from domain.dtos.action_dto import ActionDto
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 
 
 class TestSprintEventRecordService(unittest.TestCase):

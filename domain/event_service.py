@@ -14,7 +14,7 @@ from data.persistence.event_repository import (
 from data.model.action import Action
 from data.persistence.action_repository import save_all_actions
 from domain.dtos.action_dto import ActionDto
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventDto
 from domain.dtos.state_dto import StateDto
 from domain.exceptions.event_not_found_exception import EventNotFoundException

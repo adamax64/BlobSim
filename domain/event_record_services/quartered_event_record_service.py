@@ -1,5 +1,5 @@
 from domain.dtos.action_dto import ActionDto
-from domain.dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.event_record_dto import QuarteredEventRecordDto, ScoreDto
 from domain.event_record_services.event_type_checks import (
