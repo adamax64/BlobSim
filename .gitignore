@@ -3,6 +3,7 @@
 **/__pycache__/*
 *.png
 !web-ui/favicon.png
+!web-ui/favicon_192x192.png
 **/node_modules/*
 /.pytest_cache
 /venv

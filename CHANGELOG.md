@@ -662,3 +662,7 @@ Technical changes:
 - Bugfixes:
   - Fixed trait change bug that made trait change far less likely
   - Fixed bug about blobs on queue don't have access to free premium practice
+
+# 5.1
+
+- Added large favicon for mobile splash screen
