@@ -663,6 +663,10 @@ Technical changes:
   - Fixed trait change bug that made trait change far less likely
   - Fixed bug about blobs on queue don't have access to free premium practice
 
-# 5.1
+# 5.1 - Minor tweaks
 
 - Added large favicon for mobile splash screen
+- Initial skills on blob creation changed to [0.92 - 1.12]
+- Initial learning on blob creation changed to [0.55 - 1.0]
+- Adventuring activity now increases speed and strength
+  - Effect is half of practice effect

@@ -60,6 +60,7 @@ from domain.utils.activity_utils import choose_activity
 from domain.item_service import grant_item_to_blob, is_inventory_full
 from domain.utils.item_utils import choose_random_item_type, get_item_from_list_by_type
 from domain.utils.constants import (
+    ADVENTURE_EFFECT,
     COMPETITION_EFFECT,
     CYCLES_PER_SEASON,
     GRANDMASTER_SALARY,
@@ -265,6 +266,9 @@ def _proceed_with_activity(
             grant_item_to_blob(blob, choose_random_item_type(), session)
         elif random.random() < 0.1:
             apply_injury(blob.id, session)
+        split = random.random()
+        multiplyer.speed = ADVENTURE_EFFECT * split
+        multiplyer.strength = ADVENTURE_EFFECT * (1 - split)
     else:
         pass  # Idle activity
 

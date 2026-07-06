@@ -41,9 +41,9 @@ def check_factory_and_create_blob(session):
 def create_blob(session, first_name: str, last_name: str, parent_id: int | None = None):
     """Create a new blob with random stats and add it to the queue."""
 
-    strength = 0.9 + random.random() * 0.2
-    speed = 0.9 + random.random() * 0.2
-    learning = 0.5 + 0.5 * random.random()
+    strength = 0.92 + random.random() * 0.2
+    speed = 0.92 + random.random() * 0.2
+    learning = 0.55 + 0.45 * random.random()
     current_time = get_sim_time(session)
     queue = get_queue(session)
 
