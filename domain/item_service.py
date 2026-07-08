@@ -30,7 +30,6 @@ from domain.utils.item_utils import (
 )
 
 OVERCLOCK_DEPLETED_INJURY_CHANCE = 0.3
-EVENT_ITEM_STATE_DURATION = 1
 
 MONEY_REWARDS: dict[ItemType, int] = {
     ItemType.COIN: 1,
@@ -66,7 +65,8 @@ def is_inventory_full(blob: Blob, session: Session) -> bool:
 
 @transactional
 def apply_pre_event_items(blob_id: int, session: Session) -> None:
-    effect_until = get_sim_time(session) + EVENT_ITEM_STATE_DURATION
+    # Only apply items for the current event
+    effect_until = get_sim_time(session)
 
     items = get_items_of_blob(session, blob_id)
     for item in items:

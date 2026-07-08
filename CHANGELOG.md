@@ -670,3 +670,8 @@ Technical changes:
 - Initial learning on blob creation changed to [0.55 - 1.0]
 - Adventuring activity now increases speed and strength
   - Effect is half of practice effect
+
+### 5.1.1
+
+- Added another, larger favicon for high resolution mobile/tablet splash screen
+- States of items only have effect for the day of the event
