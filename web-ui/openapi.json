@@ -512,6 +512,53 @@
         }
       }
     },
+    "/standings/snippet/{blob_id}": {
+      "get": {
+        "tags": [
+          "Standings"
+        ],
+        "summary": "Get Standings Snippet",
+        "description": "Fetch the standings of the referenced blob and the competitors before and after them.",
+        "operationId": "get_standings_snippet_standings_snippet__blob_id__get",
+        "parameters": [
+          {
+            "name": "blob_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Blob Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StandingsSnippetDto"
+                  },
+                  "title": "Response Get Standings Snippet Standings Snippet  Blob Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/competition/current": {
       "get": {
         "tags": [
@@ -1663,6 +1710,10 @@
       },
       "BlobStatsDto": {
         "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
           "name": {
             "type": "string",
             "title": "Name"
@@ -1880,6 +1931,7 @@
         },
         "type": "object",
         "required": [
+          "id",
           "name",
           "born",
           "podiums",
@@ -3142,6 +3194,39 @@
           "points"
         ],
         "title": "StandingsResultDTO"
+      },
+      "StandingsSnippetDto": {
+        "properties": {
+          "blob_id": {
+            "type": "integer",
+            "title": "Blob Id"
+          },
+          "blob_name": {
+            "type": "string",
+            "title": "Blob Name"
+          },
+          "blob_color": {
+            "type": "string",
+            "title": "Blob Color"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "points": {
+            "type": "integer",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blob_id",
+          "blob_name",
+          "blob_color",
+          "position",
+          "points"
+        ],
+        "title": "StandingsSnippetDto"
       },
       "StateDto": {
         "properties": {

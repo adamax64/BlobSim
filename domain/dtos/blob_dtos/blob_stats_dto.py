@@ -16,6 +16,7 @@ class IntegrityState(enum.Enum):
 
 
 class BlobStatsDto(BaseModel):
+    id: int
     name: str
     born: str
     terminated: str | None = None

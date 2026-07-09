@@ -1,36 +1,41 @@
-import { BlobsApi, BlobStatsDto } from '../../../../generated';
-import { useEffect, useState } from 'react';
+import { BlobsApi, BlobStatsDto, ResponseError, StandingsApi, StandingsSnippetDto } from '../../../../generated';
+import { useEffect } from 'react';
 import { BlobEventDetailsDialogUi } from './BlobEventDetailsDialogUi';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 
-interface BlobEventDetailsDialogProps {
+type BlobEventDetailsDialogProps = {
   open: boolean;
   onClose: () => void;
   cachedBlob?: BlobStatsDto | undefined;
   blobId?: number;
-}
+};
 
 export const BlobEventDetailsDialog = ({ open, onClose, cachedBlob, blobId }: BlobEventDetailsDialogProps) => {
-  const [blob, setBlob] = useState<BlobStatsDto>();
-
   const blobsApi: BlobsApi = new BlobsApi(defaultConfig);
-  const { mutate: fetchBlobDetails } = useMutation({
+  const standingsApi: StandingsApi = new StandingsApi(defaultConfig);
+  const { mutate: fetchBlobDetails, data: blob } = useMutation<BlobStatsDto | undefined, ResponseError>({
     mutationFn: () => (blobId ? blobsApi.getBlobBlobsBlobIdGet({ blobId }) : Promise.resolve(undefined)),
-    onSuccess: (response) => {
-      if (response) {
-        setBlob(response);
-      }
-    },
+  });
+
+  const { mutate: fetchStandingsSnippet, data: standingsData } = useMutation<
+    StandingsSnippetDto[] | undefined,
+    ResponseError
+  >({
+    mutationFn: () =>
+      !blobId && !cachedBlob
+        ? Promise.resolve(undefined)
+        : standingsApi.getStandingsSnippetStandingsSnippetBlobIdGet({ blobId: blobId ?? cachedBlob?.id ?? 0 }),
   });
 
   useEffect(() => {
-    if (cachedBlob) {
-      setBlob(cachedBlob);
-    } else if (blobId) {
+    if (blobId) {
       fetchBlobDetails();
     }
-  }, [cachedBlob, blobId, fetchBlobDetails]);
+    fetchStandingsSnippet();
+  }, [cachedBlob, blobId, fetchBlobDetails, fetchStandingsSnippet]);
 
-  return <BlobEventDetailsDialogUi open={open} onClose={onClose} blob={blob} />;
+  return (
+    <BlobEventDetailsDialogUi open={open} onClose={onClose} blob={blob ?? cachedBlob} standingsData={standingsData} />
+  );
 };

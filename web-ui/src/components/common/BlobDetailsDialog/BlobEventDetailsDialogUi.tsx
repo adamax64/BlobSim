@@ -1,6 +1,6 @@
 import Close from '@mui/icons-material/Close';
 import { Dialog, DialogTitle, Divider, IconButton } from '@mui/material';
-import { BlobStatsDto } from '../../../../generated';
+import { BlobStatsDto, StandingsSnippetDto } from '../../../../generated';
 import { useTranslation } from 'react-i18next';
 import LoadingDialogContent from './LoadingDialogContent/LoadingDialogContent';
 import { BlobAnimated } from '../blob-visuals/BlobAnimated';
@@ -10,9 +10,10 @@ interface BlobEventDetailsDialogUiProps {
   open: boolean;
   onClose: () => void;
   blob?: BlobStatsDto;
+  standingsData?: StandingsSnippetDto[];
 }
 
-export const BlobEventDetailsDialogUi = ({ open, onClose, blob }: BlobEventDetailsDialogUiProps) => {
+export const BlobEventDetailsDialogUi = ({ open, onClose, blob, standingsData }: BlobEventDetailsDialogUiProps) => {
   const { t } = useTranslation();
 
   return (
@@ -32,6 +33,7 @@ export const BlobEventDetailsDialogUi = ({ open, onClose, blob }: BlobEventDetai
           includeCurrentLeague={false}
           includeCurrentActivity={false}
           includeInventory={false}
+          standingsData={standingsData}
         />
       ) : (
         <LoadingDialogContent />

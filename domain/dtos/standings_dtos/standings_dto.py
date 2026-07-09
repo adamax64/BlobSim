@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.dtos.standings_result_dto import StandingsResultDTO
+from domain.dtos.standings_dtos.standings_result_dto import StandingsResultDTO
 
 
 @dataclass

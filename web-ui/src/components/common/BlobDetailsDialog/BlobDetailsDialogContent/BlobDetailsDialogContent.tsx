@@ -14,10 +14,11 @@ import StateIcon from './StateIcon';
 import TraitIcon from './TraitIcon';
 import { getContrastYIQ } from '../../../../utils/color-utils';
 import { useTranslation } from 'react-i18next';
-import { BlobStatsDto, type ItemType } from '../../../../../generated';
+import { BlobStatsDto, StandingsSnippetDto, type ItemType } from '../../../../../generated';
 import { IconName } from '../../IconName';
 import DynamicTooltip from '../../DynamicTooltip';
 import Inventory from './Inventory';
+import StandingSnippetWidget from './StandingSnippetWidget';
 
 type BlobDetailsDialogContentProps = {
   blob: BlobStatsDto;
@@ -26,7 +27,7 @@ type BlobDetailsDialogContentProps = {
   includeCurrentLeague?: boolean;
   includeCurrentActivity?: boolean;
   includeInventory?: boolean;
-  includeStandingsContext?: boolean;
+  standingsData?: StandingsSnippetDto[];
 };
 
 const contentEntries = [
@@ -46,7 +47,7 @@ const BlobDetailsDialogContent = ({
   includeCurrentLeague = true,
   includeCurrentActivity = true,
   includeInventory = true,
-  includeStandingsContext = false,
+  standingsData,
 }: BlobDetailsDialogContentProps) => {
   const { t } = useTranslation();
 
@@ -57,6 +58,9 @@ const BlobDetailsDialogContent = ({
     })
     .splice(0, 3) // Limit to 3 entries
     .reverse(); // Reverse to show the lowest ranking first
+
+  const innerGridSize = standingsData ? 6 : 12;
+  const innerGridCellSize = standingsData ? 12 : 6;
 
   return (
     <DialogContent>
@@ -122,80 +126,90 @@ const BlobDetailsDialogContent = ({
                 </DynamicTooltip>
               </Grid>
             )}
-            {blob.debut && (
-              <Grid size={6}>
-                <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                  <strong>{t('blob_details.debut')}</strong>: {blob.debut}
-                </Typography>
-              </Grid>
-            )}
-            {blob.isRetired && (
-              <Grid size={6}>
-                <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                  <strong>{t('blob_details.retired')}</strong>: {blob.contract}
-                </Typography>
-              </Grid>
-            )}
-            {!blob.isDead && includeMoney && (
-              <Grid size={6}>
-                <Typography variant="body1">
-                  <strong>{t('blob_details.money')}:</strong> {blob.money}
-                </Typography>
-              </Grid>
-            )}
-            {blob.retirementFocus && (
-              <Grid size={6}>
-                <Box display="flex" gap={1} alignItems="center">
-                  <Typography variant="body1">
-                    <strong>{t('blob_details.retirement_focus')}:</strong>
+            <Grid container size={innerGridSize} spacing={1.5}>
+              {blob.debut && (
+                <Grid size={6}>
+                  <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
+                    <strong>{t('blob_details.debut')}</strong>: {blob.debut}
                   </Typography>
-                  <RetirementFocusIcon retirementFocus={blob.retirementFocus} />
-                </Box>
+                </Grid>
+              )}
+              {blob.isRetired && (
+                <Grid size={innerGridCellSize}>
+                  <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
+                    <strong>{t('blob_details.retired')}</strong>: {blob.contract}
+                  </Typography>
+                </Grid>
+              )}
+              {!blob.isDead && includeMoney && (
+                <Grid size={innerGridCellSize}>
+                  <Typography variant="body1">
+                    <strong>{t('blob_details.money')}:</strong> {blob.money}
+                  </Typography>
+                </Grid>
+              )}
+              {blob.retirementFocus && (
+                <Grid size={innerGridCellSize}>
+                  <Box display="flex" gap={1} alignItems="center">
+                    <Typography variant="body1">
+                      <strong>{t('blob_details.retirement_focus')}:</strong>
+                    </Typography>
+                    <RetirementFocusIcon retirementFocus={blob.retirementFocus} />
+                  </Box>
+                </Grid>
+              )}
+              {blob.parent && (
+                <Grid size={12}>
+                  <Typography variant="body1" component="div">
+                    <strong>{t('blob_details.parent')}:</strong>{' '}
+                    <IconName name={blob.parent.name} color={blob.parent.color} size={24} />
+                  </Typography>
+                </Grid>
+              )}
+
+              {!!blob.debut ? (
+                !blob.isRetired && (
+                  <>
+                    {includeCurrentLeague && (
+                      <Grid size={12}>
+                        <Typography variant="body1">
+                          <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
+                        </Typography>
+                      </Grid>
+                    )}
+                    <Grid size={innerGridCellSize}>
+                      <Box display="flex" gap={0.75} alignItems="center">
+                        <Typography variant="body1">
+                          <strong>{t('blob_details.contract')}:</strong> {blob.contract}
+                        </Typography>
+                        {blob.atRisk && (
+                          <DynamicTooltip title={t('blob_details.contract_ending')}>
+                            <WarningIcon fontSize="small" color="warning" />
+                          </DynamicTooltip>
+                        )}
+                      </Box>
+                    </Grid>
+                    {blob.currentStandingsPosition && !standingsData && (
+                      <Grid size={6}>
+                        <Typography variant="body1">
+                          <strong>{t('blob_details.standings')}:</strong> {blob.currentStandingsPosition}
+                        </Typography>
+                      </Grid>
+                    )}
+                  </>
+                )
+              ) : (
+                <Grid size={12}>
+                  <Typography variant="body1">{t('blob_details.on_queue')}</Typography>
+                </Grid>
+              )}
+            </Grid>
+            {standingsData && (
+              <Grid size={6}>
+                <StandingSnippetWidget standingsData={standingsData} />
               </Grid>
             )}
           </Grid>
-
-          {blob.parent && (
-            <Typography variant="body1" component="div">
-              <strong>{t('blob_details.parent')}:</strong>{' '}
-              <IconName name={blob.parent.name} color={blob.parent.color} size={24} />
-            </Typography>
-          )}
-
-          {!!blob.debut ? (
-            !blob.isRetired && (
-              <>
-                {includeCurrentLeague && (
-                  <Typography variant="body1">
-                    <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
-                  </Typography>
-                )}
-                <Grid container spacing={2} width="100%">
-                  <Grid size={6}>
-                    <Box display="flex" gap={0.75} alignItems="center">
-                      <Typography variant="body1">
-                        <strong>{t('blob_details.contract')}:</strong> {blob.contract}
-                      </Typography>
-                      {blob.atRisk && (
-                        <DynamicTooltip title={t('blob_details.contract_ending')}>
-                          <WarningIcon fontSize="small" color="warning" />
-                        </DynamicTooltip>
-                      )}
-                    </Box>
-                  </Grid>
-                  {blob.currentStandingsPosition && !includeStandingsContext && (
-                    <Grid size={6}>
-                      <Typography variant="body1">
-                        <strong>{t('blob_details.standings')}:</strong> {blob.currentStandingsPosition}
-                      </Typography>
-                    </Grid>
-                  )}
-                </Grid>
-              </>
-            )
-          ) : (
-            <Typography variant="body1">{t('blob_details.on_queue')}</Typography>
-          )}
 
           {rankingEntries.length > 0 && (
             <>

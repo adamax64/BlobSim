@@ -1,13 +1,19 @@
 from collections import defaultdict
 
+from sqlalchemy.orm import Session
+
 from data.db.db_engine import transactional
 from data.model.blob import Blob
+from data.persistence.blob_reposiotry import get_blob_by_id
 from data.persistence.calendar_repository import get_calendar
 from data.persistence.result_repository import get_results_of_league_by_season
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
-from domain.dtos.standings_dto import StandingsDTO
-from domain.dtos.standings_result_dto import StandingsResultDTO
+from domain.dtos.standings_dtos.standings_dto import StandingsDTO
+from domain.dtos.standings_dtos.standings_result_dto import StandingsResultDTO
+from domain.dtos.standings_dtos.standings_snippet_dto import StandingsSnippetDto
+from domain.sim_data_service import get_sim_time
 from domain.utils.league_utils import get_number_of_rounds_by_size
+from domain.utils.sim_time_utils import get_season
 
 _standings_cache: dict[tuple[int, int, int], list[StandingsDTO]] = {}
 
@@ -29,7 +35,7 @@ def invalidate_standings_cache(
 
 @transactional
 def get_standings(
-    league_id: int, season: int, current_season: int, session
+    league_id: int, season: int, current_season: int, session: Session
 ) -> list[StandingsDTO]:
     cache_key = (league_id, season, current_season)
     if cache_key in _standings_cache:
@@ -78,7 +84,7 @@ def get_standings(
 
 @transactional
 def get_last_place_from_season_by_league(
-    league_id: int, season: int, session
+    league_id: int, season: int, session: Session
 ) -> int | None:
     """Return the blob id of the last place in the standings for a given league and season.
 
@@ -92,7 +98,7 @@ def get_last_place_from_season_by_league(
 
 @transactional
 def get_grandmaster_standings(
-    start_season: int, current_season: int, session
+    start_season: int, current_season: int, session: Session
 ) -> list[GrandmasterStandingsDTO]:
     end_season = (
         current_season if start_season + 4 > current_season else start_season + 3
@@ -144,8 +150,61 @@ def get_grandmaster_standings(
 
 
 @transactional
+def get_standings_snippet_by_blob(
+    blob_id: int, session: Session
+) -> list[StandingsSnippetDto]:
+    """Fetch the standings of the referenced blob and the competitors before and after them.
+
+    Returns a list of three StandingsSnippetDto objects, ordered by position.
+    If the blob is in first or last place, the list will contain only two objects.
+    """
+
+    season = get_season(get_sim_time())
+
+    blob = get_blob_by_id(session, blob_id)
+    if not blob or not blob.league:
+        return []
+
+    standings = get_standings(blob.league.id, season, season, session)
+    snippet = []
+    for i, standing in enumerate(standings):
+        if standing.blob_id == blob_id:
+            if i > 0:
+                snippet.append(
+                    StandingsSnippetDto(
+                        blob_id=standings[i - 1].blob_id,
+                        blob_name=standings[i - 1].name,
+                        blob_color=standings[i - 1].color,
+                        position=i,
+                        points=standings[i - 1].total_points,
+                    )
+                )
+            snippet.append(
+                StandingsSnippetDto(
+                    blob_id=standing.blob_id,
+                    blob_name=standing.name,
+                    blob_color=standing.color,
+                    position=i + 1,
+                    points=standing.total_points,
+                )
+            )
+            if i < len(standings) - 1:
+                snippet.append(
+                    StandingsSnippetDto(
+                        blob_id=standings[i + 1].blob_id,
+                        blob_name=standings[i + 1].name,
+                        blob_color=standings[i + 1].color,
+                        position=i + 2,
+                        points=standings[i + 1].total_points,
+                    )
+                )
+            break
+    return snippet
+
+
+@transactional
 def get_standings_by_league(
-    session, blobs: list[Blob], season: int
+    session: Session, blobs: list[Blob], season: int
 ) -> dict[int, dict[int, int]]:
     """
     Fetch standings for all leagues of the given blobs.

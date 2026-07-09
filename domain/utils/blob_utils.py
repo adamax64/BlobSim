@@ -65,6 +65,7 @@ def map_to_blob_state_dto(
     standings_position: int | None,
 ) -> BlobStatsDto:
     return BlobStatsDto(
+        id=blob.id,
         name=format_blob_name(blob),
         born=format_sim_time_short(blob.born),
         terminated=format_sim_time_short(blob.terminated) if blob.terminated else None,
