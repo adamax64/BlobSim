@@ -1,4 +1,4 @@
-import { Tooltip } from '@mui/material';
+import DynamicTooltip from '../../DynamicTooltip';
 
 interface DialogTooltipProps {
   icon: React.ReactElement;
@@ -6,7 +6,7 @@ interface DialogTooltipProps {
 }
 
 const DialogTooltip = ({ icon, title }: DialogTooltipProps) => {
-  return <Tooltip title={title}>{icon}</Tooltip>;
+  return <DynamicTooltip title={title}>{icon}</DynamicTooltip>;
 };
 
 export default DialogTooltip;

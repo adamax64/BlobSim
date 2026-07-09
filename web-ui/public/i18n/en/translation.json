@@ -295,9 +295,24 @@
     "podiums": "Podiums",
     "wins": "Wins",
     "championships": "Championships",
-    "grandmasters": "Grandmasters",
+    "grandmaster_titles": "Grandmasters",
+    "master_wins": "Master wins",
+    "master_podiums": "Master podiums",
+    "season_victories": "Season victories",
+    "lesser_wins": "Lesser wins",
+    "lesser_podiums": "Lesser podiums",
     "current_activity": "Current Activity",
-    "retirement_focus": "Retirement focus"
+    "retirement_focus": "Retirement focus",
+    "inventory": "Inventory",
+    "inventory_items": {
+      "COOKIE": "Cookie",
+      "ENERGY_CELL": "Energy Cell",
+      "CACHE_CLEANER": "Cache Cleaner",
+      "CACHE": "Cache",
+      "POWER_BANK": "Power Bank",
+      "PROCESSOR_PASTE": "Processor Paste",
+      "EXTERNAL_STORAGE": "External Storage"
+    }
   },
   "blob_naming": {
     "create_title": "Create new blob",

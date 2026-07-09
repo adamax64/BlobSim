@@ -671,7 +671,9 @@ Technical changes:
 - Adventuring activity now increases speed and strength
   - Effect is half of practice effect
 
-### 5.1.1
+### 5.2
 
 - Added another, larger favicon for high resolution mobile/tablet splash screen
 - States of items only have effect for the day of the event
+- Added a dedicated event-specific blob details dialog for event tables and standings context
+- Extended blob details dialogs with inventory display, ranking summary fields, and mobile-friendly tooltips

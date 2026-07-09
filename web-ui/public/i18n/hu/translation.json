@@ -295,9 +295,24 @@
     "podiums": "Dobogók",
     "wins": "Győzelmek",
     "championships": "Bajnokságok",
-    "grandmasters": "Nagymesteri címek",
+    "grandmaster_titles": "Nagymesteri címek",
+    "master_wins": "Master győzelmek",
+    "master_podiums": "Master dobogók",
+    "season_victories": "Szezon győzelmek",
+    "lesser_wins": "Alsóbb liga győzelmek",
+    "lesser_podiums": "Alsóbb liga dobogók",
     "current_activity": "Jelenlegi tevékenység",
-    "retirement_focus": "Nyugdíj fókusz"
+    "retirement_focus": "Nyugdíj fókusz",
+    "inventory": "Leltár",
+    "inventory_items": {
+      "COOKIE": "Süti",
+      "ENERGY_CELL": "Energiacella",
+      "CACHE_CLEANER": "Gyorsítótár Tisztító",
+      "CACHE": "Gyorsítótár",
+      "POWER_BANK": "Power Bank",
+      "PROCESSOR_PASTE": "Processzor Paszta",
+      "EXTERNAL_STORAGE": "Külső Tároló"
+    }
   },
   "blob_naming": {
     "create_title": "Új blob létrehozása",

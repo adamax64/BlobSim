@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { IconName, IconNameProps } from './IconName';
 import { useState } from 'react';
 import { BlobDetailsDialog } from './BlobDetailsDialog/BlobDetailsDialog';
+import { BlobEventDetailsDialog } from './BlobDetailsDialog/BlobEventDetailsDialog';
 import { BlobStatsDto } from '../../../generated/models/BlobStatsDto';
 
 type IconNameWithDetailsModalProps = IconNameProps &
@@ -11,9 +12,16 @@ type IconNameWithDetailsModalProps = IconNameProps &
         blob?: never;
       }
     | { blob?: BlobStatsDto; blobId?: never }
-  );
+  ) & {
+    detailsDialogVariant?: 'default' | 'event';
+  };
 
-export const IconNameWithDetailsModal = ({ blobId, blob, ...props }: IconNameWithDetailsModalProps) => {
+export const IconNameWithDetailsModal = ({
+  blobId,
+  blob,
+  detailsDialogVariant = 'default',
+  ...props
+}: IconNameWithDetailsModalProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleOpenDialog = () => {
@@ -31,7 +39,11 @@ export const IconNameWithDetailsModal = ({ blobId, blob, ...props }: IconNameWit
       </Box>
       {isDialogOpen && (
         <Box position="static">
-          <BlobDetailsDialog open={isDialogOpen} onClose={handleCloseDialog} blobId={blobId} cachedBlob={blob} />
+          {detailsDialogVariant === 'event' ? (
+            <BlobEventDetailsDialog open={isDialogOpen} onClose={handleCloseDialog} blobId={blobId} cachedBlob={blob} />
+          ) : (
+            <BlobDetailsDialog open={isDialogOpen} onClose={handleCloseDialog} blobId={blobId} cachedBlob={blob} />
+          )}
         </Box>
       )}
     </>

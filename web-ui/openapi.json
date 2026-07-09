@@ -1720,6 +1720,43 @@
             "type": "integer",
             "title": "Grandmasters"
           },
+          "grandmaster_titles": {
+            "type": "integer",
+            "title": "Grandmaster Titles",
+            "default": 0
+          },
+          "master_wins": {
+            "type": "integer",
+            "title": "Master Wins",
+            "default": 0
+          },
+          "master_podiums": {
+            "type": "integer",
+            "title": "Master Podiums",
+            "default": 0
+          },
+          "season_victories": {
+            "type": "integer",
+            "title": "Season Victories",
+            "default": 0
+          },
+          "lesser_wins": {
+            "type": "integer",
+            "title": "Lesser Wins",
+            "default": 0
+          },
+          "lesser_podiums": {
+            "type": "integer",
+            "title": "Lesser Podiums",
+            "default": 0
+          },
+          "inventory": {
+            "items": {
+              "$ref": "#/components/schemas/ItemDto"
+            },
+            "type": "array",
+            "title": "Inventory"
+          },
           "league_name": {
             "type": "string",
             "title": "League Name"
@@ -1849,6 +1886,7 @@
           "wins",
           "championships",
           "grandmasters",
+          "inventory",
           "league_name",
           "color",
           "states",
@@ -2280,6 +2318,44 @@
           "GOOD"
         ],
         "title": "IntegrityState"
+      },
+      "ItemDto": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ItemType"
+          },
+          "durability": {
+            "type": "integer",
+            "title": "Durability"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "durability"
+        ],
+        "title": "ItemDto"
+      },
+      "ItemType": {
+        "type": "string",
+        "enum": [
+          "COOKIE",
+          "COIN",
+          "ENERGY_CELL",
+          "BAG_OF_MONEY",
+          "CACHE_CLEANER",
+          "MAINTENANCE_KIT",
+          "SACK_OF_MONEY",
+          "REPAIR_KIT",
+          "TREASURE_CHEST",
+          "CACHE",
+          "POWER_BANK",
+          "PROCESSOR_PASTE",
+          "OVERCLOCKING_DEVICE",
+          "EXTERNAL_STORAGE"
+        ],
+        "title": "ItemType",
+        "description": "Enum for Item Type"
       },
       "LeagueChampionsDto": {
         "properties": {

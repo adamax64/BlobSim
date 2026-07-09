@@ -1,6 +1,10 @@
 from data.model.blob import Blob
 from data.model.state_type import StateType
-from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto, IntegrityState
+from domain.dtos.blob_dtos.blob_stats_dto import (
+    BlobStatsDto,
+    IntegrityState,
+)
+from domain.dtos.item_dto import ItemDto
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.state_dto import StateDto
 from domain.dtos.trait_type_dto import TraitTypeDto
@@ -70,6 +74,18 @@ def map_to_blob_state_dto(
         wins=blob.gold_trophies,
         championships=blob.championships,
         grandmasters=blob.grandmasters,
+        grandmaster_titles=blob.grandmasters,
+        master_wins=blob.gold_trophies,
+        master_podiums=(
+            blob.bronze_trophies + blob.silver_trophies + blob.gold_trophies
+        ),
+        season_victories=blob.season_victories,
+        lesser_wins=blob.gold_medals,
+        lesser_podiums=(blob.bronze_medals + blob.silver_medals + blob.gold_medals),
+        inventory=[
+            ItemDto(type=item.type.value, durability=item.durability)
+            for item in blob.items or []
+        ],
         league_name=blob.league.name if blob.league else "None",
         is_rookie=blob.debut == current_season,
         at_risk=blob.contract == current_season,

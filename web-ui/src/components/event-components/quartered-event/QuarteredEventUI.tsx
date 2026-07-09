@@ -156,6 +156,7 @@ export const QuarteredEventUI = ({
                   name={record.blob.name}
                   color={record.blob.color}
                   renderFullName={!isMobile}
+                  detailsDialogVariant="event"
                 />
               </TableCell>
               {shouldShowQuarter(1) && (

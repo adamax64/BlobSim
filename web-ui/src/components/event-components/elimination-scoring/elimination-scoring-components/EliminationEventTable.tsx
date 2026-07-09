@@ -57,6 +57,7 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
                 name={record.blob.name}
                 color={record.blob.color}
                 renderFullName={!isMobile}
+                detailsDialogVariant="event"
               />
             </TableCell>
             <TableCell>

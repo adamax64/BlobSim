@@ -1,6 +1,7 @@
 import enum
 from pydantic import BaseModel
 
+from domain.dtos.item_dto import ItemDto
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.retirement_focus_type_dto import RetirementFocusTypeDto
 from domain.dtos.state_dto import StateDto
@@ -24,6 +25,13 @@ class BlobStatsDto(BaseModel):
     wins: int
     championships: int
     grandmasters: int
+    grandmaster_titles: int = 0
+    master_wins: int = 0
+    master_podiums: int = 0
+    season_victories: int = 0
+    lesser_wins: int = 0
+    lesser_podiums: int = 0
+    inventory: list[ItemDto]
     league_name: str
     is_rookie: bool = False
     at_risk: bool = False

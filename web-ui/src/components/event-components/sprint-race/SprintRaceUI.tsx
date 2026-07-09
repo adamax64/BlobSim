@@ -165,6 +165,7 @@ export const SprintRaceUI = ({
                   name={record.blob.name}
                   color={record.blob.color}
                   renderFullName={!isMobile}
+                  detailsDialogVariant="event"
                 />
               </NarrowCell>
               {isMobile ? (
