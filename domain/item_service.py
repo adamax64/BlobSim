@@ -13,7 +13,11 @@ from data.persistence.item_repository import (
     save_item,
     update_item,
 )
-from data.persistence.state_repository import create_state, delete_state, get_states_of_blob
+from data.persistence.state_repository import (
+    create_state,
+    delete_state,
+    get_states_of_blob,
+)
 from domain.sim_data_service import get_sim_time
 from domain.state_service import apply_injury
 from domain.utils.item_utils import (
@@ -34,6 +38,7 @@ OVERCLOCK_DEPLETED_INJURY_CHANCE = 0.3
 MONEY_REWARDS: dict[ItemType, int] = {
     ItemType.COIN: 1,
     ItemType.BAG_OF_MONEY: 5,
+    ItemType.SACK_OF_MONEY: 10,
     ItemType.TREASURE_CHEST: 20,
 }
 
@@ -71,7 +76,11 @@ def apply_pre_event_items(blob_id: int, session: Session) -> None:
     items = get_items_of_blob(session, blob_id)
     for item in items:
         blob_states = [state.type for state in get_states_of_blob(session, blob_id)]
-        if item.type not in PRE_EVENT_ITEM_TYPES or PRE_EVENT_ITEM_STATE_TYPES[item.type] in blob_states or not _can_use_pre_event_item(item):
+        if (
+            item.type not in PRE_EVENT_ITEM_TYPES
+            or PRE_EVENT_ITEM_STATE_TYPES[item.type] in blob_states
+            or not _can_use_pre_event_item(item)
+        ):
             continue
 
         if (
@@ -92,7 +101,7 @@ def apply_pre_event_items(blob_id: int, session: Session) -> None:
 
 def _can_use_pre_event_item(item: Item) -> bool:
     if is_consumable(item.type):
-        return True 
+        return True
     if item.type == ItemType.OVERCLOCKING_DEVICE:
         # If Durability is 0 blobs don't always use because it is dangerous
         return item.durability > 0 or random.random() < OVERCLOCK_DEPLETED_INJURY_CHANCE
@@ -110,13 +119,16 @@ def _consume_item_after_use(session: Session, item: Item, items: list[Item]) -> 
         if item.durability == 0:
             cache_cleaner = get_item_from_list_by_type(items, ItemType.CACHE_CLEANER)
             energy_cell = get_item_from_list_by_type(items, ItemType.ENERGY_CELL)
-            if item.type == ItemType.CACHE and cache_cleaner != None:
+            if item.type == ItemType.CACHE and cache_cleaner is not None:
                 item.durability = DEFAULT_UNCONSUMABLE_DURABILITY
                 delete_item(session, cache_cleaner.id)
-            elif (item.type == ItemType.POWER_BANK or item.type == ItemType.OVERCLOCKING_DEVICE) and energy_cell != None:
+            elif (
+                item.type == ItemType.POWER_BANK
+                or item.type == ItemType.OVERCLOCKING_DEVICE
+            ) and energy_cell is not None:
                 item.durability = DEFAULT_UNCONSUMABLE_DURABILITY
                 delete_item(session, energy_cell.id)
-    
+
     update_item(session, item)
 
 
@@ -135,9 +147,7 @@ def _add_item_to_inventory(blob: Blob, item_type: ItemType, session: Session) ->
 
     new_rank = get_item_rarity_rank(item_type)
     depleted_unconsumables = [
-        item
-        for item in items
-        if not is_consumable(item.type) and item.durability == 0
+        item for item in items if not is_consumable(item.type) and item.durability == 0
     ]
     if depleted_unconsumables:
         to_sell = min(
