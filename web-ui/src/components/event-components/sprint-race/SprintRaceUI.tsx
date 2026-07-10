@@ -18,9 +18,10 @@ import { EventType } from '../../../../generated';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import { useCallback, useMemo } from 'react';
 import { roundToOneDecimals, roundToThreeDecimals, roundToTwoDecimals } from '../event-utils';
-import { DistanceProgress, NarrowCell, TickLoadingBar } from '../../common/StyledComponents';
+import { DistanceProgress, NarrowCell } from '../../common/StyledComponents';
 import { EventCardFrame } from '../shared/EventCardFrame';
 import { EventTable } from '../shared/EventTable';
+import SkeletonRows from '../shared/SkeletonRows';
 
 type SprintRaceUIProps = {
   eventRecords: EventRecordDto[];
@@ -153,67 +154,71 @@ export const SprintRaceUI = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventRecords.map((record, index) => (
-            <TableRow
-              key={index}
-              className={getRowClass(record.previousPosition ?? 0, index + 1, record.isFinished ?? false)}
-            >
-              {isMobile ? <NarrowCell>{index + 1}</NarrowCell> : <TableCell>{index + 1}</TableCell>}
-              <NarrowCell>
-                <IconNameWithDetailsModal
-                  blobId={record.blob.id}
-                  name={record.blob.name}
-                  color={record.blob.color}
-                  renderFullName={!isMobile}
-                  detailsDialogVariant="event"
-                />
-              </NarrowCell>
-              {isMobile ? (
-                <NarrowCell align="center">{getDistance(record)}</NarrowCell>
-              ) : (
+          {eventRecords.length > 0 ? (
+            eventRecords.map((record, index) => (
+              <TableRow
+                key={index}
+                className={getRowClass(record.previousPosition ?? 0, index + 1, record.isFinished ?? false)}
+              >
+                {isMobile ? <NarrowCell>{index + 1}</NarrowCell> : <TableCell>{index + 1}</TableCell>}
                 <NarrowCell>
-                  <Box position="relative" display="flex" alignItems="center">
-                    <DistanceProgress
-                      variant="determinate"
-                      value={Math.min(
-                        ((record.distanceRecords?.[record.distanceRecords?.length - 1] ?? 0) / raceDuration) * 100,
-                        100,
-                      )}
-                      sx={{
-                        backgroundColor: getLightBackgroundColor(record.blob.color),
-                        '& .MuiLinearProgress-bar': {
-                          backgroundColor: record.blob.color,
-                        },
-                      }}
-                    />
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        position: 'absolute',
-                        width: '100%',
-                        textAlign: 'center',
-                        fontWeight: 600,
-                        color: 'text.primary',
-                        pointerEvents: 'none',
-                      }}
-                    >
-                      {getDistance(record)}
-                    </Typography>
-                  </Box>
+                  <IconNameWithDetailsModal
+                    blobId={record.blob.id}
+                    name={record.blob.name}
+                    color={record.blob.color}
+                    renderFullName={!isMobile}
+                    detailsDialogVariant="event"
+                  />
                 </NarrowCell>
-              )}
-              {!isMobile && !isFinished(record) && (
-                <TableCell align="center">{getDelta(record, eventRecords?.[firstNotFinishedIndex], index)}</TableCell>
-              )}
-              <NarrowCell align="center" colSpan={!isMobile && (isFinished(record) || isEnd) ? 2 : 1}>
-                {!isFinished(record)
-                  ? isEnd
-                    ? 'DNF'
-                    : getDelta(record, eventRecords?.[index === 0 ? 0 : index - 1], index)
-                  : `${isMobile ? roundToOneDecimals(record.time) : roundToThreeDecimals(record.time)} tick`}
-              </NarrowCell>
-            </TableRow>
-          ))}
+                {isMobile ? (
+                  <NarrowCell align="center">{getDistance(record)}</NarrowCell>
+                ) : (
+                  <NarrowCell>
+                    <Box position="relative" display="flex" alignItems="center">
+                      <DistanceProgress
+                        variant="determinate"
+                        value={Math.min(
+                          ((record.distanceRecords?.[record.distanceRecords?.length - 1] ?? 0) / raceDuration) * 100,
+                          100,
+                        )}
+                        sx={{
+                          backgroundColor: getLightBackgroundColor(record.blob.color),
+                          '& .MuiLinearProgress-bar': {
+                            backgroundColor: record.blob.color,
+                          },
+                        }}
+                      />
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          position: 'absolute',
+                          width: '100%',
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          color: 'text.primary',
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        {getDistance(record)}
+                      </Typography>
+                    </Box>
+                  </NarrowCell>
+                )}
+                {!isMobile && !isFinished(record) && (
+                  <TableCell align="center">{getDelta(record, eventRecords?.[firstNotFinishedIndex], index)}</TableCell>
+                )}
+                <NarrowCell align="center" colSpan={!isMobile && (isFinished(record) || isEnd) ? 2 : 1}>
+                  {!isFinished(record)
+                    ? isEnd
+                      ? 'DNF'
+                      : getDelta(record, eventRecords?.[index === 0 ? 0 : index - 1], index)
+                    : `${isMobile ? roundToOneDecimals(record.time) : roundToThreeDecimals(record.time)} tick`}
+                </NarrowCell>
+              </TableRow>
+            ))
+          ) : (
+            <SkeletonRows columnCount={isMobile ? 4 : 5} />
+          )}
         </TableBody>
       </EventTable>
     </EventCardFrame>

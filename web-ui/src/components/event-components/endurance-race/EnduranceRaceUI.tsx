@@ -1,9 +1,18 @@
-import { Box, TableBody, TableCell, TableHead, TableRow, useTheme, useMediaQuery, Tooltip } from '@mui/material';
+import {
+  Box,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  useTheme,
+  useMediaQuery,
+  Tooltip,
+  CircularProgress,
+} from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { useTranslation } from 'react-i18next';
 import type { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/RaceEventRecordDtoOutput';
 import { EventType } from '../../../../generated';
-import { TickLoadingBar } from '../../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import Straighten from '@mui/icons-material/Straighten';
 import { useCallback, useMemo } from 'react';
@@ -11,6 +20,7 @@ import { roundToOneDecimals, roundToThreeDecimals } from '../event-utils';
 import { NarrowCell } from '../../common/StyledComponents';
 import { EventCardFrame } from '../shared/EventCardFrame';
 import { EventTable } from '../shared/EventTable';
+import SkeletonRows from '../shared/SkeletonRows';
 
 type EnduranceRaceUIProps = {
   eventRecords: EventRecordDto[];
@@ -110,29 +120,33 @@ export const EnduranceRaceUI = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventRecords.map((record, index) => (
-            <TableRow key={index} className={getRowClass(record.previousPosition ?? 0, index + 1)}>
-              {isMobile ? <NarrowCell>{index + 1}</NarrowCell> : <TableCell>{index + 1}</TableCell>}
-              <TableCell>
-                <IconNameWithDetailsModal
-                  blobId={record.blob.id}
-                  name={record.blob.name}
-                  color={record.blob.color}
-                  renderFullName={!isMobile}
-                  detailsDialogVariant="event"
-                />
-              </TableCell>
-              {isMobile ? (
-                <NarrowCell align="center">{getDistance(record)}</NarrowCell>
-              ) : (
-                <TableCell align="center">{getDistance(record)}</TableCell>
-              )}
-              {!isMobile && <TableCell align="center">{getDelta(record, eventRecords?.[0], index)}</TableCell>}
-              <TableCell align="center">
-                {getDelta(record, eventRecords?.[index === 0 ? 0 : index - 1], index)}
-              </TableCell>
-            </TableRow>
-          ))}
+          {eventRecords.length > 0 ? (
+            eventRecords.map((record, index) => (
+              <TableRow key={index} className={getRowClass(record.previousPosition ?? 0, index + 1)}>
+                {isMobile ? <NarrowCell>{index + 1}</NarrowCell> : <TableCell>{index + 1}</TableCell>}
+                <TableCell>
+                  <IconNameWithDetailsModal
+                    blobId={record.blob.id}
+                    name={record.blob.name}
+                    color={record.blob.color}
+                    renderFullName={!isMobile}
+                    detailsDialogVariant="event"
+                  />
+                </TableCell>
+                {isMobile ? (
+                  <NarrowCell align="center">{getDistance(record)}</NarrowCell>
+                ) : (
+                  <TableCell align="center">{getDistance(record)}</TableCell>
+                )}
+                {!isMobile && <TableCell align="center">{getDelta(record, eventRecords?.[0], index)}</TableCell>}
+                <TableCell align="center">
+                  {getDelta(record, eventRecords?.[index === 0 ? 0 : index - 1], index)}
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <SkeletonRows columnCount={isMobile ? 4 : 5} />
+          )}
         </TableBody>
       </EventTable>
     </EventCardFrame>

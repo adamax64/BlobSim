@@ -6,6 +6,7 @@ import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../.
 import { NarrowCell } from '../../../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../../../common/IconNameWithDetailsModal';
 import { EventTable } from '../../shared/EventTable';
+import SkeletonRows from '../../shared/SkeletonRows';
 
 interface EliminationEventTableProps {
   eventRecords: EventRecordDto[];
@@ -48,26 +49,34 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
         </TableRow>
       </TableHead>
       <TableBody>
-        {eventRecords.map((record, index) => (
-          <TableRow key={index} className={getRowClass(index, record.eliminated ?? false)}>
-            {isMobile ? <NarrowCell width={30}>{index + 1}</NarrowCell> : <TableCell width={30}>{index + 1}</TableCell>}
-            <TableCell sx={{ display: 'flex' }}>
-              <IconNameWithDetailsModal
-                blobId={record.blob.id}
-                name={record.blob.name}
-                color={record.blob.color}
-                renderFullName={!isMobile}
-                detailsDialogVariant="event"
-              />
-            </TableCell>
-            <TableCell>
-              {!record.lastScore && record.eliminated
-                ? t('elimination_event.eliminated')
-                : (roundToThreeDecimals(record.lastScore) ?? '-')}
-            </TableCell>
-            <TableCell>{record.tickWins || '-'}</TableCell>
-          </TableRow>
-        ))}
+        {eventRecords.length > 0 ? (
+          eventRecords.map((record, index) => (
+            <TableRow key={index} className={getRowClass(index, record.eliminated ?? false)}>
+              {isMobile ? (
+                <NarrowCell width={30}>{index + 1}</NarrowCell>
+              ) : (
+                <TableCell width={30}>{index + 1}</TableCell>
+              )}
+              <TableCell sx={{ display: 'flex' }}>
+                <IconNameWithDetailsModal
+                  blobId={record.blob.id}
+                  name={record.blob.name}
+                  color={record.blob.color}
+                  renderFullName={!isMobile}
+                  detailsDialogVariant="event"
+                />
+              </TableCell>
+              <TableCell>
+                {!record.lastScore && record.eliminated
+                  ? t('elimination_event.eliminated')
+                  : (roundToThreeDecimals(record.lastScore) ?? '-')}
+              </TableCell>
+              <TableCell>{record.tickWins || '-'}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <SkeletonRows columnCount={4} />
+        )}
       </TableBody>
     </EventTable>
   );

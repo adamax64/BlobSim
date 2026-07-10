@@ -15,6 +15,7 @@ import { roundToThreeDecimals } from '../event-utils';
 import { useCallback } from 'react';
 import { EventCardFrame } from '../shared/EventCardFrame';
 import { EventTable } from '../shared/EventTable';
+import SkeletonRows from '../shared/SkeletonRows';
 
 type QuarteredEventUIProps = {
   eventRecords: EventRecordDto[];
@@ -145,42 +146,46 @@ export const QuarteredEventUI = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventRecords.map((record, index) => (
-            <TableRow key={index} className={getRowClass(record, index)}>
-              <TableCell padding="checkbox" align="center">
-                {index + 1}
-              </TableCell>
-              <TableCell sx={isMobile ? { paddingX: 1 } : {}}>
-                <IconNameWithDetailsModal
-                  blobId={record.blob.id}
-                  name={record.blob.name}
-                  color={record.blob.color}
-                  renderFullName={!isMobile}
-                  detailsDialogVariant="event"
-                />
-              </TableCell>
-              {shouldShowQuarter(1) && (
-                <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
-                  {renderCellContent(record, 0)}
+          {eventRecords.length > 0 ? (
+            eventRecords.map((record, index) => (
+              <TableRow key={index} className={getRowClass(record, index)}>
+                <TableCell padding="checkbox" align="center">
+                  {index + 1}
                 </TableCell>
-              )}
-              {shouldShowQuarter(2) && (
-                <TableCell padding="none" align="center" className={highlighByQuarter(2)}>
-                  {renderCellContent(record, 1)}
+                <TableCell sx={isMobile ? { paddingX: 1 } : {}}>
+                  <IconNameWithDetailsModal
+                    blobId={record.blob.id}
+                    name={record.blob.name}
+                    color={record.blob.color}
+                    renderFullName={!isMobile}
+                    detailsDialogVariant="event"
+                  />
                 </TableCell>
-              )}
-              {shouldShowQuarter(3) && (
-                <TableCell padding="none" align="center" className={highlighByQuarter(3)}>
-                  {renderCellContent(record, 2)}
-                </TableCell>
-              )}
-              {shouldShowQuarter(4) && (
-                <TableCell padding="none" align="center" className={highlighByQuarter(4)}>
-                  {renderCellContent(record, 3)}
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
+                {shouldShowQuarter(1) && (
+                  <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
+                    {renderCellContent(record, 0)}
+                  </TableCell>
+                )}
+                {shouldShowQuarter(2) && (
+                  <TableCell padding="none" align="center" className={highlighByQuarter(2)}>
+                    {renderCellContent(record, 1)}
+                  </TableCell>
+                )}
+                {shouldShowQuarter(3) && (
+                  <TableCell padding="none" align="center" className={highlighByQuarter(3)}>
+                    {renderCellContent(record, 2)}
+                  </TableCell>
+                )}
+                {shouldShowQuarter(4) && (
+                  <TableCell padding="none" align="center" className={highlighByQuarter(4)}>
+                    {renderCellContent(record, 3)}
+                  </TableCell>
+                )}
+              </TableRow>
+            ))
+          ) : (
+            <SkeletonRows columnCount={isMobile ? 4 : 6} />
+          )}
         </TableBody>
       </EventTable>
     </EventCardFrame>
