@@ -678,3 +678,7 @@ Technical changes:
 - Added a dedicated event-specific blob details dialog for event tables and standings context
 - Extended blob details dialogs with inventory display, ranking summary fields, and mobile-friendly tooltips
 - Fixed bug of Sack of Money item not consumed instantly
+
+### 5.2.1
+
+- Added visuals to adventuring activity

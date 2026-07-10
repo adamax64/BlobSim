@@ -7,6 +7,7 @@ import { Pickaxe } from './blob-parts/tools/Pickaxe';
 import { Wrench } from './blob-parts/tools/Wrench';
 import { Scroll } from './blob-parts/tools/Scroll';
 import { PremiumDumbbells } from './blob-parts/tools/PremiumDumbbells';
+import MacheteAndTravelbag from './blob-parts/tools/MacheteAndTravelbag';
 
 export const mapActivityToTool = (activity?: ActivityTypeDbo | null): JSX.Element | undefined => {
   switch (activity) {
@@ -28,6 +29,8 @@ export const mapActivityToTool = (activity?: ActivityTypeDbo | null): JSX.Elemen
       return <Scroll />;
     case ActivityTypeDbo.PremiumPractice:
       return <PremiumDumbbells />;
+    case ActivityTypeDbo.Adventure:
+      return <MacheteAndTravelbag />;
     default:
       return undefined;
   }
