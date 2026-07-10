@@ -682,3 +682,4 @@ Technical changes:
 ### 5.2.1
 
 - Added visuals to adventuring activity
+- Added PWA support to application

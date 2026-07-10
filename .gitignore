@@ -2,9 +2,7 @@
 /*.db
 **/__pycache__/*
 *.png
-!web-ui/favicon.png
-!web-ui/favicon_192x192.png
-!web-ui/favicon_512x512.png
+!web-ui/public/*.png
 **/node_modules/*
 /.pytest_cache
 /venv
