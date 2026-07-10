@@ -34,12 +34,12 @@ const DesktopTitle = ({ currentPage, pageTitle }: TitleProps) => {
 };
 
 type AppHeaderProps = {
-  isMobile: boolean;
+  isTablet: boolean;
   mobileOpen: boolean;
   setMobileOpen: (open: boolean) => void;
 };
 
-export const AppHeader = ({ isMobile, mobileOpen, setMobileOpen }: AppHeaderProps) => {
+export const AppHeader = ({ isTablet: isMobile, mobileOpen, setMobileOpen }: AppHeaderProps) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

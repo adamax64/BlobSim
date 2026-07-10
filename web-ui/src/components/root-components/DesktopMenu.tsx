@@ -3,11 +3,11 @@ import { DRAWER_WIDTH } from './constants';
 import { AppSidebar } from './AppSidebar';
 
 type DesktopMenuProps = {
-  isMobile: boolean;
+  isTablet: boolean;
 };
 
-export const DesktopMenu = ({ isMobile }: DesktopMenuProps) => {
-  if (isMobile) {
+export const DesktopMenu = ({ isTablet }: DesktopMenuProps) => {
+  if (isTablet) {
     return null;
   }
 
@@ -24,7 +24,7 @@ export const DesktopMenu = ({ isMobile }: DesktopMenuProps) => {
         boxSizing={'border-box'}
         borderRight={(theme) => `1px solid ${theme.palette.divider}`}
       >
-        <AppSidebar isMobile={isMobile} setMobileOpen={() => {}} />
+        <AppSidebar isTablet={isTablet} setMobileOpen={() => {}} />
       </Box>
       <Box width={`${DRAWER_WIDTH}px`} flexShrink={0} />
     </>

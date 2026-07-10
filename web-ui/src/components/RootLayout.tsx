@@ -4,18 +4,18 @@ import { useState } from 'react';
 import { DesktopMenu } from './root-components/DesktopMenu';
 import { MobileMenu } from './root-components/MobileMenu';
 import { AppHeader } from './root-components/AppHeader';
-import { useIsMobile } from '../hooks/useIsMobile';
+import { useIsTablet } from '../hooks/useIsTablet';
 
 export const RootLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
 
   return (
     <Box display="flex" height="100dvh" flexDirection="column">
-      <AppHeader isMobile={isMobile} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-      <MobileMenu isMobile={isMobile} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+      <AppHeader isTablet={isTablet} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+      <MobileMenu isTablet={isTablet} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
       <Box component="main" flexGrow={1} display="flex" sx={{ minHeight: 0 }}>
-        <DesktopMenu isMobile={isMobile} />
+        <DesktopMenu isTablet={isTablet} />
         <Box overflow="auto" flexGrow={1}>
           <Outlet />
         </Box>

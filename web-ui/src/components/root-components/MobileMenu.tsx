@@ -3,13 +3,13 @@ import { DRAWER_WIDTH } from './constants';
 import { AppSidebar } from './AppSidebar';
 
 type MobileMenuProps = {
-  isMobile: boolean;
+  isTablet: boolean;
   mobileOpen: boolean;
   setMobileOpen: (open: boolean) => void;
 };
 
-export const MobileMenu = ({ isMobile, mobileOpen, setMobileOpen }: MobileMenuProps) => {
-  if (!isMobile) {
+export const MobileMenu = ({ isTablet, mobileOpen, setMobileOpen }: MobileMenuProps) => {
+  if (!isTablet) {
     return null;
   }
 
@@ -30,7 +30,7 @@ export const MobileMenu = ({ isMobile, mobileOpen, setMobileOpen }: MobileMenuPr
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
       >
-        <AppSidebar isMobile={isMobile} setMobileOpen={setMobileOpen} />
+        <AppSidebar isTablet={isTablet} setMobileOpen={setMobileOpen} />
       </Drawer>
     </nav>
   );

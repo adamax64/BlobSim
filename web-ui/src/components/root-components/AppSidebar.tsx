@@ -39,18 +39,18 @@ function getMenuIcon(page: string) {
 }
 
 type AppSidebarProps = {
-  isMobile: boolean;
+  isTablet: boolean;
   setMobileOpen: (open: boolean) => void;
 };
 
-export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
+export const AppSidebar = ({ isTablet, setMobileOpen }: AppSidebarProps) => {
   const { setCurrentPage } = useCurrentPage();
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
 
   const handleMenuItemClick = (menuItem: AppPage) => {
     setCurrentPage(menuItem);
-    if (isMobile) {
+    if (isTablet) {
       setMobileOpen(false);
     }
   };
@@ -94,7 +94,7 @@ export const AppSidebar = ({ isMobile, setMobileOpen }: AppSidebarProps) => {
             © 2026 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v5.2.1
+            v5.3
           </Typography>
         </Box>
       </Box>

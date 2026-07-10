@@ -679,7 +679,9 @@ Technical changes:
 - Extended blob details dialogs with inventory display, ranking summary fields, and mobile-friendly tooltips
 - Fixed bug of Sack of Money item not consumed instantly
 
-### 5.2.1
+### 5.3
 
 - Added visuals to adventuring activity
 - Added PWA support to application
+- Changed root layout responseness so the sidebar is closable on tablet view too
+- On tablet view the blob cards appear in two columns in the blobs page
