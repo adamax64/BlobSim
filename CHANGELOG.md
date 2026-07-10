@@ -685,3 +685,4 @@ Technical changes:
 - Added PWA support to application
 - Changed root layout responseness so the sidebar is closable on tablet view too
 - On tablet view the blob cards appear in two columns in the blobs page
+- Added skeleton rows to event table when event records are loading
