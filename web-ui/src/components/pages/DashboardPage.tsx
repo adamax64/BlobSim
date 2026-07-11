@@ -7,6 +7,7 @@ import Administration from '../dashboard-components/administration-components/Ad
 import SimActions from '../dashboard-components/sim-actions/SimActions';
 import News from '../dashboard-components/news-components/News';
 import Gym from '../dashboard-components/gym-components/Gym';
+import LabourSite from '../dashboard-components/labour-site-components/LabourSite';
 
 const GRID_CELL_SIZE = { xs: 12, sm: 6, lg: 4 };
 
@@ -36,6 +37,9 @@ export function DashboardPage() {
         </Grid>
         <Grid size={GRID_CELL_SIZE}>
           <Gym />
+        </Grid>
+        <Grid size={GRID_CELL_SIZE}>
+          <LabourSite />
         </Grid>
       </Grid>
       <SimActions />

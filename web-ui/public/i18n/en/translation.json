@@ -15,7 +15,8 @@
     "proceed_to_next_day": "Proceed to next day",
     "options": {
       "administration": "Administration",
-      "gym": "Gym"
+      "gym": "Gym",
+      "labour_site": "Labour Site"
     }
   },
   "administration": {
@@ -44,6 +45,11 @@
     "practice": "The following blobs use the basic gym service:",
     "premium_practice": "The following blobs use the premium gym service:",
     "empty": "The gym is empty for now."
+  },
+  "labour_site": {
+    "title": "Labour Site",
+    "subtitle": "The following blobs are working right now:",
+    "empty": "No one works right now."
   },
   "blobs": {
     "search_by_name": "Search by name",

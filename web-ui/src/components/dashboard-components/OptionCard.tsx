@@ -19,7 +19,7 @@ const OptionCard = ({ title, icon: Icon, onClick }: OptionCardProps) => {
           padding: 3,
         }}
       >
-        <Box display="flex" alignItems="center" gap={1} height="100%">
+        <Box display="flex" alignItems="center" gap={1.5} height="100%">
           <Icon fontSize="large" />
           <Typography variant="h4">{title}</Typography>
         </Box>

@@ -1,12 +1,12 @@
-import { Dialog, DialogContent, Divider, Skeleton, Typography } from '@mui/material';
+import { Dialog, DialogContent, Divider, Typography } from '@mui/material';
 import DialogTitleWithCloseButton from '../../common/DialogTitleWithCloseButton';
 import { useTranslation } from 'react-i18next';
-import { ActivityTypeDbo, BlobsApi, BlobStatsDto, ResponseError } from '../../../../generated';
+import { ActivityTypeDbo, BlobsApi, BlobStatsDto } from '../../../../generated';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import SkeletonGrid from '../blob-grid/SkeletonGrid';
 import BlobGrid from '../blob-grid/BlobGrid';
+import SkeletonContent from '../SkeletonContent';
 
 type GymModalProps = {
   open: boolean;
@@ -97,18 +97,6 @@ const GymModal = ({ open, onClose }: GymModalProps) => {
         </>
       )}
     </Dialog>
-  );
-};
-
-const SkeletonContent = () => {
-  return (
-    <>
-      <Divider />
-      <DialogContent>
-        <Skeleton variant="text" width="100%" sx={{ mb: 2 }} />
-        <SkeletonGrid />
-      </DialogContent>
-    </>
   );
 };
 

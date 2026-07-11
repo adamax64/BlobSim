@@ -15,7 +15,8 @@
     "proceed_to_next_day": "Tovább a következő napra",
     "options": {
       "administration": "Adminisztráció",
-      "gym": "Edzőterem"
+      "gym": "Edzőterem",
+      "labour_site": "Munkaterület"
     }
   },
   "administration": {
@@ -44,6 +45,11 @@
     "practice": "Az alábbi blobok használják az alap edzőtermi szolgáltatást:",
     "premium_practice": "Az alábbi blobok használják a prémium edzőtermi szolgáltatást:",
     "empty": "Az edzőterem jelenleg üres."
+  },
+  "labour_site": {
+    "title": "Munkaterület",
+    "subtitle": "Az alábbi blobok dolgoznak jelenleg:",
+    "empty": "Jelenleg senki sem dolgozik."
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",
