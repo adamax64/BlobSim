@@ -61,32 +61,36 @@ const GymModal = ({ open, onClose }: GymModalProps) => {
     <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
       <DialogTitleWithCloseButton title={t('gym.title')} onClose={onClose} />
       {isPending && noCachedData && <SkeletonContent />}
-      {catchupTrainees.length > 0 && (
-        <>
-          <Divider />
-          <DialogContent>
-            <Typography mb={2}>{t('gym.catchup_training')}</Typography>
-            <BlobGrid blobs={catchupTrainees} />
-          </DialogContent>
-        </>
-      )}
-      {regularTrainees.length > 0 && (
-        <>
-          <Divider />
-          <DialogContent>
-            <Typography mb={2}>{t('gym.practice')}</Typography>
-            <BlobGrid blobs={regularTrainees} />
-          </DialogContent>
-        </>
-      )}
-      {premiumTrainees.length > 0 && (
-        <>
-          <Divider />
-          <DialogContent>
-            <Typography mb={2}>{t('gym.premium_practice')}</Typography>
-            <BlobGrid blobs={premiumTrainees} />
-          </DialogContent>
-        </>
+      {!noCachedData && (
+        <DialogContent sx={{ p: 0 }}>
+          {catchupTrainees.length > 0 && (
+            <>
+              <Divider />
+              <DialogContent>
+                <Typography mb={2}>{t('gym.catchup_training')}</Typography>
+                <BlobGrid blobs={catchupTrainees} />
+              </DialogContent>
+            </>
+          )}
+          {regularTrainees.length > 0 && (
+            <>
+              <Divider />
+              <DialogContent>
+                <Typography mb={2}>{t('gym.practice')}</Typography>
+                <BlobGrid blobs={regularTrainees} />
+              </DialogContent>
+            </>
+          )}
+          {premiumTrainees.length > 0 && (
+            <>
+              <Divider />
+              <DialogContent>
+                <Typography mb={2}>{t('gym.premium_practice')}</Typography>
+                <BlobGrid blobs={premiumTrainees} />
+              </DialogContent>
+            </>
+          )}
+        </DialogContent>
       )}
       {!data?.length && !isPending && (
         <>

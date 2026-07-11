@@ -707,3 +707,7 @@ Technical changes:
 - On tablet view the blob cards appear in two columns in the blobs page
 - Added skeleton rows to event table when event records are loading
 - Changed simulation time display card background in dark mode to be lighter
+
+### 5.3.1
+
+- Fixed gym modal UI issue
