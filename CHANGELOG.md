@@ -679,8 +679,28 @@ Technical changes:
 - Extended blob details dialogs with inventory display, ranking summary fields, and mobile-friendly tooltips
 - Fixed bug of Sack of Money item not consumed instantly
 
-### 5.3
+### 5.3 - Dashboard update
 
+- Reworked dashboard UI:
+  - News card and policy panel is removed from the page
+  - New option cards added to the page each opens a modal on click:
+    - Administration
+      - Modal shows current grandmaster
+      - Policy panel is moved to this modal
+    - News
+      - Modal shows news card content shown before on the dashboard page
+    - Gym
+      - Modal shows blobs currently practicing
+      - Blobs divided into catchup trainees, regular trainees (simple and intense practice) and premium trainees
+    - Labour site
+      - Modal shows blobs currently doing labour
+    - Mine
+      - Modal shows currently mining blobs
+    - Anchient ruins
+      - Modal shows currently adventuring blobs
+  - Restructured simulation action buttons:
+    - Inner logic of progress button is decoupled from the news content
+    - "Jump to event" and "Create blob" buttons moved from the news content to snackbars
 - Added visuals to adventuring activity
 - Added PWA support to application
 - Changed root layout responseness so the sidebar is closable on tablet view too
