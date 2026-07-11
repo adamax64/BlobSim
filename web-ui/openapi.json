@@ -45,7 +45,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
     "/sim_data/simulate": {
@@ -200,21 +205,17 @@
       }
     },
     "/blobs/blobs_by_activities": {
-      "get": {
+      "post": {
         "tags": [
           "blobs"
         ],
         "summary": "Get By Activities",
-        "operationId": "get_by_activities_blobs_blobs_by_activities_get",
+        "operationId": "get_by_activities_blobs_blobs_by_activities_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "items": {
-                  "$ref": "#/components/schemas/ActivityTypeDbo"
-                },
-                "type": "array",
-                "title": "Activities"
+                "$ref": "#/components/schemas/BlobsByActivityRequestDto"
               }
             }
           },
@@ -230,7 +231,7 @@
                     "$ref": "#/components/schemas/BlobStatsDto"
                   },
                   "type": "array",
-                  "title": "Response Get By Activities Blobs Blobs By Activities Get"
+                  "title": "Response Get By Activities Blobs Blobs By Activities Post"
                 }
               }
             }
@@ -2037,6 +2038,22 @@
           "traits"
         ],
         "title": "BlobStatsDto"
+      },
+      "BlobsByActivityRequestDto": {
+        "properties": {
+          "activities": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityTypeDbo"
+            },
+            "type": "array",
+            "title": "Activities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "activities"
+        ],
+        "title": "BlobsByActivityRequestDto"
       },
       "Body_save_elimination_competition_elimination_event_results_post": {
         "properties": {

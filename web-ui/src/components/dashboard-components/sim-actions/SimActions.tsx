@@ -20,13 +20,13 @@ const SimActions = () => {
   });
 
   useEffect(() => {
-    if (!news) {
+    if (!news && !newsLoading) {
       refreshNews();
     }
     if (isAuthenticated) {
       getCanProgress();
     }
-  }, [news, refreshNews, isAuthenticated]);
+  }, [news, newsLoading, refreshNews, isAuthenticated]);
 
   const latestNews = news?.at(0);
 

@@ -14,7 +14,8 @@
     "create_new_blob": "Új Blob létrehozása",
     "proceed_to_next_day": "Tovább a következő napra",
     "options": {
-      "administration": "Adminisztráció"
+      "administration": "Adminisztráció",
+      "gym": "Edzőterem"
     }
   },
   "administration": {
@@ -36,6 +37,13 @@
       "PENSION_SCHEME": "+1 érme minden visszavonult blobnak ciklusonként; magasabb szinten esély további érme megszerzésére"
     },
     "effect_until": "Érvényes: {{effectUntil}}-ig"
+  },
+  "gym": {
+    "title": "Edzőterem",
+    "catchup_training": "Az alábbi blobok vesznek részt felzárkóztató edzőtáborban:",
+    "practice": "Az alábbi blobok használják az alap edzőtermi szolgáltatást:",
+    "premium_practice": "Az alábbi blobok használják a prémium edzőtermi szolgáltatást:",
+    "empty": "Az edzőterem jelenleg üres."
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",

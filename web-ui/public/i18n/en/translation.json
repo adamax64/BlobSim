@@ -14,7 +14,8 @@
     "create_new_blob": "Create new Blob",
     "proceed_to_next_day": "Proceed to next day",
     "options": {
-      "administration": "Administration"
+      "administration": "Administration",
+      "gym": "Gym"
     }
   },
   "administration": {
@@ -36,6 +37,13 @@
       "PENSION_SCHEME": "+1 coin for retired blobs per cycle; chance for extra coin at higher levels"
     },
     "effect_until": "Effect until: {{effectUntil}}"
+  },
+  "gym": {
+    "title": "Gym",
+    "catchup_training": "The following blobs attending on the catchup training camp:",
+    "practice": "The following blobs use the basic gym service:",
+    "premium_practice": "The following blobs use the premium gym service:",
+    "empty": "The gym is empty for now."
   },
   "blobs": {
     "search_by_name": "Search by name",

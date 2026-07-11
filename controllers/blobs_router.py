@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response
 import traceback
 
+from pydantic import BaseModel
+
 from domain.blob_services.blob_fetching_service import (
     fetch_blob_by_id,
     get_blobs_by_activities,
@@ -18,6 +20,10 @@ from domain.exceptions.no_grandmaster_found_exception import NoGrandmasterFoundE
 from .auth_dependency import require_auth
 
 router = APIRouter(prefix="/blobs", tags=["blobs"])
+
+
+class BlobsByActivityRequestDto(BaseModel):
+    activities: list[ActivityType]
 
 
 @router.get("/all", response_model=list[BlobStatsDto])
@@ -51,10 +57,10 @@ def get_grandmaster() -> BlobStatsDto:
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
 
 
-@router.get("/blobs_by_activities", response_model=list[BlobStatsDto])
-def get_by_activities(activities: list[ActivityType]) -> list[BlobStatsDto]:
+@router.post("/blobs_by_activities", response_model=list[BlobStatsDto])
+def get_by_activities(resuest: BlobsByActivityRequestDto) -> list[BlobStatsDto]:
     try:
-        return get_blobs_by_activities(activities=activities)
+        return get_blobs_by_activities(activities=resuest.activities)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

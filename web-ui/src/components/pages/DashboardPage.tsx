@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import Administration from '../dashboard-components/administration-components/Administration';
 import SimActions from '../dashboard-components/sim-actions/SimActions';
 import News from '../dashboard-components/news-components/News';
+import Gym from '../dashboard-components/gym-components/Gym';
 
 const GRID_CELL_SIZE = { xs: 12, sm: 6, lg: 4 };
 
@@ -32,6 +33,9 @@ export function DashboardPage() {
         </Grid>
         <Grid size={GRID_CELL_SIZE}>
           <News />
+        </Grid>
+        <Grid size={GRID_CELL_SIZE}>
+          <Gym />
         </Grid>
       </Grid>
       <SimActions />
