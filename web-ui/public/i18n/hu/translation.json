@@ -16,7 +16,8 @@
     "options": {
       "administration": "Adminisztráció",
       "gym": "Edzőterem",
-      "labour_site": "Munkaterület"
+      "labour_site": "Munkaterület",
+      "mine": "Bánya"
     }
   },
   "administration": {
@@ -50,6 +51,11 @@
     "title": "Munkaterület",
     "subtitle": "Az alábbi blobok dolgoznak jelenleg:",
     "empty": "Jelenleg senki sem dolgozik."
+  },
+  "mine": {
+    "title": "Bánya",
+    "subtitle": "Az alábbi blobok jelenleg a bányában dolgoznak:",
+    "empty": "Jelenleg senki sincs a bányában."
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",

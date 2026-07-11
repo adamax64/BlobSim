@@ -16,7 +16,8 @@
     "options": {
       "administration": "Administration",
       "gym": "Gym",
-      "labour_site": "Labour Site"
+      "labour_site": "Labour Site",
+      "mine": "Mine"
     }
   },
   "administration": {
@@ -50,6 +51,11 @@
     "title": "Labour Site",
     "subtitle": "The following blobs are working right now:",
     "empty": "No one works right now."
+  },
+  "mine": {
+    "title": "Mine",
+    "subtitle": "The following blobs work in the mine right now:",
+    "empty": "No one is in the mine right now."
   },
   "blobs": {
     "search_by_name": "Search by name",
