@@ -706,3 +706,4 @@ Technical changes:
 - Changed root layout responseness so the sidebar is closable on tablet view too
 - On tablet view the blob cards appear in two columns in the blobs page
 - Added skeleton rows to event table when event records are loading
+- Changed simulation time display card background in dark mode to be lighter
