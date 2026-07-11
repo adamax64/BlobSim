@@ -17,7 +17,8 @@
       "administration": "Administration",
       "gym": "Gym",
       "labour_site": "Labour Site",
-      "mine": "Mine"
+      "mine": "Mine",
+      "anchient_ruins": "Anchient Ruins"
     }
   },
   "administration": {
@@ -56,6 +57,11 @@
     "title": "Mine",
     "subtitle": "The following blobs work in the mine right now:",
     "empty": "No one is in the mine right now."
+  },
+  "anchient_ruins": {
+    "title": "Anchient Ruins",
+    "subtitle": "The following blobs went exploring the anchient ruins:",
+    "empty": "No one is adventuring right now."
   },
   "blobs": {
     "search_by_name": "Search by name",

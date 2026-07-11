@@ -1,4 +1,5 @@
 import { Box, Card, CardActionArea, Typography } from '@mui/material';
+import { useIsTablet } from '../../hooks/useIsTablet';
 
 type OptionCardProps = {
   title: string;
@@ -7,8 +8,10 @@ type OptionCardProps = {
 };
 
 const OptionCard = ({ title, icon: Icon, onClick }: OptionCardProps) => {
+  const isTable = useIsTablet();
+
   return (
-    <Card>
+    <Card sx={{ height: '100%' }}>
       <CardActionArea
         onClick={onClick}
         sx={{
@@ -16,7 +19,7 @@ const OptionCard = ({ title, icon: Icon, onClick }: OptionCardProps) => {
             backgroundColor: 'action.selectedHover',
           },
           height: '100%',
-          padding: 3,
+          padding: isTable ? 3 : 6,
         }}
       >
         <Box display="flex" alignItems="center" gap={1.5} height="100%">

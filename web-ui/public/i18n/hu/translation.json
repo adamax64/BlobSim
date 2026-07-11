@@ -17,7 +17,8 @@
       "administration": "Adminisztráció",
       "gym": "Edzőterem",
       "labour_site": "Munkaterület",
-      "mine": "Bánya"
+      "mine": "Bánya",
+      "anchient_ruins": "Ősi romok"
     }
   },
   "administration": {
@@ -56,6 +57,11 @@
     "title": "Bánya",
     "subtitle": "Az alábbi blobok jelenleg a bányában dolgoznak:",
     "empty": "Jelenleg senki sincs a bányában."
+  },
+  "anchient_ruins": {
+    "title": "Ősi romok",
+    "subtitle": "Az alábbi blobok mentek felfedezni az ősi romokat:",
+    "empty": "Jelenleg senki sem ment felfedezőútra."
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",
