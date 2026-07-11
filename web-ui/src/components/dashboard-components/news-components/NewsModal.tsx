@@ -1,40 +1,40 @@
-import { Box, Button, Card, CardContent, Divider, Grid, Skeleton, Typography } from '@mui/material';
-import { NewsDto } from '../../../generated';
+import { Box, Dialog, DialogContent, Divider, Grid, Skeleton, Typography } from '@mui/material';
 import { NewsContent } from './NewsContent';
 import { useTranslation } from 'react-i18next';
-import { formatToShort } from '../../utils/sim-time-utils';
-import { NewsActionButton } from './NewsActionButton';
+import { formatToShort } from '../../../utils/sim-time-utils';
+import { useNews } from '../../../context/NewsContext';
+import DialogTitleWithCloseButton from '../../common/DialogTitleWithCloseButton';
 
-type NewsCardProps = {
-  news: NewsDto[] | undefined;
-  loadingSkeletonVisible: boolean;
-  fetchNews: () => void;
+type NewsModalProps = {
+  open: boolean;
+  onClose: () => void;
 };
 
-export const NewsCard = ({ news, loadingSkeletonVisible, fetchNews }: NewsCardProps) => {
+export const NewsModal = ({ open, onClose }: NewsModalProps) => {
   const { t } = useTranslation();
+  const { news, newsLoading: loadingSkeletonVisible } = useNews();
 
   return (
-    <Card>
-      <CardContent>
+    <Dialog maxWidth="md" open={open} onClose={onClose}>
+      <DialogTitleWithCloseButton title={t('dashboard.news')} onClose={onClose} />
+      <Divider />
+      <DialogContent>
         <Box display="flex" flexDirection="column" gap={1.5}>
-          <Typography variant="h6">{t('dashboard.news')}</Typography>
-          <Box sx={{ height: 'calc(100vh - 310px)', overflowY: 'auto' }}>
+          <Box sx={{ overflowY: 'auto' }}>
             <Grid container>
               {loadingSkeletonVisible ? (
                 <NewsCardSkeleton />
               ) : news ? (
                 news.map((newsItem, index) => (
                   <Grid key={index} size={12} container spacing={2}>
-                    <Grid size={{ xs: 3, lg: 2, xl: 1 }} sx={{ paddingY: 1.5 }}>
+                    <Grid size={{ xs: 3, md: 2, xl: 2 }} sx={{ paddingY: 1.5 }}>
                       <Typography variant="body1" textAlign="end" fontWeight="bold">
                         {formatToShort(newsItem.date)}
                       </Typography>
                     </Grid>
                     <Divider orientation="vertical" />
-                    <Grid size={{ xs: 8, lg: 9, xl: 10 }} sx={{ paddingY: 1.5 }}>
+                    <Grid size={{ xs: 8, md: 9, xl: 9 }} sx={{ paddingY: 1.5 }}>
                       <NewsContent newsItem={newsItem} />
-                      <NewsActionButton newsItem={newsItem} fetchNews={fetchNews} />
                     </Grid>
                   </Grid>
                 ))
@@ -44,8 +44,8 @@ export const NewsCard = ({ news, loadingSkeletonVisible, fetchNews }: NewsCardPr
             </Grid>
           </Box>
         </Box>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -9,6 +9,7 @@ import './i18n';
 import { ThemeModeProvider } from './context/ThemeModeContext';
 import { CurrentPageProvider } from './context/CurrentPageContext';
 import { PoliciesProvider } from './context/PoliciesContext';
+import { NewsProvider } from './context/NewsContext';
 
 // Set up a Router instance
 const router = createRouter({
@@ -36,9 +37,11 @@ if (!rootElement.innerHTML) {
           <AuthProvider>
             <SimTimeProvider>
               <PoliciesProvider>
-                <CurrentPageProvider>
-                  <RouterProvider router={router} />
-                </CurrentPageProvider>
+                <NewsProvider>
+                  <CurrentPageProvider>
+                    <RouterProvider router={router} />
+                  </CurrentPageProvider>
+                </NewsProvider>
               </PoliciesProvider>
             </SimTimeProvider>
           </AuthProvider>

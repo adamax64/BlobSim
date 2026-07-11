@@ -13,7 +13,14 @@ type BlobBaseProps = {
 
 export const BlobBase = ({ size, color, eyeSlot, doSquash, hasCrown, toolSlot, bruiseSlot }: BlobBaseProps) => {
   return (
-    <svg width={size} height={size} viewBox="0 0 130 95" version="1.1" id="svg5" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={size}
+      height={size * 0.9}
+      viewBox="0 0 130 82"
+      version="1.1"
+      id="svg5"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="layer1">
         <g id="g12632">
           <g id="scaleGroup" style={{ transformBox: 'fill-box', transformOrigin: '0% 100%' }}>

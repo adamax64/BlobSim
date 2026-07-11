@@ -12,7 +12,14 @@
     "loading": "Betöltés...",
     "proceed_to_event": "Ugrás az eseményhez",
     "create_new_blob": "Új Blob létrehozása",
-    "proceed_to_next_day": "Tovább a következő napra"
+    "proceed_to_next_day": "Tovább a következő napra",
+    "options": {
+      "administration": "Adminisztráció"
+    }
+  },
+  "administration": {
+    "title": "Adminisztráció",
+    "grandmaster": "Nagymester"
   },
   "policies": {
     "title": "Intézkedések",
@@ -346,7 +353,11 @@
     "no_events": "Nincs a kiválasztott kritériumoknak megfelelő esemény",
     "actions": "Műveletek",
     "view_results": "Eredmények megtekintése",
-    "replay_event": "Esemény visszajátszása"
+    "replay_event": "Esemény visszajátszása",
+    "modal": {
+      "title": "Verseny eredmények",
+      "no_results": "Nem található eredmény."
+    }
   },
   "page_titles": {
     "dashboard": "Blob Bajnokság - Kezdőlap",

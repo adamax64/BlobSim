@@ -28,7 +28,7 @@ export const PoliciesProvider = ({ children }: { children: React.ReactNode }) =>
 export const usePolicies = () => {
   const context = useContext(PoliciesContext);
   if (!context) {
-    throw new Error('usePoli must be used within a PoliciesProvider');
+    throw new Error('usePolicies must be used within a PoliciesProvider');
   }
   return context;
 };

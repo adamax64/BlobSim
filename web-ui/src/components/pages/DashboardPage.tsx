@@ -1,21 +1,21 @@
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Card, CardContent, Grid, Typography, useTheme } from '@mui/material';
 import { PageFrame } from '../common/PageFrame';
 import { SimTimeDisplay } from '../common/SimTimeDisplay';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useTranslation } from 'react-i18next';
-import { NewsAndActions } from '../dashboard-components/NewsAndActions';
-import PoliciesPanel from '../dashboard-components/PoliciesPanel';
-import { usePolicies } from '../../context/PoliciesContext';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import Administration from '../dashboard-components/administration-components/Administration';
+import SimActions from '../dashboard-components/sim-actions/SimActions';
+import News from '../dashboard-components/news-components/News';
+
+const GRID_CELL_SIZE = { xs: 12, sm: 6, lg: 4 };
 
 export function DashboardPage() {
   const { t } = useTranslation();
 
   const { loading: simTimeLoading } = useSimTime();
-  const { policiesLoading } = usePolicies();
 
   return (
-    <PageFrame showLoading={simTimeLoading || policiesLoading} pageName="dashboard">
+    <PageFrame showLoading={simTimeLoading} pageName="dashboard" customFrameStyle={{ p: 2 }}>
       <Box gap={2} display="flex">
         <Card sx={{ flexGrow: 1 }}>
           <CardContent>
@@ -25,19 +25,16 @@ export function DashboardPage() {
             </Box>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent>
-            <Box display="flex" flexDirection="column" gap={1} alignItems="flex-start">
-              <Typography variant="h6" display="flex" alignItems="center" gap={1}>
-                <AccountBalanceIcon />
-                {t('policies.title')}
-              </Typography>
-              <PoliciesPanel />
-            </Box>
-          </CardContent>
-        </Card>
       </Box>
-      <NewsAndActions />
+      <Grid container spacing={2}>
+        <Grid size={GRID_CELL_SIZE}>
+          <Administration />
+        </Grid>
+        <Grid size={GRID_CELL_SIZE}>
+          <News />
+        </Grid>
+      </Grid>
+      <SimActions />
     </PageFrame>
   );
 }

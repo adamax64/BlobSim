@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { ReactNode, useEffect } from 'react';
 import { LoadingOverlay } from './LoadingOverlay';
 import { useCurrentPage } from '../../context/CurrentPageContext';
@@ -9,9 +9,10 @@ type PageFrameProps = {
   showLoading?: boolean;
   pageName?: AppPage;
   customPageTitle?: string;
+  customFrameStyle?: BoxProps;
 };
 
-export const PageFrame = ({ children, showLoading, pageName, customPageTitle }: PageFrameProps) => {
+export const PageFrame = ({ children, showLoading, pageName, customPageTitle, customFrameStyle }: PageFrameProps) => {
   const { setCurrentPage, setPageTitle } = useCurrentPage();
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export const PageFrame = ({ children, showLoading, pageName, customPageTitle }: 
   }, [pageName, customPageTitle]);
 
   return (
-    <Box display="flex" flexGrow={1} height="100%" flexDirection="column" gap={2} className="p-2">
+    <Box display="flex" flexGrow={1} height="100%" flexDirection="column" gap={2} p={1} {...customFrameStyle}>
       {children}
       {showLoading && <LoadingOverlay />}
     </Box>

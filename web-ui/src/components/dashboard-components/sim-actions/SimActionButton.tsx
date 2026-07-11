@@ -1,21 +1,21 @@
 import { Button } from '@mui/material';
-import { FactoryApi, NameSuggestionDto, NewsDto, NewsType } from '../../../generated';
+import { FactoryApi, NameSuggestionDto, NewsDto, NewsType } from '../../../../generated';
 import Stadium from '@mui/icons-material/Stadium';
 import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
-import { BlobNamingDialog } from '../common/BlobNamingDialog';
+import { BlobNamingDialog } from '../../common/BlobNamingDialog';
 import { useMutation } from '@tanstack/react-query';
-import defaultConfig from '../../default-config';
+import defaultConfig from '../../../default-config';
 
-type NewsActionButtonProps = {
-  newsItem: NewsDto;
+type SimActionButtonProps = {
+  newsItem: NewsDto | undefined;
   fetchNews: () => void;
 };
 
-export const NewsActionButton = ({ newsItem, fetchNews }: NewsActionButtonProps) => {
+export const SimActionButton = ({ newsItem, fetchNews }: SimActionButtonProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -36,10 +36,10 @@ export const NewsActionButton = ({ newsItem, fetchNews }: NewsActionButtonProps)
   });
 
   useEffect(() => {
-    if (newsItem.type === NewsType.BlobInCreation) {
+    if (newsItem?.type === NewsType.BlobInCreation) {
       getNameSuggestions();
     }
-  }, [newsItem.type]);
+  }, [newsItem?.type]);
 
   const handleDialogClose = (update?: boolean) => {
     setOpen(false);
@@ -47,6 +47,10 @@ export const NewsActionButton = ({ newsItem, fetchNews }: NewsActionButtonProps)
       fetchNews();
     }
   };
+
+  if (!newsItem) {
+    return null;
+  }
 
   switch (newsItem.type) {
     case NewsType.EventStarted:
@@ -58,7 +62,6 @@ export const NewsActionButton = ({ newsItem, fetchNews }: NewsActionButtonProps)
           size="small"
           endIcon={<Stadium />}
           onClick={() => navigate({ to: '/event' })}
-          sx={{ marginTop: 1 }}
         >
           {t('dashboard.proceed_to_event')}
         </Button>
@@ -73,7 +76,6 @@ export const NewsActionButton = ({ newsItem, fetchNews }: NewsActionButtonProps)
               size="small"
               endIcon={<AddCircle />}
               onClick={() => setOpen(true)}
-              sx={{ marginTop: 1 }}
             >
               {t('dashboard.create_new_blob')}
             </Button>

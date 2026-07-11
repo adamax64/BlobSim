@@ -1,11 +1,11 @@
 import { Typography, Box, Link } from '@mui/material';
-import { NewsDto, NewsType } from '../../../generated';
+import { NewsDto, NewsType } from '../../../../generated';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
-import { InlineTranslatedBlob } from '../../components/common/InlineTranslatedBlob';
-import ResultsModal from '../event-components/ResultsModal';
+import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
+import { InlineTranslatedBlob } from '../../common/InlineTranslatedBlob';
+import ResultsModal from '../../event-components/ResultsModal';
 
 type NewsContentProps = {
   newsItem: NewsDto;

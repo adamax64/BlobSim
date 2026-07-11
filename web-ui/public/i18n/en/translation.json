@@ -12,7 +12,14 @@
     "loading": "Loading...",
     "proceed_to_event": "Proceed to event",
     "create_new_blob": "Create new Blob",
-    "proceed_to_next_day": "Proceed to next day"
+    "proceed_to_next_day": "Proceed to next day",
+    "options": {
+      "administration": "Administration"
+    }
+  },
+  "administration": {
+    "title": "Administration",
+    "grandmaster": "Grandmaster"
   },
   "policies": {
     "title": "Policies",
@@ -346,7 +353,11 @@
     "no_events": "No events found for the selected criteria",
     "actions": "Actions",
     "view_results": "View results",
-    "replay_event": "Replay event"
+    "replay_event": "Replay event",
+    "modal": {
+      "title": "Event Results",
+      "no_results": "No results available."
+    }
   },
   "page_titles": {
     "dashboard": "Blob Championship System - Dashboard",

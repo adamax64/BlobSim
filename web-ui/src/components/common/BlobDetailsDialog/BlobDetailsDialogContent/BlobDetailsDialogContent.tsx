@@ -80,7 +80,7 @@ const BlobDetailsDialogContent = ({
           </Box>
           {blobIcon}
         </Box>
-        <Box display="flex" flexDirection="column" gap={1.5} width="100%">
+        <Box display="flex" flexDirection="column" gap={1.5} width="100%" pt={2}>
           {blob.inventory.length > 0 && includeInventory && <Inventory inventory={blob.inventory} />}
 
           <Grid container spacing={1.5} width="100%">

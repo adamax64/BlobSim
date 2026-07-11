@@ -26,6 +26,28 @@
         }
       }
     },
+    "/sim_data/can_progress": {
+      "get": {
+        "tags": [
+          "sim_data"
+        ],
+        "summary": "Can Progress",
+        "operationId": "can_progress_sim_data_can_progress_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "title": "Response Can Progress Sim Data Can Progress Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sim_data/simulate": {
       "post": {
         "tags": [
@@ -139,6 +161,76 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BlobStatsDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blobs/grandmaster": {
+      "get": {
+        "tags": [
+          "blobs"
+        ],
+        "summary": "Get Grandmaster",
+        "operationId": "get_grandmaster_blobs_grandmaster_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlobStatsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blobs/blobs_by_activities": {
+      "get": {
+        "tags": [
+          "blobs"
+        ],
+        "summary": "Get By Activities",
+        "operationId": "get_by_activities_blobs_blobs_by_activities_get",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/ActivityTypeDbo"
+                },
+                "type": "array",
+                "title": "Activities"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BlobStatsDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get By Activities Blobs Blobs By Activities Get"
                 }
               }
             }

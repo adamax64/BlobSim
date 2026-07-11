@@ -30,7 +30,7 @@ const MacheteAndTravelbag = () => {
           d="M 31,67 V 22 q -8,0 -8,6 l 2,39 z"
           id="machete-blade-1"
           fill="#b3b3b3"
-          stroke-width="1"
+          strokeWidth="1"
         />
         <path
           stroke="#000000"
@@ -40,7 +40,7 @@ const MacheteAndTravelbag = () => {
           d="M 31,67 V 27 q -4,0 -4,3 l 1,37 z"
           id="machete-blade-2"
           fill="#999999"
-          stroke-width="1"
+          strokeWidth="1"
         />
       </g>
       <g id="travelbag-stick" transform="rotate(45, 92, 64)">
