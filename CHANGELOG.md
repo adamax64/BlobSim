@@ -711,3 +711,7 @@ Technical changes:
 ### 5.3.1
 
 - Fixed gym modal UI issue
+
+### 5.3.2
+
+- Fixed order of results on standings
