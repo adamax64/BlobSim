@@ -56,7 +56,7 @@ def get_standings(
     for blob, results in results_by_blob.items():
         total_points = 0
         standing_results: list[StandingsResultDTO] = []
-        for result in results:
+        for result in sorted(results, key=lambda x: x.event.date):
             total_points += result.points
             standing_results.append(
                 StandingsResultDTO(position=result.position, points=result.points)
