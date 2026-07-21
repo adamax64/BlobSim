@@ -10,6 +10,7 @@ import Gym from '../dashboard-components/gym-components/Gym';
 import LabourSite from '../dashboard-components/labour-site-components/LabourSite';
 import Mine from '../dashboard-components/mine-components/Mine';
 import AnchientRuins from '../dashboard-components/anchient-ruins-components/AnchientRuins';
+import { useCanContinue } from '../../hooks/useCanContinue';
 
 const GRID_CELL_SIZE = { xs: 12, sm: 6, lg: 4 };
 
@@ -17,6 +18,7 @@ export function DashboardPage() {
   const { t } = useTranslation();
 
   const { loading: simTimeLoading } = useSimTime();
+  const { canContinue, isEventToday, isBlobInCreation } = useCanContinue();
 
   return (
     <PageFrame showLoading={simTimeLoading} pageName="dashboard" customFrameStyle={{ p: 2 }}>
@@ -50,7 +52,9 @@ export function DashboardPage() {
           <AnchientRuins />
         </Grid>
       </Grid>
-      <SimActions />
+      <Box sx={{ pb: { xs: isEventToday || isBlobInCreation ? '100px' : canContinue ? 4 : 0, sm: 0 } }}>
+        <SimActions />
+      </Box>
     </PageFrame>
   );
 }

@@ -22,7 +22,7 @@ const BlobGrid = ({ blobs }: BlobGridProps) => {
   return (
     <Grid container spacing={2}>
       {blobs.map((blob) => (
-        <Grid size={cellSize} display="flex" justifyContent="center">
+        <Grid key={blob.id} size={cellSize} display="flex" justifyContent="center">
           <BlobAnimatedWithName blob={blob} />
         </Grid>
       ))}

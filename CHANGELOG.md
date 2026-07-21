@@ -715,3 +715,11 @@ Technical changes:
 ### 5.3.2
 
 - Fixed order of results on standings
+
+### 5.3.3
+
+- added gap to bottom on dashboard when sim action snackbar is shown
+  - this way the bottom dashboard option card is not overlapped by the snackbar
+- fixed grandmaster state stuck on administration modal
+- added missing translation for repair kit item
+- fixed missing react key console error in blob grid

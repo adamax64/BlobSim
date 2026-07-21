@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DialogTitleWithCloseButton from '../../common/DialogTitleWithCloseButton';
 import BlobAnimatedWithName from '../BlobAnimatedWithName';
+import { useSimTime } from '../../../context/SimTimeContext';
 
 type AdministrationModalProps = {
   open: boolean;
@@ -15,6 +16,7 @@ type AdministrationModalProps = {
 
 const AdministrationModal = ({ open, onClose }: AdministrationModalProps) => {
   const { t } = useTranslation();
+  const { simTime } = useSimTime();
 
   const blobsApi = new BlobsApi(defaultConfig);
   const { data: grandmaster, mutate: fetchGrandmaster } = useMutation<BlobStatsDto, ResponseError>({
@@ -22,8 +24,10 @@ const AdministrationModal = ({ open, onClose }: AdministrationModalProps) => {
   });
 
   useEffect(() => {
-    fetchGrandmaster();
-  }, [fetchGrandmaster]);
+    if (simTime) {
+      fetchGrandmaster();
+    }
+  }, [simTime, fetchGrandmaster]);
 
   return (
     <Dialog open={open} onClose={onClose}>

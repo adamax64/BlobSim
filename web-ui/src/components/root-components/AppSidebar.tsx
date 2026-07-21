@@ -94,7 +94,7 @@ export const AppSidebar = ({ isTablet, setMobileOpen }: AppSidebarProps) => {
             © 2026 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v5.3.2
+            v5.3.3
           </Typography>
         </Box>
       </Box>
