@@ -53,14 +53,19 @@ class TestPolicies(unittest.TestCase):
 
     @patch('domain.blob_services.blob_creation_service.is_blob_created')
     @patch('domain.progression_service.get_active_policy_by_type')
-    @patch('domain.progression_service.random.randint')
+    @patch('domain.progression_service.calculate_factory_output')
+    @patch('domain.progression_service.choose_wind')
+    @patch('domain.progression_service.choose_weather')
     @patch('domain.progression_service.get_sim_data')
     @patch('domain.progression_service.get_all_retired')
-    def test_factory_and_pension_effects(self, mock_get_retired, mock_get_sim, mock_randint, mock_policy_query, mock_is_blob_created):
+    def test_factory_and_pension_effects(self, mock_get_retired, mock_get_sim, mock_choose_weather, mock_choose_wind, mock_calculate_output, mock_policy_query, mock_is_blob_created):
         session = MagicMock()
         sim = SimData(id=1, sim_time=10, factory_progress=0)
         mock_get_sim.return_value = sim
-        mock_randint.return_value = 3
+        from domain.enums.weather_type import WeatherTypeDto
+        mock_choose_weather.return_value = WeatherTypeDto.SUNNY
+        mock_choose_wind.return_value = 0.4
+        mock_calculate_output.return_value = 2
 
         # factory policy with applied_level 2
         factory_policy = MagicMock()
@@ -88,8 +93,8 @@ class TestPolicies(unittest.TestCase):
 
         progress_simulation(session)
 
-        # factory progress should have base 3 + factory applied_level 2
-        self.assertEqual(sim.factory_progress, 5)
+        # factory progress: calculate_factory_output mocked to 2, plus factory applied_level 2 = 4
+        self.assertEqual(sim.factory_progress, 4)
         # retired blob should have received pension base coins = 1
         self.assertEqual(retired.money, 1)
 

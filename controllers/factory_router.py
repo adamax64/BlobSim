@@ -2,9 +2,15 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response
 import traceback
 
+from domain.dtos.factory_progress_dto import FactoryProgressDto
 from domain.dtos.name_suggestion_dto import NameSuggestionDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
-from domain.sim_data_service import get_factory_progress as service_get_factory_progress
+from domain.sim_data_service import (
+    get_factory_progress as service_get_factory_progress,
+    get_weather as service_get_weather,
+    get_wind as service_get_wind,
+)
+from domain.weather_service import get_output_chances
 from domain.naming_service import (
     get_name_suggestions as service_get_name_suggestions,
     save_name_suggestion as service_save_name_suggestion,
@@ -18,9 +24,17 @@ router = APIRouter(prefix="/factory", tags=["factory"])
 
 
 @router.get("/progress")
-def get_factory_progress() -> float:
+def get_factory_progress() -> FactoryProgressDto:
     try:
-        return service_get_factory_progress() / BLOB_CREATION_RESOURCES
+        weather = service_get_weather()
+        wind = service_get_wind()
+        solar_efficiency, wind_efficiency, hydro_efficiency = get_output_chances(weather, wind)
+        return FactoryProgressDto(
+            progress=service_get_factory_progress() / BLOB_CREATION_RESOURCES,
+            solar_efficiency=solar_efficiency,
+            wind_efficiency=wind_efficiency,
+            hydro_efficiency=hydro_efficiency,
+        )
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

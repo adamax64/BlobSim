@@ -1,4 +1,5 @@
 import random
+
 from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
@@ -18,6 +19,12 @@ from domain.news_services.news_service import (
 from domain.sim_data_service import is_unconcluded_event_today
 from domain.standings_service import get_grandmaster_standings
 from domain.utils.sim_time_utils import format_sim_time_short, get_season, is_season_end
+from domain.weather_service import (
+    calculate_factory_output,
+    choose_weather,
+    choose_wind,
+    get_next_season_temperature,
+)
 
 
 @transactional
@@ -26,8 +33,11 @@ def progress_simulation(session: Session) -> str:
     Advances the simulation by one time unit, updating simulation data and handling season transitions.
     This function performs the following steps:
     1. Checks if the current simulation time marks the end of a season.
-       - If so, manages league transfers and recreates the calendar for the next season.
-    2. Progresses blob factory production by a random amount between 1 and 5.
+       - If so, manages league transfers, recreates the calendar for the next season and
+         shifts the season temperature (stays, drops or rises by one stage).
+    2. Rolls a new weather type (weighted by the current season temperature) and wind
+       strength, then progresses blob factory production based on those plus any active
+       factory modernization policies.
     3. Increments the simulation time by one unit.
     4. If there is an unconcluded event scheduled for today:
        - Adds a news entry about the starting event, including the league name, round, and event type.
@@ -41,6 +51,10 @@ def progress_simulation(session: Session) -> str:
         manage_league_transfers(session, get_season(sim_data.sim_time))
         recreate_calendar_for_next_season(session, get_season(sim_data.sim_time) + 1)
         _inagruate_grandmaster(get_season(sim_data.sim_time), session)
+        sim_data.season_temperature = get_next_season_temperature(sim_data.season_temperature)
+
+    sim_data.weather = choose_weather(sim_data.season_temperature)
+    sim_data.wind = choose_wind()
 
     # base factory progress plus any active factory modernization policies
     extra = 0
@@ -49,7 +63,7 @@ def progress_simulation(session: Session) -> str:
     )
     if factory_level:
         extra = factory_level.applied_level
-    sim_data.factory_progress += random.randint(1, 5) + extra
+    sim_data.factory_progress += calculate_factory_output(sim_data.weather, sim_data.wind) + extra
     sim_data.sim_time += 1
     save_sim_data(session, sim_data)
 

@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, BigInteger
+from sqlalchemy import Column, Enum, Float, Integer, BigInteger
 
 from data.db.db_engine import Base
+from data.model.weather_type import WeatherType
+from data.model.season_temperature import SeasonTemperature
 
 
 class SimData(Base):
@@ -10,3 +12,6 @@ class SimData(Base):
     id = Column(Integer, primary_key=True)
     sim_time = Column(BigInteger)
     factory_progress = Column(Integer)
+    weather = Column(Enum(WeatherType))
+    wind = Column(Float)
+    season_temperature = Column(Enum(SeasonTemperature))

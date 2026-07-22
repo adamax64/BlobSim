@@ -5,6 +5,8 @@ from data.model.calendar import Calendar
 from data.model.event_type import EventType
 from data.persistence.sim_data_repository import get_sim_data, save_sim_data
 from data.persistence.calendar_repository import get_calendar
+from domain.enums.season_temperature import SeasonTemperatureDto
+from domain.enums.weather_type import WeatherTypeDto
 from domain.utils.constants import BLOB_CREATION_RESOURCES
 from domain.calendar_service import conclude_calendar_event
 
@@ -12,6 +14,21 @@ from domain.calendar_service import conclude_calendar_event
 @transactional
 def get_sim_time(session: Session) -> int:
     return get_sim_data(session).sim_time
+
+
+@transactional
+def get_weather(session: Session) -> WeatherTypeDto:
+    return get_sim_data(session).weather
+
+
+@transactional
+def get_wind(session: Session) -> float:
+    return get_sim_data(session).wind
+
+
+@transactional
+def get_season_temperature(session: Session) -> SeasonTemperatureDto:
+    return get_sim_data(session).season_temperature
 
 
 @transactional

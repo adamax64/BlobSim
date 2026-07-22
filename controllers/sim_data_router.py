@@ -4,6 +4,7 @@ import traceback
 from domain import sim_data_service, progression_service
 from domain.blob_services.blob_service import update_blobs
 from domain.dtos.sim_time_dto import SimTimeDto
+from domain.dtos.weather_info_dto import WeatherInfoDto
 from domain.utils.sim_time_utils import convert_to_sim_time
 from .auth_dependency import require_auth
 
@@ -15,6 +16,19 @@ async def get_sim_time() -> SimTimeDto:
     try:
         sim_time = sim_data_service.get_sim_time()
         return convert_to_sim_time(sim_time)
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
+
+
+@router.get("/weather")
+async def get_weather_info() -> WeatherInfoDto:
+    try:
+        return WeatherInfoDto(
+            weather=sim_data_service.get_weather(),
+            wind=sim_data_service.get_wind(),
+            season_temperature=sim_data_service.get_season_temperature(),
+        )
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
