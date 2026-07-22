@@ -241,6 +241,9 @@
   },
   "factory": {
     "factory_progress": "Gyártás előrehaladás",
+    "solar_efficiency": "Napelem hatékonyság",
+    "wind_efficiency": "Szélturbina hatékonyság",
+    "hydro_efficiency": "Vízturbina hatékonyság",
     "name_suggestions": "Blob név javaslatok",
     "add_name_suggestion": "Névjavaslat hozzáadása",
     "add_first_name": "Keresztnév hozzáadása"

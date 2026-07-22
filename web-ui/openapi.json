@@ -26,6 +26,27 @@
         }
       }
     },
+    "/sim_data/weather": {
+      "get": {
+        "tags": [
+          "sim_data"
+        ],
+        "summary": "Get Weather Info",
+        "operationId": "get_weather_info_sim_data_weather_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherInfoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sim_data/can_progress": {
       "get": {
         "tags": [
@@ -332,8 +353,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "number",
-                  "title": "Response Get Factory Progress Factory Progress Get"
+                  "$ref": "#/components/schemas/FactoryProgressDto"
                 }
               }
             }
@@ -2393,6 +2413,34 @@
         ],
         "title": "EventType"
       },
+      "FactoryProgressDto": {
+        "properties": {
+          "progress": {
+            "type": "number",
+            "title": "Progress"
+          },
+          "solar_efficiency": {
+            "type": "number",
+            "title": "Solar Efficiency"
+          },
+          "wind_efficiency": {
+            "type": "number",
+            "title": "Wind Efficiency"
+          },
+          "hydro_efficiency": {
+            "type": "number",
+            "title": "Hydro Efficiency"
+          }
+        },
+        "type": "object",
+        "required": [
+          "progress",
+          "solar_efficiency",
+          "wind_efficiency",
+          "hydro_efficiency"
+        ],
+        "title": "FactoryProgressDto"
+      },
       "GrandmasterDto": {
         "properties": {
           "eon": {
@@ -3125,6 +3173,16 @@
         ],
         "title": "SeasonCompetitionDto"
       },
+      "SeasonTemperature": {
+        "type": "string",
+        "enum": [
+          "COLD",
+          "NEUTRAL",
+          "WARM"
+        ],
+        "title": "SeasonTemperature",
+        "description": "Enum for Season Temperature"
+      },
       "SimTimeDto": {
         "properties": {
           "eon": {
@@ -3551,6 +3609,45 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "WeatherInfoDto": {
+        "properties": {
+          "weather": {
+            "$ref": "#/components/schemas/WeatherType"
+          },
+          "wind": {
+            "type": "number",
+            "title": "Wind"
+          },
+          "season_temperature": {
+            "$ref": "#/components/schemas/SeasonTemperature"
+          }
+        },
+        "type": "object",
+        "required": [
+          "weather",
+          "wind",
+          "season_temperature"
+        ],
+        "title": "WeatherInfoDto"
+      },
+      "WeatherType": {
+        "type": "string",
+        "enum": [
+          "SUNNY",
+          "SUNNY_CLOUDY",
+          "CLOUDY",
+          "SUNNY_RAIN",
+          "RAIN",
+          "HEAVY_RAIN",
+          "STORM",
+          "HEAT",
+          "SNOWY",
+          "FREEZY",
+          "FOGGY"
+        ],
+        "title": "WeatherType",
+        "description": "Enum for Weather Type"
       },
       "WinsByEventDto": {
         "properties": {

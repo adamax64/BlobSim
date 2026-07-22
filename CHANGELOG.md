@@ -723,3 +723,17 @@ Technical changes:
 - fixed grandmaster state stuck on administration modal
 - added missing translation for repair kit item
 - fixed missing react key console error in blob grid
+
+### 5.4
+
+- Added weather system:
+  - New `weather`, `wind` and `season_temperature` fields on sim data
+  - Weather type enum (Sunny, Sunny-Cloudy, Cloudy, Sunny-Rain, Rain, Heavy-Rain, Storm, Heat, Snowy, Freezy, Foggy), each with distinct solar/wind/hydro production effects
+  - Season temperature mechanic with 3 stages (Cold, Neutral, Warm): on season change there is a 50% chance the temperature stays, otherwise it shifts towards Neutral (from Cold/Warm) or randomly towards Cold/Warm (from Neutral); weather rarity depends on the current season temperature
+- Reworked factory progression: output is now composed of 4 independent parts each simulation cycle
+  - Base output (always produced)
+  - Solar output (chance depends on weather)
+  - Wind turbine output (chance depends on wind strength and weather)
+  - Hydro turbine output (chance depends on weather)
+- `/factory/progress` endpoint now also returns the current solar panel, wind turbine and hydro turbine efficiency (chance to produce) alongside the factory progress
+- Factory page now displays solar/wind/hydro efficiency bars in addition to the factory progress bar

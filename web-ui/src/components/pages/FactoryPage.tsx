@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { FactoryApi, NameSuggestionDto } from '../../../generated';
+import { FactoryApi, FactoryProgressDto, NameSuggestionDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { BlobNamingDialog } from '../common/BlobNamingDialog';
+import { EfficiencyMeter } from '../common/EfficiencyMeter';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
@@ -39,7 +40,9 @@ export function FactoryPage() {
     data: factoryProgress,
     isPending: isFactoryProgressLoading,
     mutate: fetchFactoryprogress,
-  } = useMutation<number, Error>({ mutationFn: () => factoryApi.getFactoryProgressFactoryProgressGet() });
+  } = useMutation<FactoryProgressDto, Error>({
+    mutationFn: () => factoryApi.getFactoryProgressFactoryProgressGet(),
+  });
   const {
     data: nameSuggestions,
     isPending: isLoadingNames,
@@ -68,7 +71,8 @@ export function FactoryPage() {
     setOpen(true);
   };
 
-  const progressValue = (factoryProgress ?? 0) * 100 > 100 ? 100 : (factoryProgress ?? 0) * 100;
+  const progress = factoryProgress?.progress ?? 0;
+  const progressValue = progress * 100 > 100 ? 100 : progress * 100;
 
   return (
     <PageFrame showLoading={isFactoryProgressLoading || isLoadingNames} pageName="factory">
@@ -77,10 +81,15 @@ export function FactoryPage() {
           <Box display="flex" flexDirection="column" gap={1}>
             <Typography variant="h6">{t('factory.factory_progress')}</Typography>
             <FactoryProgressBar
-              color={(factoryProgress ?? 0) > 1 ? 'success' : 'primary'}
+              color={progress > 1 ? 'success' : 'primary'}
               variant={isFactoryProgressLoading ? 'query' : 'determinate'}
               value={progressValue}
             />
+          </Box>
+          <Box display="flex" flexWrap="wrap" justifyContent="space-around" gap={1} mt={2}>
+            <EfficiencyMeter label={t('factory.solar_efficiency')} value={factoryProgress?.solarEfficiency ?? 0} />
+            <EfficiencyMeter label={t('factory.wind_efficiency')} value={factoryProgress?.windEfficiency ?? 0} />
+            <EfficiencyMeter label={t('factory.hydro_efficiency')} value={factoryProgress?.hydroEfficiency ?? 0} />
           </Box>
         </CardContent>
       </Paper>
