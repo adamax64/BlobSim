@@ -741,3 +741,5 @@ Technical changes:
   - Displays the current weather as a pictogram with its name underneath
   - Displays the current wind strength as a small efficiency-style gauge with a "Wind" label underneath
   - On mobile, the weather name and "Wind" label are hidden and shown instead via a tap-to-open tooltip
+- Added season-temperature-based theme color variants: the app's color palette now changes towards shades of blue when the season temperature is Cold, green/yellow when Neutral and red/orange when Warm, for both light and dark mode; falls back to the previous default color when the season temperature has not loaded yet
+  - The current season temperature is cached in local storage so the seasonal color is available immediately on subsequent visits

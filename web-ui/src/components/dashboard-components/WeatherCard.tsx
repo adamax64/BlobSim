@@ -1,7 +1,6 @@
-import { JSX, useEffect } from 'react';
+import { JSX } from 'react';
 import SevereColdIcon from '@mui/icons-material/SevereCold';
 import HeatIcon from '../icons/weather-icons/Heat';
-import { useMutation } from '@tanstack/react-query';
 import { Box, Card, CardContent, SvgIconProps, Typography } from '@mui/material';
 import RainyIcon from '../icons/weather-icons/Rainy';
 import SunnyCloudyIcon from '../icons/weather-icons/SunnyCloudy';
@@ -14,11 +13,11 @@ import CloudIcon from '@mui/icons-material/Cloud';
 import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import CloudySnowingIcon from '@mui/icons-material/CloudySnowing';
 import FoggyIcon from '@mui/icons-material/Foggy';
-import { SimDataApi, WeatherInfoDto, WeatherType } from '../../../generated';
-import defaultConfig from '../../default-config';
+import { WeatherType } from '../../../generated';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import DynamicTooltip from '../common/DynamicTooltip';
 import { EfficiencyMeter } from '../common/EfficiencyMeter';
+import { useWeather } from '../../context/WeatherContext';
 
 const WEATHER_ICONS: Record<WeatherType, SvgIconComponent | ((props: SvgIconProps) => JSX.Element)> = {
   [WeatherType.Sunny]: WbSunnyIcon,
@@ -34,19 +33,10 @@ const WEATHER_ICONS: Record<WeatherType, SvgIconComponent | ((props: SvgIconProp
   [WeatherType.Foggy]: FoggyIcon,
 };
 
-const simDataApi = new SimDataApi(defaultConfig);
-
 export default function WeatherCard() {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-
-  const { data: weatherInfo, mutate: fetchWeatherInfo } = useMutation<WeatherInfoDto, Error>({
-    mutationFn: () => simDataApi.getWeatherInfoSimDataWeatherGet(),
-  });
-
-  useEffect(() => {
-    fetchWeatherInfo();
-  }, []);
+  const { weatherInfo } = useWeather();
 
   const weatherType = weatherInfo?.weather;
   const WeatherIcon = weatherType ? WEATHER_ICONS[weatherType] : undefined;

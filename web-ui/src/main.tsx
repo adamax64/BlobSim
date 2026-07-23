@@ -7,6 +7,7 @@ import { SimTimeProvider } from './context/SimTimeContext';
 import { AuthProvider } from './context/AuthContext';
 import './i18n';
 import { ThemeModeProvider } from './context/ThemeModeContext';
+import { WeatherProvider } from './context/WeatherContext';
 import { CurrentPageProvider } from './context/CurrentPageContext';
 import { PoliciesProvider } from './context/PoliciesContext';
 import { NewsProvider } from './context/NewsContext';
@@ -32,21 +33,23 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
-      <ThemeModeProvider>
-        <SnackbarProvider>
-          <AuthProvider>
-            <SimTimeProvider>
-              <PoliciesProvider>
-                <NewsProvider>
-                  <CurrentPageProvider>
-                    <RouterProvider router={router} />
-                  </CurrentPageProvider>
-                </NewsProvider>
-              </PoliciesProvider>
-            </SimTimeProvider>
-          </AuthProvider>
-        </SnackbarProvider>
-      </ThemeModeProvider>
+      <WeatherProvider>
+        <ThemeModeProvider>
+          <SnackbarProvider>
+            <AuthProvider>
+              <SimTimeProvider>
+                <PoliciesProvider>
+                  <NewsProvider>
+                    <CurrentPageProvider>
+                      <RouterProvider router={router} />
+                    </CurrentPageProvider>
+                  </NewsProvider>
+                </PoliciesProvider>
+              </SimTimeProvider>
+            </AuthProvider>
+          </SnackbarProvider>
+        </ThemeModeProvider>
+      </WeatherProvider>
     </QueryClientProvider>,
   );
 }

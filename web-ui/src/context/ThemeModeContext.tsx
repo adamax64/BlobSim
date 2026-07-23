@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme, Mode } from '../theme';
+import { useWeather } from './WeatherContext';
 
 type ThemeModeContextValue = {
   mode: Mode;
@@ -50,7 +51,8 @@ export const ThemeModeProvider: React.FC<React.PropsWithChildren<{}>> = ({ child
   const setMode = (m: Mode) => setModeState(m);
   const toggleMode = () => setModeState((prev) => (prev === 'light' ? 'dark' : 'light'));
 
-  const theme = useMemo(() => createAppTheme(mode), [mode]);
+  const { seasonTemperature } = useWeather();
+  const theme = useMemo(() => createAppTheme(mode, seasonTemperature), [mode, seasonTemperature]);
 
   return (
     <ThemeModeContext.Provider value={{ mode, toggleMode, setMode }}>

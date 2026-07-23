@@ -1,9 +1,61 @@
 import { createTheme, PaletteOptions, Theme, responsiveFontSizes } from '@mui/material/styles';
+import { SeasonTemperature } from '../generated';
 
 type Mode = 'light' | 'dark';
 
-// Factory to create a theme for the given mode
-export function createAppTheme(mode: Mode) {
+// background/text color shifts per season temperature, kept close in tone/luminance to the
+// default palette so the fallback (no season temperature yet) does not stand out as drastically
+// different: cold leans blue, neutral leans green/yellow, warm leans red/orange.
+const SEASON_COLORS: Record<
+  Mode,
+  Record<SeasonTemperature, { backgroundDefault: string; backgroundPaper: string; textPrimary: string; textSecondary: string }>
+> = {
+  light: {
+    [SeasonTemperature.Cold]: {
+      backgroundDefault: '#f4f8fc',
+      backgroundPaper: '#fafdff',
+      textPrimary: 'rgba(12, 25, 42, 0.87)',
+      textSecondary: 'rgba(18, 30, 46, 0.6)',
+    },
+    [SeasonTemperature.Neutral]: {
+      backgroundDefault: '#f7faf2',
+      backgroundPaper: '#fefffb',
+      textPrimary: 'rgba(19, 27, 11, 0.87)',
+      textSecondary: 'rgba(35, 50, 20, 0.6)',
+    },
+    [SeasonTemperature.Warm]: {
+      backgroundDefault: '#fef7f4',
+      backgroundPaper: '#fffdfc',
+      textPrimary: 'rgba(27, 12, 6, 0.87)',
+      textSecondary: 'rgba(30, 17, 11, 0.6)',
+    },
+  },
+  dark: {
+    [SeasonTemperature.Cold]: {
+      backgroundDefault: '#0b1018',
+      backgroundPaper: '#10131c',
+      textPrimary: '#eaf2fb',
+      textSecondary: 'rgba(234, 242, 251, 0.7)',
+    },
+    [SeasonTemperature.Neutral]: {
+      backgroundDefault: '#10160c',
+      backgroundPaper: '#12190e',
+      textPrimary: '#eef5e4',
+      textSecondary: 'rgba(238, 245, 228, 0.7)',
+    },
+    [SeasonTemperature.Warm]: {
+      backgroundDefault: '#160f0a',
+      backgroundPaper: '#221c17',
+      textPrimary: '#fbeee6',
+      textSecondary: 'rgba(251, 238, 230, 0.7)',
+    },
+  },
+};
+
+// Factory to create a theme for the given mode and (optional) season temperature.
+// When no season temperature is provided (e.g. not loaded yet) the current default
+// color palette is used as a fallback.
+export function createAppTheme(mode: Mode, seasonTemperature?: SeasonTemperature) {
   const lightPalette: PaletteOptions = {
     mode: 'light',
     background: { default: '#f9f9f9' },
@@ -32,6 +84,12 @@ export function createAppTheme(mode: Mode) {
 
   const palette: PaletteOptions = mode === 'dark' ? darkPalette : lightPalette;
 
+  if (seasonTemperature) {
+    const seasonColors = SEASON_COLORS[mode][seasonTemperature];
+    palette.background = { ...palette.background, default: seasonColors.backgroundDefault, paper: seasonColors.backgroundPaper };
+    palette.text = { primary: seasonColors.textPrimary, secondary: seasonColors.textSecondary };
+  }
+
   return responsiveFontSizes(
     createTheme({
       palette,
@@ -53,6 +111,7 @@ export function createAppTheme(mode: Mode) {
               '--cell-fell-behind-text': themePalette.fellBehind?.contrastText,
               '--column-active-bg': themePalette.active?.main,
               '--row-retired-bg': themePalette.retired?.main,
+              '--column-active-text': themePalette.active?.contrastText,
             },
           }),
         },
