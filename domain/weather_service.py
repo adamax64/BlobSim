@@ -29,10 +29,10 @@ WEATHER_EFFECTS: Dict[WeatherTypeDto, WeatherEffect] = {
     WeatherTypeDto.RAIN: WeatherEffect(0.40, 0.90, lambda wind: wind),
     WeatherTypeDto.HEAVY_RAIN: WeatherEffect(0.30, 1.00, lambda wind: wind),
     WeatherTypeDto.STORM: WeatherEffect(0.15, 1.00, lambda wind: 0.0),
-    WeatherTypeDto.HEAT: WeatherEffect(1.00, 0.00, lambda wind: max(0.0, wind - 0.5)),
+    WeatherTypeDto.HEAT: WeatherEffect(1.00, 0.00, lambda wind: wind * 0.5),
     WeatherTypeDto.SNOWY: WeatherEffect(0.60, 0.05, lambda wind: wind),
-    WeatherTypeDto.FREEZY: WeatherEffect(0.30, 0.00, lambda wind: max(0.0, wind - 0.5)),
-    WeatherTypeDto.FOGGY: WeatherEffect(0.40, 0.50, lambda wind: max(0.0, wind - 0.2)),
+    WeatherTypeDto.FREEZY: WeatherEffect(0.30, 0.00, lambda wind: wind * 0.5),
+    WeatherTypeDto.FOGGY: WeatherEffect(0.40, 0.50, lambda wind: wind * 0.8),
 }
 
 

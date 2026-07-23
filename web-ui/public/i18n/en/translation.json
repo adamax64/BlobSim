@@ -254,6 +254,23 @@
     "eon": "Eon",
     "season": "Season"
   },
+  "weather": {
+    "title": "Weather",
+    "wind": "Wind",
+    "types": {
+      "SUNNY": "Sunny",
+      "SUNNY_CLOUDY": "Sunny Cloudy",
+      "CLOUDY": "Cloudy",
+      "SUNNY_RAIN": "Sunny Rain",
+      "RAIN": "Rain",
+      "HEAVY_RAIN": "Heavy Rain",
+      "STORM": "Storm",
+      "HEAT": "Heat",
+      "SNOWY": "Snowy",
+      "FREEZY": "Freezy",
+      "FOGGY": "Foggy"
+    }
+  },
   "standings_table": {
     "no_data": "No data found for {{leagueName}} season {{season}}",
     "name": "Name",

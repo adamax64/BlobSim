@@ -2,9 +2,11 @@ import { Gauge, gaugeClasses, useGaugeState } from '@mui/x-charts/Gauge';
 import { Box, Typography, useTheme } from '@mui/material';
 
 interface EfficiencyMeterProps {
-  label: string;
+  label?: string;
   /** Efficiency as a ratio between 0 and 1 */
   value: number;
+  /** Width/height of the gauge in px */
+  size?: number;
 }
 
 const RED = { r: 244, g: 67, b: 54 };
@@ -52,15 +54,15 @@ function GaugePointer() {
   );
 }
 
-export function EfficiencyMeter({ label, value }: EfficiencyMeterProps) {
+export function EfficiencyMeter({ label, value, size = 120 }: EfficiencyMeterProps) {
   const percentage = Math.round((value ?? 0) * 100);
   const color = getEfficiencyColor(value ?? 0);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={0.5}>
       <Gauge
-        width={120}
-        height={120}
+        width={size}
+        height={size}
         value={percentage}
         valueMin={0}
         valueMax={100}
@@ -76,9 +78,11 @@ export function EfficiencyMeter({ label, value }: EfficiencyMeterProps) {
       >
         <GaugePointer />
       </Gauge>
-      <Typography variant="body2" textAlign="center">
-        {label}
-      </Typography>
+      {label && (
+        <Typography variant="body2" textAlign="center">
+          {label}
+        </Typography>
+      )}
     </Box>
   );
 }

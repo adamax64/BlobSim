@@ -254,6 +254,23 @@
     "eon": "Éon",
     "season": "Szezon"
   },
+  "weather": {
+    "title": "Időjárás",
+    "wind": "Szél",
+    "types": {
+      "SUNNY": "Napos",
+      "SUNNY_CLOUDY": "Napos-Felhős",
+      "CLOUDY": "Felhős",
+      "SUNNY_RAIN": "Napos-Esős",
+      "RAIN": "Esős",
+      "HEAVY_RAIN": "Erős eső",
+      "STORM": "Vihar",
+      "HEAT": "Hőség",
+      "SNOWY": "Havas",
+      "FREEZY": "Fagyos",
+      "FOGGY": "Ködös"
+    }
+  },
   "standings_table": {
     "no_data": "Nincs adat a(z) {{leagueName}} liga {{season}}. szezonjához",
     "name": "Név",

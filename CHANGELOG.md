@@ -736,4 +736,8 @@ Technical changes:
   - Wind turbine output (chance depends on wind strength and weather)
   - Hydro turbine output (chance depends on weather)
 - `/factory/progress` endpoint now also returns the current solar panel, wind turbine and hydro turbine efficiency (chance to produce) alongside the factory progress
-- Factory page now displays solar/wind/hydro efficiency bars in addition to the factory progress bar
+- Factory page now displays solar/wind/hydro efficiency meters in addition to the factory progress bar
+- Added a weather card to the dashboard, next to the date card
+  - Displays the current weather as a pictogram with its name underneath
+  - Displays the current wind strength as a small efficiency-style gauge with a "Wind" label underneath
+  - On mobile, the weather name and "Wind" label are hidden and shown instead via a tap-to-open tooltip

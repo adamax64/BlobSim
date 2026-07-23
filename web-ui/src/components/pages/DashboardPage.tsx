@@ -10,6 +10,7 @@ import Gym from '../dashboard-components/gym-components/Gym';
 import LabourSite from '../dashboard-components/labour-site-components/LabourSite';
 import Mine from '../dashboard-components/mine-components/Mine';
 import AnchientRuins from '../dashboard-components/anchient-ruins-components/AnchientRuins';
+import WeatherCard from '../dashboard-components/WeatherCard';
 import { useCanContinue } from '../../hooks/useCanContinue';
 
 const GRID_CELL_SIZE = { xs: 12, sm: 6, lg: 4 };
@@ -31,6 +32,7 @@ export function DashboardPage() {
             </Box>
           </CardContent>
         </Card>
+        <WeatherCard />
       </Box>
       <Grid container spacing={2}>
         <Grid size={GRID_CELL_SIZE}>

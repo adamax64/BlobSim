@@ -58,7 +58,16 @@ class TestPolicies(unittest.TestCase):
     @patch('domain.progression_service.choose_weather')
     @patch('domain.progression_service.get_sim_data')
     @patch('domain.progression_service.get_all_retired')
-    def test_factory_and_pension_effects(self, mock_get_retired, mock_get_sim, mock_choose_weather, mock_choose_wind, mock_calculate_output, mock_policy_query, mock_is_blob_created):
+    def test_factory_and_pension_effects(
+        self,
+        mock_get_retired,
+        mock_get_sim,
+        mock_choose_weather,
+        mock_choose_wind,
+        mock_calculate_output,
+        mock_policy_query,
+        mock_is_blob_created,
+    ):
         session = MagicMock()
         sim = SimData(id=1, sim_time=10, factory_progress=0)
         mock_get_sim.return_value = sim
