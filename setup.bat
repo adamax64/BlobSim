@@ -5,9 +5,9 @@ python.exe -m pip install --upgrade pip
 pip install -r requirements.txt
 
 cd web-ui
-call npm install
-call npm install @openapitools/openapi-generator-cli -g
-call npm run generate-api
-call npm run build
+call pnpm install
+call pnpm add -g @openapitools/openapi-generator-cli
+call pnpm run generate-api
+call pnpm run build
 cd ..
 pause

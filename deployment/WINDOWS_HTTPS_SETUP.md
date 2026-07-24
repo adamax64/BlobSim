@@ -86,7 +86,7 @@ Or add to your deployment `.env` file or system environment.
 
 **Note on FRONTEND_ROOT:** This should point to your built frontend directory:
 
-- If using Vite (default for web-ui): run `npm run build` in web-ui folder first → creates `web-ui/dist`
+- If using Vite (default for web-ui): run `pnpm run build` in web-ui folder first → creates `web-ui/dist`
 - If using a different build tool: update path to your build output directory
 
 ## Step 4: Build Frontend (if not already built)
@@ -95,8 +95,8 @@ If your frontend hasn't been built yet, build it now:
 
 ```powershell
 cd d:\SoftwareDevelopement\BlobSim\web-ui
-npm install
-npm run build
+pnpm install
+pnpm run build
 # Output goes to: web-ui/dist
 ```
 

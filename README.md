@@ -12,7 +12,7 @@ The following requirements should be met to run the application on your device:
 
 - Python 3.10 or newer
 - Node 20.17.0 or newer
-- npm 10.8.2 or newer
+- pnpm 11.0.0 or newer
 - Java 11 or newer
 - Postgres 17
 
@@ -64,9 +64,9 @@ Run `setup.bat` on Windows systems or `setup.sh` on Linux systems to setup the a
 
 1. Go into folder `web-ui`
 
-2. Run `npm install` to install node packages
+2. Run `pnpm install` to install node packages
 
-3. If you want to run the app in production mode, run `npm run build` to build the production app
+3. If you want to run the app in production mode, run `pnpm run build` to build the production app
 
 ## Running the application
 

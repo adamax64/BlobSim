@@ -14,10 +14,10 @@ $python_exec -m pip install --upgrade pip
 pip install -r requirements.txt
 
 cd web-ui
-npm install
-npm install @openapitools/openapi-generator-cli -g
-npm run generate-api
-npm run build
+pnpm install
+pnpm add -g @openapitools/openapi-generator-cli
+pnpm run generate-api
+pnpm run build
 cd ..
 
 echo "Setup complete"

@@ -7,24 +7,25 @@ RUN apt-get update && \
     apt-get install -y openjdk-17-jre-headless && \
     rm -rf /var/lib/apt/lists/*
 
-# Install OpenAPI Generator CLI globally
-RUN npm install -g @openapitools/openapi-generator-cli
+# Enable Corepack (pnpm) and install OpenAPI Generator CLI globally
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN pnpm add -g @openapitools/openapi-generator-cli
 
 # Set working directory
 WORKDIR /app
 
 # Copy package files and install dependencies
-COPY package.json package-lock.json* ./
-RUN npm install
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the app
 COPY . .
 
 # Generate API client
-RUN npm run generate-api
+RUN pnpm run generate-api
 
 # Build the React app
-RUN npm run build
+RUN pnpm run build
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine

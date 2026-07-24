@@ -12,10 +12,9 @@ echo "Python virtual environment activated"
 $python_exec -m fastapi run main.py
 
 cd web-ui
-if [ ! -d "./node_modules" ]; then
-    echo "Node modules not found. Run setup.sh to create them."
+if [ ! -d "./dist" ]; then
+    echo "Build not found. Run setup.sh to build the project."
     exit 1
 fi
-npm run start
 
 echo "Application startup complete"

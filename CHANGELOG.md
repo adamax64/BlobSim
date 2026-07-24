@@ -743,3 +743,11 @@ Technical changes:
   - On mobile, the weather name and "Wind" label are hidden and shown instead via a tap-to-open tooltip
 - Added season-temperature-based theme color variants: the app's color palette now changes towards shades of blue when the season temperature is Cold, green/yellow when Neutral and red/orange when Warm, for both light and dark mode; falls back to the previous default color when the season temperature has not loaded yet
   - The current season temperature is cached in local storage so the seasonal color is available immediately on subsequent visits
+
+### 5.4.1
+
+- Fixed weather card refresh issue on dashboard
+- Replaced npm with pnpm as the package manager for the frontend
+  - `package-lock.json` replaced by `pnpm-lock.yaml`
+  - Updated `setup.sh`/`setup.bat`, `start.sh`, the frontend `Dockerfile` and documentation to use pnpm commands
+  - Removed obsolete `debug.bat`/`debug.sh` files
