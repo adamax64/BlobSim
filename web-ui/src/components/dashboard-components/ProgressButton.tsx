@@ -6,6 +6,7 @@ import defaultConfig from '../../default-config';
 import { useSimTime } from '../../context/SimTimeContext';
 import SkipNext from '@mui/icons-material/SkipNext';
 import { usePolicies } from '../../context/PoliciesContext';
+import { useWeather } from '../../context/WeatherContext';
 
 type ProgressButtonProps = {
   fetchNews: () => void;
@@ -16,6 +17,7 @@ export const ProgressButton = ({ fetchNews, isLoadingNews }: ProgressButtonProps
   const { t } = useTranslation();
   const { refreshSimTime } = useSimTime();
   const { refreshPolicies } = usePolicies();
+  const { refreshWeatherInfo } = useWeather();
 
   const simDataApi = new SimDataApi(defaultConfig);
 
@@ -25,6 +27,7 @@ export const ProgressButton = ({ fetchNews, isLoadingNews }: ProgressButtonProps
       fetchNews();
       refreshSimTime();
       refreshPolicies();
+      refreshWeatherInfo();
     },
   });
 
