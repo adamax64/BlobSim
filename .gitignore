@@ -10,3 +10,5 @@
 .env
 /backups/*
 **/nginx_processed.conf
+/.backend.pid
+/backend.log

@@ -22,7 +22,7 @@ Before running the application, make sure to set the environment variables. Crea
 
 #### Automatic instalation
 
-Run `setup.bat` on Windows systems or `setup.sh` on Linux systems to setup the app .If you do not have permission to execute the script on Linux, open a terminal in the root folder of the project and give permission by running `chmod +x setup.sh` (you may need to add this permission to other scripts). This will create a virtual python environment where the backend will run, install the required python libraries. Then it will install the frontend dependencies and build the app for production as well. If you want to install the application manually, do the following steps below.
+Run `start.bat` on Windows systems or `start.sh` on Linux systems to setup and start the app. If you do not have permission to execute the script on Linux, open a terminal in the root folder of the project and give permission by running `chmod +x start.sh` (you may need to add this permission to other scripts). This will create a virtual python environment where the backend will run, install the required python libraries, install the frontend dependencies, build the app for production and finally start the application. If you want to install the application manually, do the following steps below.
 
 #### Backend
 
@@ -70,15 +70,9 @@ Run `setup.bat` on Windows systems or `setup.sh` on Linux systems to setup the a
 
 ## Running the application
 
-To start the app, just run `start.bat` on Windows systems or `start.sh` on Linux systems. This activates the virtual python environment, starts the backend, the frontend, and opens the frontend app on the system default browser. This opens three console windows, one for the frontend, one for the backend, and one for the main thread that started the application.
+To start the app, just run `start.bat` on Windows systems or `start.sh` on Linux systems. This activates the virtual python environment and starts the backend (which also serves the built frontend) in the background. The backend process ID is stored in `.backend.pid`; running the start script again looks up this file and stops the previously started backend before starting a new one, so the script can safely be re-run (e.g. by `deploy.bat`/`deploy.sh`) without leaving old backend processes running.
 
 The application may need some time to load, so the opened browser tab may show that the page cannot be loaded. Wait for a few seconds in this case for the subsystem to start up properly.
-
-The main thread waits for user input. When any key is pressed there (or enter on Linux), the script closes the frontend and backend server.
-
-DISCLAIMER: closing the application result in killing ALL python and node processes!
-
-For developing purposes there is a `debug.bat` (or `debug.sh` for Linux), which runs the application in development mode. If you use development mode, make sure to duplicate the database file and rename it to `bcs_database_debug.db`.
 
 ## Run tests
 

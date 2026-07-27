@@ -752,3 +752,8 @@ Technical changes:
   - Updated `setup.sh`/`setup.bat`, `start.sh`, the frontend `Dockerfile` and documentation to use pnpm commands
   - Removed obsolete `debug.bat`/`debug.sh` files
 - Migrated frontend ESLint setup to ESLint 10 with flat config (`eslint.config.js` replaces `.eslintrc.cjs`/`.eslintignore`)
+- Merged `setup.sh`/`setup.bat` into `start.sh`/`start.bat`: the start scripts now create the virtual environment, install backend/frontend dependencies and build the frontend (if not already built) before starting the application
+  - `setup.sh`/`setup.bat` removed; `deploy.sh`/`deploy.bat` continue to work unchanged since they only invoke the start scripts
+  - Updated `README.md` accordingly
+- `start.sh`/`start.bat` now run the backend in the background and store its PID in `.backend.pid`
+  - On the next run, the script looks up the PID in `.backend.pid` and kills the previously started backend process before starting a new one, so re-running (or `deploy.sh`/`deploy.bat` restarting on new commits) does not leave orphaned backend processes behind
