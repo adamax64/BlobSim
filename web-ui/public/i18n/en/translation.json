@@ -365,7 +365,8 @@
       "CACHE": "Cache",
       "POWER_BANK": "Power Bank",
       "PROCESSOR_PASTE": "Processor Paste",
-      "EXTERNAL_STORAGE": "External Storage"
+      "EXTERNAL_STORAGE": "External Storage",
+      "OVERCLOCKING_DEVICE": "Overclocking Device"
     }
   },
   "blob_naming": {

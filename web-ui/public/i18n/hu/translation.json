@@ -365,7 +365,8 @@
       "CACHE": "Gyorsítótár",
       "POWER_BANK": "Power Bank",
       "PROCESSOR_PASTE": "Processzor Paszta",
-      "EXTERNAL_STORAGE": "Külső Tároló"
+      "EXTERNAL_STORAGE": "Külső Tároló",
+      "OVERCLOCKING_DEVICE": "Overclocking Eszköz"
     }
   },
   "blob_naming": {

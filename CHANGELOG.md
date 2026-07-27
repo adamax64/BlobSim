@@ -757,3 +757,8 @@ Technical changes:
   - Updated `README.md` accordingly
 - `start.sh`/`start.bat` now run the backend in the background and store its PID in `.backend.pid`
   - On the next run, the script looks up the PID in `.backend.pid` and kills the previously started backend process before starting a new one, so re-running (or `deploy.sh`/`deploy.bat` restarting on new commits) does not leave orphaned backend processes behind
+
+
+### 5.4.2
+
+- Added missing translation for overclocking device on blob details dialog inventory section
