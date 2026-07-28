@@ -57,7 +57,7 @@ from domain.utils.blob_utils import has_state, has_trait, compute_state_multipli
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
-from domain.item_service import grant_item_to_blob, is_inventory_full
+from domain.item_service import grant_item_to_blob, has_depleted_unconsumable, is_inventory_full
 from domain.utils.item_utils import choose_random_item_type, get_item_from_list_by_type
 from domain.utils.constants import (
     ADVENTURE_EFFECT,
@@ -151,6 +151,7 @@ def _update_blob_integrity(blob: Blob, session: Session):
     processor_paste = get_item_from_list_by_type(blob.items, ItemType.PROCESSOR_PASTE)
     if processor_paste:
         chance = 5 * processor_paste.durability / 100
+        processor_paste.durability -= 1
         if processor_paste.durability == 0:
             delete_item(session, processor_paste.id)
         else:
@@ -506,7 +507,8 @@ def _choose_activity_for_blob(
                 blob,
                 extra_activities,
                 free_premium_practice,
-                adventure_blocked=is_inventory_full(blob, session),
+                adventure_blocked=is_inventory_full(blob, session)
+                and not has_depleted_unconsumable(blob, session),
             )
 
 

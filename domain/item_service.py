@@ -68,6 +68,14 @@ def is_inventory_full(blob: Blob, session: Session) -> bool:
     return len(items) >= get_inventory_capacity(items)
 
 
+def has_depleted_unconsumable(blob: Blob, session: Session) -> bool:
+    """Return True if `blob` owns an unconsumable item that has run out of durability."""
+    items = get_items_of_blob(session, blob.id)
+    return any(
+        not is_consumable(item.type) and item.durability == 0 for item in items
+    )
+
+
 @transactional
 def apply_pre_event_items(blob_id: int, session: Session) -> None:
     # Only apply items for the current event
