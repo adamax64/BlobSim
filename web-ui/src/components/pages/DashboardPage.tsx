@@ -10,6 +10,7 @@ import Gym from '../dashboard-components/gym-components/Gym';
 import LabourSite from '../dashboard-components/labour-site-components/LabourSite';
 import Mine from '../dashboard-components/mine-components/Mine';
 import AnchientRuins from '../dashboard-components/anchient-ruins-components/AnchientRuins';
+import Maintenance from '../dashboard-components/maintenance-components/Maintenance';
 import WeatherCard from '../dashboard-components/WeatherCard';
 import { useCanContinue } from '../../hooks/useCanContinue';
 
@@ -52,6 +53,9 @@ export function DashboardPage() {
         </Grid>
         <Grid size={GRID_CELL_SIZE}>
           <AnchientRuins />
+        </Grid>
+        <Grid size={GRID_CELL_SIZE}>
+          <Maintenance />
         </Grid>
       </Grid>
       <Box sx={{ pb: { xs: isEventToday || isBlobInCreation ? '100px' : canContinue ? 4 : 0, sm: 0 } }}>

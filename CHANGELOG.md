@@ -763,10 +763,11 @@ Technical changes:
 
 - Added missing translation for overclocking device on blob details dialog inventory section
 
-### 5.4.3
+### 5.5
 
 - Added `lastSeasonStandingsPosition` field to `BlobStatsDto`: when a blob has no current-season standings snippet yet (e.g. at the start of a new season), the blob details dialog now shows the blob's standings position from the previous season instead of an empty snippet widget
 - Blob details dialog inventory section now shows the remaining charge count for unconsumable items (Cache, Power Bank, Processor Paste, Overclocking Device, External Storage) in their tooltip label
 - Unconsumable item icons turn grey when depleted (0 charges), except the Overclocking Device which turns red instead
 - Fixed bug of processor paste not loosing durability during usage
 - Adventure activity is no longer blocked purely because a blob's inventory is full: it is now also allowed when the blob owns a depleted unconsumable item (Cache, Power Bank, Processor Paste, Overclocking Device with 0 charges), since that item can be sold to make room for a new one
+- Added new "Maintenance" dashboard option card, showing blobs currently doing the maintenance activity

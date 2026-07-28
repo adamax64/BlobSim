@@ -18,7 +18,8 @@
       "gym": "Gym",
       "labour_site": "Labour Site",
       "mine": "Mine",
-      "anchient_ruins": "Anchient Ruins"
+      "anchient_ruins": "Anchient Ruins",
+      "maintenance": "Maintenance Shop"
     }
   },
   "administration": {
@@ -62,6 +63,11 @@
     "title": "Anchient Ruins",
     "subtitle": "The following blobs went exploring the anchient ruins:",
     "empty": "No one is adventuring right now."
+  },
+  "maintenance": {
+    "title": "Maintenance Shop",
+    "subtitle": "The following blobs are performing maintenance right now:",
+    "empty": "No one is performing maintenance right now."
   },
   "blobs": {
     "search_by_name": "Search by name",

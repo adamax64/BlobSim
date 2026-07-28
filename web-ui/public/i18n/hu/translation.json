@@ -18,7 +18,8 @@
       "gym": "Edzőterem",
       "labour_site": "Munkaterület",
       "mine": "Bánya",
-      "anchient_ruins": "Ősi romok"
+      "anchient_ruins": "Ősi romok",
+      "maintenance": "Karbantartó műhely"
     }
   },
   "administration": {
@@ -62,6 +63,11 @@
     "title": "Ősi romok",
     "subtitle": "Az alábbi blobok mentek felfedezni az ősi romokat:",
     "empty": "Jelenleg senki sem ment felfedezőútra."
+  },
+  "maintenance": {
+    "title": "Karbantartó műhely",
+    "subtitle": "Az alábbi blobok karbantartást végeznek jelenleg:",
+    "empty": "Jelenleg senki sem végez karbantartást."
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",
