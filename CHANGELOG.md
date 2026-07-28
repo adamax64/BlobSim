@@ -762,3 +762,7 @@ Technical changes:
 ### 5.4.2
 
 - Added missing translation for overclocking device on blob details dialog inventory section
+
+### 5.4.3
+
+- Added `lastSeasonStandingsPosition` field to `BlobStatsDto`: when a blob has no current-season standings snippet yet (e.g. at the start of a new season), the blob details dialog now shows the blob's standings position from the previous season instead of an empty snippet widget

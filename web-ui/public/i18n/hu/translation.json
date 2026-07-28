@@ -344,6 +344,7 @@
     "contract": "Szerződés",
     "contract_ending": "A szerződés a szezon végén lejár",
     "standings": "Helyezés",
+    "last_season_standings": "Előző szezon helyezése",
     "on_queue": "Jelenleg várakozási sorban",
     "podiums": "Dobogók",
     "wins": "Győzelmek",

@@ -14,7 +14,11 @@ from domain.hall_of_fame_services.titles_chronology_service import (
     get_current_grandmaster_id,
 )
 from domain.sim_data_service import get_sim_time
-from domain.standings_service import get_standings, get_standings_by_league
+from domain.standings_service import (
+    get_last_season_standings_position,
+    get_standings,
+    get_standings_by_league,
+)
 from domain.utils.blob_utils import map_to_blob_state_dto
 from domain.utils.sim_time_utils import get_season
 
@@ -63,6 +67,7 @@ def fetch_blob_by_id(blob_id: int, session: Session) -> BlobStatsDto:
 
     # Fetch standings position
     standings_position = None
+    last_season_standings_position = None
     if blob.league:
         standings = get_standings(
             session=session,
@@ -75,8 +80,20 @@ def fetch_blob_by_id(blob_id: int, session: Session) -> BlobStatsDto:
                 standings_position = idx + 1
                 break
 
+        if standings_position is None:
+            last_season_standings_position = get_last_season_standings_position(
+                session=session,
+                league_id=blob.league.id,
+                blob_id=blob_id,
+                season=current_season,
+            )
+
     return map_to_blob_state_dto(
-        blob, current_season, grandmaster_id, standings_position=standings_position
+        blob,
+        current_season,
+        grandmaster_id,
+        standings_position=standings_position,
+        last_season_standings_position=last_season_standings_position,
     )
 
 

@@ -46,6 +46,7 @@ class BlobStatsDto(BaseModel):
     integrity_color: str | None = None
     current_activity: ActivityType | None = None
     current_standings_position: int | None = None
+    last_season_standings_position: int | None = None
     states: list[StateDto]
     traits: list[TraitTypeDto]
     retirement_focus: RetirementFocusTypeDto | None = None

@@ -344,6 +344,7 @@
     "contract": "Contract",
     "contract_ending": "Contract expiring end of season",
     "standings": "Standings",
+    "last_season_standings": "Last season standings",
     "on_queue": "Currently on queue",
     "podiums": "Podiums",
     "wins": "Wins",

@@ -63,6 +63,7 @@ def map_to_blob_state_dto(
     current_season: int,
     grandmaster_id: int,
     standings_position: int | None,
+    last_season_standings_position: int | None = None,
 ) -> BlobStatsDto:
     return BlobStatsDto(
         id=blob.id,
@@ -124,6 +125,7 @@ def map_to_blob_state_dto(
             else None
         ),
         current_standings_position=standings_position,
+        last_season_standings_position=last_season_standings_position,
         states=[
             StateDto(
                 type=state.type,

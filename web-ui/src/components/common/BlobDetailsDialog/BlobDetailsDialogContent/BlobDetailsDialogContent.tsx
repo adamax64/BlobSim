@@ -1,13 +1,6 @@
 import Cake from '@mui/icons-material/Cake';
 import Handyman from '@mui/icons-material/Handyman';
 import WarningIcon from '@mui/icons-material/Warning';
-import BatteryChargingFull from '@mui/icons-material/BatteryChargingFull';
-import CleaningServices from '@mui/icons-material/CleaningServices';
-import Cookie from '@mui/icons-material/Cookie';
-import Extension from '@mui/icons-material/Extension';
-import ChargingStation from '@mui/icons-material/ChargingStation';
-import Memory from '@mui/icons-material/Memory';
-import SdCard from '@mui/icons-material/SdCard';
 import { Box, DialogContent, Grid, Paper, Typography } from '@mui/material';
 import RetirementFocusIcon from './RetirementFocusIcon';
 import StateIcon from './StateIcon';
@@ -204,9 +197,16 @@ const BlobDetailsDialogContent = ({
                 </Grid>
               )}
             </Grid>
-            {standingsData && (
+            {standingsData && standingsData.length > 0 && (
               <Grid size={6}>
                 <StandingSnippetWidget standingsData={standingsData} />
+              </Grid>
+            )}
+            {standingsData && standingsData.length === 0 && !!blob.lastSeasonStandingsPosition && (
+              <Grid size={6}>
+                <Typography variant="body1">
+                  <strong>{t('blob_details.last_season_standings')}:</strong> {blob.lastSeasonStandingsPosition}
+                </Typography>
               </Grid>
             )}
           </Grid>

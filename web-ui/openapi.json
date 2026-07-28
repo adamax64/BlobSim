@@ -685,7 +685,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventDto-Output"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               }
             }
@@ -717,7 +717,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventDto-Output"
+                  "$ref": "#/components/schemas/EventDto"
                 }
               }
             }
@@ -1038,7 +1038,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BlobCompetitorDto-Input"
+                "$ref": "#/components/schemas/BlobCompetitorDto"
               }
             }
           }
@@ -1151,7 +1151,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/BlobCompetitorDto-Input"
+                  "$ref": "#/components/schemas/BlobCompetitorDto"
                 },
                 "title": "Contenders"
               }
@@ -1216,7 +1216,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/QuarteredEventRecordDto-Output"
+                    "$ref": "#/components/schemas/QuarteredEventRecordDto"
                   },
                   "title": "Response Get Quartered Event Records Quartered Get"
                 }
@@ -1272,7 +1272,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RaceEventRecordDto-Output"
+                    "$ref": "#/components/schemas/RaceEventRecordDto"
                   },
                   "title": "Response Get Endurance Event Records Endurance Get"
                 }
@@ -1328,7 +1328,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SprintEventRecordDto-Output"
+                    "$ref": "#/components/schemas/SprintEventRecordDto"
                   },
                   "title": "Response Get Sprint Event Records Sprint Get"
                 }
@@ -1384,7 +1384,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/EliminationEventRecordDto-Output"
+                    "$ref": "#/components/schemas/EliminationEventRecordDto"
                   },
                   "title": "Response Get Elimination Event Records Elimination Get"
                 }
@@ -1739,48 +1739,7 @@
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"
       },
-      "BlobCompetitorDto-Input": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "strength": {
-            "type": "number",
-            "title": "Strength"
-          },
-          "speed": {
-            "type": "number",
-            "title": "Speed"
-          },
-          "color": {
-            "type": "string",
-            "title": "Color"
-          },
-          "states": {
-            "items": {
-              "$ref": "#/components/schemas/StateDto"
-            },
-            "type": "array",
-            "title": "States"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "strength",
-          "speed",
-          "color",
-          "states"
-        ],
-        "title": "BlobCompetitorDto"
-      },
-      "BlobCompetitorDto-Output": {
+      "BlobCompetitorDto": {
         "properties": {
           "id": {
             "type": "integer",
@@ -2017,6 +1976,17 @@
             ],
             "title": "Current Standings Position"
           },
+          "last_season_standings_position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Season Standings Position"
+          },
           "states": {
             "items": {
               "$ref": "#/components/schemas/StateDto"
@@ -2078,11 +2048,11 @@
       "Body_save_elimination_competition_elimination_event_results_post": {
         "properties": {
           "event": {
-            "$ref": "#/components/schemas/EventDto-Input"
+            "$ref": "#/components/schemas/EventDto"
           },
           "event_records": {
             "items": {
-              "$ref": "#/components/schemas/EliminationEventRecordDto-Input"
+              "$ref": "#/components/schemas/EliminationEventRecordDto"
             },
             "type": "array",
             "title": "Event Records"
@@ -2098,11 +2068,11 @@
       "Body_save_endurance_competition_endurance_event_results_post": {
         "properties": {
           "event": {
-            "$ref": "#/components/schemas/EventDto-Input"
+            "$ref": "#/components/schemas/EventDto"
           },
           "event_records": {
             "items": {
-              "$ref": "#/components/schemas/RaceEventRecordDto-Input"
+              "$ref": "#/components/schemas/RaceEventRecordDto"
             },
             "type": "array",
             "title": "Event Records"
@@ -2118,11 +2088,11 @@
       "Body_save_quartered_competition_quartered_event_results_post": {
         "properties": {
           "event": {
-            "$ref": "#/components/schemas/EventDto-Input"
+            "$ref": "#/components/schemas/EventDto"
           },
           "event_records": {
             "items": {
-              "$ref": "#/components/schemas/QuarteredEventRecordDto-Input"
+              "$ref": "#/components/schemas/QuarteredEventRecordDto"
             },
             "type": "array",
             "title": "Event Records"
@@ -2138,11 +2108,11 @@
       "Body_save_sprint_competition_sprint_event_results_post": {
         "properties": {
           "event": {
-            "$ref": "#/components/schemas/EventDto-Input"
+            "$ref": "#/components/schemas/EventDto"
           },
           "event_records": {
             "items": {
-              "$ref": "#/components/schemas/SprintEventRecordDto-Input"
+              "$ref": "#/components/schemas/SprintEventRecordDto"
             },
             "type": "array",
             "title": "Event Records"
@@ -2229,10 +2199,10 @@
         ],
         "title": "ChampionDto"
       },
-      "EliminationEventRecordDto-Input": {
+      "EliminationEventRecordDto": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
+            "$ref": "#/components/schemas/BlobCompetitorDto"
           },
           "last_score": {
             "anyOf": [
@@ -2262,40 +2232,7 @@
         ],
         "title": "EliminationEventRecordDto"
       },
-      "EliminationEventRecordDto-Output": {
-        "properties": {
-          "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
-          },
-          "last_score": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Score"
-          },
-          "eliminated": {
-            "type": "boolean",
-            "title": "Eliminated",
-            "default": false
-          },
-          "tick_wins": {
-            "type": "integer",
-            "title": "Tick Wins",
-            "default": 0
-          }
-        },
-        "type": "object",
-        "required": [
-          "blob"
-        ],
-        "title": "EliminationEventRecordDto"
-      },
-      "EventDto-Input": {
+      "EventDto": {
         "properties": {
           "id": {
             "type": "integer",
@@ -2303,59 +2240,7 @@
           },
           "competitors": {
             "items": {
-              "$ref": "#/components/schemas/BlobCompetitorDto-Input"
-            },
-            "type": "array",
-            "title": "Competitors"
-          },
-          "actions": {
-            "items": {
-              "$ref": "#/components/schemas/ActionDto"
-            },
-            "type": "array",
-            "title": "Actions"
-          },
-          "league": {
-            "$ref": "#/components/schemas/LeagueDto"
-          },
-          "season": {
-            "type": "integer",
-            "title": "Season"
-          },
-          "round": {
-            "type": "integer",
-            "title": "Round"
-          },
-          "type": {
-            "$ref": "#/components/schemas/EventType"
-          },
-          "isFinished": {
-            "type": "boolean",
-            "title": "Isfinished"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "competitors",
-          "actions",
-          "league",
-          "season",
-          "round",
-          "type",
-          "isFinished"
-        ],
-        "title": "EventDto"
-      },
-      "EventDto-Output": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "competitors": {
-            "items": {
-              "$ref": "#/components/schemas/BlobCompetitorDto-Output"
+              "$ref": "#/components/schemas/BlobCompetitorDto"
             },
             "type": "array",
             "title": "Competitors"
@@ -2880,10 +2765,10 @@
         ],
         "title": "PolicyType"
       },
-      "QuarteredEventRecordDto-Input": {
+      "QuarteredEventRecordDto": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
+            "$ref": "#/components/schemas/BlobCompetitorDto"
           },
           "quarters": {
             "items": {
@@ -2915,70 +2800,10 @@
         ],
         "title": "QuarteredEventRecordDto"
       },
-      "QuarteredEventRecordDto-Output": {
+      "RaceEventRecordDto": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
-          },
-          "quarters": {
-            "items": {
-              "$ref": "#/components/schemas/ScoreDto"
-            },
-            "type": "array",
-            "title": "Quarters"
-          },
-          "eliminated": {
-            "type": "boolean",
-            "title": "Eliminated",
-            "default": false
-          },
-          "current": {
-            "type": "boolean",
-            "title": "Current",
-            "default": false
-          },
-          "next": {
-            "type": "boolean",
-            "title": "Next",
-            "default": false
-          }
-        },
-        "type": "object",
-        "required": [
-          "blob",
-          "quarters"
-        ],
-        "title": "QuarteredEventRecordDto"
-      },
-      "RaceEventRecordDto-Input": {
-        "properties": {
-          "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
-          },
-          "distance_records": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array",
-            "title": "Distance Records"
-          },
-          "previous_position": {
-            "type": "integer",
-            "title": "Previous Position",
-            "default": 1
-          }
-        },
-        "type": "object",
-        "required": [
-          "blob",
-          "distance_records"
-        ],
-        "title": "RaceEventRecordDto"
-      },
-      "RaceEventRecordDto-Output": {
-        "properties": {
-          "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
+            "$ref": "#/components/schemas/BlobCompetitorDto"
           },
           "distance_records": {
             "items": {
@@ -3211,51 +3036,10 @@
         ],
         "title": "SimTimeDto"
       },
-      "SprintEventRecordDto-Input": {
+      "SprintEventRecordDto": {
         "properties": {
           "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Input"
-          },
-          "distance_records": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array",
-            "title": "Distance Records"
-          },
-          "previous_position": {
-            "type": "integer",
-            "title": "Previous Position",
-            "default": 1
-          },
-          "is_finished": {
-            "type": "boolean",
-            "title": "Is Finished",
-            "default": false
-          },
-          "time": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Time"
-          }
-        },
-        "type": "object",
-        "required": [
-          "blob",
-          "distance_records"
-        ],
-        "title": "SprintEventRecordDto"
-      },
-      "SprintEventRecordDto-Output": {
-        "properties": {
-          "blob": {
-            "$ref": "#/components/schemas/BlobCompetitorDto-Output"
+            "$ref": "#/components/schemas/BlobCompetitorDto"
           },
           "distance_records": {
             "items": {
@@ -3600,6 +3384,13 @@
           "type": {
             "type": "string",
             "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
           }
         },
         "type": "object",

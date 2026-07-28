@@ -83,6 +83,21 @@ def get_standings(
 
 
 @transactional
+def get_last_season_standings_position(
+    league_id: int, blob_id: int, season: int, session: Session
+) -> int | None:
+    """Return the blob's standings position from the previous season, or None if unavailable."""
+    if season <= 1:
+        return None
+
+    standings = get_standings(league_id, season - 1, season - 1, session)
+    for idx, standing in enumerate(standings):
+        if standing.blob_id == blob_id:
+            return idx + 1
+    return None
+
+
+@transactional
 def get_last_place_from_season_by_league(
     league_id: int, season: int, session: Session
 ) -> int | None:

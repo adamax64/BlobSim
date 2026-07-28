@@ -6,6 +6,6 @@ When changes made to the backend check whether existing tests broke and evaluate
 
 When you create a new Enum that is also stored in the database DO NOT add a `Dbo` postfix to their names. Instead when you create the dto equvalent of the enum type in the domain layer add the `Dto` postfix to its name.
 
-When you do changes and the version number is not changed yet in `AppSidebar.tsx` then raise it to the next minor or patch version.
+Every change that is not pushed yet to origin should belong to the same version. When you do changes and in `AppSidebar.tsx` the version is not changed yet compared to the last version on origin, then raise it to the next minor or patch version.
 
 After every larger change document it in `CHANGELOG.md`.
