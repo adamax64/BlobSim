@@ -358,6 +358,9 @@
     "current_activity": "Jelenlegi tevékenység",
     "retirement_focus": "Nyugdíj fókusz",
     "inventory": "Leltár",
+    "inventory_no_charge": " (nincs töltés)",
+    "inventory_single_charge": " (töltés: {{count}})",
+    "inventory_multiple_charges": " (töltések: {{count}})",
     "inventory_items": {
       "COOKIE": "Süti",
       "ENERGY_CELL": "Energiacella",

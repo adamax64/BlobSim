@@ -358,6 +358,9 @@
     "current_activity": "Current Activity",
     "retirement_focus": "Retirement focus",
     "inventory": "Inventory",
+    "inventory_no_charge": " (no charge)",
+    "inventory_single_charge": " (charge: {{count}})",
+    "inventory_multiple_charges": " (charges: {{count}})",
     "inventory_items": {
       "COOKIE": "Cookie",
       "ENERGY_CELL": "Energy Cell",

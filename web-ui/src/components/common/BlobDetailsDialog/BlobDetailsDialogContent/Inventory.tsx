@@ -29,8 +29,40 @@ const inventoryIconMap: Record<ItemType, React.ElementType> = {
   TREASURE_CHEST: 'symbol',
 };
 
+const INFINITE_DURABILITY = -1;
+
+const UNCONSUMABLE_ITEM_TYPES: ItemType[] = [
+  ItemType.Cache,
+  ItemType.PowerBank,
+  ItemType.ProcessorPaste,
+  ItemType.OverclockingDevice,
+  ItemType.ExternalStorage,
+];
+
+const isUnconsumable = (type: ItemType) => UNCONSUMABLE_ITEM_TYPES.includes(type);
+const hasChargeCount = (item: ItemDto) => isUnconsumable(item.type) && item.durability !== INFINITE_DURABILITY;
+const isDepleted = (item: ItemDto) => isUnconsumable(item.type) && item.durability === 0;
+
+const getDepletedIconColor = (type: ItemType) =>
+  type === ItemType.OverclockingDevice ? 'error.main' : 'text.disabled';
+
+const getChargeCountKey = (durability: number) => {
+  if (durability === 0) {
+    return 'blob_details.inventory_no_charge';
+  }
+  if (durability === 1) {
+    return 'blob_details.inventory_single_charge';
+  }
+  return 'blob_details.inventory_multiple_charges';
+};
+
 const Inventory = ({ inventory }: { inventory: ItemDto[] }) => {
   const { t } = useTranslation();
+
+  const getItemLabel = (item: ItemDto) => {
+    const name = t(`blob_details.inventory_items.${item.type}`);
+    return hasChargeCount(item) ? `${name}${t(getChargeCountKey(item.durability), { count: item.durability })}` : name;
+  };
 
   return (
     <Box display="flex" flexDirection="row" gap={0.5}>
@@ -43,10 +75,11 @@ const Inventory = ({ inventory }: { inventory: ItemDto[] }) => {
           if (!Icon) {
             return null;
           }
+
           return (
-            <DynamicTooltip key={item.type} title={t(`blob_details.inventory_items.${item.type}`)} placement="top">
+            <DynamicTooltip key={item.type} title={getItemLabel(item)} placement="top">
               <Box display="inline-flex" alignItems="center" justifyContent="center" sx={{ cursor: 'pointer' }}>
-                <Icon fontSize="small" />
+                <Icon fontSize="small" sx={isDepleted(item) ? { color: getDepletedIconColor(item.type) } : undefined} />
               </Box>
             </DynamicTooltip>
           );

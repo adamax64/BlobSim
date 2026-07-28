@@ -766,3 +766,5 @@ Technical changes:
 ### 5.4.3
 
 - Added `lastSeasonStandingsPosition` field to `BlobStatsDto`: when a blob has no current-season standings snippet yet (e.g. at the start of a new season), the blob details dialog now shows the blob's standings position from the previous season instead of an empty snippet widget
+- Blob details dialog inventory section now shows the remaining charge count for unconsumable items (Cache, Power Bank, Processor Paste, Overclocking Device, External Storage) in their tooltip label
+- Unconsumable item icons turn grey when depleted (0 charges), except the Overclocking Device which turns red instead
