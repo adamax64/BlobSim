@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+import { CatEars } from './CatEars';
 import { Crown } from './Crown';
 
 type BlobBaseProps = {
@@ -6,12 +7,22 @@ type BlobBaseProps = {
   color: string;
   doSquash: boolean;
   hasCrown: boolean;
+  hasCatEars?: boolean;
   eyeSlot: JSX.Element;
   toolSlot?: JSX.Element;
   bruiseSlot?: JSX.Element;
 };
 
-export const BlobBase = ({ size, color, eyeSlot, doSquash, hasCrown, toolSlot, bruiseSlot }: BlobBaseProps) => {
+export const BlobBase = ({
+  size,
+  color,
+  eyeSlot,
+  doSquash,
+  hasCrown,
+  hasCatEars,
+  toolSlot,
+  bruiseSlot,
+}: BlobBaseProps) => {
   return (
     <svg
       width={size}
@@ -33,6 +44,7 @@ export const BlobBase = ({ size, color, eyeSlot, doSquash, hasCrown, toolSlot, b
                 repeatCount="indefinite"
               />
             )}
+            {hasCatEars && <CatEars color={color} />}
             <path
               id="path56"
               fill={color}

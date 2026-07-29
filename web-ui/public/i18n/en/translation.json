@@ -165,6 +165,14 @@
     "retirement_focus": {
       "LEGACY": "Legacy",
       "PROLONGED_LIFE": "Prolonged life"
+    },
+    "elements": {
+      "NONE": "None",
+      "FIRE": "Fire",
+      "WIND": "Wind",
+      "WATER": "Water",
+      "ICE": "Ice",
+      "BEAST": "Beast"
     }
   },
   "state_descriptions": {

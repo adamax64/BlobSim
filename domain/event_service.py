@@ -153,4 +153,5 @@ def _map_competitor(blob) -> BlobCompetitorDto:
             )
             for state in blob.states
         ],
+        element=blob.element,
     )

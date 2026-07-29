@@ -1,10 +1,11 @@
 import { Dialog, Divider } from '@mui/material';
-import { BlobStatsDto, StandingsSnippetDto } from '../../../../generated';
+import { BlobStatsDto, StandingsSnippetDto, Element } from '../../../../generated';
 import { useTranslation } from 'react-i18next';
 import LoadingDialogContent from './LoadingDialogContent/LoadingDialogContent';
 import { BlobAnimated } from '../blob-visuals/BlobAnimated';
 import BlobDetailsDialogContent from './BlobDetailsDialogContent/BlobDetailsDialogContent';
 import DialogTitleWithCloseButton from '../DialogTitleWithCloseButton';
+import ElementIcon from './BlobDetailsDialogContent/ElementIcon';
 
 interface BlobEventDetailsDialogUiProps {
   open: boolean;
@@ -18,7 +19,11 @@ export const BlobEventDetailsDialogUi = ({ open, onClose, blob, standingsData }:
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitleWithCloseButton title={blob?.name ?? t('blob_details.loading')} onClose={onClose} />
+      <DialogTitleWithCloseButton
+        title={blob?.name ?? t('blob_details.loading')}
+        elementIcon={blob?.element && blob.element !== Element.None && <ElementIcon element={blob.element} />}
+        onClose={onClose}
+      />
       <Divider />
       {blob ? (
         <BlobDetailsDialogContent

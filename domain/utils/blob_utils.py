@@ -139,6 +139,7 @@ def map_to_blob_state_dto(
             if blob.retirement_focus is not None
             else None
         ),
+        element=blob.element,
     )
 
 

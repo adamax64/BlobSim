@@ -2,6 +2,9 @@ import random
 from functools import lru_cache
 
 from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
+from domain.enums.season_temperature import SeasonTemperatureDto
+from domain.enums.weather_type import WeatherTypeDto
+from domain.utils.element_utils import compute_element_skill_multipliers
 from domain.utils.item_utils import (
     PRE_EVENT_MIN_SCORE_STATE_BONUSES,
     PRE_EVENT_SKILL_STATE_BONUSES,
@@ -78,7 +81,13 @@ def get_inverse_random_coefficient(
 
 
 def generate_race_score_for_contender(
-    contender: BlobCompetitorDto, current_time: int, race_duration: int, tick: int
+    contender: BlobCompetitorDto,
+    current_time: int,
+    race_duration: int,
+    tick: int,
+    weather: WeatherTypeDto | None = None,
+    wind: float = 0.5,
+    season_temperature: SeasonTemperatureDto | None = None,
 ) -> float:
     """
     Generate race score for contender.
@@ -89,6 +98,9 @@ def generate_race_score_for_contender(
     )
     skill_multiplier = compute_item_skill_multiplier(contender, current_time)
     min_score_boost = compute_item_min_score_boost(contender, current_time)
+    _, element_speed_multiplier = compute_element_skill_multipliers(
+        contender.element, weather, wind, season_temperature
+    )
 
     noise = perlin_like_noise_1d(
         race_duration,
@@ -96,7 +108,13 @@ def generate_race_score_for_contender(
         focused,
         min_score_boost,
     )
-    return noise[tick] * contender.speed * multiplier * skill_multiplier
+    return (
+        noise[tick]
+        * contender.speed
+        * multiplier
+        * skill_multiplier
+        * element_speed_multiplier
+    )
 
 
 @lru_cache(maxsize=128)

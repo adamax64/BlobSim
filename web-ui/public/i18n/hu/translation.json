@@ -165,6 +165,14 @@
     "retirement_focus": {
       "LEGACY": "Örökség",
       "PROLONGED_LIFE": "Hosszabb élet"
+    },
+    "elements": {
+      "NONE": "Nincs",
+      "FIRE": "Tűz",
+      "WIND": "Szél",
+      "WATER": "Víz",
+      "ICE": "Jég",
+      "BEAST": "Bestia"
     }
   },
   "state_descriptions": {

@@ -9,7 +9,7 @@ from data.persistence.action_repository import (
 from data.persistence.event_repository import get_event_by_id
 from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.record_service import check_and_update_record
-from domain.sim_data_service import get_sim_time
+from domain.sim_data_service import get_season_temperature, get_sim_time, get_weather, get_wind
 from domain.utils.action_utils import (
     compute_event_multiplier_from_contender,
     compute_item_min_score_boost,
@@ -17,6 +17,7 @@ from domain.utils.action_utils import (
     generate_race_score_for_contender,
     get_random_coefficient,
 )
+from domain.utils.element_utils import compute_element_skill_multipliers
 from domain.utils.league_utils import get_race_duration_by_size
 from domain.blob_services.blob_update_service import update_blob_speed_by_id
 from domain.utils.constants import OVERTAKE_EFFECT
@@ -37,8 +38,14 @@ def create_action_for_quartered_event(
     )
     skill_multiplier = compute_item_skill_multiplier(contender, current_time)
     min_score_boost = compute_item_min_score_boost(contender, current_time)
-    adj_strength = contender.strength * multiplier * skill_multiplier
-    adj_speed = contender.speed * multiplier * skill_multiplier
+    element_strength_multiplier, element_speed_multiplier = compute_element_skill_multipliers(
+        contender.element,
+        get_weather(session),
+        get_wind(session),
+        get_season_temperature(session),
+    )
+    adj_strength = contender.strength * multiplier * skill_multiplier * element_strength_multiplier
+    adj_speed = contender.speed * multiplier * skill_multiplier * element_speed_multiplier
 
     score = (
         adj_strength * get_random_coefficient(focused, min_score_boost) * 0.7
@@ -76,6 +83,9 @@ def create_actions_for_race(
         raise Exception("Actions already exist for this event and tick")
 
     current_time = get_sim_time(session)
+    weather = get_weather(session)
+    wind = get_wind(session)
+    season_temperature = get_season_temperature(session)
     race_duration = get_race_duration_by_size(len(contenders))
     max_score = 0
     max_scorer_name = None
@@ -115,7 +125,13 @@ def create_actions_for_race(
 
         score = (
             generate_race_score_for_contender(
-                contender, current_time, race_duration, tick
+                contender,
+                current_time,
+                race_duration,
+                tick,
+                weather,
+                wind,
+                season_temperature,
             )
             + boosts[contender.id]
         )
@@ -174,7 +190,13 @@ def create_actions_for_elimination_event(
         )
         skill_multiplier = compute_item_skill_multiplier(contender, current_time)
         min_score_boost = compute_item_min_score_boost(contender, current_time)
-        adj_strength = contender.strength * multiplier * skill_multiplier
+        element_strength_multiplier, _ = compute_element_skill_multipliers(
+            contender.element,
+            get_weather(session),
+            get_wind(session),
+            get_season_temperature(session),
+        )
+        adj_strength = contender.strength * multiplier * skill_multiplier * element_strength_multiplier
 
         score = adj_strength * get_random_coefficient(focused, min_score_boost)
         actions[contender.id].scores = actions[contender.id].scores + [score]

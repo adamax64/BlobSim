@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { BlobStatsDto, StateType, ActivityTypeDbo } from '../../../../generated';
+import { BlobStatsDto, StateType, ActivityTypeDbo, Element } from '../../../../generated';
 import { BlobBase } from './blob-parts/BlobBase';
 import { TerminatedEyes } from './blob-parts/eyes/TerminatedEyes';
 import { Blink } from './blob-parts/eyes/Blink';
@@ -11,6 +11,14 @@ import { ClosedEyes } from './blob-parts/eyes/ClosedEyes';
 type BlobAnimatedProps = {
   blob: BlobStatsDto;
   size: number;
+};
+
+const ELEMENT_EYE_COLORS: Partial<Record<Element, string>> = {
+  [Element.Fire]: '#ffb366',
+  [Element.Wind]: '#99f6ff',
+  [Element.Water]: '#6394da',
+  [Element.Ice]: '#aee9ff',
+  [Element.Beast]: '#c9a27a',
 };
 
 export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
@@ -65,6 +73,8 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
     };
   }, [toggleEyes]);
 
+  const eyeColor = blob.element ? ELEMENT_EYE_COLORS[blob.element] : undefined;
+
   const eyeSlot = useMemo(() => {
     if (blob.isDead) {
       return <TerminatedEyes />;
@@ -72,8 +82,12 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
     if (blob.currentActivity === ActivityTypeDbo.Idle) {
       return <ClosedEyes />;
     }
-    return eyesOpen ? <OpenedEyes blobStates={blob.states.map((s) => s.type)} /> : <Blink />;
-  }, [eyesOpen, blob.isDead, blob.currentActivity]);
+    return eyesOpen ? (
+      <OpenedEyes blobStates={blob.states.map((s) => s.type)} eyeColor={eyeColor} />
+    ) : (
+      <Blink />
+    );
+  }, [eyesOpen, blob.isDead, blob.currentActivity, blob.states, eyeColor]);
 
   return (
     <BlobBase
@@ -82,6 +96,7 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
       eyeSlot={eyeSlot}
       doSquash={!blob.isDead}
       hasCrown={blob.isGrandmaster ?? false}
+      hasCatEars={blob.element === Element.Beast}
       toolSlot={mapActivityToTool(blob.currentActivity)}
       bruiseSlot={blob.states.find((s) => s.type === StateType.Injured) !== undefined ? <Bruises /> : undefined}
     />

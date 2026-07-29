@@ -10,6 +10,8 @@ from data.persistence.name_suggestion_repository import (
     delete_suggestion,
     get_oldest_name,
 )
+from data.persistence.sim_data_repository import get_sim_data, save_sim_data
+from domain.element_service import pick_element_for_new_blob
 from domain.exceptions.name_occupied_exception import NameOccupiedException
 from domain.news_services.news_service import (
     add_blob_created_news,
@@ -46,6 +48,9 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
     learning = 0.55 + 0.45 * random.random()
     current_time = get_sim_time(session)
     queue = get_queue(session)
+    sim_data = get_sim_data(session)
+    element = pick_element_for_new_blob(sim_data)
+    save_sim_data(session, sim_data)
 
     if parent_id is not None:
         parent = get_blob_by_id(session, parent_id)
@@ -65,6 +70,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
             league_id=queue.id,
             parent_id=parent_id,
             color=generate_random_color(),
+            element=element,
         )
         saved_blob = save_blob(session, blob_obj)
         reset_factory_progress(session)
@@ -82,7 +88,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
                     additional = random.choice(others)
                     save_trait(session, Trait(blob_id=saved_blob.id, type=additional))
         except Exception:
-            pass            
+            pass
     except IntegrityError:
         raise NameOccupiedException()
 

@@ -11,6 +11,7 @@ from domain.blob_services.blob_creation_service import check_factory_and_create_
 from data.persistence.policy_repository import get_active_policy_by_type
 from data.persistence.blob_reposiotry import get_all_retired, save_all_blobs
 from domain.calendar_service import recreate_calendar_for_next_season
+from domain.element_service import generate_daily_element_tokens
 from domain.league_service import manage_league_transfers
 from domain.news_services.news_service import (
     add_event_starting_news,
@@ -55,6 +56,7 @@ def progress_simulation(session: Session) -> str:
 
     sim_data.weather = choose_weather(sim_data.season_temperature)
     sim_data.wind = choose_wind()
+    generate_daily_element_tokens(sim_data)
 
     # base factory progress plus any active factory modernization policies
     extra = 0

@@ -7,7 +7,7 @@ import StateIcon from './StateIcon';
 import TraitIcon from './TraitIcon';
 import { getContrastYIQ } from '../../../../utils/color-utils';
 import { useTranslation } from 'react-i18next';
-import { BlobStatsDto, StandingsSnippetDto, type ItemType } from '../../../../../generated';
+import { BlobStatsDto, StandingsSnippetDto } from '../../../../../generated';
 import { IconName } from '../../IconName';
 import DynamicTooltip from '../../DynamicTooltip';
 import Inventory from './Inventory';

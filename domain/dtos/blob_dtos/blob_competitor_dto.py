@@ -1,6 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from domain.dtos.state_dto import StateDto
+from domain.enums.element_dto import ElementDto
 
 
 @dataclass
@@ -11,3 +12,4 @@ class BlobCompetitorDto:
     speed: float
     color: str
     states: list[StateDto]
+    element: ElementDto = field(default=ElementDto.NONE)

@@ -12,6 +12,7 @@ from sqlalchemy.orm import relationship
 
 from data.db.db_engine import Base
 from data.model.activity_type import ActivityTypeDbo
+from data.model.element import Element
 
 
 class Blob(Base):
@@ -51,6 +52,7 @@ class Blob(Base):
     parent = relationship("Blob", remote_side=[id], backref="children")
     color = Column(String, nullable=False, default="#888888")
     current_activity = Column(Enum(ActivityTypeDbo), default=ActivityTypeDbo.IDLE)
+    element = Column(Enum(Element), nullable=False, default=Element.NONE)
     traits = relationship("Trait", viewonly=True)
     states = relationship("State", viewonly=True)
     retirement_focus = relationship(

@@ -1,8 +1,12 @@
-export const IdleEyes = () => {
+type IdleEyesProps = {
+  color?: string;
+};
+
+export const IdleEyes = ({ color = '#ffffff' }: IdleEyesProps) => {
   return (
     <>
       <ellipse
-        fill="#ffffff"
+        fill={color}
         stroke="#000000"
         strokeWidth="1"
         id="path2446"
@@ -12,7 +16,7 @@ export const IdleEyes = () => {
         ry="9.4549446"
       />
       <ellipse
-        fill="#ffffff"
+        fill={color}
         stroke="#000000"
         strokeWidth="1"
         id="path2446-7"

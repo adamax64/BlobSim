@@ -6,6 +6,7 @@ from domain.dtos.parent_dto import ParentDto
 from domain.dtos.retirement_focus_type_dto import RetirementFocusTypeDto
 from domain.dtos.state_dto import StateDto
 from domain.enums.activity_type import ActivityType
+from domain.enums.element_dto import ElementDto
 from domain.enums.trait_type import TraitTypeDto
 
 
@@ -50,3 +51,4 @@ class BlobStatsDto(BaseModel):
     states: list[StateDto]
     traits: list[TraitTypeDto]
     retirement_focus: RetirementFocusTypeDto | None = None
+    element: ElementDto = ElementDto.NONE

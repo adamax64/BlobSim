@@ -6,13 +6,14 @@ import { EyeStars } from './EyeStars';
 
 type OpenedEyesProps = {
   blobStates: StateType[];
+  eyeColor?: string;
 };
 
-export const OpenedEyes = ({ blobStates }: OpenedEyesProps) => {
+export const OpenedEyes = ({ blobStates, eyeColor }: OpenedEyesProps) => {
   return (
     <>
       {blobStates.find((state) => state === StateType.Gloomy) !== undefined && <GloomyEyebrows />}
-      <IdleEyes />
+      <IdleEyes color={eyeColor} />
       {blobStates.find((state) => state === StateType.Tired) !== undefined && <EyeCircles />}
       {blobStates.find((state) => state === StateType.Focused) !== undefined && <EyeStars />}
     </>

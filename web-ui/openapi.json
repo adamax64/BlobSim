@@ -1767,6 +1767,10 @@
             },
             "type": "array",
             "title": "States"
+          },
+          "element": {
+            "$ref": "#/components/schemas/Element",
+            "default": "NONE"
           }
         },
         "type": "object",
@@ -2010,6 +2014,10 @@
                 "type": "null"
               }
             ]
+          },
+          "element": {
+            "$ref": "#/components/schemas/Element",
+            "default": "NONE"
           }
         },
         "type": "object",
@@ -2198,6 +2206,19 @@
           "blob"
         ],
         "title": "ChampionDto"
+      },
+      "Element": {
+        "type": "string",
+        "enum": [
+          "NONE",
+          "FIRE",
+          "WIND",
+          "WATER",
+          "ICE",
+          "BEAST"
+        ],
+        "title": "Element",
+        "description": "Enum for Blob Element"
       },
       "EliminationEventRecordDto": {
         "properties": {

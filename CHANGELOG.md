@@ -777,3 +777,20 @@ Technical changes:
 - Retired blobs now automatically sell competition-related items (Cookie, Cache, Cache Cleaner, Power Bank, Energy Cell, Overclocking Device) for money instead of adding them to their inventory when received, since these items are only useful for competing blobs
 - Retired blobs sell their competition related items if they already possess some
 - The "News" dashboard option card shows a red exclamation mark badge when new news has appeared since the news modal was last opened; the last-viewed news date is remembered across visits
+
+### 5.6
+
+- Blobs receive an element on creation (None, Fire, Wind, Water, Ice, Beast), chosen at random based on daily-generated element tokens influenced by the weather (e.g. sunny/hot weather grants Fire tokens, rain grants Water tokens, wind grants Wind tokens, snow/freezing weather grants Ice tokens, fog grants Beast tokens, and a Neutral token is always granted each day)
+- Elements grant passive skill modifiers depending on weather, wind and season temperature: Fire boosts strength in most weather (except cold season temperature, where it always gets +2% strength), Wind's bonus scales directly with the day's wind value, Ice slightly boosts speed always and boosts/reduces strength depending on season temperature, Beast always boosts strength and speed
+- Detailed modifiers of elementy by weather type (wind excluded):
+
+|  | Sunny | Sunny-Cloudy | Cloudy | Sunny-Rain | Rain | Heavy-Rain | Storm | Heat | Snowy | Freezy | Foggy |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Fire | +5% | +1% | 0% | 0% | -2% | -3% | -4% | +10% | -6% | -10% | 0% |
+| Water | -5% | -1% | 0% | +2% | +5% | +10% | +6% | -10% | -5% | -10% | 0% |
+| Ice | -6% | -2% | 0% | 0% | 0% | 0% | 0% | -12% | +6% | +12% | 0% | 
+| Beast | 0% | 0% | 0% | -2% | -5% | -8% | -10% | -3% | 0% | 0% | +4% |
+
+- Blob visuals now reflect their element: eye color changes (Fire: light orange, Wind: light cyan, Water: faded dark blue, Ice: light blue), and Beast blobs additionally grow cat ears
+- Blob details dialog shows an element icon with a tooltip naming the blob's element
+
