@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { EventRecordsApi, EventDtoOutput } from '../../../generated';
+import { EventRecordsApi, EventDto } from '../../../generated';
 import { RaceEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/RaceEventRecordDtoOutput';
 import { getRaceDurationBySize } from '../event-components/event-utils';
 import defaultConfig from '../../default-config';
@@ -8,7 +8,7 @@ import { EnduranceRaceUI } from '../event-components/endurance-race/EnduranceRac
 import { useReplayTickDelay } from '../../hooks/useReplayTickDelay';
 
 interface ReplayEnduranceRaceFrameProps {
-  event: EventDtoOutput;
+  event: EventDto;
   tick: number;
 }
 

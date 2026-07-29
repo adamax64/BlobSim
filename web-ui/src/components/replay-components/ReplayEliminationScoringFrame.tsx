@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { EventRecordsApi, EventDtoOutput } from '../../../generated';
+import { EventRecordsApi, EventDto } from '../../../generated';
 import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../default-config';
 import { EliminationScoringUI } from '../event-components/elimination-scoring/EliminationScoringUI';
 import { useReplayTickDelay } from '../../hooks/useReplayTickDelay';
 
 interface ReplayEliminationScoringFrameProps {
-  event: EventDtoOutput;
+  event: EventDto;
   tick: number;
 }
 

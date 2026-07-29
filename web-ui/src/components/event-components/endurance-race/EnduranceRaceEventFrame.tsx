@@ -1,6 +1,6 @@
 import { Snackbar, Alert } from '@mui/material';
-import { ActionDto, ActionsApi, CompetitionApi, EventDtoInput, EventRecordsApi } from '../../../../generated';
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../../generated';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/RaceEventRecordDtoOutput';
 import { getRaceDurationBySize } from '../event-utils';
@@ -13,7 +13,7 @@ import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventControls } from '../shared/EventControls';
 
 interface EnduranceRaceEventFrameProps {
-  event: EventDtoInput;
+  event: EventDto;
   setIsEventFinished: Dispatch<SetStateAction<boolean>>;
   isEventFinished: boolean;
 }

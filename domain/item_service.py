@@ -21,6 +21,7 @@ from data.persistence.state_repository import (
 from domain.sim_data_service import get_sim_time
 from domain.state_service import apply_injury
 from domain.utils.item_utils import (
+    COMPETITION_ITEM_TYPES,
     DEFAULT_UNCONSUMABLE_DURABILITY,
     INFINITE_DURABILITY,
     PRE_EVENT_ITEM_STATE_TYPES,
@@ -32,6 +33,7 @@ from domain.utils.item_utils import (
     get_item_sell_value,
     is_consumable,
 )
+from domain.utils.sim_time_utils import get_season
 
 OVERCLOCK_DEPLETED_INJURY_CHANCE = 0.3
 
@@ -46,6 +48,10 @@ ENERGY_CELL_TARGET_TYPES = {ItemType.POWER_BANK, ItemType.OVERCLOCKING_DEVICE}
 
 
 def grant_item_to_blob(blob: Blob, item_type: ItemType, session: Session) -> None:
+    if item_type in COMPETITION_ITEM_TYPES and _is_retired(blob, session):
+        blob.money += get_item_sell_value(item_type)
+        return
+
     if item_type in MONEY_REWARDS:
         blob.money += MONEY_REWARDS[item_type]
         return
@@ -66,6 +72,11 @@ def grant_item_to_blob(blob: Blob, item_type: ItemType, session: Session) -> Non
 def is_inventory_full(blob: Blob, session: Session) -> bool:
     items = get_items_of_blob(session, blob.id)
     return len(items) >= get_inventory_capacity(items)
+
+
+def _is_retired(blob: Blob, session: Session) -> bool:
+    current_season = get_season(get_sim_time(session))
+    return blob.contract is not None and blob.contract < current_season
 
 
 def has_depleted_unconsumable(blob: Blob, session: Session) -> bool:

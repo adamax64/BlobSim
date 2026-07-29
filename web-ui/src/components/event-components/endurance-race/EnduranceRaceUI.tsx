@@ -7,7 +7,6 @@ import {
   useTheme,
   useMediaQuery,
   Tooltip,
-  CircularProgress,
 } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { useTranslation } from 'react-i18next';

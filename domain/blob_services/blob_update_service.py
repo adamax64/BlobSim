@@ -58,7 +58,7 @@ from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
 from domain.item_service import grant_item_to_blob, has_depleted_unconsumable, is_inventory_full
-from domain.utils.item_utils import choose_random_item_type, get_item_from_list_by_type
+from domain.utils.item_utils import COMPETITION_ITEM_TYPES, choose_random_item_type, get_item_from_list_by_type, get_item_sell_value
 from domain.utils.constants import (
     ADVENTURE_EFFECT,
     COMPETITION_EFFECT,
@@ -117,6 +117,12 @@ def update_all_blobs(session: Session):
         is_grandmaster = get_current_grandmaster_id(session) == blob.id
         _apply_random_states(blob, session)
         _apply_random_traits(blob, session)
+        # backwards compatibility: if retired blob already has competition related items they should sell it
+        if blob.contract is not None and blob.contract < get_season(current_time):
+            for item in blob.items:
+                if item.type in COMPETITION_ITEM_TYPES:
+                    blob.money += get_item_sell_value(item.type)
+                    delete_item(session, item.id)
         _choose_activity_for_blob(
             blob, event_next_day, catchup_training_blob_ids, is_grandmaster, session
         )

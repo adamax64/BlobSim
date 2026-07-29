@@ -1,9 +1,9 @@
 import { Snackbar, Alert } from '@mui/material';
 import {
   ActionsApi,
-  BlobCompetitorDtoInput,
-  EventDtoInput,
-  QuarteredEventRecordDtoInput as EventRecordDto,
+  BlobCompetitorDto,
+  EventDto,
+  QuarteredEventRecordDto as EventRecordDto,
   CompetitionApi,
   EventRecordsApi,
 } from '../../../../generated';
@@ -19,7 +19,7 @@ import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventControls } from '../shared/EventControls';
 
 interface QuarteredEventFrameProps {
-  event: EventDtoInput;
+  event: EventDto;
   setIsEventFinished: Dispatch<SetStateAction<boolean>>;
   isEventFinished: boolean;
 }
@@ -81,11 +81,11 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   const { mutate: createAction } = useMutation<
     { name: string; score: number } | null,
     Error,
-    { contender: BlobCompetitorDtoInput }
+    { contender: BlobCompetitorDto }
   >({
     mutationFn: (params) =>
       actionApi.quarteredActionsCreateQuarteredPost({
-        blobCompetitorDtoInput: params.contender,
+        blobCompetitorDto: params.contender,
         eventId: event.id,
       }),
     onSuccess: (data) => {

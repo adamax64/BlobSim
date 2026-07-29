@@ -102,14 +102,15 @@ class TestItemService(unittest.TestCase):
         self.assertEqual(saved_item.type, ItemType.REPAIR_KIT)
         self.assertEqual(saved_item.durability, 1)
 
+    @patch("domain.item_service.get_sim_time", return_value=0)
     @patch("domain.item_service.update_item")
     @patch("domain.item_service.get_items_of_blob")
     def test_energy_cell_resets_power_bank_durability(
-        self, mock_get_items, mock_update_item
+        self, mock_get_items, mock_update_item, mock_get_sim_time
     ):
         power_bank = _item(1, ItemType.POWER_BANK, 1)
         mock_get_items.return_value = [power_bank]
-        blob = create_blob_model_mock(id=1)
+        blob = create_blob_model_mock(id=1, contract=100)
         session = MagicMock()
 
         with patch("domain.item_service.save_item") as mock_save_item:
@@ -120,10 +121,13 @@ class TestItemService(unittest.TestCase):
         mock_update_item.assert_called_once_with(session, power_bank)
         mock_save_item.assert_not_called()
 
+    @patch("domain.item_service.get_sim_time", return_value=0)
     @patch("domain.item_service.get_items_of_blob")
-    def test_energy_cell_is_saved_without_rechargeable_item(self, mock_get_items):
+    def test_energy_cell_is_saved_without_rechargeable_item(
+        self, mock_get_items, mock_get_sim_time
+    ):
         mock_get_items.return_value = []
-        blob = create_blob_model_mock(id=1)
+        blob = create_blob_model_mock(id=1, contract=100)
         session = MagicMock()
 
         with patch("domain.item_service.save_item") as mock_save_item:
@@ -133,10 +137,13 @@ class TestItemService(unittest.TestCase):
         saved_item = mock_save_item.call_args[0][1]
         self.assertEqual(saved_item.type, ItemType.ENERGY_CELL)
 
+    @patch("domain.item_service.get_sim_time", return_value=0)
     @patch("domain.item_service.get_items_of_blob")
-    def test_non_instant_consumable_is_saved_to_inventory(self, mock_get_items):
+    def test_non_instant_consumable_is_saved_to_inventory(
+        self, mock_get_items, mock_get_sim_time
+    ):
         mock_get_items.return_value = []
-        blob = create_blob_model_mock(id=1)
+        blob = create_blob_model_mock(id=1, contract=100)
         session = MagicMock()
 
         with patch("domain.item_service.save_item") as mock_save_item:
@@ -146,6 +153,50 @@ class TestItemService(unittest.TestCase):
         saved_item = mock_save_item.call_args[0][1]
         self.assertEqual(saved_item.type, ItemType.COOKIE)
         self.assertEqual(saved_item.durability, 1)
+
+    @patch("domain.item_service.get_sim_time", return_value=0)
+    def test_retired_blob_sells_competition_item_instead_of_storing_it(
+        self, mock_get_sim_time
+    ):
+        blob = create_blob_model_mock(id=1, contract=0, money=0)
+        session = MagicMock()
+
+        with patch("domain.item_service.save_item") as mock_save_item:
+            grant_item_to_blob(blob, ItemType.COOKIE, session)
+
+        mock_save_item.assert_not_called()
+        self.assertEqual(blob.money, 1)
+
+    @patch("domain.item_service.get_sim_time", return_value=0)
+    @patch("domain.item_service.get_items_of_blob")
+    def test_retired_blob_sells_energy_cell_without_recharging_items(
+        self, mock_get_items, mock_get_sim_time
+    ):
+        power_bank = _item(1, ItemType.POWER_BANK, 1)
+        mock_get_items.return_value = [power_bank]
+        blob = create_blob_model_mock(id=1, contract=0, money=0)
+        session = MagicMock()
+
+        with patch("domain.item_service.update_item") as mock_update_item:
+            with patch("domain.item_service.save_item") as mock_save_item:
+                grant_item_to_blob(blob, ItemType.ENERGY_CELL, session)
+
+        mock_update_item.assert_not_called()
+        mock_save_item.assert_not_called()
+        self.assertEqual(power_bank.durability, 1)
+        self.assertEqual(blob.money, 5)
+
+    @patch("domain.item_service.get_sim_time", return_value=0)
+    def test_non_retired_blob_still_stores_competition_item(self, mock_get_sim_time):
+        blob = create_blob_model_mock(id=1, contract=100, money=0)
+        session = MagicMock()
+
+        with patch("domain.item_service.get_items_of_blob", return_value=[]):
+            with patch("domain.item_service.save_item") as mock_save_item:
+                grant_item_to_blob(blob, ItemType.OVERCLOCKING_DEVICE, session)
+
+        mock_save_item.assert_called_once()
+        self.assertEqual(blob.money, 0)
 
     @patch("domain.item_service.save_item")
     @patch("domain.item_service.delete_item")

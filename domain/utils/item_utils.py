@@ -67,6 +67,16 @@ PRE_EVENT_ITEM_TYPES = {
     ItemType.OVERCLOCKING_DEVICE,
 }
 
+# Items that are only useful for competing blobs; retired blobs sell these on receipt
+COMPETITION_ITEM_TYPES = {
+    ItemType.COOKIE,
+    ItemType.CACHE,
+    ItemType.CACHE_CLEANER,
+    ItemType.POWER_BANK,
+    ItemType.ENERGY_CELL,
+    ItemType.OVERCLOCKING_DEVICE,
+}
+
 PRE_EVENT_ITEM_STATE_TYPES: dict[ItemType, StateType] = {
     ItemType.COOKIE: StateType.COOKIE_BOOST,
     ItemType.ENERGY_CELL: StateType.ENERGY_CELL_BOOST,

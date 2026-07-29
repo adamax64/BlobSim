@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { EventRecordsApi, EventDtoOutput } from '../../../generated';
+import { EventRecordsApi, EventDto } from '../../../generated';
 import { QuarteredEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/QuarteredEventRecordDtoOutput';
 import { getCurrentQuarter, getQuarterEnds } from '../event-components/event-utils';
 import defaultConfig from '../../default-config';
 import { QuarteredEventUI } from '../event-components/quartered-event/QuarteredEventUI';
 import { useReplayTickDelay } from '../../hooks/useReplayTickDelay';
 interface ReplayQuarteredEventFrameProps {
-  event: EventDtoOutput;
+  event: EventDto;
   tick: number;
 }
 

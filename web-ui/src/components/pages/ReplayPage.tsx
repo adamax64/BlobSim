@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { CompetitionApi, EventDtoOutput, EventType } from '../../../generated';
+import { CompetitionApi, EventDto, EventType } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { PageFrame } from '../common/PageFrame';
 import { useEffect, useMemo, useState, useCallback } from 'react';
@@ -27,7 +27,7 @@ export const ReplayPage = () => {
     data: event,
     isPending: loadingEvent,
     mutate: loadEvent,
-  } = useMutation<EventDtoOutput, Error, number>({
+  } = useMutation<EventDto, Error, number>({
     mutationFn: (id: number) => competitionApi.getEventByIdRouteCompetitionEventIdGet({ eventId: id }),
   });
 

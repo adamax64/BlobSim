@@ -771,3 +771,9 @@ Technical changes:
 - Fixed bug of processor paste not loosing durability during usage
 - Adventure activity is no longer blocked purely because a blob's inventory is full: it is now also allowed when the blob owns a depleted unconsumable item (Cache, Power Bank, Processor Paste, Overclocking Device with 0 charges), since that item can be sold to make room for a new one
 - Added new "Maintenance" dashboard option card, showing blobs currently doing the maintenance activity
+
+### 5.5.1
+
+- Retired blobs now automatically sell competition-related items (Cookie, Cache, Cache Cleaner, Power Bank, Energy Cell, Overclocking Device) for money instead of adding them to their inventory when received, since these items are only useful for competing blobs
+- Retired blobs sell their competition related items if they already possess some
+- The "News" dashboard option card shows a red exclamation mark badge when new news has appeared since the news modal was last opened; the last-viewed news date is remembered across visits

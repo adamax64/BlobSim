@@ -5,13 +5,14 @@ type OptionCardProps = {
   title: string;
   icon: React.ElementType;
   onClick: () => void;
+  badge?: React.ReactNode;
 };
 
-const OptionCard = ({ title, icon: Icon, onClick }: OptionCardProps) => {
+const OptionCard = ({ title, icon: Icon, onClick, badge }: OptionCardProps) => {
   const isTable = useIsTablet();
 
   return (
-    <Card sx={{ height: '100%' }}>
+    <Card sx={{ height: '100%', position: 'relative' }}>
       <CardActionArea
         onClick={onClick}
         sx={{
@@ -22,9 +23,12 @@ const OptionCard = ({ title, icon: Icon, onClick }: OptionCardProps) => {
           padding: isTable ? 3 : 6,
         }}
       >
-        <Box display="flex" alignItems="center" gap={1.5} height="100%">
-          <Icon fontSize="large" />
-          <Typography variant="h4">{title}</Typography>
+        <Box display="flex" justifyContent="space-between" gap={1.5} height="100%">
+          <Box display="flex" alignItems="center" gap={1.5}>
+            <Icon fontSize="large" />
+            <Typography variant="h4">{title}</Typography>
+          </Box>
+          {badge}
         </Box>
       </CardActionArea>
     </Card>

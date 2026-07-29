@@ -1,4 +1,5 @@
 import { Box, Dialog, DialogContent, Divider, Grid, Skeleton, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { NewsContent } from './NewsContent';
 import { useTranslation } from 'react-i18next';
 import { formatToShort } from '../../../utils/sim-time-utils';
@@ -12,7 +13,13 @@ type NewsModalProps = {
 
 export const NewsModal = ({ open, onClose }: NewsModalProps) => {
   const { t } = useTranslation();
-  const { news, newsLoading: loadingSkeletonVisible } = useNews();
+  const { news, newsLoading: loadingSkeletonVisible, markNewsAsViewed } = useNews();
+
+  useEffect(() => {
+    if (open) {
+      markNewsAsViewed();
+    }
+  }, [open, news, markNewsAsViewed]);
 
   return (
     <Dialog maxWidth="md" open={open} onClose={onClose}>

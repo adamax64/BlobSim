@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { PageFrame } from '../common/PageFrame';
 import { SimTimeDisplay } from '../common/SimTimeDisplay';
 import { useSimTime } from '../../context/SimTimeContext';

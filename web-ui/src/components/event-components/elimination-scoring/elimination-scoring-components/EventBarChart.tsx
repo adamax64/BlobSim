@@ -3,7 +3,7 @@ import { BarChart, ChartsText, ChartsTextProps, ChartsTooltipContainer, useAxesT
 import { IconName } from '../../../common/IconName';
 import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../../generated/models/EliminationEventRecordDtoOutput';
 import { BlobIcon } from '../../../icons/BlobIcon';
-import { BlobCompetitorDtoInput } from '../../../../../generated';
+import { BlobCompetitorDto } from '../../../../../generated';
 
 interface EventBarChartProps {
   eventRecords: EventRecordDto[];
@@ -28,7 +28,7 @@ export const EventBarChart = ({ eventRecords, isMobile }: EventBarChartProps) =>
         yAxis={[
           {
             data: eventRecords.map((record) => record.blob),
-            valueFormatter: (value: BlobCompetitorDtoInput) => value.color,
+            valueFormatter: (value: BlobCompetitorDto) => value.color,
             tickLabelStyle: { display: 'contents' },
             colorMap: {
               colors: eventRecords.map((record) => record.blob.color),

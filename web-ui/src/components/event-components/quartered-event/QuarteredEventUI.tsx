@@ -9,7 +9,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import type { QuarteredEventRecordDtoInput as EventRecordDto, EventType } from '../../../../generated';
+import type { QuarteredEventRecordDto as EventRecordDto, EventType } from '../../../../generated';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import { roundToThreeDecimals } from '../event-utils';
 import { useCallback } from 'react';

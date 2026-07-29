@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import type { ActionDto, BlobCompetitorDtoInput, EventDtoInput } from '../../../../generated';
+import type { ActionDto, BlobCompetitorDto, EventDto } from '../../../../generated';
 import { ActionsApi, CompetitionApi, EventRecordsApi } from '../../../../generated';
 import type { Dispatch, SetStateAction } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import type { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../../default-config';
@@ -19,7 +19,7 @@ interface SnackbarState {
 }
 
 interface EliminationScoringEventFrameProps {
-  event: EventDtoInput;
+  event: EventDto;
   setIsEventFinished: Dispatch<SetStateAction<boolean>>;
   isEventFinished: boolean;
 }
@@ -73,10 +73,10 @@ export const EliminationScoringEventFrame = ({
   const { mutate: createAction } = useMutation<
     { name: string; score: number } | undefined,
     Error,
-    { contenders: BlobCompetitorDtoInput[] }
+    { contenders: BlobCompetitorDto[] }
   >({
     mutationFn: ({ contenders }) =>
-      actionApi.eliminationActionsCreateEliminationPost({ eventId: event.id, blobCompetitorDtoInput: contenders }),
+      actionApi.eliminationActionsCreateEliminationPost({ eventId: event.id, blobCompetitorDto: contenders }),
     onSuccess: (data) => {
       if (data) {
         setSnackbarState({
