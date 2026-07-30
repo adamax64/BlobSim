@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useIsMobile } from '../../../hooks/useIsMobile';
+import { useNews } from '../../../context/NewsContext';
 
 interface ProgressButtonProps {
   isStart: boolean;
@@ -29,6 +30,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { refreshNews } = useNews();
 
   // Add key listener for spacebar to trigger progressEvent
   useEffect(() => {
@@ -42,13 +44,14 @@ export const ProgressButton: React.FC<ProgressButtonProps> = ({
         } else if (isEnd && !isEventFinished) {
           onClickEnd();
         } else if (isEventFinished) {
+          refreshNews();
           navigate({ to: '/' });
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isStart, isEnd, isEventFinished, onClickStart, onClickNext, onClickEnd]);
+  }, [isStart, isEnd, isEventFinished, onClickStart, onClickNext, onClickEnd, refreshNews, navigate, disabled]);
 
   return (
     <>
