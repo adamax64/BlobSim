@@ -11,17 +11,51 @@ from domain.utils.element_utils import (
 
 
 class TestElementUtils(unittest.TestCase):
-    def test_no_element_gives_no_bonus(self):
+    def test_no_element_gives_no_bonus_in_neutral_weather(self):
         strength_mult, speed_mult = compute_element_skill_multipliers(
-            ElementDto.NONE, WeatherTypeDto.HEAT, 0.5, SeasonTemperatureDto.WARM
+            ElementDto.NONE, WeatherTypeDto.CLOUDY, 0.5, SeasonTemperatureDto.WARM
         )
         self.assertEqual((strength_mult, speed_mult), (1.0, 1.0))
 
-    def test_none_element_arg_gives_no_bonus(self):
+    def test_no_element_gives_no_bonus_with_no_weather(self):
         strength_mult, speed_mult = compute_element_skill_multipliers(
-            None, WeatherTypeDto.HEAT, 0.5, SeasonTemperatureDto.WARM
+            ElementDto.NONE, None, 0.5, SeasonTemperatureDto.WARM
         )
         self.assertEqual((strength_mult, speed_mult), (1.0, 1.0))
+
+    def test_none_element_arg_gives_no_bonus_in_neutral_weather(self):
+        strength_mult, speed_mult = compute_element_skill_multipliers(
+            None, WeatherTypeDto.CLOUDY, 0.5, SeasonTemperatureDto.WARM
+        )
+        self.assertEqual((strength_mult, speed_mult), (1.0, 1.0))
+
+    def test_no_element_rain_penalizes_speed_only(self):
+        strength_mult, speed_mult = compute_element_skill_multipliers(
+            ElementDto.NONE, WeatherTypeDto.RAIN, 0.5, SeasonTemperatureDto.WARM
+        )
+        self.assertAlmostEqual(strength_mult, 1.0)
+        self.assertAlmostEqual(speed_mult, 0.99)
+
+    def test_no_element_heavy_rain_penalizes_speed_only(self):
+        strength_mult, speed_mult = compute_element_skill_multipliers(
+            ElementDto.NONE, WeatherTypeDto.HEAVY_RAIN, 0.5, SeasonTemperatureDto.WARM
+        )
+        self.assertAlmostEqual(strength_mult, 1.0)
+        self.assertAlmostEqual(speed_mult, 0.98)
+
+    def test_no_element_heat_penalizes_speed_and_strength(self):
+        strength_mult, speed_mult = compute_element_skill_multipliers(
+            ElementDto.NONE, WeatherTypeDto.HEAT, 0.5, SeasonTemperatureDto.WARM
+        )
+        self.assertAlmostEqual(strength_mult, 0.98)
+        self.assertAlmostEqual(speed_mult, 0.98)
+
+    def test_no_element_freezy_penalizes_speed_and_strength(self):
+        strength_mult, speed_mult = compute_element_skill_multipliers(
+            ElementDto.NONE, WeatherTypeDto.FREEZY, 0.5, SeasonTemperatureDto.WARM
+        )
+        self.assertAlmostEqual(strength_mult, 0.98)
+        self.assertAlmostEqual(speed_mult, 0.98)
 
     def test_fire_applies_weather_table_and_non_cold_season_bonus(self):
         strength_mult, speed_mult = compute_element_skill_multipliers(

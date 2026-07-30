@@ -67,6 +67,18 @@ ELEMENT_WEATHER_MODIFIERS: Dict[ElementDto, Dict[WeatherTypeDto, float]] = {
 WIND_BUFF_MIN = -0.05
 WIND_BUFF_MAX = 0.05
 
+# Weather-dependent penalties applied to blobs that have no element at all.
+NO_ELEMENT_WEATHER_SPEED_PENALTIES: Dict[WeatherTypeDto, float] = {
+    WeatherTypeDto.RAIN: -0.01,
+    WeatherTypeDto.HEAVY_RAIN: -0.02,
+    WeatherTypeDto.HEAT: -0.02,
+    WeatherTypeDto.FREEZY: -0.02,
+}
+NO_ELEMENT_WEATHER_STRENGTH_PENALTIES: Dict[WeatherTypeDto, float] = {
+    WeatherTypeDto.HEAT: -0.02,
+    WeatherTypeDto.FREEZY: -0.02,
+}
+
 
 def compute_wind_buff(wind: float) -> float:
     """Linearly map a wind value (0..1) to the Wind element's -5%..+5% buff range."""
@@ -81,11 +93,16 @@ def compute_element_skill_multipliers(
 ) -> Tuple[float, float]:
     """
     Compute (strength_multiplier, speed_multiplier) for a blob's element given the current
-    weather/wind/season temperature. Returns (1.0, 1.0) if the blob has no element.
-    Missing weather/season temperature are treated as neutral (no bonus/penalty from them).
+    weather/wind/season temperature. If the blob has no element, weather can still apply
+    small penalties (rain/heavy rain/heat/freeze). Missing weather/season temperature are
+    treated as neutral (no bonus/penalty from them).
     """
     if element is None or element == ElementDto.NONE:
-        return 1.0, 1.0
+        if weather is None:
+            return 1.0, 1.0
+        strength_bonus = NO_ELEMENT_WEATHER_STRENGTH_PENALTIES.get(weather, 0.0)
+        speed_bonus = NO_ELEMENT_WEATHER_SPEED_PENALTIES.get(weather, 0.0)
+        return 1.0 + strength_bonus, 1.0 + speed_bonus
 
     strength_bonus = 0.0
     speed_bonus = 0.0

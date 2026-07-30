@@ -794,3 +794,8 @@ Technical changes:
 - Blob visuals now reflect their element: eye color changes (Fire: light orange, Wind: light cyan, Water: faded dark blue, Ice: light blue), and Beast blobs additionally grow cat ears
 - Blob details dialog shows an element icon with a tooltip naming the blob's element
 
+### 5.6.1
+
+- Blobs with no element now suffer small weather-based penalties: rain reduces speed by 1%, heavy rain reduces speed by 2%, and heat or freezing weather reduces both speed and strength by 2%
+- Fixed news refresh issue when user navigates back to dashboard after event concludes
+
