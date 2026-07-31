@@ -30,6 +30,7 @@ type SprintRaceUIProps = {
   loadingNextTick: boolean;
   eventType: EventType;
   isEnd: boolean;
+  eventId?: number;
 };
 
 export const SprintRaceUI = ({
@@ -39,6 +40,7 @@ export const SprintRaceUI = ({
   loadingNextTick,
   eventType,
   isEnd,
+  eventId,
 }: SprintRaceUIProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -155,6 +157,7 @@ export const SprintRaceUI = ({
                     color={record.blob.color}
                     renderFullName={!isMobile}
                     detailsDialogVariant="event"
+                    eventId={eventId}
                   />
                 </NarrowCell>
                 {isMobile ? (

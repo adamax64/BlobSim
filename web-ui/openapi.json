@@ -168,6 +168,7 @@
           "blobs"
         ],
         "summary": "Get Blob",
+        "description": "Fetch a blob by id.\n\nIf `event_id` is provided, the blob's standings position reflects the state as of that\nevent instead of the current standings (used by the replay event views).",
         "operationId": "get_blob_blobs__blob_id_get",
         "parameters": [
           {
@@ -177,6 +178,22 @@
             "schema": {
               "type": "integer",
               "title": "Blob Id"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Event Id"
             }
           }
         ],
@@ -647,7 +664,7 @@
           "Standings"
         ],
         "summary": "Get Standings Snippet",
-        "description": "Fetch the standings of the referenced blob and the competitors before and after them.",
+        "description": "Fetch the standings of the referenced blob and the competitors before and after them.\n\nIf `event_id` is provided, the snippet reflects the state as of that event instead of the\ncurrent standings (used by the replay event views).",
         "operationId": "get_standings_snippet_standings_snippet__blob_id__get",
         "parameters": [
           {
@@ -657,6 +674,22 @@
             "schema": {
               "type": "integer",
               "title": "Blob Id"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Event Id"
             }
           }
         ],

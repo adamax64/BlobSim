@@ -14,12 +14,18 @@ type IconNameWithDetailsModalProps = IconNameProps &
     | { blob?: BlobStatsDto; blobId?: never }
   ) & {
     detailsDialogVariant?: 'default' | 'event';
+    /**
+     * When viewing a replay, the id of the event being replayed, so the 'event' details dialog
+     * returns standings as they stood at the time of that event instead of the current standings.
+     */
+    eventId?: number;
   };
 
 export const IconNameWithDetailsModal = ({
   blobId,
   blob,
   detailsDialogVariant = 'default',
+  eventId,
   ...props
 }: IconNameWithDetailsModalProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -40,7 +46,13 @@ export const IconNameWithDetailsModal = ({
       {isDialogOpen && (
         <Box position="static">
           {detailsDialogVariant === 'event' ? (
-            <BlobEventDetailsDialog open={isDialogOpen} onClose={handleCloseDialog} blobId={blobId} cachedBlob={blob} />
+            <BlobEventDetailsDialog
+              open={isDialogOpen}
+              onClose={handleCloseDialog}
+              blobId={blobId}
+              cachedBlob={blob}
+              eventId={eventId}
+            />
           ) : (
             <BlobDetailsDialog open={isDialogOpen} onClose={handleCloseDialog} blobId={blobId} cachedBlob={blob} />
           )}

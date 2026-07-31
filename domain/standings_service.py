@@ -6,6 +6,7 @@ from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.persistence.blob_reposiotry import get_blob_by_id
 from data.persistence.calendar_repository import get_calendar
+from data.persistence.event_repository import get_event_by_id
 from data.persistence.result_repository import get_results_of_league_by_season
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.standings_dtos.standings_dto import StandingsDTO
@@ -203,21 +204,28 @@ def get_grandmaster_standings(
 
 @transactional
 def get_standings_snippet_by_blob(
-    blob_id: int, session: Session
+    blob_id: int, session: Session, event_id: int | None = None
 ) -> list[StandingsSnippetDto]:
     """Fetch the standings of the referenced blob and the competitors before and after them.
 
     Returns a list of three StandingsSnippetDto objects, ordered by position.
     If the blob is in first or last place, the list will contain only two objects.
+
+    If `event_id` is given, the standings reflect the state as of that event (i.e. truncated to
+    the event's round, in the event's season) instead of the current standings.
     """
 
-    season = get_season(get_sim_time())
+    event = get_event_by_id(session, event_id) if event_id is not None else None
+    season = event.season if event is not None else get_season(get_sim_time())
+    through_round = event.round if event is not None else None
 
     blob = get_blob_by_id(session, blob_id)
     if not blob or not blob.league:
         return []
 
-    standings = get_standings(blob.league.id, season, season, session)
+    league_id = event.league_id if event is not None else blob.league.id
+
+    standings = get_standings(league_id, season, season, session, through_round=through_round)
     snippet = []
     for i, standing in enumerate(standings):
         if standing.blob_id == blob_id:

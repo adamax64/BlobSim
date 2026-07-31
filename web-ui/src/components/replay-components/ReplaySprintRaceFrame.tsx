@@ -75,6 +75,7 @@ export const ReplaySprintRaceFrame: React.FC<ReplaySprintRaceFrameProps> = ({
           loadingNextTick={loadingNextTick}
           eventType={event.type}
           isEnd={tick >= maxTick}
+          eventId={event.id}
         />
       }
     />

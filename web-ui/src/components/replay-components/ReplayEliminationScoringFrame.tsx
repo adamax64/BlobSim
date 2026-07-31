@@ -70,6 +70,7 @@ export const ReplayEliminationScoringFrame: React.FC<ReplayEliminationScoringFra
           tick={tick}
           loadingNextTick={loadingNextTick}
           eventType={event.type}
+          eventId={event.id}
         />
       }
     />

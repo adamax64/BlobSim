@@ -23,6 +23,7 @@ type QuarteredEventUIProps = {
   currentBlobIndex: number;
   isPerforming: boolean;
   eventType: EventType;
+  eventId?: number;
 };
 
 export const QuarteredEventUI = ({
@@ -31,6 +32,7 @@ export const QuarteredEventUI = ({
   currentBlobIndex,
   isPerforming,
   eventType,
+  eventId,
 }: QuarteredEventUIProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -146,6 +148,7 @@ export const QuarteredEventUI = ({
                     color={record.blob.color}
                     renderFullName={!isMobile}
                     detailsDialogVariant="event"
+                    eventId={eventId}
                   />
                 </TableCell>
                 {shouldShowQuarter(1) && (

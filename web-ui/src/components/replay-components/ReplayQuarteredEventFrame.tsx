@@ -86,6 +86,7 @@ export const ReplayQuarteredEventFrame: React.FC<ReplayQuarteredEventFrameProps>
           eventType={event.type}
           currentBlobIndex={currentBlobIndex}
           isPerforming={loadingNextTick}
+          eventId={event.id}
         />
       }
     />

@@ -11,9 +11,10 @@ import SkeletonRows from '../../shared/SkeletonRows';
 interface EliminationEventTableProps {
   eventRecords: EventRecordDto[];
   isMobile?: boolean;
+  eventId?: number;
 }
 
-export const EliminationEventTable = ({ eventRecords, isMobile }: EliminationEventTableProps) => {
+export const EliminationEventTable = ({ eventRecords, isMobile, eventId }: EliminationEventTableProps) => {
   const { t } = useTranslation();
 
   const getRowClass = useCallback((isEliminated: boolean) => {
@@ -46,6 +47,7 @@ export const EliminationEventTable = ({ eventRecords, isMobile }: EliminationEve
                   color={record.blob.color}
                   renderFullName={!isMobile}
                   detailsDialogVariant="event"
+                  eventId={eventId}
                 />
               </TableCell>
               <TableCell>

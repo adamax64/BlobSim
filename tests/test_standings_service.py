@@ -6,7 +6,12 @@ from sqlalchemy.orm import Session
 from data.model.blob import Blob
 from data.model.event import Event
 from data.model.result import Result
-from domain.standings_service import get_standings, invalidate_standings_cache
+from domain.dtos.standings_dtos.standings_dto import StandingsDTO
+from domain.standings_service import (
+    get_standings,
+    get_standings_snippet_by_blob,
+    invalidate_standings_cache,
+)
 
 
 def _mock_result(blob, date, position, points):
@@ -95,6 +100,70 @@ class TestStandingsServiceThroughRound(unittest.TestCase):
 
         for standing in standings:
             self.assertEqual(len(standing.results), 2)
+
+
+class TestStandingsSnippetByBlobEventAware(unittest.TestCase):
+    def setUp(self):
+        invalidate_standings_cache()
+
+    def tearDown(self):
+        invalidate_standings_cache()
+
+    @patch("domain.standings_service.get_standings")
+    @patch("domain.standings_service.get_event_by_id")
+    @patch("domain.standings_service.get_blob_by_id")
+    def test_with_event_id_uses_event_season_and_round(
+        self, mock_get_blob, mock_get_event, mock_get_standings
+    ):
+        blob = MagicMock()
+        blob.league = MagicMock(id=9)
+        mock_get_blob.return_value = blob
+
+        event = MagicMock()
+        event.season = 4
+        event.round = 6
+        mock_get_event.return_value = event
+
+        standing_above = StandingsDTO(
+            blob_id=10, name="A", color="red", is_contract_ending=False, is_rookie=False,
+            results=[], num_of_rounds=8, total_points=5,
+        )
+        standing_self = StandingsDTO(
+            blob_id=1, name="Me", color="blue", is_contract_ending=False, is_rookie=False,
+            results=[], num_of_rounds=8, total_points=3,
+        )
+        standing_below = StandingsDTO(
+            blob_id=11, name="B", color="green", is_contract_ending=False, is_rookie=False,
+            results=[], num_of_rounds=8, total_points=1,
+        )
+        mock_get_standings.return_value = [standing_above, standing_self, standing_below]
+
+        session = MagicMock(spec=Session)
+        result = get_standings_snippet_by_blob(1, session, event_id=99)
+
+        mock_get_event.assert_called_once_with(session, 99)
+        mock_get_standings.assert_called_once_with(9, 4, 4, session, through_round=6)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result[1].blob_id, 1)
+
+    @patch("domain.standings_service.get_sim_time", return_value=123)
+    @patch("domain.standings_service.get_season", return_value=8)
+    @patch("domain.standings_service.get_standings")
+    @patch("domain.standings_service.get_event_by_id")
+    @patch("domain.standings_service.get_blob_by_id")
+    def test_without_event_id_uses_current_season_and_no_truncation(
+        self, mock_get_blob, mock_get_event, mock_get_standings, _mock_get_season, _mock_get_sim_time
+    ):
+        blob = MagicMock()
+        blob.league = MagicMock(id=9)
+        mock_get_blob.return_value = blob
+        mock_get_standings.return_value = []
+
+        session = MagicMock(spec=Session)
+        get_standings_snippet_by_blob(1, session)
+
+        mock_get_event.assert_not_called()
+        mock_get_standings.assert_called_once_with(9, 8, 8, session, through_round=None)
 
 
 if __name__ == "__main__":

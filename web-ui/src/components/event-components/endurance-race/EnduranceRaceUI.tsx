@@ -27,6 +27,7 @@ type EnduranceRaceUIProps = {
   loadingNextTick: boolean;
   eventType: EventType;
   raceDuration: number;
+  eventId?: number;
 };
 
 export const EnduranceRaceUI = ({
@@ -35,6 +36,7 @@ export const EnduranceRaceUI = ({
   loadingNextTick,
   eventType,
   raceDuration,
+  eventId,
 }: EnduranceRaceUIProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -117,6 +119,7 @@ export const EnduranceRaceUI = ({
                     color={record.blob.color}
                     renderFullName={!isMobile}
                     detailsDialogVariant="event"
+                    eventId={eventId}
                   />
                 </TableCell>
                 {isMobile ? (

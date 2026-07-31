@@ -7,6 +7,7 @@ from data.persistence.blob_reposiotry import (
     get_blob_by_id,
     get_by_activities,
 )
+from data.persistence.event_repository import get_event_by_id
 from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 from domain.enums.activity_type import ActivityType
 from domain.exceptions.no_grandmaster_found_exception import NoGrandmasterFoundException
@@ -55,8 +56,14 @@ def fetch_all_blobs(
 
 
 @transactional
-def fetch_blob_by_id(blob_id: int, session: Session) -> BlobStatsDto:
-    """Fetch a blob by its ID and return it as a BlobStatsDto."""
+def fetch_blob_by_id(
+    blob_id: int, session: Session, event_id: int | None = None
+) -> BlobStatsDto:
+    """Fetch a blob by its ID and return it as a BlobStatsDto.
+
+    If `event_id` is given, the blob's standings position reflects the state as of that event
+    (i.e. truncated to the event's round, in the event's season) instead of the current standings.
+    """
 
     current_season = get_season(get_sim_time(session))
     blob = get_blob_by_id(session, blob_id)
@@ -65,15 +72,22 @@ def fetch_blob_by_id(blob_id: int, session: Session) -> BlobStatsDto:
     if not blob:
         raise ValueError(f"Blob with ID {blob_id} not found")
 
+    event = get_event_by_id(session, event_id) if event_id is not None else None
+    standings_season = event.season if event is not None else current_season
+    through_round = event.round if event is not None else None
+
+    league_id = event.league_id if event is not None else blob.league.id if blob.league else None
+
     # Fetch standings position
     standings_position = None
     last_season_standings_position = None
     if blob.league:
         standings = get_standings(
             session=session,
-            league_id=blob.league.id,
-            season=current_season,
-            current_season=current_season,
+            league_id=league_id,
+            season=standings_season,
+            current_season=standings_season,
+            through_round=through_round,
         )
         for idx, standing in enumerate(standings):
             if standing.blob_id == blob_id:
@@ -83,14 +97,14 @@ def fetch_blob_by_id(blob_id: int, session: Session) -> BlobStatsDto:
         if standings_position is None:
             last_season_standings_position = get_last_season_standings_position(
                 session=session,
-                league_id=blob.league.id,
+                league_id=league_id,
                 blob_id=blob_id,
-                season=current_season,
+                season=standings_season,
             )
 
     return map_to_blob_state_dto(
         blob,
-        current_season,
+        standings_season,
         grandmaster_id,
         standings_position=standings_position,
         last_season_standings_position=last_season_standings_position,

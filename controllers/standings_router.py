@@ -49,12 +49,15 @@ def get_grandmaster_standings_by_eon(
 
 
 @router.get("/snippet/{blob_id}")
-def get_standings_snippet(blob_id: int) -> list[StandingsSnippetDto]:
+def get_standings_snippet(blob_id: int, event_id: int | None = None) -> list[StandingsSnippetDto]:
     """
     Fetch the standings of the referenced blob and the competitors before and after them.
+
+    If `event_id` is provided, the snippet reflects the state as of that event instead of the
+    current standings (used by the replay event views).
     """
     try:
-        return get_standings_snippet_by_blob(blob_id)
+        return get_standings_snippet_by_blob(blob_id, event_id=event_id)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

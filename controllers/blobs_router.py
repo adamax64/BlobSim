@@ -38,9 +38,15 @@ def get_all(
 
 
 @router.get("/:blob_id", response_model=BlobStatsDto)
-def get_blob(blob_id: int) -> BlobStatsDto:
+def get_blob(blob_id: int, event_id: int | None = None) -> BlobStatsDto:
+    """
+    Fetch a blob by id.
+
+    If `event_id` is provided, the blob's standings position reflects the state as of that
+    event instead of the current standings (used by the replay event views).
+    """
     try:
-        return fetch_blob_by_id(blob_id)
+        return fetch_blob_by_id(blob_id, event_id=event_id)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

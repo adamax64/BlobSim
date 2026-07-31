@@ -74,6 +74,7 @@ export const ReplayEnduranceRaceFrame: React.FC<ReplayEnduranceRaceFrameProps> =
           raceDuration={raceDuration}
           loadingNextTick={loadingNextTick}
           eventType={event.type}
+          eventId={event.id}
         />
       }
     />
