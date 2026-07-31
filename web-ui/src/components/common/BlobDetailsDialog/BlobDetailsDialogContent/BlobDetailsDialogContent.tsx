@@ -197,12 +197,12 @@ const BlobDetailsDialogContent = ({
                 </Grid>
               )}
             </Grid>
-            {standingsData && standingsData.length > 0 && (
+            {!blob.lastSeasonStandingsPosition && standingsData && standingsData.length > 0 && (
               <Grid size={6}>
                 <StandingSnippetWidget standingsData={standingsData} />
               </Grid>
             )}
-            {standingsData && standingsData.length === 0 && !!blob.lastSeasonStandingsPosition && (
+            {!!blob.lastSeasonStandingsPosition && (
               <Grid size={6}>
                 <Typography variant="body1">
                   <strong>{t('blob_details.last_season_standings')}:</strong> {blob.lastSeasonStandingsPosition}

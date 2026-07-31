@@ -806,3 +806,7 @@ Technical changes:
 - Blobs with no element now suffer small weather-based penalties: rain reduces speed by 1%, heavy rain reduces speed by 2%, and heat or freezing weather reduces both speed and strength by 2%
 - Fixed news refresh issue when user navigates back to dashboard after event concludes
 - Blob detail dialogs opened from replay event views now show the standings/position as of that event's round instead of the current standings (via a new optional `event_id` query parameter on `/blobs/{blob_id}` and `/standings/snippet/{blob_id}`)
+
+### 5.7.1
+
+- Fixed display of standing snippets at start of season on replay and current standings on event pages

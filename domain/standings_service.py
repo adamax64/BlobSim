@@ -216,11 +216,11 @@ def get_standings_snippet_by_blob(
     """
 
     event = get_event_by_id(session, event_id) if event_id is not None else None
-    season = event.season if event is not None else get_season(get_sim_time())
-    through_round = event.round if event is not None else None
+    season = event.season if event is not None else get_season(get_sim_time(session))
+    through_round = event.round - 1 if event is not None else None
 
     blob = get_blob_by_id(session, blob_id)
-    if not blob or not blob.league:
+    if not blob or not blob.league or (through_round is not None and through_round == 0):
         return []
 
     league_id = event.league_id if event is not None else blob.league.id

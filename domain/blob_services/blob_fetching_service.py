@@ -74,7 +74,7 @@ def fetch_blob_by_id(
 
     event = get_event_by_id(session, event_id) if event_id is not None else None
     standings_season = event.season if event is not None else current_season
-    through_round = event.round if event is not None else None
+    through_round = event.round - 1 if event is not None else None
 
     league_id = event.league_id if event is not None else blob.league.id if blob.league else None
 
@@ -94,7 +94,7 @@ def fetch_blob_by_id(
                 standings_position = idx + 1
                 break
 
-        if standings_position is None:
+        if standings_position is None or (through_round is not None and through_round == 0):
             last_season_standings_position = get_last_season_standings_position(
                 session=session,
                 league_id=league_id,
