@@ -13,7 +13,6 @@ type EliminationScoringUIProps = {
   eventRecords: EventRecordDto[];
   tick: number;
   loadingNextTick: boolean;
-  isEventFinished: boolean;
   eventType: EventType;
 };
 
@@ -21,7 +20,6 @@ export const EliminationScoringUI = ({
   eventRecords,
   tick,
   loadingNextTick,
-  isEventFinished,
   eventType,
 }: EliminationScoringUIProps) => {
   const { t } = useTranslation();
@@ -43,15 +41,11 @@ export const EliminationScoringUI = ({
   return (
     <EventCardFrame eventType={eventType} tickDisplay={tickDisplay} showLoader={loadingNextTick}>
       {isMobile ? (
-        <EliminationEventContentTabs
-          eventRecords={eventRecords}
-          isEventFinished={isEventFinished}
-          isMobile={isMobile}
-        />
+        <EliminationEventContentTabs eventRecords={eventRecords} isMobile={isMobile} />
       ) : (
         <Box display="flex" flexDirection="row">
           <Box>
-            <EliminationEventTable eventRecords={eventRecords} isEventFinished={isEventFinished} isMobile={isMobile} />
+            <EliminationEventTable eventRecords={eventRecords} isMobile={isMobile} />
           </Box>
           <Box flexGrow={1}>
             <EventBarChart eventRecords={eventRecords} isMobile={isMobile} />

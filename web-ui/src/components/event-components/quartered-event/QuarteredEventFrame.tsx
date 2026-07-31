@@ -16,7 +16,7 @@ import { SnackbarState } from '../snackbar-state';
 import { QuarteredEventUI } from './QuarteredEventUI';
 import { useReplayState } from '../../../hooks/useReplayState';
 import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
-import { EventControls } from '../shared/EventControls';
+import { EventStagePipeline } from '../shared/EventStagePipeline';
 
 interface QuarteredEventFrameProps {
   event: EventDto;
@@ -32,7 +32,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(event.actions.reduce((sum, action) => sum + action.scores.length, 0));
-  const { replayTick, setReplayTick } = useReplayState(event.id);
+  const { replayTick, setReplayTick, stageIndex, setStageIndex } = useReplayState(event.id);
   const [isPerforming, setIsPerforming] = useState(false);
   const [quarter, setQuarter] = useState(0);
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
@@ -155,25 +155,31 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
 
   return (
     <>
-      <EventControls
-        tick={tick}
-        replayTick={replayTick}
-        setReplayTick={setReplayTick}
-        isStart={tick === 0}
-        isEnd={quarter > 4}
+      <EventStagePipeline
+        event={event}
         isEventFinished={isEventFinished}
-        progressButtonDisabled={isPerforming || replayTick < tick}
-        onClickStart={progressEvent}
-        onClickNext={progressEvent}
-        onClickEnd={finishEvent}
-      />
-      <QuarteredEventUI
-        eventRecords={eventRecords ?? eventRecordsCache}
-        quarter={quarter}
-        isPerforming={isPerforming}
-        isEventFinished={isEventFinished}
-        eventType={event.type}
-        currentBlobIndex={currentBlobIndex}
+        stageIndex={stageIndex}
+        setStageIndex={setStageIndex}
+        eventControls={{
+          tick,
+          replayTick,
+          setReplayTick,
+          isStart: tick === 0,
+          isEnd: quarter > 4,
+          progressButtonDisabled: isPerforming || replayTick < tick,
+          onClickStart: progressEvent,
+          onClickNext: progressEvent,
+          onClickEnd: finishEvent,
+        }}
+        competitionContent={
+          <QuarteredEventUI
+            eventRecords={eventRecords ?? eventRecordsCache}
+            quarter={quarter}
+            isPerforming={isPerforming}
+            eventType={event.type}
+            currentBlobIndex={currentBlobIndex}
+          />
+        }
       />
       <Snackbar
         open={snackbarOpen}

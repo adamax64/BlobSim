@@ -28,7 +28,6 @@ type SprintRaceUIProps = {
   tick: number;
   raceDuration: number;
   loadingNextTick: boolean;
-  isEventFinished: boolean;
   eventType: EventType;
   isEnd: boolean;
 };
@@ -38,7 +37,6 @@ export const SprintRaceUI = ({
   tick,
   raceDuration,
   loadingNextTick,
-  isEventFinished,
   eventType,
   isEnd,
 }: SprintRaceUIProps) => {
@@ -86,25 +84,14 @@ export const SprintRaceUI = ({
   );
 
   const getRowClass = (previousPosition: number, currentPosition: number, isContenderFinished: boolean): string => {
-    if (isEventFinished) {
-      switch (currentPosition) {
-        case 1:
-          return 'row-gold';
-        case 2:
-          return 'row-silver';
-        case 3:
-          return 'row-bronze';
-      }
-    } else {
-      if (isContenderFinished) {
-        return 'cell-finished';
-      }
-      if (previousPosition > currentPosition) {
-        return 'cell-overtake';
-      }
-      if (currentPosition > previousPosition && tick > 0) {
-        return 'cell-fell-behind';
-      }
+    if (isContenderFinished) {
+      return 'cell-finished';
+    }
+    if (previousPosition > currentPosition) {
+      return 'cell-overtake';
+    }
+    if (currentPosition > previousPosition && tick > 0) {
+      return 'cell-fell-behind';
     }
     return '';
   };

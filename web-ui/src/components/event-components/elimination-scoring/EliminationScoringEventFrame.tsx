@@ -10,7 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import { EliminationScoringUI } from './EliminationScoringUI';
 import { useReplayState } from '../../../hooks/useReplayState';
 import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
-import { EventControls } from '../shared/EventControls';
+import { EventStagePipeline } from '../shared/EventStagePipeline';
 
 interface SnackbarState {
   message: string | null;
@@ -39,7 +39,7 @@ export const EliminationScoringEventFrame = ({
   });
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
-  const { replayTick, setReplayTick } = useReplayState(event.id);
+  const { replayTick, setReplayTick, stageIndex, setStageIndex } = useReplayState(event.id);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
 
@@ -138,24 +138,30 @@ export const EliminationScoringEventFrame = ({
 
   return (
     <>
-      <EventControls
-        tick={tick}
-        replayTick={replayTick}
-        setReplayTick={setReplayTick}
-        isStart={tick === 0}
-        isEnd={tick >= event.actions.length - 1}
+      <EventStagePipeline
+        event={event}
         isEventFinished={isEventFinished}
-        progressButtonDisabled={loadingNextTick || replayTick < tick}
-        onClickStart={progressEvent}
-        onClickNext={progressEvent}
-        onClickEnd={finishEvent}
-      />
-      <EliminationScoringUI
-        eventRecords={eventRecords ?? eventRecordsCache}
-        tick={replayTick}
-        loadingNextTick={loadingNextTick}
-        isEventFinished={isEventFinished}
-        eventType={event.type}
+        stageIndex={stageIndex}
+        setStageIndex={setStageIndex}
+        eventControls={{
+          tick,
+          replayTick,
+          setReplayTick,
+          isStart: tick === 0,
+          isEnd: tick >= event.actions.length - 1,
+          progressButtonDisabled: loadingNextTick || replayTick < tick,
+          onClickStart: progressEvent,
+          onClickNext: progressEvent,
+          onClickEnd: finishEvent,
+        }}
+        competitionContent={
+          <EliminationScoringUI
+            eventRecords={eventRecords ?? eventRecordsCache}
+            tick={replayTick}
+            loadingNextTick={loadingNextTick}
+            eventType={event.type}
+          />
+        }
       />
       <Snackbar
         open={snackbarOpen}

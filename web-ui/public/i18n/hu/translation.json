@@ -212,6 +212,23 @@
   "event_controls": {
     "shortcuts": "Gyorsbillentyűk:\nBal nyíl — Előző tick\nJobb nyíl — Következő tick"
   },
+  "event_stage_pipeline": {
+    "continue": "Tovább",
+    "back": "Vissza",
+
+    "introduction": {
+      "season_round": "{{season}}. szezon, {{round}}. forduló"
+    },
+    "pre_standings": {
+      "title": "Állás a verseny előtt"
+    },
+    "post_standings": {
+      "title": "Állás a verseny után"
+    },
+    "results": {
+      "title": "Eredmények"
+    }
+  },
   "endurance_race": {
     "tick": "Tick",
     "name": "Név",

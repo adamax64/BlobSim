@@ -25,7 +25,6 @@ type EnduranceRaceUIProps = {
   eventRecords: EventRecordDto[];
   tick: number;
   loadingNextTick: boolean;
-  isEventFinished: boolean;
   eventType: EventType;
   raceDuration: number;
 };
@@ -34,7 +33,6 @@ export const EnduranceRaceUI = ({
   eventRecords,
   tick,
   loadingNextTick,
-  isEventFinished,
   eventType,
   raceDuration,
 }: EnduranceRaceUIProps) => {
@@ -66,22 +64,11 @@ export const EnduranceRaceUI = ({
   }, []);
 
   const getRowClass = (previousPosition: number, currentPosition: number): string => {
-    if (isEventFinished) {
-      switch (currentPosition) {
-        case 1:
-          return 'row-gold';
-        case 2:
-          return 'row-silver';
-        case 3:
-          return 'row-bronze';
-      }
-    } else {
-      if (previousPosition > currentPosition) {
-        return 'cell-overtake';
-      }
-      if (currentPosition > previousPosition && tick > 0) {
-        return 'cell-fell-behind';
-      }
+    if (previousPosition > currentPosition) {
+      return 'cell-overtake';
+    }
+    if (currentPosition > previousPosition && tick > 0) {
+      return 'cell-fell-behind';
     }
     return '';
   };

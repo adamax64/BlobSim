@@ -17,14 +17,17 @@ router = APIRouter(prefix="/standings", tags=["Standings"])
 
 @router.get("/championship/{league_id}/{season}")
 def get_standings_by_league_and_season(
-    league_id: int, season: int
+    league_id: int, season: int, round: int | None = None
 ) -> list[StandingsDTO]:
     """
     Fetch standings by league id and season.
+
+    If `round` is provided, the standings are truncated to each blob's results through
+    that round, to reconstruct the standings as they stood at that point in the season.
     """
     try:
         current_season = get_season(get_sim_time())
-        return get_standings(league_id, season, current_season)
+        return get_standings(league_id, season, current_season, through_round=round)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

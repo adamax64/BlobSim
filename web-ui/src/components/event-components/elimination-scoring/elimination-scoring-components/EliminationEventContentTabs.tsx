@@ -7,15 +7,10 @@ import { useState } from 'react';
 
 interface EliminationEventContentTabsProps {
   eventRecords: EventRecordDto[];
-  isEventFinished: boolean;
   isMobile: boolean;
 }
 
-export const EliminationEventContentTabs = ({
-  eventRecords,
-  isEventFinished,
-  isMobile,
-}: EliminationEventContentTabsProps) => {
+export const EliminationEventContentTabs = ({ eventRecords, isMobile }: EliminationEventContentTabsProps) => {
   const { t } = useTranslation();
 
   const [index, setIndex] = useState(0);
@@ -48,7 +43,7 @@ export const EliminationEventContentTabs = ({
           paddingBottom: 2,
         }}
       >
-        <EliminationEventTable eventRecords={eventRecords} isEventFinished={isEventFinished} isMobile={isMobile} />
+        <EliminationEventTable eventRecords={eventRecords} isMobile={isMobile} />
       </Box>
       <Box
         role="tabpanel"

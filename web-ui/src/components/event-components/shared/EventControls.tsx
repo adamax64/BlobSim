@@ -21,6 +21,15 @@ interface EventControlsProps {
   onClickStart: () => void;
   onClickNext: () => void;
   onClickEnd: () => void;
+
+  // Stage navigation: lets the step buttons also walk between the introduction, standings and
+  // results stages once the tick range within the competition stage is exhausted.
+  showProgressButton: boolean;
+  isCompetitionStage: boolean;
+  canStepStageBack: boolean;
+  canStepStageForward: boolean;
+  onStepStageBack: () => void;
+  onStepStageForward: () => void;
 }
 
 export const EventControls: React.FC<EventControlsProps> = ({
@@ -34,20 +43,33 @@ export const EventControls: React.FC<EventControlsProps> = ({
   onClickStart,
   onClickNext,
   onClickEnd,
+  showProgressButton,
+  isCompetitionStage,
+  canStepStageBack,
+  canStepStageForward,
+  onStepStageBack,
+  onStepStageForward,
 }) => {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
+  const canStepBack = (isCompetitionStage && replayTick > 0) || canStepStageBack;
+  const canStepForward = (isCompetitionStage && replayTick < tick) || canStepStageForward;
+
   const handlePreviousTick = () => {
-    if (replayTick > 0) {
+    if (isCompetitionStage && replayTick > 0) {
       setReplayTick((prev) => prev - 1);
+    } else if (canStepStageBack) {
+      onStepStageBack();
     }
   };
 
   const handleNextTick = () => {
-    if (replayTick < tick) {
+    if (isCompetitionStage && replayTick < tick) {
       setReplayTick((prev) => prev + 1);
+    } else if (canStepStageForward) {
+      onStepStageForward();
     }
   };
 
@@ -99,9 +121,9 @@ export const EventControls: React.FC<EventControlsProps> = ({
         zIndex: 1000,
       }}
     >
-      <StepBackButton onClick={handlePreviousTick} disabled={replayTick <= 0} />
-      <StepForwardButton onClick={handleNextTick} disabled={replayTick >= tick} />
-      {isAuthenticated && (
+      <StepBackButton onClick={handlePreviousTick} disabled={!canStepBack} />
+      <StepForwardButton onClick={handleNextTick} disabled={!canStepForward} />
+      {showProgressButton && isAuthenticated && (
         <ProgressButton
           isStart={isStart}
           isEnd={isEnd}

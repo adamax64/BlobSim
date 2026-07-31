@@ -794,8 +794,14 @@ Technical changes:
 - Blob visuals now reflect their element: eye color changes (Fire: light orange, Wind: light cyan, Water: faded dark blue, Ice: light blue), and Beast blobs additionally grow cat ears
 - Blob details dialog shows an element icon with a tooltip naming the blob's element
 
-### 5.6.1
+### 5.7 - Event UI update
 
+- Reworked the event UI (live and replay) into a shared 5-stage pipeline: Introduction, Standings before the round, Competition, Results, Standings after the round; every stage transition slides in from the right / out to the left
+- The `/standings/championship/{league_id}/{season}` endpoint now accepts an optional `round` query parameter to return standings truncated as of that round
+- The old gold/silver/bronze row-coloring shown on event tables once an event finished has been replaced by a dedicated Results stage reusing the existing results table
+- On live events, the step back/forward buttons now also walk between the introduction, standings and results stages once the tick range is exhausted, as if those stages were extra ticks
+- Replay tick controls are now rendered by the same stage pipeline as live events (instead of separately by the replay page), and their step back/forward buttons get the same stage-walking behavior
+- The current pipeline stage (introduction, standings, competition, results) is now persisted in local storage together with the replay tick (one combined entry per event), instead of a separate storage entry, so reopening an event resumes on the stage last viewed
+- The current pipeline stage (introduction, standings, competition, results) is now persisted per event in local storage, the same way the replay tick already was, so reopening an event resumes on the stage last viewed
 - Blobs with no element now suffer small weather-based penalties: rain reduces speed by 1%, heavy rain reduces speed by 2%, and heat or freezing weather reduces both speed and strength by 2%
 - Fixed news refresh issue when user navigates back to dashboard after event concludes
-

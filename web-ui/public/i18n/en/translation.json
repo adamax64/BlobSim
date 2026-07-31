@@ -212,6 +212,22 @@
   "event_controls": {
     "shortcuts": "Keyboard shortcuts:\nLeft arrow — Previous tick\nRight arrow — Next tick"
   },
+  "event_stage_pipeline": {
+    "continue": "Continue",
+    "back": "Back",
+    "introduction": {
+      "season_round": "Season {{season}}, Round {{round}}"
+    },
+    "pre_standings": {
+      "title": "Standings before this round"
+    },
+    "post_standings": {
+      "title": "Standings after this round"
+    },
+    "results": {
+      "title": "Results"
+    }
+  },
   "endurance_race": {
     "tick": "Tick",
     "name": "Name",

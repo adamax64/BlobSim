@@ -18,22 +18,24 @@ const Loader = ({ showLoader }: { showLoader?: boolean }) => (
 );
 
 type EventCardFrameProps = {
-  eventType: EventType;
+  eventType?: EventType;
+  title?: string;
   tickDisplay?: ReactNode;
   children: React.ReactNode;
   showLoader?: boolean;
 };
 
-export const EventCardFrame = ({ eventType, tickDisplay, children, showLoader }: EventCardFrameProps) => {
+export const EventCardFrame = ({ eventType, title, tickDisplay, children, showLoader }: EventCardFrameProps) => {
   const { t } = useTranslation();
+  const resolvedTitle = title ?? (eventType ? t(`enums.event_types.${eventType}`) : undefined);
   return (
-    <Paper sx={{ maxHeight: '100vh', paddingBottom: 3, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <CardHeader
-        title={t(`enums.event_types.${eventType}`)}
-        subheader={tickDisplay}
-        action={<Loader showLoader={showLoader} />}
-      />
-      <Divider />
+    <Paper sx={{ maxHeight: '90vh', paddingBottom: 3, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {resolvedTitle && (
+        <>
+          <CardHeader title={resolvedTitle} subheader={tickDisplay} action={<Loader showLoader={showLoader} />} />
+          <Divider />
+        </>
+      )}
       <CardContent
         sx={{
           flex: 1,

@@ -10,7 +10,7 @@ import { SnackbarState } from '../snackbar-state';
 import { EnduranceRaceUI } from './EnduranceRaceUI';
 import { useReplayState } from '../../../hooks/useReplayState';
 import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
-import { EventControls } from '../shared/EventControls';
+import { EventStagePipeline } from '../shared/EventStagePipeline';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDto;
@@ -26,7 +26,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const { t } = useTranslation();
 
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
-  const { replayTick, setReplayTick } = useReplayState(event.id);
+  const { replayTick, setReplayTick, stageIndex, setStageIndex } = useReplayState(event.id);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
   const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -118,25 +118,31 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
 
   return (
     <>
-      <EventControls
-        tick={tick}
-        replayTick={replayTick}
-        setReplayTick={setReplayTick}
-        isStart={(eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0}
-        isEnd={tick >= raceDuration}
+      <EventStagePipeline
+        event={event}
         isEventFinished={isEventFinished}
-        progressButtonDisabled={loadingNextTick || replayTick < tick}
-        onClickStart={progressEvent}
-        onClickNext={progressEvent}
-        onClickEnd={finishEvent}
-      />
-      <EnduranceRaceUI
-        eventRecords={eventRecords ?? eventRecordsCache}
-        tick={replayTick}
-        loadingNextTick={loadingNextTick}
-        isEventFinished={isEventFinished}
-        eventType={event.type}
-        raceDuration={raceDuration}
+        stageIndex={stageIndex}
+        setStageIndex={setStageIndex}
+        eventControls={{
+          tick,
+          replayTick,
+          setReplayTick,
+          isStart: (eventRecords?.[0]?.distanceRecords?.length ?? 0) === 0,
+          isEnd: tick >= raceDuration,
+          progressButtonDisabled: loadingNextTick || replayTick < tick,
+          onClickStart: progressEvent,
+          onClickNext: progressEvent,
+          onClickEnd: finishEvent,
+        }}
+        competitionContent={
+          <EnduranceRaceUI
+            eventRecords={eventRecords ?? eventRecordsCache}
+            tick={replayTick}
+            loadingNextTick={loadingNextTick}
+            eventType={event.type}
+            raceDuration={raceDuration}
+          />
+        }
       />
       <Snackbar
         open={snackbarOpen}

@@ -22,7 +22,6 @@ type QuarteredEventUIProps = {
   quarter: number;
   currentBlobIndex: number;
   isPerforming: boolean;
-  isEventFinished: boolean;
   eventType: EventType;
 };
 
@@ -31,7 +30,6 @@ export const QuarteredEventUI = ({
   quarter,
   currentBlobIndex,
   isPerforming,
-  isEventFinished,
   eventType,
 }: QuarteredEventUIProps) => {
   const { t } = useTranslation();
@@ -92,28 +90,17 @@ export const QuarteredEventUI = ({
         </Box>
       );
     },
-    [quarter, isPerforming, isEventFinished],
+    [quarter, isPerforming],
   );
 
   const getRowClass = useCallback(
     (record: EventRecordDto, index: number) => {
-      if (isEventFinished) {
-        switch (index) {
-          case 0:
-            return 'row-gold';
-          case 1:
-            return 'row-silver';
-          case 2:
-            return 'row-bronze';
-        }
-      } else {
-        if (quarter <= 4 && record.eliminated) {
-          return 'row-inactive';
-        }
-        return index === currentBlobIndex ? 'row-current' : '';
+      if (quarter <= 4 && record.eliminated) {
+        return 'row-inactive';
       }
+      return index === currentBlobIndex ? 'row-current' : '';
     },
-    [currentBlobIndex, isEventFinished, quarter],
+    [currentBlobIndex, quarter],
   );
 
   return (

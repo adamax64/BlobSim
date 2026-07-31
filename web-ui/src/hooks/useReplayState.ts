@@ -6,21 +6,26 @@ const MAX_ENTRIES = 16;
 interface ReplayTickEntry {
   eventId: number;
   tick: number;
+  stageIndex: number;
 }
 
-export function useReplayState(eventId: number, initialTick: number = 0) {
+export function useReplayState(eventId: number, initialTick: number = 0, initialStageIndex: number = 0) {
   const [replayTick, setReplayTick] = useState<number>(initialTick);
+  const [stageIndex, setStageIndex] = useState<number>(initialStageIndex);
 
-  // Load stored replay tick from localStorage on mount
+  // Load stored replay tick and stage index from localStorage on mount
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     const eventEntry = storedData.find((entry: ReplayTickEntry) => entry.eventId === eventId);
     if (eventEntry) {
       setReplayTick(eventEntry.tick);
+      if (typeof eventEntry.stageIndex === 'number') {
+        setStageIndex(eventEntry.stageIndex);
+      }
     }
   }, [eventId]);
 
-  // Save replay tick to localStorage when it changes
+  // Save replay tick and stage index to localStorage when either changes
   useEffect(() => {
     let storedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
@@ -28,7 +33,7 @@ export function useReplayState(eventId: number, initialTick: number = 0) {
     storedData = storedData.filter((entry: ReplayTickEntry) => entry.eventId !== eventId);
 
     // Add new entry at the end
-    storedData.push({ eventId, tick: replayTick });
+    storedData.push({ eventId, tick: replayTick, stageIndex });
 
     // Keep only the last MAX_ENTRIES entries
     if (storedData.length > MAX_ENTRIES) {
@@ -36,7 +41,7 @@ export function useReplayState(eventId: number, initialTick: number = 0) {
     }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(storedData));
-  }, [eventId, replayTick]);
+  }, [eventId, replayTick, stageIndex]);
 
-  return { replayTick, setReplayTick };
+  return { replayTick, setReplayTick, stageIndex, setStageIndex };
 }

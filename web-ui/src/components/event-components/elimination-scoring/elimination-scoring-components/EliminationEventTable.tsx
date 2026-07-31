@@ -10,33 +10,15 @@ import SkeletonRows from '../../shared/SkeletonRows';
 
 interface EliminationEventTableProps {
   eventRecords: EventRecordDto[];
-  isEventFinished: boolean;
   isMobile?: boolean;
 }
 
-export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile }: EliminationEventTableProps) => {
+export const EliminationEventTable = ({ eventRecords, isMobile }: EliminationEventTableProps) => {
   const { t } = useTranslation();
 
-  const getRowClass = useCallback(
-    (index: number, isEliminated: boolean) => {
-      if (isEventFinished) {
-        switch (index) {
-          case 0:
-            return 'row-gold';
-          case 1:
-            return 'row-silver';
-          case 2:
-            return 'row-bronze';
-        }
-      } else {
-        if (isEliminated) {
-          return 'row-inactive';
-        }
-      }
-      return '';
-    },
-    [isEventFinished],
-  );
+  const getRowClass = useCallback((isEliminated: boolean) => {
+    return isEliminated ? 'row-inactive' : '';
+  }, []);
 
   return (
     <EventTable>
@@ -51,7 +33,7 @@ export const EliminationEventTable = ({ eventRecords, isEventFinished, isMobile 
       <TableBody>
         {eventRecords.length > 0 ? (
           eventRecords.map((record, index) => (
-            <TableRow key={index} className={getRowClass(index, record.eliminated ?? false)}>
+            <TableRow key={index} className={getRowClass(record.eliminated ?? false)}>
               {isMobile ? (
                 <NarrowCell width={30}>{index + 1}</NarrowCell>
               ) : (

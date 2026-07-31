@@ -35,51 +35,88 @@ def invalidate_standings_cache(
 
 @transactional
 def get_standings(
-    league_id: int, season: int, current_season: int, session: Session
+    league_id: int,
+    season: int,
+    current_season: int,
+    session: Session,
+    through_round: int | None = None,
 ) -> list[StandingsDTO]:
+    """
+    Fetch standings by league id and season.
+
+    If `through_round` is given, each blob's results are truncated to only the first
+    `through_round` (chronologically ordered) results and points/ordering are recomputed
+    from that subset, to reconstruct the standings as they stood after a given round.
+    """
     cache_key = (league_id, season, current_season)
     if cache_key in _standings_cache:
-        return _standings_cache[cache_key]
+        standings = _standings_cache[cache_key]
+    else:
+        results = get_results_of_league_by_season(league_id, season, session)
 
-    results = get_results_of_league_by_season(league_id, season, session)
+        if len(results) == 0:
+            return []
 
-    if len(results) == 0:
-        return []
+        results_by_blob = defaultdict(list)
+        for result in results:
+            results_by_blob[result.blob].append(result)
 
-    results_by_blob = defaultdict(list)
-    for result in results:
-        results_by_blob[result.blob].append(result)
+        num_of_rounds = get_number_of_rounds_by_size(len(results_by_blob))
 
-    num_of_rounds = get_number_of_rounds_by_size(len(results_by_blob))
+        standings = []
+        for blob, results in results_by_blob.items():
+            total_points = 0
+            standing_results: list[StandingsResultDTO] = []
+            for result in sorted(results, key=lambda x: x.event.date):
+                total_points += result.points
+                standing_results.append(
+                    StandingsResultDTO(position=result.position, points=result.points)
+                )
 
-    standings = []
-    for blob, results in results_by_blob.items():
-        total_points = 0
-        standing_results: list[StandingsResultDTO] = []
-        for result in sorted(results, key=lambda x: x.event.date):
-            total_points += result.points
-            standing_results.append(
-                StandingsResultDTO(position=result.position, points=result.points)
+            contract_ending = season == current_season and blob.contract == current_season
+            is_rookie = blob.debut == current_season and season == current_season
+            standings.append(
+                StandingsDTO(
+                    blob_id=blob.id,
+                    name=f"{blob.first_name} {blob.last_name}",
+                    color=blob.color,
+                    results=standing_results,
+                    num_of_rounds=num_of_rounds,
+                    total_points=total_points,
+                    is_contract_ending=contract_ending,
+                    is_rookie=is_rookie,
+                )
             )
 
-        contract_ending = season == current_season and blob.contract == current_season
-        is_rookie = blob.debut == current_season and season == current_season
-        standings.append(
+        standings.sort(key=_sort_by_position(len(standings)), reverse=True)
+        _standings_cache[cache_key] = standings
+
+    if through_round is None:
+        return standings
+    return _truncate_standings_through_round(standings, through_round)
+
+
+def _truncate_standings_through_round(
+    standings: list[StandingsDTO], through_round: int
+) -> list[StandingsDTO]:
+    bounded_round = max(0, through_round)
+    truncated = []
+    for standing in standings:
+        results = standing.results[:bounded_round]
+        truncated.append(
             StandingsDTO(
-                blob_id=blob.id,
-                name=f"{blob.first_name} {blob.last_name}",
-                color=blob.color,
-                results=standing_results,
-                num_of_rounds=num_of_rounds,
-                total_points=total_points,
-                is_contract_ending=contract_ending,
-                is_rookie=is_rookie,
+                blob_id=standing.blob_id,
+                name=standing.name,
+                color=standing.color,
+                is_contract_ending=standing.is_contract_ending,
+                is_rookie=standing.is_rookie,
+                results=results,
+                num_of_rounds=standing.num_of_rounds,
+                total_points=sum(result.points for result in results),
             )
         )
-
-    standings.sort(key=_sort_by_position(len(standings)), reverse=True)
-    _standings_cache[cache_key] = standings
-    return standings
+    truncated.sort(key=_sort_by_position(len(truncated)), reverse=True)
+    return truncated
 
 
 @transactional

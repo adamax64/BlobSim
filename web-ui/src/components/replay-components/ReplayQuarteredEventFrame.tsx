@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Dispatch, SetStateAction } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { EventRecordsApi, EventDto } from '../../../generated';
 import { QuarteredEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/QuarteredEventRecordDtoOutput';
@@ -6,12 +6,26 @@ import { getCurrentQuarter, getQuarterEnds } from '../event-components/event-uti
 import defaultConfig from '../../default-config';
 import { QuarteredEventUI } from '../event-components/quartered-event/QuarteredEventUI';
 import { useReplayTickDelay } from '../../hooks/useReplayTickDelay';
+import { EventStagePipeline } from '../event-components/shared/EventStagePipeline';
 interface ReplayQuarteredEventFrameProps {
   event: EventDto;
   tick: number;
+  maxTick: number | undefined;
+  setCurrentTick: (tick: number | ((prev: number) => number)) => void;
+  stageIndex: number;
+  setStageIndex: Dispatch<SetStateAction<number>>;
+  onGoBack: () => void;
 }
 
-export const ReplayQuarteredEventFrame: React.FC<ReplayQuarteredEventFrameProps> = ({ event, tick }) => {
+export const ReplayQuarteredEventFrame: React.FC<ReplayQuarteredEventFrameProps> = ({
+  event,
+  tick,
+  maxTick,
+  setCurrentTick,
+  stageIndex,
+  setStageIndex,
+  onGoBack,
+}) => {
   const [eventRecordsCache, setEventRecordsCache] = useState<Map<number, EventRecordDto[]>>(new Map());
   const [displayedRecords, setDisplayedRecords] = useState<EventRecordDto[]>([]);
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
@@ -59,13 +73,21 @@ export const ReplayQuarteredEventFrame: React.FC<ReplayQuarteredEventFrameProps>
   }, [displayedRecords]);
 
   return (
-    <QuarteredEventUI
-      eventRecords={displayedRecords}
-      quarter={quarter}
-      isEventFinished={false}
-      eventType={event.type}
-      currentBlobIndex={currentBlobIndex}
-      isPerforming={loadingNextTick}
+    <EventStagePipeline
+      event={event}
+      isEventFinished
+      stageIndex={stageIndex}
+      setStageIndex={setStageIndex}
+      replayControls={{ currentTick: tick, maxTick, setCurrentTick, onGoBack }}
+      competitionContent={
+        <QuarteredEventUI
+          eventRecords={displayedRecords}
+          quarter={quarter}
+          eventType={event.type}
+          currentBlobIndex={currentBlobIndex}
+          isPerforming={loadingNextTick}
+        />
+      }
     />
   );
 };

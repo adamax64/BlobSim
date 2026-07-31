@@ -528,7 +528,7 @@
           "Standings"
         ],
         "summary": "Get Standings By League And Season",
-        "description": "Fetch standings by league id and season.",
+        "description": "Fetch standings by league id and season.\n\nIf `round` is provided, the standings are truncated to each blob's results through\nthat round, to reconstruct the standings as they stood at that point in the season.",
         "operationId": "get_standings_by_league_and_season_standings_championship__league_id___season__get",
         "parameters": [
           {
@@ -547,6 +547,22 @@
             "schema": {
               "type": "integer",
               "title": "Season"
+            }
+          },
+          {
+            "name": "round",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Round"
             }
           }
         ],

@@ -16,6 +16,14 @@ interface ReplayControlsProps {
   maxTick: number | undefined;
   setCurrentTick: (tick: number | ((prev: number) => number)) => void;
   onGoBack: () => void;
+
+  // Stage navigation: lets the step buttons also walk between the introduction, standings and
+  // results stages once the tick range within the competition stage is exhausted.
+  isCompetitionStage: boolean;
+  canStepStageBack: boolean;
+  canStepStageForward: boolean;
+  onStepStageBack: () => void;
+  onStepStageForward: () => void;
 }
 
 const TickInput: React.FC<{
@@ -23,11 +31,13 @@ const TickInput: React.FC<{
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: () => void;
-}> = ({ maxTick, ...props }) => (
+  enabled: boolean;
+}> = ({ maxTick, enabled, ...props }) => (
   <TextField
     size="small"
     type="number"
     slotProps={{ input: { inputProps: { min: 0, max: maxTick } } }}
+    disabled={!enabled}
     sx={{
       width: 45,
       '& .MuiInputBase-input': {
@@ -46,7 +56,17 @@ const TickInput: React.FC<{
   />
 );
 
-export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, maxTick, setCurrentTick, onGoBack }) => {
+export const ReplayControls: React.FC<ReplayControlsProps> = ({
+  currentTick,
+  maxTick,
+  setCurrentTick,
+  onGoBack,
+  isCompetitionStage,
+  canStepStageBack,
+  canStepStageForward,
+  onStepStageBack,
+  onStepStageForward,
+}) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [inputValue, setInputValue] = useState(currentTick.toString());
@@ -55,13 +75,24 @@ export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, max
     setInputValue(currentTick.toString());
   }, [currentTick]);
 
+  const canGoBack = (isCompetitionStage && currentTick > 0) || canStepStageBack;
+  const canGoForward = (isCompetitionStage && maxTick !== undefined && currentTick < maxTick) || canStepStageForward;
+
   const handleStepBack = useCallback(() => {
-    setCurrentTick((prev) => Math.max(0, prev - 1));
-  }, [setCurrentTick]);
+    if (isCompetitionStage && currentTick > 0) {
+      setCurrentTick((prev) => Math.max(0, prev - 1));
+    } else if (canStepStageBack) {
+      onStepStageBack();
+    }
+  }, [isCompetitionStage, currentTick, canStepStageBack, onStepStageBack, setCurrentTick]);
 
   const handleStepForward = useCallback(() => {
-    setCurrentTick((prev) => (maxTick !== undefined ? Math.min(maxTick, prev + 1) : prev));
-  }, [maxTick, setCurrentTick]);
+    if (isCompetitionStage && maxTick !== undefined && currentTick < maxTick) {
+      setCurrentTick((prev) => (maxTick !== undefined ? Math.min(maxTick, prev + 1) : prev));
+    } else if (canStepStageForward) {
+      onStepStageForward();
+    }
+  }, [isCompetitionStage, currentTick, maxTick, canStepStageForward, onStepStageForward, setCurrentTick]);
 
   const handleJumpToStart = useCallback(() => {
     setCurrentTick(0);
@@ -143,8 +174,8 @@ export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, max
       }}
     >
       <GoBackButton onClick={onGoBack} />
-      <JumpToStartButton onClick={handleJumpToStart} disabled={currentTick <= 0} />
-      <StepBackButton onClick={handleStepBack} disabled={currentTick <= 0} />
+      <JumpToStartButton onClick={handleJumpToStart} disabled={!isCompetitionStage || currentTick <= 0} />
+      <StepBackButton onClick={handleStepBack} disabled={!canGoBack} />
       <Tooltip title={t('replay.set_tick')}>
         <TickInput
           maxTick={maxTick}
@@ -156,10 +187,11 @@ export const ReplayControls: React.FC<ReplayControlsProps> = ({ currentTick, max
             }
           }}
           onBlur={handleBlur}
+          enabled={isCompetitionStage}
         />
       </Tooltip>
-      <StepForwardButton onClick={handleStepForward} disabled={maxTick === undefined || currentTick >= maxTick} />
-      <JumpToEndButton onClick={handleJumpToEnd} disabled={maxTick === undefined || currentTick >= maxTick} />
+      <StepForwardButton onClick={handleStepForward} disabled={!canGoForward} />
+      <JumpToEndButton onClick={handleJumpToEnd} disabled={!isCompetitionStage || maxTick === undefined || currentTick >= maxTick} />
       {!isMobile && (
         <Tooltip
           title={

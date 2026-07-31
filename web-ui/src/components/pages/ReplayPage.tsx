@@ -10,7 +10,6 @@ import { ReplaySprintRaceFrame } from '../replay-components/ReplaySprintRaceFram
 import { ReplayEnduranceRaceFrame } from '../replay-components/ReplayEnduranceRaceFrame';
 import { ReplayQuarteredEventFrame } from '../replay-components/ReplayQuarteredEventFrame';
 import { ReplayEliminationScoringFrame } from '../replay-components/ReplayEliminationScoringFrame';
-import { ReplayControls } from '../replay-components/ReplayControls';
 import { useNavigate } from '@tanstack/react-router';
 import { useReplayState } from '../../hooks/useReplayState';
 
@@ -20,7 +19,10 @@ export const ReplayPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { replayTick: currentTick, setReplayTick: setCurrentTick } = useReplayState(Number(eventId), 0);
+  const { replayTick: currentTick, setReplayTick: setCurrentTick, stageIndex, setStageIndex } = useReplayState(
+    Number(eventId),
+    0,
+  );
   const [maxTick, setMaxTick] = useState<number | undefined>();
 
   const {
@@ -80,17 +82,57 @@ export const ReplayPage = () => {
       case EventType.QuarteredOneShotScoring:
       case EventType.QuarteredOneShotScoringV2:
       case EventType.QuarteredTwoShotScoringV2:
-        return <ReplayQuarteredEventFrame event={event} tick={currentTick} />;
+        return (
+          <ReplayQuarteredEventFrame
+            event={event}
+            tick={currentTick}
+            maxTick={maxTick}
+            setCurrentTick={setCurrentTick}
+            stageIndex={stageIndex}
+            setStageIndex={setStageIndex}
+            onGoBack={() => navigate({ to: '/results' })}
+          />
+        );
       case EventType.EnduranceRace:
-        return <ReplayEnduranceRaceFrame event={event} tick={currentTick} />;
+        return (
+          <ReplayEnduranceRaceFrame
+            event={event}
+            tick={currentTick}
+            maxTick={maxTick}
+            setCurrentTick={setCurrentTick}
+            stageIndex={stageIndex}
+            setStageIndex={setStageIndex}
+            onGoBack={() => navigate({ to: '/results' })}
+          />
+        );
       case EventType.SprintRace:
-        return <ReplaySprintRaceFrame event={event} tick={currentTick} maxTick={maxTick ?? 0} />;
+        return (
+          <ReplaySprintRaceFrame
+            event={event}
+            tick={currentTick}
+            maxTick={maxTick ?? 0}
+            setCurrentTick={setCurrentTick}
+            stageIndex={stageIndex}
+            setStageIndex={setStageIndex}
+            onGoBack={() => navigate({ to: '/results' })}
+          />
+        );
       case EventType.EliminationScoring:
-        return <ReplayEliminationScoringFrame event={event} tick={currentTick} />;
+        return (
+          <ReplayEliminationScoringFrame
+            event={event}
+            tick={currentTick}
+            maxTick={maxTick}
+            setCurrentTick={setCurrentTick}
+            stageIndex={stageIndex}
+            setStageIndex={setStageIndex}
+            onGoBack={() => navigate({ to: '/results' })}
+          />
+        );
       default:
         return <div>Unknown Event Type</div>;
     }
-  }, [loadingEvent, event, currentTick, t]);
+  }, [loadingEvent, event, currentTick, maxTick, setCurrentTick, stageIndex, setStageIndex, navigate, t]);
 
   const pageTitle = useMemo(
     () =>
@@ -103,12 +145,6 @@ export const ReplayPage = () => {
   return (
     <PageFrame pageName="replay" customPageTitle={pageTitle}>
       {eventContent()}
-      <ReplayControls
-        currentTick={currentTick}
-        maxTick={maxTick}
-        setCurrentTick={setCurrentTick}
-        onGoBack={() => navigate({ to: '/results' })}
-      />
     </PageFrame>
   );
 };

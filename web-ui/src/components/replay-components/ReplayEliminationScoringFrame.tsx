@@ -1,17 +1,31 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { EventRecordsApi, EventDto } from '../../../generated';
 import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../generated/models/EliminationEventRecordDtoOutput';
 import defaultConfig from '../../default-config';
 import { EliminationScoringUI } from '../event-components/elimination-scoring/EliminationScoringUI';
 import { useReplayTickDelay } from '../../hooks/useReplayTickDelay';
+import { EventStagePipeline } from '../event-components/shared/EventStagePipeline';
 
 interface ReplayEliminationScoringFrameProps {
   event: EventDto;
   tick: number;
+  maxTick: number | undefined;
+  setCurrentTick: (tick: number | ((prev: number) => number)) => void;
+  stageIndex: number;
+  setStageIndex: Dispatch<SetStateAction<number>>;
+  onGoBack: () => void;
 }
 
-export const ReplayEliminationScoringFrame: React.FC<ReplayEliminationScoringFrameProps> = ({ event, tick }) => {
+export const ReplayEliminationScoringFrame: React.FC<ReplayEliminationScoringFrameProps> = ({
+  event,
+  tick,
+  maxTick,
+  setCurrentTick,
+  stageIndex,
+  setStageIndex,
+  onGoBack,
+}) => {
   const [eventRecordsCache, setEventRecordsCache] = useState<Map<number, EventRecordDto[]>>(new Map());
   const [displayedRecords, setDisplayedRecords] = useState<EventRecordDto[]>([]);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
@@ -44,12 +58,20 @@ export const ReplayEliminationScoringFrame: React.FC<ReplayEliminationScoringFra
   );
 
   return (
-    <EliminationScoringUI
-      eventRecords={displayedRecords}
-      tick={tick}
-      loadingNextTick={loadingNextTick}
-      isEventFinished={false}
-      eventType={event.type}
+    <EventStagePipeline
+      event={event}
+      isEventFinished
+      stageIndex={stageIndex}
+      setStageIndex={setStageIndex}
+      replayControls={{ currentTick: tick, maxTick, setCurrentTick, onGoBack }}
+      competitionContent={
+        <EliminationScoringUI
+          eventRecords={displayedRecords}
+          tick={tick}
+          loadingNextTick={loadingNextTick}
+          eventType={event.type}
+        />
+      }
     />
   );
 };
