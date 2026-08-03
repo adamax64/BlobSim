@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, use, useEffect, useMemo, useState } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme, Mode } from '../theme';
 import { useWeather } from './WeatherContext';
@@ -13,8 +13,8 @@ const ThemeModeContext = createContext<ThemeModeContextValue | undefined>(undefi
 
 const STORAGE_KEY = 'themeMode';
 
-export const ThemeModeProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const [mode, setModeState] = useState<Mode>(() => {
+export const ThemeModeProvider: React.FC<React.PropsWithChildren<object>> = ({ children }) => {
+  const [mode, setMode] = useState<Mode>(() => {
     if (typeof window === 'undefined') return 'light';
     const stored = localStorage.getItem(STORAGE_KEY) as Mode | null;
     if (stored) return stored;
@@ -35,7 +35,7 @@ export const ThemeModeProvider: React.FC<React.PropsWithChildren<{}>> = ({ child
     if (stored) return; // user set a preference, do not auto-follow
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e: MediaQueryListEvent) => setModeState(e.matches ? 'dark' : 'light');
+    const handler = (e: MediaQueryListEvent) => setMode(e.matches ? 'dark' : 'light');
 
     // Use the standard addEventListener/removeEventListener API only.
     // Do not fall back to legacy addListener/removeListener.
@@ -48,24 +48,22 @@ export const ThemeModeProvider: React.FC<React.PropsWithChildren<{}>> = ({ child
     return;
   }, []);
 
-  const setMode = (m: Mode) => setModeState(m);
-  const toggleMode = () => setModeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+  const toggleMode = () => setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
 
   const { seasonTemperature } = useWeather();
   const theme = useMemo(() => createAppTheme(mode, seasonTemperature), [mode, seasonTemperature]);
 
   return (
-    <ThemeModeContext.Provider value={{ mode, toggleMode, setMode }}>
+    <ThemeModeContext value={{ mode, toggleMode, setMode }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
       </ThemeProvider>
-    </ThemeModeContext.Provider>
+    </ThemeModeContext>
   );
 };
 
 export function useThemeMode() {
-  const ctx = useContext(ThemeModeContext);
-  if (!ctx) throw new Error('useThemeMode must be used within ThemeModeProvider');
-  return ctx;
+  const context = use(ThemeModeContext as React.Context<ThemeModeContextValue>);
+  return context;
 }

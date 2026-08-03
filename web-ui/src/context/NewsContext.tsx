@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, use, useState } from 'react';
 import { NewsApi, NewsDto, SimTimeDto } from '../../generated';
 import defaultConfig from '../default-config';
 import { useMutation } from '@tanstack/react-query';
@@ -34,7 +34,8 @@ export const NewsProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const latestNewsDate = news?.at(0)?.date;
-  const hasUnseenNews = !!latestNewsDate && (!lastViewedNewsDate || compareSimTime(latestNewsDate, lastViewedNewsDate) > 0);
+  const hasUnseenNews =
+    !!latestNewsDate && (!lastViewedNewsDate || compareSimTime(latestNewsDate, lastViewedNewsDate) > 0);
 
   const markNewsAsViewed = () => {
     if (!latestNewsDate) return;
@@ -43,7 +44,7 @@ export const NewsProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <NewsContext.Provider
+    <NewsContext
       value={{
         news,
         newsLoading: isPending,
@@ -53,15 +54,11 @@ export const NewsProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-    </NewsContext.Provider>
+    </NewsContext>
   );
 };
 
 export const useNews = () => {
-  const context = useContext(NewsContext);
-
-  if (!context) {
-    throw new Error('NewsContext must be used within a NewsProvider');
-  }
+  const context = use(NewsContext as React.Context<NewsContextValue>);
   return context;
 };

@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useContext } from 'react';
+import { createContext, use } from 'react';
 import { PoliciesApi, PolicyDto } from '../../generated';
 import defaultConfig from '../default-config';
 import { useMutation } from '@tanstack/react-query';
@@ -19,16 +19,13 @@ export const PoliciesProvider = ({ children }: { children: React.ReactNode }) =>
   });
 
   return (
-    <PoliciesContext.Provider value={{ policiesLoading: isPending, policies: data, refreshPolicies: mutate }}>
+    <PoliciesContext value={{ policiesLoading: isPending, policies: data, refreshPolicies: mutate }}>
       {children}
-    </PoliciesContext.Provider>
+    </PoliciesContext>
   );
 };
 
 export const usePolicies = () => {
-  const context = useContext(PoliciesContext);
-  if (!context) {
-    throw new Error('usePolicies must be used within a PoliciesProvider');
-  }
+  const context = use(PoliciesContext as React.Context<PolicyContextValue>);
   return context;
 };

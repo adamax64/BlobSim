@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 import { SimDataApi, SimTimeDto } from '../../generated';
 import defaultConfig from '../default-config';
 import { useMutation } from '@tanstack/react-query';
@@ -22,13 +22,10 @@ export const SimTimeProvider = ({ children }: { children: React.ReactNode }) => 
     mutationFn: () => simDataApi.getSimTimeSimDataSimTimeGet(),
   });
 
-  return <SimTimeContext.Provider value={{ simTime, loading, refreshSimTime }}>{children}</SimTimeContext.Provider>;
+  return <SimTimeContext value={{ simTime, loading, refreshSimTime }}>{children}</SimTimeContext>;
 };
 
 export const useSimTime = () => {
-  const context = useContext(SimTimeContext);
-  if (!context) {
-    throw new Error('useSimTime must be used within a SimTimeProvider');
-  }
+  const context = use(SimTimeContext as React.Context<SimTimeContextValue>);
   return context;
 };

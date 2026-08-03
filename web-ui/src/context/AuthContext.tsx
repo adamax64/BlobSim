@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, use } from 'react';
 import { AuthApi, Configuration } from '../../generated';
 import defaultConfig from '../default-config';
 
@@ -54,13 +54,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsAuthenticated(false);
   };
 
-  return <AuthContext.Provider value={{ isAuthenticated, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext value={{ isAuthenticated, login, logout }}>{children}</AuthContext>;
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  const context = use(AuthContext as React.Context<AuthContextValue>);
   return context;
 };

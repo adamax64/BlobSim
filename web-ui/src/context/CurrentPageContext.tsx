@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, use, useState } from 'react';
 import { AppPage } from '../components/root-components/constants';
 
 type CurrentPageContextValue = {
@@ -17,16 +17,11 @@ export const CurrentPageProvider = ({ children }: { children: React.ReactNode })
   const [pageTitle, setPageTitle] = useState<string | undefined>();
 
   return (
-    <CurrentPageContext.Provider value={{ currentPage, setCurrentPage, pageTitle, setPageTitle }}>
-      {children}
-    </CurrentPageContext.Provider>
+    <CurrentPageContext value={{ currentPage, setCurrentPage, pageTitle, setPageTitle }}>{children}</CurrentPageContext>
   );
 };
 
 export const useCurrentPage = () => {
-  const context = useContext(CurrentPageContext);
-  if (!context) {
-    throw new Error('useCurrentPage must be used within a CurrentPageProvider');
-  }
+  const context = use(CurrentPageContext as React.Context<CurrentPageContextValue>);
   return context;
 };

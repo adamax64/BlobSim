@@ -23,7 +23,7 @@ export const PageFrame = ({ children, showLoading, pageName, customPageTitle, cu
     if (customPageTitle) {
       setPageTitle(customPageTitle);
     }
-  }, [pageName, customPageTitle]);
+  }, [pageName, customPageTitle, setCurrentPage, setPageTitle]);
 
   return (
     <Box display="flex" flexGrow={1} height="100%" flexDirection="column" gap={2} p={1} {...customFrameStyle}>

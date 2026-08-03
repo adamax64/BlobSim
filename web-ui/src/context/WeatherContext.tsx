@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, use, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { SimDataApi, SeasonTemperature, WeatherInfoDto } from '../../generated';
 import defaultConfig from '../default-config';
@@ -34,7 +34,7 @@ export const WeatherProvider = ({ children }: { children: React.ReactNode }) => 
 
   useEffect(() => {
     refreshWeatherInfo();
-  }, []);
+  }, [refreshWeatherInfo]);
 
   useEffect(() => {
     if (weatherInfo?.seasonTemperature) {
@@ -44,16 +44,11 @@ export const WeatherProvider = ({ children }: { children: React.ReactNode }) => 
   }, [weatherInfo]);
 
   return (
-    <WeatherContext.Provider value={{ weatherInfo, seasonTemperature, loading, refreshWeatherInfo }}>
-      {children}
-    </WeatherContext.Provider>
+    <WeatherContext value={{ weatherInfo, seasonTemperature, loading, refreshWeatherInfo }}>{children}</WeatherContext>
   );
 };
 
 export const useWeather = () => {
-  const context = useContext(WeatherContext);
-  if (!context) {
-    throw new Error('useWeather must be used within a WeatherProvider');
-  }
+  const context = use(WeatherContext as React.Context<WeatherContextValue>);
   return context;
 };
