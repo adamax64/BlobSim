@@ -44,15 +44,12 @@ export const EventStandingsStage = ({
   }, [active, loadStandings, throughRound]);
 
   return (
-    <EventCardFrame
-      title={title}
-    >
+    <EventCardFrame title={title}>
       <StandingsTable
         loading={isPending && !standings}
         standings={standings ?? []}
         leagueName={leagueName}
         season={season}
-        hasSeasonEnded={false}
       />
     </EventCardFrame>
   );

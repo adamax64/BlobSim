@@ -1,12 +1,12 @@
 import { Gauge, gaugeClasses, useGaugeState } from '@mui/x-charts/Gauge';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 interface EfficiencyMeterProps {
   label?: string;
   /** Efficiency as a ratio between 0 and 1 */
   value: number;
   /** Width/height of the gauge in px */
-  size?: number;
+  size?: { xs: number; sm: number };
 }
 
 const RED = { r: 244, g: 67, b: 54 };
@@ -20,8 +20,7 @@ function interpolateChannel(from: number, to: number, ratio: number): number {
 /** Interpolates red (0) -> yellow (0.5) -> green (1) for a ratio between 0 and 1 */
 function getEfficiencyColor(ratio: number): string {
   const clamped = Math.min(1, Math.max(0, ratio));
-  const [from, to, localRatio] =
-    clamped <= 0.5 ? [RED, YELLOW, clamped / 0.5] : [YELLOW, GREEN, (clamped - 0.5) / 0.5];
+  const [from, to, localRatio] = clamped <= 0.5 ? [RED, YELLOW, clamped / 0.5] : [YELLOW, GREEN, (clamped - 0.5) / 0.5];
 
   const r = interpolateChannel(from.r, to.r, localRatio);
   const g = interpolateChannel(from.g, to.g, localRatio);
@@ -54,15 +53,16 @@ function GaugePointer() {
   );
 }
 
-export function EfficiencyMeter({ label, value, size = 120 }: EfficiencyMeterProps) {
+export function EfficiencyMeter({ label, value, size = { xs: 64, sm: 76 } }: EfficiencyMeterProps) {
+  const sizeValue = useMediaQuery('(min-width: 600px)') ? size.sm : size.xs;
   const percentage = Math.round((value ?? 0) * 100);
   const color = getEfficiencyColor(value ?? 0);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={0.5}>
       <Gauge
-        width={size}
-        height={size}
+        width={sizeValue}
+        height={sizeValue}
         value={percentage}
         valueMin={0}
         valueMax={100}

@@ -758,7 +758,6 @@ Technical changes:
 - `start.sh`/`start.bat` now run the backend in the background and store its PID in `.backend.pid`
   - On the next run, the script looks up the PID in `.backend.pid` and kills the previously started backend process before starting a new one, so re-running (or `deploy.sh`/`deploy.bat` restarting on new commits) does not leave orphaned backend processes behind
 
-
 ### 5.4.2
 
 - Added missing translation for overclocking device on blob details dialog inventory section
@@ -784,12 +783,12 @@ Technical changes:
 - Elements grant passive skill modifiers depending on weather, wind and season temperature: Fire boosts strength in most weather (except cold season temperature, where it always gets +2% strength), Wind's bonus scales directly with the day's wind value, Ice slightly boosts speed always and boosts/reduces strength depending on season temperature, Beast always boosts strength and speed
 - Detailed modifiers of elementy by weather type (wind excluded):
 
-|  | Sunny | Sunny-Cloudy | Cloudy | Sunny-Rain | Rain | Heavy-Rain | Storm | Heat | Snowy | Freezy | Foggy |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| Fire | +5% | +1% | 0% | 0% | -2% | -3% | -4% | +10% | -6% | -10% | 0% |
-| Water | -5% | -1% | 0% | +2% | +5% | +10% | +6% | -10% | -5% | -10% | 0% |
-| Ice | -6% | -2% | 0% | 0% | 0% | 0% | 0% | -12% | +6% | +12% | 0% | 
-| Beast | 0% | 0% | 0% | -2% | -5% | -8% | -10% | -3% | 0% | 0% | +4% |
+|       | Sunny | Sunny-Cloudy | Cloudy | Sunny-Rain | Rain | Heavy-Rain | Storm | Heat | Snowy | Freezy | Foggy |
+| ----- | ----- | ------------ | ------ | ---------- | ---- | ---------- | ----- | ---- | ----- | ------ | ----- |
+| Fire  | +5%   | +1%          | 0%     | 0%         | -2%  | -3%        | -4%   | +10% | -6%   | -10%   | 0%    |
+| Water | -5%   | -1%          | 0%     | +2%        | +5%  | +10%       | +6%   | -10% | -5%   | -10%   | 0%    |
+| Ice   | -6%   | -2%          | 0%     | 0%         | 0%   | 0%         | 0%    | -12% | +6%   | +12%   | 0%    |
+| Beast | 0%    | 0%           | 0%     | -2%        | -5%  | -8%        | -10%  | -3%  | 0%    | 0%     | +4%   |
 
 - Blob visuals now reflect their element: eye color changes (Fire: light orange, Wind: light cyan, Water: faded dark blue, Ice: light blue), and Beast blobs additionally grow cat ears
 - Blob details dialog shows an element icon with a tooltip naming the blob's element
@@ -810,3 +809,9 @@ Technical changes:
 ### 5.7.1
 
 - Fixed display of standing snippets at start of season on replay and current standings on event pages
+
+### 5.7.2
+
+- When a blob has a repair kit they more likely do intense practice, because if they get injured the repair kit used up instantly
+  - This can avoid cases when a blob has a full inventory of repair kits
+- Slightly modified weather card for better responsivity and user friendly

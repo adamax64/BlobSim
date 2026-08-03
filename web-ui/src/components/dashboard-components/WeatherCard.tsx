@@ -41,23 +41,40 @@ export default function WeatherCard() {
   const weatherType = weatherInfo?.weather;
   const WeatherIcon = weatherType ? WEATHER_ICONS[weatherType] : undefined;
   const weatherName = weatherType ? t(`weather.types.${weatherType}`) : '';
-  const windLabel = t('weather.wind');
+  const windLabel = t(
+    `weather.wind.${(weatherInfo?.wind ?? 0) > 0.66 ? 'strong' : (weatherInfo?.wind ?? 0) > 0.33 ? 'moderate' : 'light'}`,
+  );
 
   return (
     <Card>
-      <CardContent sx={{pb: '16px !important'}}>
+      <CardContent sx={{ pb: '16px !important' }}>
         <Box display="flex" flexDirection="column" height="100%">
-          <Typography variant="h6">{t('weather.title')}</Typography>
-          <Box display="flex" alignItems="center" justifyContent="space-around" gap={{ xs: 1, sm: 5}} height="100%" paddingX={{ xs: 0, sm: 1.5 }}>
+          <Typography variant="h6">
+            <Box display="flex" alignItems="center" gap={1}>
+              {t('weather.title')}
+            </Box>
+          </Typography>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-around"
+            gap={{ xs: 1, sm: 5 }}
+            height="100%"
+            paddingX={{ xs: 0, sm: 1.5 }}
+          >
             <DynamicTooltip title={isMobile && weatherName}>
               <Box display="flex" flexDirection="column" alignItems="center" gap={0.5} height="100%">
-                {WeatherIcon && <WeatherIcon sx={{ fontSize: 48, m: '14px' }} />}
+                {WeatherIcon && <WeatherIcon sx={{ fontSize: { xs: 36, sm: 48 }, m: '14px' }} />}
                 {!isMobile && <Typography variant="body2">{weatherName}</Typography>}
               </Box>
             </DynamicTooltip>
-            <DynamicTooltip title={isMobile && windLabel}>
+            <DynamicTooltip title={isMobile ? undefined : windLabel}>
               <Box>
-                <EfficiencyMeter label={isMobile ? undefined : windLabel} value={weatherInfo?.wind ?? 0} size={76} />
+                <EfficiencyMeter
+                  label={isMobile ? undefined : windLabel}
+                  value={weatherInfo?.wind ?? 0}
+                  size={{ xs: 64, sm: 76 }}
+                />
               </Box>
             </DynamicTooltip>
           </Box>

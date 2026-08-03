@@ -286,8 +286,12 @@
     "season": "Szezon"
   },
   "weather": {
-    "title": "Időjárás",
-    "wind": "Szél",
+    "title": "Időjárás & Szél",
+    "wind": {
+      "light": "Enyhe szellő",
+      "moderate": "Közepes szél",
+      "strong": "Erős szél"
+    },
     "types": {
       "SUNNY": "Napos",
       "SUNNY_CLOUDY": "Napos-Felhős",

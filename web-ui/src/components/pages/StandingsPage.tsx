@@ -183,7 +183,6 @@ export function StandingsPage() {
             standings={standings ?? []}
             leagueName={selectedLeague?.name}
             season={seasonOrEon}
-            hasSeasonEnded={hasSeasonOrEonEnded}
           />
         )}
       </Paper>

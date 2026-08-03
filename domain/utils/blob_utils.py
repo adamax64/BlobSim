@@ -1,4 +1,5 @@
 from data.model.blob import Blob
+from data.model.item_type import ItemType
 from data.model.state_type import StateType
 from domain.dtos.blob_dtos.blob_stats_dto import (
     BlobStatsDto,
@@ -21,6 +22,11 @@ def has_trait(blob: Blob, trait_type: TraitType) -> bool:
 def has_state(blob: Blob, state_type: StateType) -> bool:
     """Return True if `blob.states` contains a state of given `state_type`."""
     return any(s.type == state_type for s in blob.states)
+
+
+def has_item(blob: Blob, item_type: ItemType) -> bool:
+    """Return True if `blob.items` contains an item of given `item_type`."""
+    return any(i.type == item_type for i in blob.items or [])
 
 
 def compute_state_multiplier(blob: Blob, current_time: int) -> float:

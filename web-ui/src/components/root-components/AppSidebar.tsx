@@ -58,7 +58,7 @@ export const AppSidebar = ({ isTablet, setMobileOpen }: AppSidebarProps) => {
   return (
     <>
       <List>
-        {MENU_ITEMS.filter((text) => text !== 'admin' || isAuthenticated).map((text, _) => (
+        {MENU_ITEMS.filter((text) => text !== 'admin' || isAuthenticated).map((text) => (
           <ListItem key={text}>
             <Box display="flex" gap={1} color="text.primary">
               {getMenuIcon(text)}
@@ -94,7 +94,7 @@ export const AppSidebar = ({ isTablet, setMobileOpen }: AppSidebarProps) => {
             © 2026 Adamax-Works
           </Typography>
           <Typography variant="caption" display="block" color="text.secondary">
-            v5.7.1
+            v5.7.2
           </Typography>
         </Box>
       </Box>

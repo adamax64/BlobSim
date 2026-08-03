@@ -1,5 +1,4 @@
 import {
-  Box,
   CircularProgress,
   Paper,
   Table,
@@ -22,10 +21,9 @@ interface StandingsTableProps {
   loading: boolean;
   leagueName?: string;
   season?: number;
-  hasSeasonEnded: boolean;
 }
 
-export const StandingsTable = ({ loading, standings, leagueName, season, hasSeasonEnded }: StandingsTableProps) => {
+export const StandingsTable = ({ loading, standings, leagueName, season }: StandingsTableProps) => {
   const { simTime } = useSimTime();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -35,7 +33,7 @@ export const StandingsTable = ({ loading, standings, leagueName, season, hasSeas
     (position: number) => {
       return Math.ceil(standings.length / 2) === position && simTime?.season === season ? 'row-middle' : '';
     },
-    [standings.length],
+    [standings.length, season, simTime?.season],
   );
 
   const getPositionClassName = (position: number): string => {

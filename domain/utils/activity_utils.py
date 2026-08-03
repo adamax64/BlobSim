@@ -4,11 +4,12 @@ from dataclasses import dataclass
 import random
 
 from data.model.blob import Blob
+from data.model.item_type import ItemType
 from data.model.retirement_focus_type import RetirementFocusType
 from data.model.state_type import StateType
 from data.model.trait_type import TraitType
 from domain.enums.activity_type import ActivityType
-from domain.utils.blob_utils import has_state, has_trait
+from domain.utils.blob_utils import has_item, has_state, has_trait
 
 FREE_ACTIVITIES = [
     ActivityType.PRACTICE,
@@ -21,6 +22,7 @@ FREE_ACTIVITIES = [
 
 DEFAULT_ACTIVITY_WEIGHT = 10
 INTENSE_OR_PREMIUM_PRACTICE_BASE_WEIGHT = 1
+REPAIR_KIT_MULTIPLIER = 1.5
 TRAIT_MULTIPLIER = 2
 DETERMINED_INTENSE_PRACTICE_MULTIPLIER = 10
 PROLONGED_LIFE_MAINTENANCE_MULTIPLIER = 3
@@ -150,6 +152,19 @@ FREE_ACTIVITY_RULES: list[WeightRule] = [
     WeightRule(
         condition=lambda blob: has_state(blob, StateType.GLOOMY),
         adjustments={ActivityType.IDLE: _multiply(TRAIT_MULTIPLIER)},
+    ),
+    WeightRule(
+        condition=lambda blob: not has_trait(blob, TraitType.DETERMINED) and has_item(blob, ItemType.REPAIR_KIT),
+        adjustments={
+            ActivityType.INTENSE_PRACTICE: _multiply(DETERMINED_INTENSE_PRACTICE_MULTIPLIER),
+            ActivityType.PRACTICE: _divide(DETERMINED_INTENSE_PRACTICE_MULTIPLIER),
+        },
+    ),
+    WeightRule(
+        condition=lambda blob: has_trait(blob, TraitType.DETERMINED) and has_item(blob, ItemType.REPAIR_KIT),
+        adjustments={
+            ActivityType.INTENSE_PRACTICE: _multiply(REPAIR_KIT_MULTIPLIER),
+        },
     ),
 ]
 
