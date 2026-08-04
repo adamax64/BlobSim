@@ -43,6 +43,20 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
     return '';
   };
 
+  const POSITION_COLUMN_WIDTH = 48;
+
+  const stickyColumnSx = (left: number) => ({
+    position: 'sticky' as const,
+    left,
+    zIndex: 2,
+    backgroundColor: theme.palette.background.paper,
+  });
+
+  const stickyLastColumnSx = (left: number) => ({
+    ...stickyColumnSx(left),
+    boxShadow: '2px 0 4px -2px rgba(0, 0, 0, 0.3)',
+  });
+
   if (loading) {
     return (
       <Paper sx={{ margin: 2, padding: 2, display: 'flex', justifyContent: 'center' }}>
@@ -70,8 +84,12 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell width={25}>#</TableCell>
-            <TableCell>{t('standings_table.name')}</TableCell>
+            <TableCell width={POSITION_COLUMN_WIDTH} sx={stickyColumnSx(0)}>
+              #
+            </TableCell>
+            <TableCell sx={stickyLastColumnSx(POSITION_COLUMN_WIDTH)}>
+              {t('standings_table.name')}
+            </TableCell>
             {!isMobile &&
               standings[0]?.results.map((_, index) => (
                 <TableCell key={index} align="center">
@@ -93,8 +111,10 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
         <TableBody>
           {standings.map((standing, index) => (
             <TableRow key={index}>
-              <TableCell className={getThresholdClassName(index + 1)}>{index + 1}</TableCell>
-              <TableCell className={getThresholdClassName(index + 1)}>
+              <TableCell className={getThresholdClassName(index + 1)} sx={{...stickyColumnSx(0), minWidth: POSITION_COLUMN_WIDTH}}>
+                {index + 1}
+              </TableCell>
+              <TableCell className={getThresholdClassName(index + 1)} sx={stickyLastColumnSx(POSITION_COLUMN_WIDTH)}>
                 <IconNameWithDetailsModal
                   blobId={standing.blobId}
                   name={standing.name}

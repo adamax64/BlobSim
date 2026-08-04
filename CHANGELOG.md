@@ -815,3 +815,7 @@ Technical changes:
 - When a blob has a repair kit they more likely do intense practice, because if they get injured the repair kit used up instantly
   - This can avoid cases when a blob has a full inventory of repair kits
 - Slightly modified weather card for better responsivity and user friendly
+
+### 5.7.3
+
+- Name and position columns are now sticky on the standings table
