@@ -820,5 +820,7 @@ Technical changes:
 
 - Added multi-language support for league names (issue #81): league names are now stored as a set of per-language translations (English, Hungarian) in the database instead of a single fixed name
 - Every place in the app displaying a league name (standings, results, calendar, blob details, hall of fame, news, event pages, replay pages) now shows the name in the currently selected UI language, falling back to English if a translation is missing
+- Added a Wiki page that gives a general introduction to Blob Championship System and its core concepts
+  - For now only available in english
 - Name and position columns are now sticky on the standings table
 - Improved hungarian translations to be grammatically correct and more straightforward

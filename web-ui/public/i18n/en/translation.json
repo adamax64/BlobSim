@@ -425,6 +425,7 @@
     "calendar": "Calendar",
     "hall-of-fame": "Hall of Fame",
     "results": "Results",
+    "wiki": "Wiki",
     "admin": "Admin"
   },
   "results": {
@@ -462,6 +463,8 @@
     "results_short": "BCS - Results",
     "login": "Admin Login",
     "login_short": "Admin Login",
+    "wiki": "Blob Championship System - Wiki",
+    "wiki_short": "BCS - Wiki",
     "admin": "Admin Settings",
     "admin_short": "Admin Settings"
   },

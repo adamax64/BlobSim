@@ -11,7 +11,8 @@ export type AppPage =
   | 'event'
   | 'replay'
   | 'login'
-  | 'admin';
+  | 'admin'
+  | 'wiki';
 export const MENU_ITEMS: AppPage[] = [
   'dashboard',
   'blobs',
@@ -20,5 +21,6 @@ export const MENU_ITEMS: AppPage[] = [
   'calendar',
   'hall-of-fame',
   'results',
+  'wiki',
   'admin',
 ];

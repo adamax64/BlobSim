@@ -31,6 +31,25 @@ The timespan of the race is determined by the number of blobs competing in the e
 
 The final order is determined by the most distance driven after the specified amount of time.
 
+## Sprint race
+
+This competition type is very similar to endurance race, the difference is that here blobs need to make a certain amount of distance in the set amount of time. The order here is determined by the order the blobs make the set distance. If they cannot make it till the end of the race duration, they'll be marked as "Did Not Finished" or DNF for short. For DNF blobs the order is determined by the distance they made (same as for endurance races).
+
+The timespan and distance of the race is determined by the following table:
+
+| Field size | Race distance | Timespan of the race |
+|---|---|---|
+| 5 - 7 | 60 octaves | 60 ticks |
+| 8 - 10 | 75 octaves | 75 ticks |
+| 11 - 13 | 90 octaves | 90 ticks |
+| 14 - 17 | 100 octaves | 100 ticks |
+| 18 - 21 | 110 octaves | 110 ticks |
+| 22+ | 120 octaves | 120 ticks |
+
+Octave is the base unit for race competitions equal to eight blob lengths.
+
+Points are given the same way as for endurance races except DNF blobs get one point less than they would get for that position if they finished the race.
+
 ## Elimination scoring
 
 Blobs in this event needs to show their pure strength to compete with each other. In each round blobs are set in front of a machine where they need to hit the target sensor as hard as they can to set their score for that round. In each rount the blob with the least score is eliminated. Scores are not brought to the next round every time the contenders are ranked by their current performance.

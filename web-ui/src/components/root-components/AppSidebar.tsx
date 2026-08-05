@@ -8,6 +8,7 @@ import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import Factory from '@mui/icons-material/Factory';
 import FormatListBulleted from '@mui/icons-material/FormatListBulleted';
 import StarIcon from '@mui/icons-material/Star';
+import MenuBook from '@mui/icons-material/MenuBook';
 import { BlobPiktogram } from '../icons/BlobPiktogram';
 import { Link } from '@tanstack/react-router';
 import { AppPage, MENU_ITEMS } from './constants';
@@ -31,6 +32,8 @@ function getMenuIcon(page: string) {
       return <StarIcon />;
     case 'results':
       return <FormatListBulleted />;
+    case 'wiki':
+      return <MenuBook />;
     case 'admin':
       return <SettingsIcon />;
     default:
