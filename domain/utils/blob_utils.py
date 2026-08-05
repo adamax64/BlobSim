@@ -8,6 +8,8 @@ from domain.dtos.blob_dtos.blob_stats_dto import (
 from domain.dtos.item_dto import ItemDto
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.state_dto import StateDto
+from domain.dtos.translations_dto import TranslationsDto
+from domain.utils.translation_utils import build_translations_dto
 from domain.dtos.trait_type_dto import TraitTypeDto
 from domain.utils.constants import INITIAL_INTEGRITY
 from domain.utils.sim_time_utils import format_sim_time_short, convert_to_sim_time
@@ -94,7 +96,11 @@ def map_to_blob_state_dto(
             ItemDto(type=item.type.value, durability=item.durability)
             for item in blob.items or []
         ],
-        league_name=blob.league.name if blob.league else "None",
+        league_name=(
+            build_translations_dto(blob.league.name)
+            if blob.league
+            else [TranslationsDto(language="en", text="None"), TranslationsDto(language="hu", text="Nincs")]
+        ),
         is_rookie=blob.debut == current_season,
         at_risk=blob.contract == current_season,
         is_dead=blob.terminated is not None,

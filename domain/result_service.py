@@ -6,6 +6,7 @@ from data.persistence.result_repository import get_results_of_event
 from domain.dtos.result_dto import ResultDto
 from domain.dtos.season_competition_dto import SeasonCompetitionDto
 from domain.utils.blob_utils import map_to_blob_state_dto
+from domain.utils.translation_utils import build_translations_dto
 from domain.hall_of_fame_services.titles_chronology_service import (
     get_current_grandmaster_id,
 )
@@ -58,7 +59,7 @@ def get_competitions_by_season(season: int, session) -> List[SeasonCompetitionDt
         SeasonCompetitionDto(
             id=event.id,
             date=convert_to_sim_time(event.date),
-            league_name=event.league.name if event.league else "",
+            league_name=build_translations_dto(event.league.name) if event.league else [],
             round=event.round,
             event_type=event.type,
         )

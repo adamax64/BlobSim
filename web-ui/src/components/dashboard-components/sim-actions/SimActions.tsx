@@ -5,9 +5,10 @@ import { ProgressButton } from '../ProgressButton';
 import { Slide, Snackbar } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { SimActionButton } from './SimActionButton';
+import { getLocalizedText } from '../../../utils/translation-utils';
 
 const SimActions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { news, newsLoading, refreshNews } = useNews();
 
   const { canContinue, isEventToday, isBlobInCreation } = useCanContinue();
@@ -25,7 +26,7 @@ const SimActions = () => {
       <Snackbar
         open={isEventToday || isBlobInCreation}
         message={t(`enums.news_type.${latestNews?.type}`, {
-          leagueName: latestNews?.leagueName,
+          leagueName: getLocalizedText(latestNews?.leagueName, i18n.language),
           round: latestNews?.round,
           eventType: t(`enums.event_types.${latestNews?.eventType}`),
         })}

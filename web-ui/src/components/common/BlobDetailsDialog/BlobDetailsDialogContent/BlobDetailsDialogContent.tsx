@@ -12,6 +12,7 @@ import { IconName } from '../../IconName';
 import DynamicTooltip from '../../DynamicTooltip';
 import Inventory from './Inventory';
 import StandingSnippetWidget from './StandingSnippetWidget';
+import { getLocalizedText } from '../../../../utils/translation-utils';
 
 type BlobDetailsDialogContentProps = {
   blob: BlobStatsDto;
@@ -42,7 +43,7 @@ const BlobDetailsDialogContent = ({
   includeInventory = true,
   standingsData,
 }: BlobDetailsDialogContentProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const rankingEntries = contentEntries
     .filter((entry) => {
@@ -166,7 +167,7 @@ const BlobDetailsDialogContent = ({
                     {includeCurrentLeague && (
                       <Grid size={12}>
                         <Typography variant="body1">
-                          <strong>{t('blob_details.current_league')}:</strong> {blob.leagueName}
+                          <strong>{t('blob_details.current_league')}:</strong> {getLocalizedText(blob.leagueName, i18n.language)}
                         </Typography>
                       </Grid>
                     )}

@@ -4,8 +4,9 @@ import { BlobStatsDto } from '../../../generated';
 import { BlobState } from '../../utils/blob-state-utils';
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../../utils/translation-utils';
 
-const desktopColumns = (t: (key: string) => string): GridColDef[] => [
+const desktopColumns = (t: (key: string) => string, language: string): GridColDef[] => [
   {
     field: 'name',
     headerName: t('blobs_grid.name'),
@@ -33,7 +34,13 @@ const desktopColumns = (t: (key: string) => string): GridColDef[] => [
   { field: 'wins', headerName: t('blobs_grid.wins'), resizable: false, flex: 0.6 },
   { field: 'championships', headerName: t('blobs_grid.championships'), resizable: false, flex: 0.6 },
   { field: 'grandmasters', headerName: t('blobs_grid.grandmasters'), resizable: false, flex: 0.6 },
-  { field: 'leagueName', headerName: t('blobs_grid.league'), resizable: false, flex: 1.5 },
+  {
+    field: 'leagueName',
+    headerName: t('blobs_grid.league'),
+    resizable: false,
+    flex: 1.5,
+    valueGetter: (_, row: BlobStatsDto) => getLocalizedText(row.leagueName, language),
+  },
 ];
 
 function getRowClass(params: GridRowClassNameParams<BlobStatsDto>) {
@@ -53,13 +60,13 @@ interface BlobsDesktopGridProps {
 }
 
 export function BlobsDesktopGrid({ blobs, isPending, onBlobSelect }: BlobsDesktopGridProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <Box margin={2} pb="1vw">
       <Box display="grid" width="100%">
         <DataGrid
-          columns={desktopColumns(t)}
+          columns={desktopColumns(t, i18n.language)}
           rows={blobs ?? []}
           getRowId={(blob: BlobStatsDto) => blob.name}
           loading={isPending}

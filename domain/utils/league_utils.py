@@ -1,5 +1,6 @@
 from data.model.league import League
 from domain.dtos.league_dto import LeagueDto
+from domain.utils.translation_utils import build_translations_dto
 
 
 INACTIVE_SEASON = 0
@@ -65,7 +66,7 @@ def get_epoch_cycle_by_level(level: int) -> int:
 def map_league_to_dto(league: League, competitors) -> LeagueDto:
     return LeagueDto(
         id=league.id,
-        name=league.name,
+        name=build_translations_dto(league.name),
         field_size=len(competitors),
         level=league.level
     )

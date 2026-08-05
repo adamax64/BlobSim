@@ -4,6 +4,7 @@ from data.model.news_type import NewsType
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.translations_dto import TranslationsDto
 
 
 NewsTypeDto = NewsType
@@ -11,7 +12,7 @@ NewsTypeDto = NewsType
 
 @dataclass
 class TransfersDto():
-    league_name: str
+    league_name: list[TranslationsDto]
     blobs: list[BlobStatsDto]
 
 
@@ -20,7 +21,7 @@ class NewsDto():
     date: SimTimeDto
     type: NewsTypeDto
     blob: BlobStatsDto | None = None
-    league_name: str | None = None
+    league_name: list[TranslationsDto] | None = None
     round: int | None = None
     event_id: int | None = None
     season: int | None = None

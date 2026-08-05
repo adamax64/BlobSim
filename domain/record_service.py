@@ -14,6 +14,7 @@ from domain.sim_data_service import get_sim_time
 from domain.standings_service import get_standings_by_league
 from domain.utils.blob_utils import map_to_blob_state_dto
 from domain.utils.sim_time_utils import get_season
+from domain.utils.translation_utils import build_translations_dto
 
 
 @transactional
@@ -35,7 +36,7 @@ def get_all_records_service(session) -> list[RecordDto]:
             id=record.id,
             league=LeagueDto(
                 id=record.league.id,
-                name=record.league.name,
+                name=build_translations_dto(record.league.name),
                 field_size=len(record.league.players),
                 level=record.league.level,
             ),

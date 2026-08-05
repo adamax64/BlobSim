@@ -18,8 +18,10 @@ from domain.league_service import (
     _retire_blobs,
 )
 from domain.dtos.league_dto import LeagueDto
+from domain.dtos.translations_dto import TranslationsDto
 from data.model.league import League
 from data.model.blob import Blob
+from data.model.translation import Translation
 from domain.utils.constants import MAX_FIELD_SIZE, QUEUE_LEVEL
 from tests.utils import create_blob_model_mock
 
@@ -42,8 +44,8 @@ class TestLeagueService(unittest.TestCase):
     def test_get_all_real_leagues(self, mock_get_all_real_leagues):
         session = MagicMock(spec=Session)
         mock_leagues = [
-            League(id=1, name="League 1", players=[Blob(), Blob()], level=1),
-            League(id=2, name="League 2", players=[Blob(), Blob(), Blob()], level=2),
+            League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[Blob(), Blob()], level=1),
+            League(id=2, name=Translation(en="League 2", hu="Liga 2"), players=[Blob(), Blob(), Blob()], level=2),
         ]
         mock_get_all_real_leagues.return_value = mock_leagues
 
@@ -52,14 +54,17 @@ class TestLeagueService(unittest.TestCase):
         self.assertEqual(len(result), 2)
         self.assertIsInstance(result[0], LeagueDto)
         self.assertEqual(result[0].id, 1)
-        self.assertEqual(result[0].name, "League 1")
+        self.assertEqual(
+            result[0].name,
+            [TranslationsDto(language="en", text="League 1"), TranslationsDto(language="hu", text="Liga 1")],
+        )
         self.assertEqual(result[0].field_size, 2)
         self.assertEqual(result[0].level, 1)
 
     def test_correct_contract_of_inactive_leagues(self):
         session = MagicMock(spec=Session)
         league = League(
-            id=1, name="League 1", players=[mock_blob(1), mock_blob(1)], level=1
+            id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(1), mock_blob(1)], level=1
         )
         leagues = [league]
 
@@ -71,8 +76,8 @@ class TestLeagueService(unittest.TestCase):
     @patch("domain.league_service.transfers")
     def test_promote_blobs_to_leagues(self, mock_transfers):
         session = MagicMock(spec=Session)
-        league1 = League(id=1, name="League 1", players=[mock_blob(1)], level=1)
-        league2 = League(id=2, name="League 2", players=[mock_blob(1)], level=2)
+        league1 = League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(1)], level=1)
+        league2 = League(id=2, name=Translation(en="League 2", hu="Liga 2"), players=[mock_blob(1)], level=2)
         leagues = [league1, league2]
 
         mock_transfers.__getitem__.side_effect = lambda league: []
@@ -85,10 +90,10 @@ class TestLeagueService(unittest.TestCase):
     @patch("domain.league_service.league_repository.save_league")
     def test_create_new_league_if_necessary(self, mock_save_league):
         session = MagicMock(spec=Session)
-        league1 = League(id=1, name="League 1", players=[mock_blob(1)], level=1)
+        league1 = League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(1)], level=1)
         queue = League(
             id=2,
-            name="Queue",
+            name=Translation(en="Queue", hu="Sor"),
             players=[
                 mock_blob(1),
                 mock_blob(2),
@@ -106,7 +111,7 @@ class TestLeagueService(unittest.TestCase):
         mock_save_league.assert_called_once()
         args, _ = mock_save_league.call_args
         self.assertEqual(args[0], session)
-        self.assertEqual(args[1].name, "League 2")
+        self.assertEqual(args[1].name, Translation(en="League 2", hu="Liga 2"))
         self.assertEqual(args[1].level, 2)
 
     @patch("domain.league_service.transfers")
@@ -118,9 +123,9 @@ class TestLeagueService(unittest.TestCase):
         self, mock_get_standings, mock_get_blob_event, mock_transfers
     ):
         session = MagicMock(spec=Session)
-        league1 = League(id=1, name="League 1", players=[mock_blob(6)], level=1)
+        league1 = League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(6)], level=1)
         dropout_league = League(
-            id=2, name="Dropout", players=[mock_blob(5, 2, blob_id=1)], level=0
+            id=2, name=Translation(en="Dropout", hu="Kiesok"), players=[mock_blob(5, 2, blob_id=1)], level=0
         )
         leagues = [league1]
 
@@ -150,7 +155,7 @@ class TestLeagueService(unittest.TestCase):
     def test_get_dropout_winner(self, mock_get_standings):
         session = MagicMock(spec=Session)
         dropout_league = League(
-            id=1, name="Dropout", players=[mock_blob(1, blob_id=1)], level=0
+            id=1, name=Translation(en="Dropout", hu="Kiesok"), players=[mock_blob(1, blob_id=1)], level=0
         )
 
         mock_get_standings.return_value = [
@@ -164,8 +169,8 @@ class TestLeagueService(unittest.TestCase):
     @patch("domain.league_service.transfers")
     def test_demote_blobs_to_dropout(self, mock_transfers):
         session = MagicMock(spec=Session)
-        league1 = League(id=1, name="League 1", players=[mock_blob(5)], level=1)
-        dropout_league = League(id=2, name="Dropout", players=[], level=0)
+        league1 = League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(5)], level=1)
+        dropout_league = League(id=2, name=Translation(en="Dropout", hu="Kiesok"), players=[], level=0)
         leagues = [league1]
 
         mock_transfers.__getitem__.side_effect = lambda league: []
@@ -176,7 +181,7 @@ class TestLeagueService(unittest.TestCase):
             self.assertEqual(blob.league_id, 2)
 
     def test_get_free_spaces(self):
-        league = League(id=1, name="League 1", players=[mock_blob(1)], level=1)
+        league = League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(1)], level=1)
 
         result = _get_free_spaces(league)
 
@@ -185,7 +190,7 @@ class TestLeagueService(unittest.TestCase):
     @patch("domain.league_service.get_standings")
     def test_get_blobs_by_standings_order(self, mock_get_standings):
         session = MagicMock(spec=Session)
-        league = League(id=1, name="League 1", players=[mock_blob(1)], level=1)
+        league = League(id=1, name=Translation(en="League 1", hu="Liga 1"), players=[mock_blob(1)], level=1)
         mock_get_standings.return_value = []
 
         result = _get_blobs_by_standings_order(session, league, 5)
@@ -215,7 +220,7 @@ class TestLeagueService(unittest.TestCase):
         session = MagicMock(spec=Session)
         league = League(
             id=1,
-            name="League 1",
+            name=Translation(en="League 1", hu="Liga 1"),
             players=[
                 create_blob_model_mock(contract=5),
                 create_blob_model_mock(contract=7, integrity=10),

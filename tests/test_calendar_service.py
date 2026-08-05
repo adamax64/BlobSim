@@ -7,6 +7,8 @@ from domain.calendar_service import (
   get_season_calendar,
   conclude_calendar_event
 )
+from domain.dtos.translations_dto import TranslationsDto
+from data.model.translation import Translation
 
 
 class TestCalendarService(unittest.TestCase):
@@ -42,7 +44,7 @@ class TestCalendarService(unittest.TestCase):
         # Mock calendar event
         event = MagicMock()
         event.date = 123
-        event.league.name = 'Test League'
+        event.league.name = Translation(en='Test League', hu='Teszt Liga')
         event.league.level = 1
         event.concluded = False
         event.event_type = 'SOME_EVENT'
@@ -52,7 +54,10 @@ class TestCalendarService(unittest.TestCase):
         result = get_season_calendar(session)
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].date, 'SIM_TIME_DTO')
-        self.assertEqual(result[0].league_name, 'Test League')
+        self.assertEqual(
+            result[0].league_name,
+            [TranslationsDto(language='en', text='Test League'), TranslationsDto(language='hu', text='Teszt Liga')],
+        )
         self.assertEqual(result[0].league_level, 1)
         self.assertEqual(result[0].is_current, True)
 

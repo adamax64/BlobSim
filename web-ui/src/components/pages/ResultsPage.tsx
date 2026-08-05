@@ -29,6 +29,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useSimTime } from '../../context/SimTimeContext';
 import { formatToShort } from '../../utils/sim-time-utils';
+import { getLocalizedText } from '../../utils/translation-utils';
 import { ResultsModal } from '../event-components/ResultsModal';
 import { NarrowCell } from '../common/StyledComponents';
 import { Link } from '@tanstack/react-router';
@@ -36,7 +37,7 @@ import { Link } from '@tanstack/react-router';
 const ALL_LEAGUE = 'all';
 
 export const ResultsPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { simTime, loading: simTimeLoading, refreshSimTime } = useSimTime();
@@ -89,7 +90,7 @@ export const ResultsPage = () => {
   const filteredCompetitions =
     !selectedLeague || selectedLeague === ALL_LEAGUE
       ? (competitions ?? [])
-      : (competitions ?? []).filter((c) => c.leagueName === selectedLeague);
+      : (competitions ?? []).filter((c) => getLocalizedText(c.leagueName, 'en') === selectedLeague);
 
   return (
     <PageFrame pageName="results">
@@ -123,8 +124,8 @@ export const ResultsPage = () => {
                 >
                   <MenuItem value={ALL_LEAGUE}>{t('results.filter_all')}</MenuItem>
                   {(leagues ?? []).map((league) => (
-                    <MenuItem key={league.id} value={league.name}>
-                      {league.name}
+                    <MenuItem key={league.id} value={getLocalizedText(league.name, 'en')}>
+                      {getLocalizedText(league.name, i18n.language)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -171,11 +172,12 @@ export const ResultsPage = () => {
                             <TableCell>{formatToShort(row.date)}</TableCell>
                             {isMobile ? (
                               <NarrowCell>
-                                {row.leagueName} · {t('results.round_short', { round: row.round })} · {eventTypeLabel}
+                                {getLocalizedText(row.leagueName, i18n.language)} ·{' '}
+                                {t('results.round_short', { round: row.round })} · {eventTypeLabel}
                               </NarrowCell>
                             ) : (
                               <>
-                                <TableCell>{row.leagueName}</TableCell>
+                                <TableCell>{getLocalizedText(row.leagueName, i18n.language)}</TableCell>
                                 <TableCell>{row.round}</TableCell>
                                 <TableCell>{eventTypeLabel}</TableCell>
                               </>

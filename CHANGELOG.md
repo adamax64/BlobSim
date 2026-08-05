@@ -816,6 +816,9 @@ Technical changes:
   - This can avoid cases when a blob has a full inventory of repair kits
 - Slightly modified weather card for better responsivity and user friendly
 
-### 5.7.3
+### 5.8.0
 
+- Added multi-language support for league names (issue #81): league names are now stored as a set of per-language translations (English, Hungarian) in the database instead of a single fixed name
+- Every place in the app displaying a league name (standings, results, calendar, blob details, hall of fame, news, event pages, replay pages) now shows the name in the currently selected UI language, falling back to English if a translation is missing
 - Name and position columns are now sticky on the standings table
+- Improved hungarian translations to be grammatically correct and more straightforward

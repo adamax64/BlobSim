@@ -7,6 +7,7 @@ import { EventStandingsStage } from './EventStandingsStage';
 import { EventResultsStage } from './EventResultsStage';
 import { EventControls } from './EventControls';
 import { ReplayControls } from '../../replay-components/ReplayControls';
+import { getLocalizedText } from '../../../utils/translation-utils';
 
 const STAGES = ['introduction', 'pre-standings', 'competition', 'results', 'post-standings'] as const;
 export type EventStage = (typeof STAGES)[number];
@@ -74,8 +75,10 @@ export const EventStagePipeline = ({
   eventControls,
   replayControls,
 }: EventStagePipelineProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const wasFinishedRef = useRef(isEventFinished);
+
+  const leagueName = getLocalizedText(event.league.name, i18n.language);
 
   // Auto-advance to the results stage the moment a live event finishes.
   useEffect(() => {
@@ -104,7 +107,7 @@ export const EventStagePipeline = ({
           <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0}}>
             <EventIntroductionStage
               active={currentStage === 'introduction'}
-              leagueName={event.league.name}
+              leagueName={leagueName}
               season={event.season}
               round={event.round}
               eventType={event.type}
@@ -115,7 +118,7 @@ export const EventStagePipeline = ({
               active={currentStage === 'pre-standings'}
               title={t('event_stage_pipeline.pre_standings.title')}
               leagueId={event.league.id}
-              leagueName={event.league.name}
+              leagueName={leagueName}
               season={event.season}
               throughRound={event.round - 1}
             />
@@ -132,7 +135,7 @@ export const EventStagePipeline = ({
               active={currentStage === 'post-standings'}
               title={t('event_stage_pipeline.post_standings.title')}
               leagueId={event.league.id}
-              leagueName={event.league.name}
+              leagueName={leagueName}
               season={event.season}
               throughRound={event.round}
             />

@@ -27,6 +27,7 @@ from domain.utils.league_utils import (
     get_number_of_rounds_by_size,
 )
 from domain.utils.sim_time_utils import convert_to_sim_time, get_sim_time_from
+from domain.utils.translation_utils import build_translations_dto
 
 
 @transactional
@@ -53,7 +54,7 @@ def get_season_calendar(session: Session) -> list[CalendarDto]:
             league_level = None
             round_num = sum(1 for x in result if x.league_level is None) + 1
         else:
-            league_name = event.league.name
+            league_name = build_translations_dto(event.league.name)
             league_level = event.league.level
             round_num = (
                 sum(1 for x in result if x.league_level == event.league.level) + 1

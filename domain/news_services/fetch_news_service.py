@@ -2,11 +2,14 @@ from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
 from data.model.news import News
+from data.persistence.league_repository import get_all_leagues_ordered_by_level
 from data.persistence.news_repository import get_all_news
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.news_dto import NewsDto, NewsTypeDto, TransfersDto
 from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
+from domain.dtos.translations_dto import TranslationsDto
 from domain.utils.sim_time_utils import convert_to_sim_time
+from domain.utils.translation_utils import build_translations_dto
 from domain.blob_services.blob_fetching_service import fetch_blob_by_id
 
 
@@ -30,7 +33,7 @@ def fetch_all_news(session: Session) -> list[NewsDto]:
                 date=convert_to_sim_time(news.date),
                 type=news.news_type,
                 blob=_get_blob(news, session),
-                league_name=_get_league_name(news),
+                league_name=_get_league_name(news, session),
                 round=_get_round(news),
                 event_id=_get_event_id(news),
                 season=_get_season(news),
@@ -54,9 +57,17 @@ def _get_blob(news: News, session) -> BlobStatsDto | None:
     return None
 
 
-def _get_league_name(news: News) -> str | None:
+def _get_league_translations_by_name(name: str, session) -> list[TranslationsDto]:
+    """News only stores a snapshot english league name string, so resolve current translations by matching it."""
+    for league in get_all_leagues_ordered_by_level(session):
+        if league.name.en == name:
+            return build_translations_dto(league.name)
+    return [TranslationsDto(language="en", text=name)]
+
+
+def _get_league_name(news: News, session) -> list[TranslationsDto] | None:
     return (
-        news.news_data[0]
+        _get_league_translations_by_name(news.news_data[0], session)
         if news.news_type in [
             NewsTypeDto.EVENT_STARTED,
             NewsTypeDto.ONGOING_EVENT,
@@ -116,7 +127,7 @@ def _get_transfers(data: list[str], session) -> tuple[int, list[TransfersDto]]:
     league_num = int(data[index])
     for _ in range(league_num):
         index += 1
-        transfer = TransfersDto(data[index], [])
+        transfer = TransfersDto(_get_league_translations_by_name(data[index], session), [])
         index += 1
         blobs_num = int(data[index])
         for _ in range(blobs_num):

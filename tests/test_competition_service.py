@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 
 from domain.competition_service import process_event_results
 from domain.dtos.event_dto import EventDto
+from domain.dtos.translations_dto import TranslationsDto
 from tests.utils import create_blob_model_mock, create_mock_blob_competitor
 from tests.utils import create_mock_result
 
@@ -26,7 +27,7 @@ class TestProcessEventResults(unittest.TestCase):
 
         mock_league = MagicMock()
         mock_league.level = 1
-        mock_league.name = 'Masters League'
+        mock_league.name = [TranslationsDto(language="en", text="Masters League")]
 
         event = EventDto(
             id=123,
@@ -107,7 +108,7 @@ class TestProcessEventResults(unittest.TestCase):
         # Assert add_event_ended_news called with correct params (league, round, event_id, session)
         mock_add_event_ended_news.assert_called_once()
         news_args = mock_add_event_ended_news.call_args[0]
-        self.assertEqual(news_args[0], mock_league.name)
+        self.assertEqual(news_args[0], 'Masters League')
         self.assertEqual(news_args[1], event.round)
         self.assertEqual(news_args[2], event.id)
         self.assertEqual(news_args[3], session)

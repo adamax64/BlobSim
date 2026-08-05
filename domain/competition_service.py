@@ -16,6 +16,7 @@ from domain.news_services.news_service import add_event_ended_news
 from domain.sim_data_service import get_current_calendar
 from domain.standings_service import invalidate_standings_cache
 from domain.utils.constants import VICTORY_PRIZE
+from domain.utils.translation_utils import get_translation_text
 
 
 @transactional
@@ -62,7 +63,7 @@ def process_event_results(
 
     invalidate_standings_cache(event.league.id, event.season)
     conclude_calendar_event(session)
-    add_event_ended_news(event.league.name, event.round, event.id, session)
+    add_event_ended_news(get_translation_text(event.league.name), event.round, event.id, session)
 
 
 def _map_records_to_results(

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { GrandmasterStandingsDTO, LeagueDto, LeaguesApi, StandingsApi, StandingsDTO } from '../../../generated';
+import { GrandmasterStandingsDTO, LeagueDto, LeaguesApi, StandingsApi, StandingsDTO, TranslationsDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { PageFrame } from '../common/PageFrame';
@@ -19,10 +19,11 @@ import { StandingsTable } from '../standings/StandingsTable';
 import { GrandmasterStandingsTable } from '../standings/GrandmasterStandingsTable';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../../utils/translation-utils';
 
 interface LeagueOption {
   id: number;
-  name: string;
+  translations?: TranslationsDto[];
   level: number;
 }
 
@@ -31,7 +32,10 @@ export function StandingsPage() {
   const [selectedLeague, setSelectedLeague] = useState<LeagueOption>();
   const [seasonOrEon, setSeasonOrEon] = useState<number>();
   const [isGrandmasters, setIsGrandmasters] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const getLeagueLabel = (league: LeagueOption) =>
+    league.id === -1 ? t('standings.grandmasters') : getLocalizedText(league.translations, i18n.language);
 
   const { simTime, loading: loadingTime, refreshSimTime: loadSimTime } = useSimTime();
 
@@ -89,8 +93,11 @@ export function StandingsPage() {
 
   useEffect(() => {
     if (leagues) {
-      setLeagueOptions([{ id: -1, name: t('standings.grandmasters'), level: -1 }, ...leagues]);
-      setSelectedLeague(leagues[0]);
+      setLeagueOptions([
+        { id: -1, level: -1 },
+        ...leagues.map((league) => ({ id: league.id, level: league.level, translations: league.name })),
+      ]);
+      setSelectedLeague(leagues[0] && { id: leagues[0].id, level: leagues[0].level, translations: leagues[0].name });
     }
   }, [leagues]);
 
@@ -150,7 +157,7 @@ export function StandingsPage() {
               >
                 {leagueOptions?.map((league) => (
                   <MenuItem key={league.id} value={league.id}>
-                    {league.name}
+                    {getLeagueLabel(league)}
                   </MenuItem>
                 ))}
               </Select>
@@ -181,7 +188,7 @@ export function StandingsPage() {
           <StandingsTable
             loading={loadingStandings || isFormLoading}
             standings={standings ?? []}
-            leagueName={selectedLeague?.name}
+            leagueName={selectedLeague && getLeagueLabel(selectedLeague)}
             season={seasonOrEon}
           />
         )}

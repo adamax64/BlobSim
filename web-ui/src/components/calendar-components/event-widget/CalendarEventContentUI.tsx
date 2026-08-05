@@ -6,6 +6,7 @@ import CheckCircle from '@mui/icons-material/CheckCircle';
 import PlayCircle from '@mui/icons-material/PlayCircle';
 import ResultsModal from '../../event-components/ResultsModal';
 import { useState } from 'react';
+import { getLocalizedText } from '../../../utils/translation-utils';
 
 type CalendarEventContentUIProps = {
   event: CalendarDto;
@@ -14,7 +15,7 @@ type CalendarEventContentUIProps = {
 
 export const CalendarEventContentUI: React.FC<CalendarEventContentUIProps> = ({ event, isToday }) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [resultsModalOpen, setResultsModalOpen] = useState(false);
 
   const closeResultsModal = () => {
@@ -36,7 +37,7 @@ export const CalendarEventContentUI: React.FC<CalendarEventContentUIProps> = ({ 
       <Typography variant="caption" sx={{ fontSize: '0.8125rem' }}>
         {event.leagueName
           ? t('calendar.event_title', {
-              leagueName: event.leagueName,
+              leagueName: getLocalizedText(event.leagueName, i18n.language),
               round: event.round,
               eventType: t(`enums.event_types.${event.eventType}`),
             })

@@ -12,13 +12,13 @@ def get_all_leagues_ordered_by_level(session: Session) -> List[League]:
 
 @transactional
 def get_all_real_leagues(session: Session) -> List[League]:
-    result = session.query(League).filter(League.name.notlike('queue')).all()
+    result = session.query(League).filter(League.level != 10).all()
     return result
 
 
 @transactional
 def get_queue(session: Session) -> League:
-    return session.query(League).filter(League.name.like('queue')).first()
+    return session.query(League).filter(League.level == 10).first()
 
 
 @transactional

@@ -13,19 +13,20 @@ import {
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import { useTranslation } from 'react-i18next';
 import { LeagueChampionsDto } from '../../../../generated';
+import { getLocalizedText } from '../../../utils/translation-utils';
 
 interface ChampionsChronologyTableProps {
   leagueChampions: LeagueChampionsDto | null;
 }
 
 export const ChampionsChronologyTable = ({ leagueChampions }: ChampionsChronologyTableProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
 
   return (
     <TableContainer component={Paper} sx={{ padding: 2, width: isMobile ? 'auto' : '100%' }}>
-      {!isMobile && <Typography variant="h6">{leagueChampions?.league.name}</Typography>}
+      {!isMobile && <Typography variant="h6">{getLocalizedText(leagueChampions?.league.name, i18n.language)}</Typography>}
       <Table size="small">
         <TableHead>
           <TableRow>

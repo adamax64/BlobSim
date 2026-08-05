@@ -9,13 +9,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { GrandmasterChronologyTable } from './tables/GrandmasterChronologyTable';
 import { ChampionsChronologyTable } from './tables/ChampionsChronologyTable';
 import { SmallAccordionTitle } from '../common/StyledComponents';
+import { getLocalizedText } from '../../utils/translation-utils';
 
 interface ChronologyTabProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
@@ -59,7 +60,7 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
           {topLeague && (
             <Accordion defaultExpanded>
               <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="body2">{topLeague.league.name}</Typography>
+                <Typography variant="body2">{getLocalizedText(topLeague.league.name, i18n.language)}</Typography>
               </SmallAccordionTitle>
               <AccordionDetails>
                 <ChampionsChronologyTable leagueChampions={topLeague} />
@@ -81,7 +82,7 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
           {dropoutLeague && (
             <Accordion defaultExpanded>
               <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="body2">{dropoutLeague.league.name}</Typography>
+                <Typography variant="body2">{getLocalizedText(dropoutLeague.league.name, i18n.language)}</Typography>
               </SmallAccordionTitle>
               <AccordionDetails>
                 <ChampionsChronologyTable leagueChampions={dropoutLeague} />
@@ -92,7 +93,7 @@ export const ChronologyTab = ({ setLoading }: ChronologyTabProps) => {
             otherLeagues.map((league) => (
               <Accordion key={league.league.id}>
                 <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="body2">{league.league.name}</Typography>
+                  <Typography variant="body2">{getLocalizedText(league.league.name, i18n.language)}</Typography>
                 </SmallAccordionTitle>
                 <AccordionDetails>
                   <ChampionsChronologyTable leagueChampions={league} />

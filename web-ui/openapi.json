@@ -1934,7 +1934,10 @@
             "title": "Inventory"
           },
           "league_name": {
-            "type": "string",
+            "items": {
+              "$ref": "#/components/schemas/TranslationsDto"
+            },
+            "type": "array",
             "title": "League Name"
           },
           "is_rookie": {
@@ -2188,7 +2191,17 @@
             "$ref": "#/components/schemas/SimTimeDto"
           },
           "league_name": {
-            "type": "string",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TranslationsDto"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "League Name"
           },
           "league_level": {
@@ -2548,7 +2561,10 @@
             "title": "Id"
           },
           "name": {
-            "type": "string",
+            "items": {
+              "$ref": "#/components/schemas/TranslationsDto"
+            },
+            "type": "array",
             "title": "Name"
           },
           "field_size": {
@@ -2654,7 +2670,10 @@
           "league_name": {
             "anyOf": [
               {
-                "type": "string"
+                "items": {
+                  "$ref": "#/components/schemas/TranslationsDto"
+                },
+                "type": "array"
               },
               {
                 "type": "null"
@@ -3047,7 +3066,10 @@
             "$ref": "#/components/schemas/SimTimeDto"
           },
           "league_name": {
-            "type": "string",
+            "items": {
+              "$ref": "#/components/schemas/TranslationsDto"
+            },
+            "type": "array",
             "title": "League Name"
           },
           "round": {
@@ -3413,7 +3435,10 @@
       "TransfersDto": {
         "properties": {
           "league_name": {
-            "type": "string",
+            "items": {
+              "$ref": "#/components/schemas/TranslationsDto"
+            },
+            "type": "array",
             "title": "League Name"
           },
           "blobs": {
@@ -3430,6 +3455,24 @@
           "blobs"
         ],
         "title": "TransfersDto"
+      },
+      "TranslationsDto": {
+        "properties": {
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "language",
+          "text"
+        ],
+        "title": "TranslationsDto"
       },
       "ValidationError": {
         "properties": {

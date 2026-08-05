@@ -20,6 +20,7 @@ from domain.news_services.news_service import (
 from domain.sim_data_service import is_unconcluded_event_today
 from domain.standings_service import get_grandmaster_standings
 from domain.utils.sim_time_utils import format_sim_time_short, get_season, is_season_end
+from domain.utils.translation_utils import build_translations_dto, get_translation_text
 from domain.weather_service import (
     calculate_factory_output,
     choose_weather,
@@ -94,7 +95,7 @@ def _check_and_add_event_news(sim_time: int, session: Session):
         calendar_event = calendar.get(sim_time)
         if calendar_event.league is not None:
             add_event_starting_news(
-                calendar_event.league.name,
+                get_translation_text(build_translations_dto(calendar_event.league.name)),
                 sum(
                     1
                     for x in calendar.values()

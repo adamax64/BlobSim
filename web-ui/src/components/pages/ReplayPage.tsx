@@ -12,11 +12,12 @@ import { ReplayQuarteredEventFrame } from '../replay-components/ReplayQuarteredE
 import { ReplayEliminationScoringFrame } from '../replay-components/ReplayEliminationScoringFrame';
 import { useNavigate } from '@tanstack/react-router';
 import { useReplayState } from '../../hooks/useReplayState';
+import { getLocalizedText } from '../../utils/translation-utils';
 
 export const ReplayPage = () => {
   const { eventId } = useParams({ from: '/replay/$eventId' });
   const competitionApi = new CompetitionApi(defaultConfig);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const { replayTick: currentTick, setReplayTick: setCurrentTick, stageIndex, setStageIndex } = useReplayState(
@@ -137,7 +138,7 @@ export const ReplayPage = () => {
   const pageTitle = useMemo(
     () =>
       event
-        ? t('replay.title', { leagueName: event.league.name, season: event.season, round: event.round })
+        ? t('replay.title', { leagueName: getLocalizedText(event.league.name, i18n.language), season: event.season, round: event.round })
         : t('replay.title_short'),
     [event, t],
   );

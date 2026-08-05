@@ -30,6 +30,7 @@ from domain.utils.constants import (
     GRANDMASTER_PRIZE,
     ROOKIE_OF_THE_YEAR_PRIZE,
 )
+from domain.utils.translation_utils import get_translation_text
 
 
 @transactional
@@ -107,7 +108,7 @@ def end_season_if_over(league: LeagueDto, season: int, session) -> List[Standing
         add_champion(
             session, Champion(season=season, blob_id=champion.id, league_id=league.id)
         )
-        add_season_ended_news(league.name, champion.id, session)
+        add_season_ended_news(get_translation_text(league.name), champion.id, session)
     if rookie is not None:
         add_rookie_of_the_year_news(rookie.id, session)
     return standings

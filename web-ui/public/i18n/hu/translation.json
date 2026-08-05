@@ -140,7 +140,7 @@
       "NEW_SEASON": {
         "headline": "Elkezdődött a {{season}}. szezon.",
         "retirees": "Az alábbo blob(ok) vonultak vissza a versenyzéstől:",
-        "transfers": "Az alábbi blob(ok) a {{leagueName}}-ben folytatják:",
+        "transfers": "Az alábbi blob(ok) a {{leagueName}} mezőnyében folytatják:",
         "rookies": "Az alábbi blob(ok) debütálnak az idei szezonban:"
       },
       "NEW_GRANDMASTER": "Új eon kezdődik. Gratulálunk {{grandmaster}}-nak/nek a nagymesterré nevezéssé a következő négy szezonra."
@@ -422,7 +422,7 @@
     "dashboard": "Kezdőlap",
     "blobs": "Blobok",
     "factory": "Blob Gyár",
-    "standings": "Eredmények",
+    "standings": "Tabella",
     "calendar": "Versenynaptár",
     "hall-of-fame": "Hírességek Csarnoka",
     "results": "Eredmények",

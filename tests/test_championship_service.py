@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 from sqlalchemy.orm import Session
 from domain.championship_service import end_eon_if_over, end_season_if_over
 from domain.dtos.league_dto import LeagueDto
+from domain.dtos.translations_dto import TranslationsDto
 from domain.dtos.grandmaster_standings_dto import GrandmasterStandingsDTO
 from domain.dtos.standings_dtos.standings_dto import StandingsDTO
 from data.model.blob import Blob
@@ -28,7 +29,7 @@ class TestChampionshipService(unittest.TestCase):
         mock_count_unconcluded,
     ):
         session = MagicMock(spec=Session)
-        league = LeagueDto(id=1, name="League 1", field_size=5, level=1)
+        league = LeagueDto(id=1, name=[TranslationsDto(language="en", text="League 1")], field_size=5, level=1)
         season = 4
 
         mock_count_unconcluded.return_value = 0
@@ -217,7 +218,7 @@ class TestChampionshipService(unittest.TestCase):
             mock_get_all_by_league_order_by_id.return_value = mock_blobs
 
             league = LeagueDto(
-                id=level, name=f"League {level}", field_size=2, level=level
+                id=level, name=[TranslationsDto(language="en", text=f"League {level}")], field_size=2, level=level
             )
             season = 1
 
@@ -243,7 +244,7 @@ class TestChampionshipService(unittest.TestCase):
                 mock_blobs[4].id, session
             )
             mock_add_season_ended_news.assert_called_with(
-                league.name, mock_blobs[1].id, session
+                f"League {level}", mock_blobs[1].id, session
             )
 
         run_test_for_level(1)

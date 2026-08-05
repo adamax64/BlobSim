@@ -5,6 +5,7 @@ from domain.dtos.item_dto import ItemDto
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.retirement_focus_type_dto import RetirementFocusTypeDto
 from domain.dtos.state_dto import StateDto
+from domain.dtos.translations_dto import TranslationsDto
 from domain.enums.activity_type import ActivityType
 from domain.enums.element_dto import ElementDto
 from domain.enums.trait_type import TraitTypeDto
@@ -34,7 +35,7 @@ class BlobStatsDto(BaseModel):
     lesser_wins: int = 0
     lesser_podiums: int = 0
     inventory: list[ItemDto]
-    league_name: str
+    league_name: list[TranslationsDto]
     is_rookie: bool = False
     at_risk: bool = False
     is_dead: bool = False

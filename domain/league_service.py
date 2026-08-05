@@ -1,11 +1,12 @@
 from sqlalchemy.orm import Session
-from random import choices, random, choice
+from random import choices, random
 
 from data.db.db_engine import transactional
 from data.model.blob import Blob
 from data.model.league import League
 from data.model.retirement_focus_type import RetirementFocusType
 from data.model.trait_type import TraitType
+from data.model.translation import Translation
 from data.persistence import league_repository
 from data.persistence.blob_reposiotry import save_all_blobs
 from data.persistence.result_repository import (
@@ -36,7 +37,10 @@ def get_all_real_leagues(session) -> list[LeagueDto]:
     """Get all leagues that are not the queue."""
 
     leagues = league_repository.get_all_real_leagues(session)
-    return [map_league_to_dto(league, league.players) for league in leagues]
+    return sorted(
+        [map_league_to_dto(league, league.players) for league in leagues],
+        key=lambda x: x.level if x.level != 0 else float('inf')
+    )
 
 
 @transactional
@@ -116,7 +120,10 @@ def _create_new_league_if_necessary(
     queue = leagues[-1]
     if len(queue.players) >= MIN_FIELD_SIZE and len(leagues) < MAX_LEAGUE_COUNT + 1:
         last_league = leagues[-2]
-        new_league = League(name=f"League {len(leagues)}", level=last_league.level + 1)
+        new_league = League(
+            name=Translation(en=f"League {len(leagues)}", hu=f"Liga {len(leagues)}"),
+            level=last_league.level + 1,
+        )
         new_league = league_repository.save_league(session, new_league)
         blobs: list[Blob] = _get_blobs_by_standings_order(
             session, queue, current_season

@@ -25,6 +25,7 @@ from domain.sim_data_service import get_current_calendar, get_sim_time
 from domain.utils.blob_utils import format_blob_name
 from domain.utils.league_utils import map_league_to_dto
 from domain.utils.sim_time_utils import get_season, convert_to_sim_time
+from domain.utils.translation_utils import build_translations_dto, get_translation_text
 
 
 @transactional
@@ -74,7 +75,7 @@ def get_or_start_event(
         random.shuffle(actions)
         save_all_actions(session, actions)
         session.refresh(event)
-        add_ongoing_event_news(event.league.name, event.round, event.type, session)
+        add_ongoing_event_news(get_translation_text(build_translations_dto(event.league.name)), event.round, event.type, session)
 
     actions = [
         ActionDto(blob_id=action.blob_id, scores=action.scores)

@@ -9,10 +9,11 @@ import { EnduranceRaceEventFrame } from '../event-components/endurance-race/Endu
 import { SprintRaceEventFrame } from '../event-components/sprint-race/SprintRaceEventFrame';
 import { useTranslation } from 'react-i18next';
 import { EliminationScoringEventFrame } from '../event-components/elimination-scoring/EliminationScoringEventFrame';
+import { getLocalizedText } from '../../utils/translation-utils';
 
 export const EventPage = () => {
   const competitionApi = new CompetitionApi(defaultConfig);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const {
     data: event,
@@ -96,7 +97,7 @@ export const EventPage = () => {
   const pageTitle = useMemo(
     () =>
       event
-        ? t('event.title', { leagueName: event.league.name, season: event.season, round: event.round })
+        ? t('event.title', { leagueName: getLocalizedText(event.league.name, i18n.language), season: event.season, round: event.round })
         : t('event.title_short'),
     [event],
   );

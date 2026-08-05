@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from functools import wraps
 import os
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, event, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import inspect
@@ -19,6 +19,17 @@ POSTGRES_PORT = os.environ.get("POSTGRES_PORT", "5432")
 DB_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 engine = create_engine(DB_URL)
+
+
+@event.listens_for(engine, "connect")
+def _register_composite_types(dbapi_connection, connection_record):
+    """Teach psycopg2 about the "BCS".translation composite type on each new DB connection."""
+    from psycopg2.extras import register_composite
+    from data.model.league import TRANSLATION_TYPE, TRANSLATION_TYPE_QUALIFIED_NAME
+
+    register_composite(
+        TRANSLATION_TYPE_QUALIFIED_NAME, dbapi_connection, globally=True, factory=TRANSLATION_TYPE.caster
+    )
 
 # Create the base class for declarative models
 Base = declarative_base()

@@ -6,13 +6,14 @@ import { useNavigate } from '@tanstack/react-router';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import { InlineTranslatedBlob } from '../../common/InlineTranslatedBlob';
 import ResultsModal from '../../event-components/ResultsModal';
+import { getLocalizedText } from '../../../utils/translation-utils';
 
 type NewsContentProps = {
   newsItem: NewsDto;
 };
 
 export const NewsContent = ({ newsItem }: NewsContentProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [resultsOpen, setResultsOpen] = useState(false);
   const [resultsEventId, setResultsEventId] = useState<number | null>(null);
@@ -32,7 +33,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
       return (
         <Typography variant="body1">
           {t(`enums.news_type.${newsItem.type}`, {
-            leagueName: newsItem.leagueName,
+            leagueName: getLocalizedText(newsItem.leagueName, i18n.language),
             round: newsItem.round,
             eventType: t(`enums.event_types.${newsItem.eventType}`),
           })}
@@ -42,7 +43,10 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
       return (
         <>
           <Typography variant="body1">
-            {t('enums.news_type.EVENT_ENDED.headline', { leagueName: newsItem.leagueName, round: newsItem.round })}
+            {t('enums.news_type.EVENT_ENDED.headline', {
+              leagueName: getLocalizedText(newsItem.leagueName, i18n.language),
+              round: newsItem.round,
+            })}
           </Typography>
           <Link
             href="#"
@@ -91,7 +95,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
           translationKey={`enums.news_type.SEASON_ENDED`}
           blob={newsItem.winner ?? undefined}
           interpolationKey="winner"
-          otherInterpolations={{ leagueName: newsItem.leagueName ?? '' }}
+          otherInterpolations={{ leagueName: getLocalizedText(newsItem.leagueName, i18n.language) }}
         />
       );
     case NewsType.RookieOfTheYear:
@@ -124,9 +128,11 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
             newsItem.transfers
               ?.filter((league) => league.blobs.length > 0)
               .map((league) => (
-                <Box key={league.leagueName}>
+                <Box key={getLocalizedText(league.leagueName, 'en')}>
                   <Typography variant="body1">
-                    {t('enums.news_type.NEW_SEASON.transfers', { leagueName: league.leagueName })}
+                    {t('enums.news_type.NEW_SEASON.transfers', {
+                      leagueName: getLocalizedText(league.leagueName, i18n.language),
+                    })}
                   </Typography>
                   <ul>
                     {league.blobs.map((b) => (

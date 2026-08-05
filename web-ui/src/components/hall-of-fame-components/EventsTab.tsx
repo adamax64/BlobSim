@@ -8,13 +8,14 @@ import { useMutation } from '@tanstack/react-query';
 import { WinsByEventTypeTable } from './tables/WinsByEventTypeTable';
 import { RecordsByLeagueTable } from './tables/RecordsByEventTable';
 import { SmallAccordionTitle } from '../common/StyledComponents';
+import { getLocalizedText } from '../../utils/translation-utils';
 
 interface EventsTabProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const EventsTab = ({ setLoading }: EventsTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(`${theme.breakpoints.down('sm')} or (max-height:600px)`);
@@ -53,7 +54,7 @@ export const EventsTab = ({ setLoading }: EventsTabProps) => {
         recordsByLeague.map((records) => (
           <Accordion defaultExpanded={records.league.level === 1} key={records.league.level}>
             <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="body2">{records.league.name}</Typography>
+              <Typography variant="body2">{getLocalizedText(records.league.name, i18n.language)}</Typography>
             </SmallAccordionTitle>
             <AccordionDetails>
               <RecordsByLeagueTable data={records.records} />
@@ -68,7 +69,7 @@ export const EventsTab = ({ setLoading }: EventsTabProps) => {
           recordsByLeague.map((records) => (
             <Accordion defaultExpanded={records.league.level === 1} key={records.league.level}>
               <SmallAccordionTitle expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="body2">{records.league.name}</Typography>
+                <Typography variant="body2">{getLocalizedText(records.league.name, i18n.language)}</Typography>
               </SmallAccordionTitle>
               <AccordionDetails>
                 <RecordsByLeagueTable data={records.records} />
