@@ -7,3 +7,4 @@ PyJWT
 python-dotenv
 psycopg2-binary
 apscheduler
+sqlalchemy_utils
