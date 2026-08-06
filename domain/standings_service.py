@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
 from data.model.blob import Blob
-from data.persistence.blob_reposiotry import get_blob_by_id
+from data.persistence.blob_repository import get_blob_by_id
 from data.persistence.calendar_repository import get_calendar
 from data.persistence.event_repository import get_event_by_id
 from data.persistence.result_repository import get_results_of_league_by_season

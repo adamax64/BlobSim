@@ -1,6 +1,6 @@
 from data.db.db_engine import transactional
 from data.model.result import Result
-from data.persistence.blob_reposiotry import save_all_blobs
+from data.persistence.blob_repository import save_all_blobs
 from data.persistence.result_repository import save_all_results
 from domain.calendar_service import conclude_calendar_event
 from domain.dtos.event_dto import EventDto

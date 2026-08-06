@@ -824,3 +824,7 @@ Technical changes:
   - For now only available in english
 - Name and position columns are now sticky on the standings table
 - Improved hungarian translations to be grammatically correct and more straightforward
+
+### 5.8.1
+
+- Fixed bug of simulation not progressing when blobs use repair kit immedietly after getting injured 

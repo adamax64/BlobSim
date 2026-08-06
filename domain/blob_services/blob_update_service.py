@@ -13,7 +13,7 @@ from data.model.name_suggestion import NameSuggestion
 from data.model.policy_type import PolicyType
 from data.model.retirement_focus_type import RetirementFocusType
 from data.model.trait import Trait
-from data.persistence.blob_reposiotry import (
+from data.persistence.blob_repository import (
     get_all_blobs_by_name,
     get_blob_by_id,
     save_all_blobs,

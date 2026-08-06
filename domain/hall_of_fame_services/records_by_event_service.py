@@ -14,7 +14,7 @@ from domain.hall_of_fame_services.titles_chronology_service import (
     get_current_grandmaster_id,
 )
 from data.persistence.result_repository import get_wins_by_event
-from data.persistence.blob_reposiotry import get_all_by_ids
+from data.persistence.blob_repository import get_all_by_ids
 
 
 @transactional

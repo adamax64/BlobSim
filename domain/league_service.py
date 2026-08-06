@@ -8,7 +8,7 @@ from data.model.retirement_focus_type import RetirementFocusType
 from data.model.trait_type import TraitType
 from data.model.translation import Translation
 from data.persistence import league_repository
-from data.persistence.blob_reposiotry import save_all_blobs
+from data.persistence.blob_repository import save_all_blobs
 from data.persistence.result_repository import (
     get_most_recent_real_league_result_of_blob,
 )

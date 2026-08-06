@@ -4,7 +4,7 @@ import random
 from psycopg2 import IntegrityError
 from data.db.db_engine import transactional
 from data.model.blob import Blob
-from data.persistence.blob_reposiotry import get_blob_by_id, save_blob
+from data.persistence.blob_repository import get_blob_by_id, save_blob
 from data.persistence.league_repository import get_queue
 from data.persistence.name_suggestion_repository import (
     delete_suggestion,

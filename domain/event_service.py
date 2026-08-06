@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
 from data.model.event import Event
-from data.persistence.blob_reposiotry import get_all_by_ids
+from data.persistence.blob_repository import get_all_by_ids
 from data.persistence.event_repository import (
     get_event_by_date,
     get_event_by_id as repository_get_event_by_id,

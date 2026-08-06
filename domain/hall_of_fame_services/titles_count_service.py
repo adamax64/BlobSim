@@ -1,5 +1,5 @@
 from data.db.db_engine import transactional
-from data.persistence.blob_reposiotry import get_all_blobs_by_name
+from data.persistence.blob_repository import get_all_blobs_by_name
 from data.persistence.champion_repository import get_all_champions
 from data.persistence.grandmaster_repository import get_all_grandmasters
 from domain.dtos.titles_count_dto import TitleCountDto, TitlesCountSummaryDto

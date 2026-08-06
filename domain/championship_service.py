@@ -6,7 +6,7 @@ from data.model.blob import Blob
 from data.model.champion import Champion
 from data.model.grandmaster import Grandmaster
 from data.model.name_suggestion import NameSuggestion
-from data.persistence.blob_reposiotry import (
+from data.persistence.blob_repository import (
     get_all_by_league_order_by_id,
     get_blob_by_id,
     save_all_blobs,

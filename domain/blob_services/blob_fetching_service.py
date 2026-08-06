@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
 from data.model.blob import Blob
-from data.persistence.blob_reposiotry import (
+from data.persistence.blob_repository import (
     get_all_blobs_by_name,
     get_blob_by_id,
     get_by_activities,

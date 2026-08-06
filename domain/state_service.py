@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from data.db.db_engine import transactional
 from data.model.item_type import ItemType
 from data.model.state_type import StateType
-from data.persistence.blob_reposiotry import get_blob_by_id
+from data.persistence.blob_repository import get_blob_by_id
 from data.persistence.item_repository import delete_item
 from data.persistence.state_repository import create_state
 from domain.sim_data_service import get_sim_time
@@ -20,7 +20,7 @@ def apply_injury(blob_id: int, session: Session):
 
     repair_kit = get_item_from_list_by_type(blob.items, ItemType.REPAIR_KIT)
     if repair_kit:
-        delete_item(repair_kit)
+        delete_item(session, repair_kit.id)
         return
 
     effect_until = get_sim_time(session) + INJURED_STATE_DURATION

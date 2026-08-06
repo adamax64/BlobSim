@@ -9,7 +9,7 @@ from data.persistence.sim_data_repository import get_sim_data, save_sim_data
 from data.persistence.state_repository import delete_expired_states
 from domain.blob_services.blob_creation_service import check_factory_and_create_blob
 from data.persistence.policy_repository import get_active_policy_by_type
-from data.persistence.blob_reposiotry import get_all_retired, save_all_blobs
+from data.persistence.blob_repository import get_all_retired, save_all_blobs
 from domain.calendar_service import recreate_calendar_for_next_season
 from domain.element_service import generate_daily_element_tokens
 from domain.league_service import manage_league_transfers
