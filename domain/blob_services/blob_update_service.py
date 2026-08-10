@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 import random
+import math
 from sqlalchemy.orm import Session
 
 from data.db.db_engine import transactional
@@ -287,6 +288,11 @@ def _is_premium_practice_free(blob: Blob, session: Session) -> bool:
         return True
 
     current_season = get_season(get_sim_time(session))
+    current_standings = get_standings(blob.league_id, current_season, current_season, session)
+    current_position = next((i for i, s in enumerate(current_standings) if s.blob_id == blob.id), None)
+    if current_position is not None and current_position < math.ceil(len(current_standings) / 2):
+        return False
+
     if blob.contract == current_season and blob.league_id is not None:
         standings = get_standings(
             blob.league_id, current_season - 1, current_season, session

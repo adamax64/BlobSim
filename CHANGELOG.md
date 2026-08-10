@@ -827,4 +827,8 @@ Technical changes:
 
 ### 5.8.1
 
-- Fixed bug of simulation not progressing when blobs use repair kit immedietly after getting injured 
+- Fixed bug of simulation not progressing when blobs use repair kit immedietly after getting injured
+
+### 5.8.2
+
+- Free premium practice is no longer available for blobs with ending contract if their finishing position last season was under the 50% threshold but are currently inside the top 50% in the current season
