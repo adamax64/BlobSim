@@ -1,376 +1,417 @@
 # Version changelog
 
-### 1.2
+### 5.8.3
 
-- New main menu option: "_Add blob name suggestion_"
-  - Here the user can add a name to the name suggestions list
-  - When a new blob is created and the name suggestions list is not empty, it takes the oldest record of the list and applies the name to the blob thus the simulation is not blobked
-  - If the name suggestions list is empty the blob creation is the same as in previous versions
-- Enhanced prompt for entering blob name: a dialog window appears with a textbox
+- Switched the blob squash/breathing animation from SVG SMIL (`<animateTransform>`) to CSS keyframe animations so the animation starts reliably on mount instead of lagging on the first frames
+- Blob blinking now uses randomized per-blob durations instead of a fixed 9 s schedule, so multiple blobs on screen no longer blink in sync
+- Blob squash/breathing animation now uses a randomized per-blob duration and starting phase so multiple blobs no longer breathe in lockstep
 
-### 1.2.1
+### 5.8.2
 
-- App crash at the end of the last league event of season fixed
+- Free premium practice is no longer available for blobs with ending contract if their finishing position last season was under the 50% threshold but are currently inside the top 50% in the current season
+
+### 5.8.1
+
+- Fixed bug of simulation not progressing when blobs use repair kit immedietly after getting injured
+
+### 5.8.0
+
+- Added multi-language support for league names (issue #81): league names are now stored as a set of per-language translations (English, Hungarian) in the database instead of a single fixed name
+- Every place in the app displaying a league name (standings, results, calendar, blob details, hall of fame, news, event pages, replay pages) now shows the name in the currently selected UI language, falling back to English if a translation is missing
+- Added a Wiki page that gives a general introduction to Blob Championship System and its core concepts
+  - For now only available in english
+- Name and position columns are now sticky on the standings table
+- Improved hungarian translations to be grammatically correct and more straightforward
+
+### 5.7.2
+
+- When a blob has a repair kit they more likely do intense practice, because if they get injured the repair kit used up instantly
+  - This can avoid cases when a blob has a full inventory of repair kits
+- Slightly modified weather card for better responsivity and user friendly
 
-### 1.2.2
+### 5.7.1
 
-- Fixed the contract problem in inactive leagues at the end of season
-- Fixed calendar creation at the end of season
-- Debug mode window title extended with "_debug mode_"
-- Started removing types of the typing library from the code as newer python versions provide native list and dict types
+- Fixed display of standing snippets at start of season on replay and current standings on event pages
 
-### 1.2.3
+### 5.7 - Event UI update
 
-- Changed disclaimer text on intro screen
-- Visual representation of a blob is created in vector image format
-
-### 1.2.4
-
-- Fixed standings sorting on score ties
-
-### 1.2.5
-
-- Created unit test environment, writing tests for league service
-
-### 1.2.6
-
-- Fixed bug: empty grandmasters standings table appears for next eon when season is dividable by 4
-- On the league standings for current season blob names are colored when their contract is ending this season
-- Grandmaster winners get 1 extra season for their contract
-- Wrote tests for championship service
-
-### 1.2.7
-
-- For larger field sizes the elimination count calculation changed to align with the rules
-- Improving the progress simulation view by adding a GUI window to show the progress of the process
-
-### 1.3
-
-- Added new race event format: endurance race event
-
-### 2.0
-
-- Migrates UI to a web based frontend application
-  - The UI consists of a main area where the contents of the different pages are rendered and menu bar on the left to navigate between these pages
-  - the pages follow a similar structure to the previous Console UI
-  - The pages are the following:
-    - Dashboard
-    - Blobs
-    - Standings
-    - Calendar
-    - Event pages
-- Adjusted application setup and startup logic
-  - A `setup` script is added which installs the backend and frontend dependencies
-  - The `start` and `debug` scripts start the backend and frontend as well in production and development mode respectively
-  - Added possibility to run the app on Linux distributions
-- New page: Factory
-  - Shows factory progress on a progress bar
-  - Lists blob name suggestions and a button
-  - Clicking the button a dialog appears where the user can add a new name suggestion
-  - The same name validations apply as on the old UI
-- Added new simulation status texts, now called as "news":
-  - When a blob is created and named after a suggested name, that name is displayed
-  - After an event is concluded a sumamry text is shown with the top 3
-
-### 2.1
-
-- Blobs now can have children, by becoming grandmaster at the end of each eon
-- Children inherit the last name of the grandmaster
-- On blob creation children get bonuses to initial stats:
-  - +0.01 learning for every championship title of parent
-  - +0.01 strength for every grandmaster title of parent
-  - So if parent is currently 5 times champion and 2 times grandmaster, then their new child gets 0.05 learning and 0.02 strength bonus
-
-### 2.1.1
-
-- Fixed missing adjustments related to the name split
-
-### 2.1.2
-
-- Fixed error on event record calculation if field size is 15 or larger
-- Cached event records table on quartered event page so it does not disappears for a moment, causing unintended scrollup
-
-### 2.2
-
-- Each blob has a unique color
-- Added blob icons to the blob list
-  - The icon is displayed next to the blob's name
-- Added blob details dialog when clicking on a blob in the blobs page
-  - Shows blob in large
-  - Displays blob's basic information like birthdate, debut, current status
-  - Shows blob's achievements like podiums, wins, championships and grandmaster titles
-- Added copyright text and version to the bottom of the menubar
-
-### 2.2.1
-
-- Improved UI responsiveness so the UI is more usable on mobile
-- Landscape mode on mobile is still a bit broken, will be refined in future release
-
-### 2.3
-
-- Added admin authentication
-  - Login page with username and password
-  - Token-based authentication with backend API
-  - Protected endpoints that require authentication
-  - Only admin user is added at the moment, no registration
-
-### 2.3.1
-
-- Smaller UI fixes on blobs page and race event page
-
-### 2.3.2
-
-- On race events score generation use perlin-like noise for more diverse race results
-- Fixed competitor shuffling at the beginning of events
-- Added event records cache to endurance race view to avoid table flashing on progressing to next tick
-
-### 2.3.3
-
-- Hide "add name suggestion" button and progress buttons on event page when user is unauthorized
-- Minor refactors on dashboard
-
-### 2.3.4
-
-- Display name of blob's parent on blob details dialog
-
-### 2.4
-
-- Introduce internationalization:
-  - Language can be set at the bottom of the drawer
-  - Default language is english
-  - Other language option is hungarian
-- Fixed blob search by name error
-- Adjusted blob datagrid autosizing to solve column grid imploding
-
-### 2.5
-
-- Adjusted application to be hosted on the internet
-- Migrated database to Postgres
-- Adjusted database migrations for postgres and populate initial data as current state of the "production" database
-- Adjusted frontend to enable setting backend url from environment variables
-
-### 2.5.1
-
-- Some hotfixes to production deployment
-- When user is logged in redirect from login to dashboard
-- Proceed to event button is green and visible for non logged in users too
-- At the first quarter in high jump events the randomized starting is fixed with a twist: the order of blobs that not scored yet is randomized every tick
-- Improved backend error logging
-
-### 2.5.2 - Miscellaneous update
-
-- Reworked the calendar on desktop view to make the calendar more visual
-  - No room for the new design in mobile view, it will be reworked later
-- Fixed action multiplicating bug in endurance races
-  - Disable simulation and event progression buttons when progression related operations are pending
-  - Backend throws error when actions are about to be saved for a tick, but there are already saved actions corresponding for that tick
-- Fixed page sizing problems on standings page mobile
-- Fixed page sizing problems on endurance event page mobile
-
-### 2.5.3
-
-- On race events if a blob overtakes someone or is overtaken, they learn from it, so their strength increases a little bit
-- Added playback flag for race events to avoid duplicated rewards for overtakes on page reloads
-- When a blob sets a new record on a quartered high jump event, a snackbar appears to notify the user about the new record
-
-### 2.6 - Stats update
-
-- Blobs get a new stat: speed
-  - Used for score generation in race events
-  - During practice, the practice effect is divided between the two stats in random ratio
-- Modified stat update multiplyer constants
-- Added backend checks for simulation progress endpoint
-- Generalised loading animation
-- Refined desktop calendar to display only the current season's epochs and all of the events in the current season
-
-### 2.6.1 Hotfix
-
-- Updated openapi specifications to fix the quartered event action creation error
-- Fixed login page layout issues
-
-### 2.6.2
-
-- Fixed bug about getting error when saving quartered event results
-- Added error snackbar when result save and event record assembly runs into an error
-
-### 2.6.3
-
-- Fixed to show mobile drawer menu when mobile device is in landscape mode
-
-### 3.0
-
-- Added rookie of the year feature: if there are at least three rookies participated in a league at the end of the season the best rookie gets money reward and a contract extension
-- Reworked actions data structure:
-  - Instead of storing every score one by one they are now grouped by event and competitor
-  - Event ticks and which score belongs to which tick is calculated from event rules
-  - DISCLAIMER (for dev): because of the previous point, event rules should be versioned, if they are changed in the future
-- Seed for score generation in race events are calculated from blob id instead of speed because speed can change during event
-- Enhanced event progresion handling:
-  - Every click on the ProgressButton can be done by pressing _space_
-  - Enchanced quartered event UI to display current blob with shadow box instead of darker border
-- Blobs with ending contract and rookies are now marked with badges instead of colored background
-- Score generation for quartered events now require both skill stats from blobs: strength 70%, speed 30%
-  - Skills are updated after event accordingly
-- New event type: elimination scoring
-  - Scores generated from blob strength
-  - In each tick every non eliminated blob generates a score and the lowest scoring gets eliminated
-  - This repeats until only one blob is left
-- Fixed bug: event result saving was possibble multiple times after event was concluded
-- Added new information to blob details dialog to display:
-  - Strength, speed and integrity state relative to other blobs (no exact values, just categories with color code)
-  - Termination and retirement dates
-  - Money
-  - If blob is dead, a different blob icon is displayed
-  - Current activity
-- Added minor blinking animation to blob on blob details dialog
-- Reworked blob activity logic to first proceed with the effects of the current activity stored in the database then generate the activities for next cycle (day)
-- Blob details dialog now can be opened on standings and event pages by clicking on blob name
-- Reworked news logic:
-  - News entries are saved to database
-  - Whole new variety of news:
-    - Blob created, terminated, retired, debuted
-    - Event starteing, ongoing, ened (displaying results)
-    - Season ended for league, displaying champion
-    - New season started, displaying league transfers, retirees and debuting blobs
-    - New grandmaster at the start of new eon
-- Refactored UI:
-  - Added app header bar with page title and menu toggle button in mobile mode
-  - Page title card is removed
-  - News card redesigned according to the reworked news logic
-  - Control buttons like 'Next day', 'Proceed to event' are put to a toolbar card at the bottom
-
-### 3.0.1
-
-- Fixed production build error caused by vite version update
-
-### 3.0.2
-
-- Fixed best score calculation error in quartered events
-- Fixed news text translation issues
-
-### 3.0.3
-
-- Added speed stat bonus for grandmaster's child
-
-### 3.1
-
-- Added cathup trainings:
-  - On the second epoch of every season
-  - The following blobs participate:
-    - The youngest blob to debut
-    - Last seasons last place of every league
-    - Every blob demoted to the dropout league last season
-- Added intense training
-  - Done only on cathup trainings
-  - More efficient than regular practice
-- Added blob icons next to names in news
-- By clicking on the blob icon and name in the news the blob details dialog opens
-- Fixed new season news querying
-
-### 3.1.1
-
-- Fixed news text for "rookie of the year" and "season ended" news types
-- Fixed bug about blob order is not randomized when event starts
-
-### 3.1.2
-
-- Created records database table to make record checking and managing logic simpler and mor robust
-- Created endpoints for querying records for possible future feature
-- Fixed bug about blob dialog not opening from news of certain types
-- Fixed issue about the "NEW_GRANDMASTER" news type appearing at the end of every season
-
-### 3.1.3
-
-- Extended bonus point calculation to elimination event:
-  - If a blob scores highest in at least one tick they get one bonus point
-  - The blob with the most ticks won gets an additional bonus point (if there is a tie then no bonus points given)
-  - The winner of the whole event gets one additional bonus point
-- Adjusted UI on elimination event so the latest eliminated blob's score is displayed
-- Fixed elimination event table aligning against the barchart
-- Added missing rounding to elimination score record
-- Fixed starting event news round calculation bug
-
-### 3.1.4
-
-- Fixed missing browser shortcut icon
-- Fixed page overflow issue on mobile caused by browser header on scrolling
-
-### 3.1.5
-
-- Fixed scrolling issue on event and factory page
-
-### 3.2
-
-- Changed skill effect of overtakes in endurance races: the blob overtaken now improves their speed skill with the same modifier as the one overtook them
-- Enhanced blob visualization:
-  - Blobs on blob details dialog has an idle animation of "extending" and "retracting" vertically
-  - The current grandmaster has a crown on their head
-- Fixed error on opening the blob details dialog for a terminated blob
-
-### 3.3
-
-- Made news loading independent from the other loading processes on dashboard
-  - Added skeleton loader to news card
-- Removed strength and speed indicator from blob details dialog
-- Replaced top 3 blobs in event ended news with a link
-  - Opens a modal containing the event results
-
-### 3.4 - Grandmaster activity update
-
-- Added grandmaster "Administration" activity allowing grandmasters to randomly create temporary "policies" (Factory modernization, Gym improvements, Salary raise, Pension).
-  - Policies have duration depending on grandmaster level (level 1 → 4 days; level 2 → 6 days; level >2 → 6 + (level - 2) days) and an applied level determining effect strength.
-  - Effects: factory modernization speeds up factory progress; gym improvements increase practice/intense training efficiency; salary raises increase labour salary; pension schemes provide pension payouts to retired blobs.
-  - Backend: new `policies` DB table, repository upsert, domain service to create/update policies, and an API endpoint (`GET /policies/`) returning active policies. Added Alembic migrations (policies table + ADMINISTRATION activity enum value) and unit tests.
-  - Frontend: Dashboard "Policies" panel showing active policies with tooltips and translations added (English & Hungarian).
-
-- Bugfix: Fixed Results modal so it properly refreshes/resets on open/close to avoid stale state and duplicated fetches.
-- Bugfix: Results table on the modal displays name shorthands on mobile devices
-
-### 3.5 - Sprint and Mining update
-
-- added new event type: sprint race
-  - blobs have a certain amount of time to finish the race of a given distance
-  - the available time is determined the same way as for endurance races
-  - the distance to make during the race is the same amount of distance units as the number of available ticks
-  - point system is the same as for endurance races with one addition:
-    - contenders who cannot finish the given time in the available time get one point less as the base points determined by finishing position
-  - from the four guaranteed event types Quartered two shot high jump is replaced by sprint race
-- added new activity: mining
-  - from the blobs who chose to mine in the current cycle one is chosen as winner
-  - the winner gets the same amount of coins as the number of blobs participated in mining
-- added visualization for the following activities:
-  - practice
-  - intense training
-  - labour
-  - mining
-- added dark mode and a switch between dark and light mode
-- adjusted dashboard page so the policies card appear next to the time card even in mobile mode
-- changed standings table:
-  - points cell background is colored for podium finishes instead of font color
-  - removed row coloring for closed seasons
-  - centered points for competition finishes and point sums
-- fixed standings page loading issue
-- adjusted font sizes of card titles and header titles
-- fixed policies not fetched during page load
-- fixed console error about unique key prop in NewsContent
-
-### 3.6 - Hall of Fame update
-
-- refactored getting current grandmaster logic in backend to use new grandmasters table
-  - this makes this logic more performant
-- removed unused code for records
-- added new 'Hall of Fame' page with three tabs:
-  - Chronology: displays the list of champions in various leagues and list of grandmasters
-  - Titles: displays the count of championships, wins, podiums etc.
-  - Events: displays most wins by event type and record scores by league and event type
-- made round titles on standings table centered
-
-### 3.6.1
-
-- changed blob icons on policy panel to material icons (their active colors remained the same)
-- title of policies panel changed to "Policies"
-- added contract and current standings information to blob details dialog
-- added visualization for maintenance and administartion activities
+- Reworked the event UI (live and replay) into a shared 5-stage pipeline: Introduction, Standings before the round, Competition, Results, Standings after the round; every stage transition slides in from the right / out to the left
+- The `/standings/championship/{league_id}/{season}` endpoint now accepts an optional `round` query parameter to return standings truncated as of that round
+- The old gold/silver/bronze row-coloring shown on event tables once an event finished has been replaced by a dedicated Results stage reusing the existing results table
+- On live events, the step back/forward buttons now also walk between the introduction, standings and results stages once the tick range is exhausted, as if those stages were extra ticks
+- Replay tick controls are now rendered by the same stage pipeline as live events (instead of separately by the replay page), and their step back/forward buttons get the same stage-walking behavior
+- The current pipeline stage (introduction, standings, competition, results) is now persisted in local storage together with the replay tick (one combined entry per event), instead of a separate storage entry, so reopening an event resumes on the stage last viewed
+- The current pipeline stage (introduction, standings, competition, results) is now persisted per event in local storage, the same way the replay tick already was, so reopening an event resumes on the stage last viewed
+- Blobs with no element now suffer small weather-based penalties: rain reduces speed by 1%, heavy rain reduces speed by 2%, and heat or freezing weather reduces both speed and strength by 2%
+- Fixed news refresh issue when user navigates back to dashboard after event concludes
+- Blob detail dialogs opened from replay event views now show the standings/position as of that event's round instead of the current standings (via a new optional `event_id` query parameter on `/blobs/{blob_id}` and `/standings/snippet/{blob_id}`)
+
+### 5.6 - Element update
+
+- Blobs receive an element on creation (None, Fire, Wind, Water, Ice, Beast), chosen at random based on daily-generated element tokens influenced by the weather (e.g. sunny/hot weather grants Fire tokens, rain grants Water tokens, wind grants Wind tokens, snow/freezing weather grants Ice tokens, fog grants Beast tokens, and a Neutral token is always granted each day)
+- Elements grant passive skill modifiers depending on weather, wind and season temperature: Fire boosts strength in most weather (except cold season temperature, where it always gets +2% strength), Wind's bonus scales directly with the day's wind value, Ice slightly boosts speed always and boosts/reduces strength depending on season temperature, Beast always boosts strength and speed
+- Detailed modifiers of elementy by weather type (wind excluded):
+
+|       | Sunny | Sunny-Cloudy | Cloudy | Sunny-Rain | Rain | Heavy-Rain | Storm | Heat | Snowy | Freezy | Foggy |
+| ----- | ----- | ------------ | ------ | ---------- | ---- | ---------- | ----- | ---- | ----- | ------ | ----- |
+| Fire  | +5%   | +1%          | 0%     | 0%         | -2%  | -3%        | -4%   | +10% | -6%   | -10%   | 0%    |
+| Water | -5%   | -1%          | 0%     | +2%        | +5%  | +10%       | +6%   | -10% | -5%   | -10%   | 0%    |
+| Ice   | -6%   | -2%          | 0%     | 0%         | 0%   | 0%         | 0%    | -12% | +6%   | +12%   | 0%    |
+| Beast | 0%    | 0%           | 0%     | -2%        | -5%  | -8%        | -10%  | -3%  | 0%    | 0%     | +4%   |
+
+- Blob visuals now reflect their element: eye color changes (Fire: light orange, Wind: light cyan, Water: faded dark blue, Ice: light blue), and Beast blobs additionally grow cat ears
+- Blob details dialog shows an element icon with a tooltip naming the blob's element
+
+### 5.5.1
+
+- Retired blobs now automatically sell competition-related items (Cookie, Cache, Cache Cleaner, Power Bank, Energy Cell, Overclocking Device) for money instead of adding them to their inventory when received, since these items are only useful for competing blobs
+- Retired blobs sell their competition related items if they already possess some
+- The "News" dashboard option card shows a red exclamation mark badge when new news has appeared since the news modal was last opened; the last-viewed news date is remembered across visits
+
+### 5.5
+
+- Added `lastSeasonStandingsPosition` field to `BlobStatsDto`: when a blob has no current-season standings snippet yet (e.g. at the start of a new season), the blob details dialog now shows the blob's standings position from the previous season instead of an empty snippet widget
+- Blob details dialog inventory section now shows the remaining charge count for unconsumable items (Cache, Power Bank, Processor Paste, Overclocking Device, External Storage) in their tooltip label
+- Unconsumable item icons turn grey when depleted (0 charges), except the Overclocking Device which turns red instead
+- Fixed bug of processor paste not loosing durability during usage
+- Adventure activity is no longer blocked purely because a blob's inventory is full: it is now also allowed when the blob owns a depleted unconsumable item (Cache, Power Bank, Processor Paste, Overclocking Device with 0 charges), since that item can be sold to make room for a new one
+- Added new "Maintenance" dashboard option card, showing blobs currently doing the maintenance activity
+
+### 5.4.2
+
+- Added missing translation for overclocking device on blob details dialog inventory section
+
+### 5.4.1 - Technical excellence update
+
+- Fixed weather card refresh issue on dashboard
+- Replaced npm with pnpm as the package manager for the frontend
+  - `package-lock.json` replaced by `pnpm-lock.yaml`
+  - Updated `setup.sh`/`setup.bat`, `start.sh`, the frontend `Dockerfile` and documentation to use pnpm commands
+  - Removed obsolete `debug.bat`/`debug.sh` files
+- Migrated frontend ESLint setup to ESLint 10 with flat config (`eslint.config.js` replaces `.eslintrc.cjs`/`.eslintignore`)
+- Merged `setup.sh`/`setup.bat` into `start.sh`/`start.bat`: the start scripts now create the virtual environment, install backend/frontend dependencies and build the frontend (if not already built) before starting the application
+  - `setup.sh`/`setup.bat` removed; `deploy.sh`/`deploy.bat` continue to work unchanged since they only invoke the start scripts
+  - Updated `README.md` accordingly
+- `start.sh`/`start.bat` now run the backend in the background and store its PID in `.backend.pid`
+  - On the next run, the script looks up the PID in `.backend.pid` and kills the previously started backend process before starting a new one, so re-running (or `deploy.sh`/`deploy.bat` restarting on new commits) does not leave orphaned backend processes behind
+
+### 5.4 - Weather update
+
+- Added weather system:
+  - New `weather`, `wind` and `season_temperature` fields on sim data
+  - Weather type enum (Sunny, Sunny-Cloudy, Cloudy, Sunny-Rain, Rain, Heavy-Rain, Storm, Heat, Snowy, Freezy, Foggy), each with distinct solar/wind/hydro production effects
+  - Season temperature mechanic with 3 stages (Cold, Neutral, Warm): on season change there is a 50% chance the temperature stays, otherwise it shifts towards Neutral (from Cold/Warm) or randomly towards Cold/Warm (from Neutral); weather rarity depends on the current season temperature
+- Reworked factory progression: output is now composed of 4 independent parts each simulation cycle
+  - Base output (always produced)
+  - Solar output (chance depends on weather)
+  - Wind turbine output (chance depends on wind strength and weather)
+  - Hydro turbine output (chance depends on weather)
+- `/factory/progress` endpoint now also returns the current solar panel, wind turbine and hydro turbine efficiency (chance to produce) alongside the factory progress
+- Factory page now displays solar/wind/hydro efficiency meters in addition to the factory progress bar
+- Added a weather card to the dashboard, next to the date card
+  - Displays the current weather as a pictogram with its name underneath
+  - Displays the current wind strength as a small efficiency-style gauge with a "Wind" label underneath
+  - On mobile, the weather name and "Wind" label are hidden and shown instead via a tap-to-open tooltip
+- Added season-temperature-based theme color variants: the app's color palette now changes towards shades of blue when the season temperature is Cold, green/yellow when Neutral and red/orange when Warm, for both light and dark mode; falls back to the previous default color when the season temperature has not loaded yet
+  - The current season temperature is cached in local storage so the seasonal color is available immediately on subsequent visits
+
+### 5.3.3
+
+- added gap to bottom on dashboard when sim action snackbar is shown
+  - this way the bottom dashboard option card is not overlapped by the snackbar
+- fixed grandmaster state stuck on administration modal
+- added missing translation for repair kit item
+- fixed missing react key console error in blob grid
+
+### 5.3.2
+
+- Fixed order of results on standings
+
+### 5.3.1
+
+- Fixed gym modal UI issue
+
+### 5.3 - Dashboard update
+
+- Reworked dashboard UI:
+  - News card and policy panel is removed from the page
+  - New option cards added to the page each opens a modal on click:
+    - Administration
+      - Modal shows current grandmaster
+      - Policy panel is moved to this modal
+    - News
+      - Modal shows news card content shown before on the dashboard page
+    - Gym
+      - Modal shows blobs currently practicing
+      - Blobs divided into catchup trainees, regular trainees (simple and intense practice) and premium trainees
+    - Labour site
+      - Modal shows blobs currently doing labour
+    - Mine
+      - Modal shows currently mining blobs
+    - Anchient ruins
+      - Modal shows currently adventuring blobs
+  - Restructured simulation action buttons:
+    - Inner logic of progress button is decoupled from the news content
+    - "Jump to event" and "Create blob" buttons moved from the news content to snackbars
+- Added visuals to adventuring activity
+- Added PWA support to application
+- Changed root layout responseness so the sidebar is closable on tablet view too
+- On tablet view the blob cards appear in two columns in the blobs page
+- Added skeleton rows to event table when event records are loading
+- Changed simulation time display card background in dark mode to be lighter
+
+### 5.2
+
+- Added another, larger favicon for high resolution mobile/tablet splash screen
+- States of items only have effect for the day of the event
+- Added a dedicated event-specific blob details dialog for event tables and standings context
+- Extended blob details dialogs with inventory display, ranking summary fields, and mobile-friendly tooltips
+- Fixed bug of Sack of Money item not consumed instantly
+
+### 5.1 - Minor tweaks
+
+- Added large favicon for mobile splash screen
+- Initial skills on blob creation changed to [0.92 - 1.12]
+- Initial learning on blob creation changed to [0.55 - 1.0]
+- Adventuring activity now increases speed and strength
+  - Effect is half of practice effect
+
+### 5.0 - Adventure update
+
+- New activity: Adventure
+  - 50% chance to find loot, 5% chance for injury
+  - Loot can be of different rarity (chances after loot was found):
+    - Common: 60%
+    - Rare: 20%
+    - Epic: 16%
+    - Legendary: 4%
+- New traid: Adventurous - goes on adventures more likely
+- Added inventory and item mechanic to blobs
+  - Inventory not visible on UI (yet)
+  - But can be seen if a blob used item(s) on events
+  - Items:
+    - Unconsumables:
+
+    | Name             | Rarity    | Effect                                                                                                                                                   |
+    | ---------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | Cache            | Rare      | Increases minimal generated score by 5%                                                                                                                  |
+    | Power Bank       | Epic      | Increases minimal generated score by 10% and skills by 2%                                                                                                |
+    | Processor Paste  | Epic      | Chance of not loosing integrity is determined by durability \* 5 in % (16 durability, used once per cycle, removed instantly if reaches zero durability) |
+    | Repair Kit       | Epic      | Removes injured trait (consumes instantly when injury trait is gained)                                                                                   |
+    | Overclock Device | Legendary | Increases skills by 5%, (3 durability, but blob can decide to use it at 0 durability, but then it risks injury)                                          |
+    | External Storage | Legendary | Inventory size is increased by 3                                                                                                                         |
+    - Consumables:
+
+    | Name            | Rarity    | Effect                                                                                                                                                          |
+    | --------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | Cookie          | Common    | Increases skills by 5%                                                                                                                                          |
+    | Coin            | Common    | Increases money by 1 (instantly consumed)                                                                                                                       |
+    | Energy Cell     | Rare      | Minimal generated score increased by 5% or resets durability of Power banks or Overclocking devices if the blob owns it (in that case it is consumed instantly) |
+    | Bag of Money    | Rare      | Increases money by 5 (instantly consumed)                                                                                                                       |
+    | Cache Cleaner   | Rare      | Resets cache charge                                                                                                                                             |
+    | Maintenance Kit | Epic      | Increases integrity by 3 (instantly consumed)                                                                                                                   |
+    | Sack of Money   | Epic      | Increases money by 10 (instantly consumed)                                                                                                                      |
+    | Repair Kit      | Epic      | Removes injured trait (consumes instantly when injury trait is gained)                                                                                          |
+    | Treasure Chest  | Legendary | Increases money by 20 (instantly consumed)                                                                                                                      |
+
+  - For each item that grants an effect during event the effect is implemented as a new state
+
+- UI adjustments:
+  - changed icon for lazy trait
+  - replaced loading bar with circular progress in card header on event page
+    - the circular progress is visible when the user scrolls down making the page more responsive
+- Bugfixes:
+  - Fixed trait change bug that made trait change far less likely
+  - Fixed bug about blobs on queue don't have access to free premium practice
+
+### 4.8 - Calendar creation update
+
+- The event type randomizer is reworked:
+  - No fixed events on epochs 6, 13, 21 and 28 for all leagues
+  - All event types should appear at least once per league if there are more competitions for that league than event types
+  - Fixed issue that calendar recreation logic still worked with old versions of quartered event types
+
+### 4.7 - Intense practice update
+
+- Blobs has a new type of activity to do between competitions: Premium practice
+  - It is more effective than normal practice but, intense practice is still sligthly more effective
+  - The cost of doing premium practice is 36 coins
+  - The following blobs get free access to rpemium practice:
+    - Blobs on queue (not yet debuted)
+    - Blobs in danger: their contract is ending on current season and they are in th ebottom 50% in the standings (menaing they won't get a contract extension)
+  - If not free, blobs only have a small probability of choosing premium practice
+  - Blobs with free access to premium practice will always choose premium practice over normal practice (they will never choose normal practice if free premium practice is available)
+  - When injured blobs attend on premium practice:
+    - Their skills increase less than for healthy blobs (but still more than on normal practice)
+    - Their injured state won't reset like on normal practice
+
+### 4.6.4
+
+Business features, changes:
+
+- Raised cost of maintenance to 52 coins
+- When blobs get injured they have a 0-20% chance to loose 1 integiry
+  - depends on integrity: the older a blob is, the higher the chance of loosing 1 integrity
+- Added retirement focus to blob details dialog
+- When the user steps the replay forward it has the same delayed loading effect as the progress event
+- Fixed tooltip issues regarding blob details dialog
+- Fixed elimination count calculation on frontend for V2 quartered events
+
+Technical changes:
+
+- Refactored activity choosing logic to be more maintainable
+- Maintained tests
+
+### 4.6.3 - UI improvements update
+
+- Fixed missing icons for V2 quartered events on mobile calendar
+- Added loading state to blob details dialog
+- Added keyboard shortcuts to replay and event controls in desktop mode
+- Modified progress button texts to be shorter on mobile
+- Show loading state for event record loading if those records not manually generated
+- Fix max tick estimation for quartered events
+
+### 4.6.2
+
+- Fixed scheduler not working after manual restart
+- Added new version of quartered events where the elimination counts are altered
+  - This way a 23 big field will finish a two shot scoring event under 120 ticks
+
+### 4.6.1
+
+- Added justify content 'space between' to event widget content for better appearance
+- Fixed background color for row and card of retired blob on Blobs page
+- Narrowed column width for the following statistics on the blob stats grid: debut, contract, podiums, wins, championships, grandmasters
+
+### 4.6 - Catchup update
+
+- The following blobs additionally attend the catchup trainings:
+  - Blobs on queue who born before the current season start
+  - Blobs with ending contracts who ended outside of the top 50% of their current league standings last season
+- After sprint races blobs get skill increase proportionally to their finish time
+  - This way slower blobs gain more experience because they raced for a longer time
+
+### 4.5.1
+
+- Minor UI fixes on mobile calendar
+- Fixed overlap issue with result modal and blob details modal
+
+### 4.5 - Calendar UI update
+
+- Redesigned mobile view event calendar
+  - Mobile view has the same table calendar format as the desktop
+  - Event chips are renamed to event widget due to component restructuring
+  - Event widgets on mobile only display an icon resembling the event type
+  - On click of the evend widget on mobile displays the event widget content the desktop variant has
+- Dropout league event widget color changed to yellow both on mobile and desktop
+- Clicking on the checkmark icon on concluded events displays the result modal for corresponding event
+
+### 4.4
+
+- Added replay functionality to event page
+  - If the event automatically started by the scheduler the user can replay the event from tick 0
+  - If user is admin, they can only progress the event by the progress button if the replay caught up with the presently current tick
+- Fixed bug of hall of fame records returning 500 because of KeyError
+- Fixed bug of hall of fame championship counts showing season winners from all leagues instead of just the top league
+- Speed skill update after overtakes are now applied during action creation
+- Moved tick counter to the event card subtitle for better visibility
+
+### 4.3.1
+
+- Minor redesign of the dashboard page:
+  - The footer is removed, its buttons are distributed to other places:
+    - The progress button is now a FAB in the bottom right corner
+    - The create blob button and proceed to event buttons are now displayed in the news card under their respective news items
+
+### 4.3 - Retirement update
+
+- Added retirement focus to blobs
+  - It is a purpose they can go for after retirement
+  - At the moment all focus types focus on money saving
+  - Blobs with retirement focus no longer practice since they no longer compete
+- Two types of retirement focus
+  - Legacy: if retired blob does not have any children they can save money for a heir
+  - prolonged life: retired blob saves money for maintenance to live longer
+- Fixed blob creation with parent on dashboard blob naming dialog
+
+### 4.2.1
+
+- Fixed blobs getting "Competing" activity on catchup training days
+
+### 4.2 - Admin settings update
+
+- Added admin endpoint to download the entire database as a SQL dump. Requires admin authentication.
+- Added "Admin" page to the frontend, accessible only when logged in as admin, with a button to download the database dump.
+- Added admin endpoints to get and set the enabled state of cronjobs.
+- Added cronjobs management UI to the admin page with a toggle switch to enable/disable automated background tasks.
+- Reworked cronjob management so the admin is able to turn on and off cronjobs from the admin UI
+
+### 4.1.1
+
+- Fixed event replay not working from older seasons
+- Added favicon.png to cover edge cases when favicon.ico does not work
+
+### 4.1 - Slipstream update
+
+- Added slipstream effect to race event simulations
+  - Applied if distance to blob ahead is under 1 octave, but more than a blob length (1/8 octave) + a small gap
+  - Calculated by a formula: `f(x)=((1)/(96 x+4))-0.01` where `x` is the distance to blob ahead
+- Added link to ended event news
+- Added textbox to replay controls to set exact tick in the replay
+- Fixed bug of "Jump to end" button not getting disabled in max tick
+- Persist replay state to local storage
+- Fixed scheduler simulating events after 18:00
+
+### 4.0.5
+
+- Inflate cost for maintanence because blobs now can earn money easier than the cost was first determined
+
+### 4.0.4
+
+- Fixed missing season conclusion after last competition of league
+
+### 4.0.3
+
+- Fixed sorting on elimination scoring replay
+- Fixed double conclusion of event in scheduler
+- Sort events on results page by date in descending order
+
+### 4.0.2
+
+- Fixed replay bug of elimination scoring events
+
+### 4.0.1
+
+- Fixed scheduler not working for elimination scoring
+
+### 4.0 - Cronjob update
+
+- From now on the simulation progress can be controlled via schedulers!
+  - Simulation time is progressec every midnight
+  - On competition days one competition tick is simulated every 3 minutes between 12:00 AM and 18:00 PM
+  - Can be enabled and diabled by environment variable
+- Added "Results" page
+  - Lists all past events
+  - Filtered by season and optionally league
+  - "View results" button in the "Actions" column to view the results of that competition
+  - "Replay event" button in the "Actions" column to replay the competition
+- Added event replay page:
+  - Loads event records by event id and tick
+  - The user can step the ticks back and forth to view a specified moment of the competition
+
+### 3.7.3
+
+- Fixed production bugs
+
+### 3.7.2
+
+- fixed bug during race action generation
+
+### 3.7.1
+
+- Added visualization for states on animated blob
+- Added icons with explanatory tooltips for blob states and traits displayed over the animated blob on the blob details dialog
+- Added visuals for blob's `IDLE` activity type
 
 ### 3.7 - Traits and States update
 
@@ -426,409 +467,374 @@
   - Fixed new season news description
   - Fixed attendees on catchup training: dropout league members who already competed in dropout league last season are excluded
 
-### 3.7.1
+### 3.6.1
+
+- changed blob icons on policy panel to material icons (their active colors remained the same)
+- title of policies panel changed to "Policies"
+- added contract and current standings information to blob details dialog
+- added visualization for maintenance and administartion activities
+
+### 3.6 - Hall of Fame update
+
+- refactored getting current grandmaster logic in backend to use new grandmasters table
+  - this makes this logic more performant
+- removed unused code for records
+- added new 'Hall of Fame' page with three tabs:
+  - Chronology: displays the list of champions in various leagues and list of grandmasters
+  - Titles: displays the count of championships, wins, podiums etc.
+  - Events: displays most wins by event type and record scores by league and event type
+- made round titles on standings table centered
+
+### 3.5 - Sprint and Mining update
+
+- added new event type: sprint race
+  - blobs have a certain amount of time to finish the race of a given distance
+  - the available time is determined the same way as for endurance races
+  - the distance to make during the race is the same amount of distance units as the number of available ticks
+  - point system is the same as for endurance races with one addition:
+    - contenders who cannot finish the given time in the available time get one point less as the base points determined by finishing position
+  - from the four guaranteed event types Quartered two shot high jump is replaced by sprint race
+- added new activity: mining
+  - from the blobs who chose to mine in the current cycle one is chosen as winner
+  - the winner gets the same amount of coins as the number of blobs participated in mining
+- added visualization for the following activities:
+  - practice
+  - intense training
+  - labour
+  - mining
+- added dark mode and a switch between dark and light mode
+- adjusted dashboard page so the policies card appear next to the time card even in mobile mode
+- changed standings table:
+  - points cell background is colored for podium finishes instead of font color
+  - removed row coloring for closed seasons
+  - centered points for competition finishes and point sums
+- fixed standings page loading issue
+- adjusted font sizes of card titles and header titles
+- fixed policies not fetched during page load
+- fixed console error about unique key prop in NewsContent
+
+### 3.4 - Grandmaster activity update
+
+- Added grandmaster "Administration" activity allowing grandmasters to randomly create temporary "policies" (Factory modernization, Gym improvements, Salary raise, Pension).
+  - Policies have duration depending on grandmaster level (level 1 → 4 days; level 2 → 6 days; level >2 → 6 + (level - 2) days) and an applied level determining effect strength.
+  - Effects: factory modernization speeds up factory progress; gym improvements increase practice/intense training efficiency; salary raises increase labour salary; pension schemes provide pension payouts to retired blobs.
+  - Backend: new `policies` DB table, repository upsert, domain service to create/update policies, and an API endpoint (`GET /policies/`) returning active policies. Added Alembic migrations (policies table + ADMINISTRATION activity enum value) and unit tests.
+  - Frontend: Dashboard "Policies" panel showing active policies with tooltips and translations added (English & Hungarian).
+
+- Bugfix: Fixed Results modal so it properly refreshes/resets on open/close to avoid stale state and duplicated fetches.
+- Bugfix: Results table on the modal displays name shorthands on mobile devices
+
+### 3.3
+
+- Made news loading independent from the other loading processes on dashboard
+  - Added skeleton loader to news card
+- Removed strength and speed indicator from blob details dialog
+- Replaced top 3 blobs in event ended news with a link
+  - Opens a modal containing the event results
+
+### 3.2
+
+- Changed skill effect of overtakes in endurance races: the blob overtaken now improves their speed skill with the same modifier as the one overtook them
+- Enhanced blob visualization:
+  - Blobs on blob details dialog has an idle animation of "extending" and "retracting" vertically
+  - The current grandmaster has a crown on their head
+- Fixed error on opening the blob details dialog for a terminated blob
+
+### 3.1.5
+
+- Fixed scrolling issue on event and factory page
+
+### 3.1.4
+
+- Fixed missing browser shortcut icon
+- Fixed page overflow issue on mobile caused by browser header on scrolling
+
+### 3.1.3
+
+- Extended bonus point calculation to elimination event:
+  - If a blob scores highest in at least one tick they get one bonus point
+  - The blob with the most ticks won gets an additional bonus point (if there is a tie then no bonus points given)
+  - The winner of the whole event gets one additional bonus point
+- Adjusted UI on elimination event so the latest eliminated blob's score is displayed
+- Fixed elimination event table aligning against the barchart
+- Added missing rounding to elimination score record
+- Fixed starting event news round calculation bug
+
+### 3.1.2
+
+- Created records database table to make record checking and managing logic simpler and mor robust
+- Created endpoints for querying records for possible future feature
+- Fixed bug about blob dialog not opening from news of certain types
+- Fixed issue about the "NEW_GRANDMASTER" news type appearing at the end of every season
+
+### 3.1.1
+
+- Fixed news text for "rookie of the year" and "season ended" news types
+- Fixed bug about blob order is not randomized when event starts
+
+### 3.1
+
+- Added cathup trainings:
+  - On the second epoch of every season
+  - The following blobs participate:
+    - The youngest blob to debut
+    - Last seasons last place of every league
+    - Every blob demoted to the dropout league last season
+- Added intense training
+  - Done only on cathup trainings
+  - More efficient than regular practice
+- Added blob icons next to names in news
+- By clicking on the blob icon and name in the news the blob details dialog opens
+- Fixed new season news querying
+
+### 3.0.3
+
+- Added speed stat bonus for grandmaster's child
+
+### 3.0.2
+
+- Fixed best score calculation error in quartered events
+- Fixed news text translation issues
+
+### 3.0.1
+
+- Fixed production build error caused by vite version update
+
+### 3.0
+
+- Added rookie of the year feature: if there are at least three rookies participated in a league at the end of the season the best rookie gets money reward and a contract extension
+- Reworked actions data structure:
+  - Instead of storing every score one by one they are now grouped by event and competitor
+  - Event ticks and which score belongs to which tick is calculated from event rules
+  - DISCLAIMER (for dev): because of the previous point, event rules should be versioned, if they are changed in the future
+- Seed for score generation in race events are calculated from blob id instead of speed because speed can change during event
+- Enhanced event progresion handling:
+  - Every click on the ProgressButton can be done by pressing _space_
+  - Enchanced quartered event UI to display current blob with shadow box instead of darker border
+- Blobs with ending contract and rookies are now marked with badges instead of colored background
+- Score generation for quartered events now require both skill stats from blobs: strength 70%, speed 30%
+  - Skills are updated after event accordingly
+- New event type: elimination scoring
+  - Scores generated from blob strength
+  - In each tick every non eliminated blob generates a score and the lowest scoring gets eliminated
+  - This repeats until only one blob is left
+- Fixed bug: event result saving was possibble multiple times after event was concluded
+- Added new information to blob details dialog to display:
+  - Strength, speed and integrity state relative to other blobs (no exact values, just categories with color code)
+  - Termination and retirement dates
+  - Money
+  - If blob is dead, a different blob icon is displayed
+  - Current activity
+- Added minor blinking animation to blob on blob details dialog
+- Reworked blob activity logic to first proceed with the effects of the current activity stored in the database then generate the activities for next cycle (day)
+- Blob details dialog now can be opened on standings and event pages by clicking on blob name
+- Reworked news logic:
+  - News entries are saved to database
+  - Whole new variety of news:
+    - Blob created, terminated, retired, debuted
+    - Event starteing, ongoing, ened (displaying results)
+    - Season ended for league, displaying champion
+    - New season started, displaying league transfers, retirees and debuting blobs
+    - New grandmaster at the start of new eon
+- Refactored UI:
+  - Added app header bar with page title and menu toggle button in mobile mode
+  - Page title card is removed
+  - News card redesigned according to the reworked news logic
+  - Control buttons like 'Next day', 'Proceed to event' are put to a toolbar card at the bottom
+
+### 2.6.3
+
+- Fixed to show mobile drawer menu when mobile device is in landscape mode
+
+### 2.6.2
+
+- Fixed bug about getting error when saving quartered event results
+- Added error snackbar when result save and event record assembly runs into an error
+
+### 2.6.1 Hotfix
+
+- Updated openapi specifications to fix the quartered event action creation error
+- Fixed login page layout issues
+
+### 2.6 - Stats update
+
+- Blobs get a new stat: speed
+  - Used for score generation in race events
+  - During practice, the practice effect is divided between the two stats in random ratio
+- Modified stat update multiplyer constants
+- Added backend checks for simulation progress endpoint
+- Generalised loading animation
+- Refined desktop calendar to display only the current season's epochs and all of the events in the current season
+
+### 2.5.3
 
-- Added visualization for states on animated blob
-- Added icons with explanatory tooltips for blob states and traits displayed over the animated blob on the blob details dialog
-- Added visuals for blob's `IDLE` activity type
+- On race events if a blob overtakes someone or is overtaken, they learn from it, so their strength increases a little bit
+- Added playback flag for race events to avoid duplicated rewards for overtakes on page reloads
+- When a blob sets a new record on a quartered high jump event, a snackbar appears to notify the user about the new record
 
-### 3.7.2
+### 2.5.2 - Miscellaneous update
+
+- Reworked the calendar on desktop view to make the calendar more visual
+  - No room for the new design in mobile view, it will be reworked later
+- Fixed action multiplicating bug in endurance races
+  - Disable simulation and event progression buttons when progression related operations are pending
+  - Backend throws error when actions are about to be saved for a tick, but there are already saved actions corresponding for that tick
+- Fixed page sizing problems on standings page mobile
+- Fixed page sizing problems on endurance event page mobile
+
+### 2.5.1
+
+- Some hotfixes to production deployment
+- When user is logged in redirect from login to dashboard
+- Proceed to event button is green and visible for non logged in users too
+- At the first quarter in high jump events the randomized starting is fixed with a twist: the order of blobs that not scored yet is randomized every tick
+- Improved backend error logging
+
+### 2.5
+
+- Adjusted application to be hosted on the internet
+- Migrated database to Postgres
+- Adjusted database migrations for postgres and populate initial data as current state of the "production" database
+- Adjusted frontend to enable setting backend url from environment variables
+
+### 2.4
+
+- Introduce internationalization:
+  - Language can be set at the bottom of the drawer
+  - Default language is english
+  - Other language option is hungarian
+- Fixed blob search by name error
+- Adjusted blob datagrid autosizing to solve column grid imploding
+
+### 2.3.4
+
+- Display name of blob's parent on blob details dialog
+
+### 2.3.3
+
+- Hide "add name suggestion" button and progress buttons on event page when user is unauthorized
+- Minor refactors on dashboard
+
+### 2.3.2
+
+- On race events score generation use perlin-like noise for more diverse race results
+- Fixed competitor shuffling at the beginning of events
+- Added event records cache to endurance race view to avoid table flashing on progressing to next tick
 
-- fixed bug during race action generation
+### 2.3.1
 
-### 3.7.3
+- Smaller UI fixes on blobs page and race event page
 
-- Fixed production bugs
+### 2.3
 
-### 4.0 - Cronjob update
+- Added admin authentication
+  - Login page with username and password
+  - Token-based authentication with backend API
+  - Protected endpoints that require authentication
+  - Only admin user is added at the moment, no registration
 
-- From now on the simulation progress can be controlled via schedulers!
-  - Simulation time is progressec every midnight
-  - On competition days one competition tick is simulated every 3 minutes between 12:00 AM and 18:00 PM
-  - Can be enabled and diabled by environment variable
-- Added "Results" page
-  - Lists all past events
-  - Filtered by season and optionally league
-  - "View results" button in the "Actions" column to view the results of that competition
-  - "Replay event" button in the "Actions" column to replay the competition
-- Added event replay page:
-  - Loads event records by event id and tick
-  - The user can step the ticks back and forth to view a specified moment of the competition
+### 2.2.1
 
-### 4.0.1
+- Improved UI responsiveness so the UI is more usable on mobile
+- Landscape mode on mobile is still a bit broken, will be refined in future release
 
-- Fixed scheduler not working for elimination scoring
+### 2.2
 
-### 4.0.2
+- Each blob has a unique color
+- Added blob icons to the blob list
+  - The icon is displayed next to the blob's name
+- Added blob details dialog when clicking on a blob in the blobs page
+  - Shows blob in large
+  - Displays blob's basic information like birthdate, debut, current status
+  - Shows blob's achievements like podiums, wins, championships and grandmaster titles
+- Added copyright text and version to the bottom of the menubar
 
-- Fixed replay bug of elimination scoring events
+### 2.1.2
 
-### 4.0.3
+- Fixed error on event record calculation if field size is 15 or larger
+- Cached event records table on quartered event page so it does not disappears for a moment, causing unintended scrollup
 
-- Fixed sorting on elimination scoring replay
-- Fixed double conclusion of event in scheduler
-- Sort events on results page by date in descending order
+### 2.1.1
 
-### 4.0.4
+- Fixed missing adjustments related to the name split
 
-- Fixed missing season conclusion after last competition of league
+### 2.1
 
-### 4.0.5
+- Blobs now can have children, by becoming grandmaster at the end of each eon
+- Children inherit the last name of the grandmaster
+- On blob creation children get bonuses to initial stats:
+  - +0.01 learning for every championship title of parent
+  - +0.01 strength for every grandmaster title of parent
+  - So if parent is currently 5 times champion and 2 times grandmaster, then their new child gets 0.05 learning and 0.02 strength bonus
 
-- Inflate cost for maintanence because blobs now can earn money easier than the cost was first determined
+### 2.0
 
-### 4.1 - Slipstream update
+- Migrates UI to a web based frontend application
+  - The UI consists of a main area where the contents of the different pages are rendered and menu bar on the left to navigate between these pages
+  - the pages follow a similar structure to the previous Console UI
+  - The pages are the following:
+    - Dashboard
+    - Blobs
+    - Standings
+    - Calendar
+    - Event pages
+- Adjusted application setup and startup logic
+  - A `setup` script is added which installs the backend and frontend dependencies
+  - The `start` and `debug` scripts start the backend and frontend as well in production and development mode respectively
+  - Added possibility to run the app on Linux distributions
+- New page: Factory
+  - Shows factory progress on a progress bar
+  - Lists blob name suggestions and a button
+  - Clicking the button a dialog appears where the user can add a new name suggestion
+  - The same name validations apply as on the old UI
+- Added new simulation status texts, now called as "news":
+  - When a blob is created and named after a suggested name, that name is displayed
+  - After an event is concluded a sumamry text is shown with the top 3
 
-- Added slipstream effect to race event simulations
-  - Applied if distance to blob ahead is under 1 octave, but more than a blob length (1/8 octave) + a small gap
-  - Calculated by a formula: `f(x)=((1)/(96 x+4))-0.01` where `x` is the distance to blob ahead
-- Added link to ended event news
-- Added textbox to replay controls to set exact tick in the replay
-- Fixed bug of "Jump to end" button not getting disabled in max tick
-- Persist replay state to local storage
-- Fixed scheduler simulating events after 18:00
+### 1.3
 
-### 4.1.1
+- Added new race event format: endurance race event
 
-- Fixed event replay not working from older seasons
-- Added favicon.png to cover edge cases when favicon.ico does not work
+### 1.2.7
 
-### 4.2 - Admin settings update
+- For larger field sizes the elimination count calculation changed to align with the rules
+- Improving the progress simulation view by adding a GUI window to show the progress of the process
 
-- Added admin endpoint to download the entire database as a SQL dump. Requires admin authentication.
-- Added "Admin" page to the frontend, accessible only when logged in as admin, with a button to download the database dump.
-- Added admin endpoints to get and set the enabled state of cronjobs.
-- Added cronjobs management UI to the admin page with a toggle switch to enable/disable automated background tasks.
-- Reworked cronjob management so the admin is able to turn on and off cronjobs from the admin UI
+### 1.2.6
 
-### 4.2.1
+- Fixed bug: empty grandmasters standings table appears for next eon when season is dividable by 4
+- On the league standings for current season blob names are colored when their contract is ending this season
+- Grandmaster winners get 1 extra season for their contract
+- Wrote tests for championship service
 
-- Fixed blobs getting "Competing" activity on catchup training days
+### 1.2.5
 
-### 4.3 - Retirement update
+- Created unit test environment, writing tests for league service
 
-- Added retirement focus to blobs
-  - It is a purpose they can go for after retirement
-  - At the moment all focus types focus on money saving
-  - Blobs with retirement focus no longer practice since they no longer compete
-- Two types of retirement focus
-  - Legacy: if retired blob does not have any children they can save money for a heir
-  - prolonged life: retired blob saves money for maintenance to live longer
-- Fixed blob creation with parent on dashboard blob naming dialog
+### 1.2.4
 
-### 4.3.1
+- Fixed standings sorting on score ties
 
-- Minor redesign of the dashboard page:
-  - The footer is removed, its buttons are distributed to other places:
-    - The progress button is now a FAB in the bottom right corner
-    - The create blob button and proceed to event buttons are now displayed in the news card under their respective news items
+### 1.2.3
 
-### 4.4
+- Changed disclaimer text on intro screen
+- Visual representation of a blob is created in vector image format
 
-- Added replay functionality to event page
-  - If the event automatically started by the scheduler the user can replay the event from tick 0
-  - If user is admin, they can only progress the event by the progress button if the replay caught up with the presently current tick
-- Fixed bug of hall of fame records returning 500 because of KeyError
-- Fixed bug of hall of fame championship counts showing season winners from all leagues instead of just the top league
-- Speed skill update after overtakes are now applied during action creation
-- Moved tick counter to the event card subtitle for better visibility
-
-### 4.5 - Calendar UI update
-
-- Redesigned mobile view event calendar
-  - Mobile view has the same table calendar format as the desktop
-  - Event chips are renamed to event widget due to component restructuring
-  - Event widgets on mobile only display an icon resembling the event type
-  - On click of the evend widget on mobile displays the event widget content the desktop variant has
-- Dropout league event widget color changed to yellow both on mobile and desktop
-- Clicking on the checkmark icon on concluded events displays the result modal for corresponding event
-
-### 4.5.1
-
-- Minor UI fixes on mobile calendar
-- Fixed overlap issue with result modal and blob details modal
-
-### 4.6 - Catchup update
-
-- The following blobs additionally attend the catchup trainings:
-  - Blobs on queue who born before the current season start
-  - Blobs with ending contracts who ended outside of the top 50% of their current league standings last season
-- After sprint races blobs get skill increase proportionally to their finish time
-  - This way slower blobs gain more experience because they raced for a longer time
-
-### 4.6.1
-
-- Added justify content 'space between' to event widget content for better appearance
-- Fixed background color for row and card of retired blob on Blobs page
-- Narrowed column width for the following statistics on the blob stats grid: debut, contract, podiums, wins, championships, grandmasters
-
-### 4.6.2
-
-- Fixed scheduler not working after manual restart
-- Added new version of quartered events where the elimination counts are altered
-  - This way a 23 big field will finish a two shot scoring event under 120 ticks
-
-### 4.6.3 - UI improvements update
-
-- Fixed missing icons for V2 quartered events on mobile calendar
-- Added loading state to blob details dialog
-- Added keyboard shortcuts to replay and event controls in desktop mode
-- Modified progress button texts to be shorter on mobile
-- Show loading state for event record loading if those records not manually generated
-- Fix max tick estimation for quartered events
-
-### 4.6.4
-
-Business features, changes:
-
-- Raised cost of maintenance to 52 coins
-- When blobs get injured they have a 0-20% chance to loose 1 integiry
-  - depends on integrity: the older a blob is, the higher the chance of loosing 1 integrity
-- Added retirement focus to blob details dialog
-- When the user steps the replay forward it has the same delayed loading effect as the progress event
-- Fixed tooltip issues regarding blob details dialog
-- Fixed elimination count calculation on frontend for V2 quartered events
-
-Technical changes:
-
-- Refactored activity choosing logic to be more maintainable
-- Maintained tests
-
-# 4.7 - Intense practice update
-
-- Blobs has a new type of activity to do between competitions: Premium practice
-  - It is more effective than normal practice but, intense practice is still sligthly more effective
-  - The cost of doing premium practice is 36 coins
-  - The following blobs get free access to rpemium practice:
-    - Blobs on queue (not yet debuted)
-    - Blobs in danger: their contract is ending on current season and they are in th ebottom 50% in the standings (menaing they won't get a contract extension)
-  - If not free, blobs only have a small probability of choosing premium practice
-  - Blobs with free access to premium practice will always choose premium practice over normal practice (they will never choose normal practice if free premium practice is available)
-  - When injured blobs attend on premium practice:
-    - Their skills increase less than for healthy blobs (but still more than on normal practice)
-    - Their injured state won't reset like on normal practice
-
-# 4.8 - Calendar creation update
-
-- The event type randomizer is reworked:
-  - No fixed events on epochs 6, 13, 21 and 28 for all leagues
-  - All event types should appear at least once per league if there are more competitions for that league than event types
-  - Fixed issue that calendar recreation logic still worked with old versions of quartered event types
-
-# 5.0 - Adventure update
-
-- New activity: Adventure
-  - 50% chance to find loot, 5% chance for injury
-  - Loot can be of different rarity (chances after loot was found):
-    - Common: 60%
-    - Rare: 20%
-    - Epic: 16%
-    - Legendary: 4%
-- New traid: Adventurous - goes on adventures more likely
-- Added inventory and item mechanic to blobs
-  - Inventory not visible on UI (yet)
-  - But can be seen if a blob used item(s) on events
-  - Items:
-    - Unconsumables:
-
-    | Name             | Rarity    | Effect                                                                                                                                                   |
-    | ---------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | Cache            | Rare      | Increases minimal generated score by 5%                                                                                                                  |
-    | Power Bank       | Epic      | Increases minimal generated score by 10% and skills by 2%                                                                                                |
-    | Processor Paste  | Epic      | Chance of not loosing integrity is determined by durability \* 5 in % (16 durability, used once per cycle, removed instantly if reaches zero durability) |
-    | Repair Kit       | Epic      | Removes injured trait (consumes instantly when injury trait is gained)                                                                                   |
-    | Overclock Device | Legendary | Increases skills by 5%, (3 durability, but blob can decide to use it at 0 durability, but then it risks injury)                                          |
-    | External Storage | Legendary | Inventory size is increased by 3                                                                                                                         |
-    - Consumables:
-
-    | Name            | Rarity    | Effect                                                                                                                                                          |
-    | --------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | Cookie          | Common    | Increases skills by 5%                                                                                                                                          |
-    | Coin            | Common    | Increases money by 1 (instantly consumed)                                                                                                                       |
-    | Energy Cell     | Rare      | Minimal generated score increased by 5% or resets durability of Power banks or Overclocking devices if the blob owns it (in that case it is consumed instantly) |
-    | Bag of Money    | Rare      | Increases money by 5 (instantly consumed)                                                                                                                       |
-    | Cache Cleaner   | Rare      | Resets cache charge                                                                                                                                             |
-    | Maintenance Kit | Epic      | Increases integrity by 3 (instantly consumed)                                                                                                                   |
-    | Sack of Money   | Epic      | Increases money by 10 (instantly consumed)                                                                                                                      |
-    | Repair Kit      | Epic      | Removes injured trait (consumes instantly when injury trait is gained)                                                                                          |
-    | Treasure Chest  | Legendary | Increases money by 20 (instantly consumed)                                                                                                                      |
-
-  - For each item that grants an effect during event the effect is implemented as a new state
-
-- UI adjustments:
-  - changed icon for lazy trait
-  - replaced loading bar with circular progress in card header on event page
-    - the circular progress is visible when the user scrolls down making the page more responsive
-- Bugfixes:
-  - Fixed trait change bug that made trait change far less likely
-  - Fixed bug about blobs on queue don't have access to free premium practice
-
-# 5.1 - Minor tweaks
-
-- Added large favicon for mobile splash screen
-- Initial skills on blob creation changed to [0.92 - 1.12]
-- Initial learning on blob creation changed to [0.55 - 1.0]
-- Adventuring activity now increases speed and strength
-  - Effect is half of practice effect
-
-### 5.2
-
-- Added another, larger favicon for high resolution mobile/tablet splash screen
-- States of items only have effect for the day of the event
-- Added a dedicated event-specific blob details dialog for event tables and standings context
-- Extended blob details dialogs with inventory display, ranking summary fields, and mobile-friendly tooltips
-- Fixed bug of Sack of Money item not consumed instantly
-
-### 5.3 - Dashboard update
-
-- Reworked dashboard UI:
-  - News card and policy panel is removed from the page
-  - New option cards added to the page each opens a modal on click:
-    - Administration
-      - Modal shows current grandmaster
-      - Policy panel is moved to this modal
-    - News
-      - Modal shows news card content shown before on the dashboard page
-    - Gym
-      - Modal shows blobs currently practicing
-      - Blobs divided into catchup trainees, regular trainees (simple and intense practice) and premium trainees
-    - Labour site
-      - Modal shows blobs currently doing labour
-    - Mine
-      - Modal shows currently mining blobs
-    - Anchient ruins
-      - Modal shows currently adventuring blobs
-  - Restructured simulation action buttons:
-    - Inner logic of progress button is decoupled from the news content
-    - "Jump to event" and "Create blob" buttons moved from the news content to snackbars
-- Added visuals to adventuring activity
-- Added PWA support to application
-- Changed root layout responseness so the sidebar is closable on tablet view too
-- On tablet view the blob cards appear in two columns in the blobs page
-- Added skeleton rows to event table when event records are loading
-- Changed simulation time display card background in dark mode to be lighter
-
-### 5.3.1
-
-- Fixed gym modal UI issue
-
-### 5.3.2
-
-- Fixed order of results on standings
-
-### 5.3.3
-
-- added gap to bottom on dashboard when sim action snackbar is shown
-  - this way the bottom dashboard option card is not overlapped by the snackbar
-- fixed grandmaster state stuck on administration modal
-- added missing translation for repair kit item
-- fixed missing react key console error in blob grid
-
-### 5.4
-
-- Added weather system:
-  - New `weather`, `wind` and `season_temperature` fields on sim data
-  - Weather type enum (Sunny, Sunny-Cloudy, Cloudy, Sunny-Rain, Rain, Heavy-Rain, Storm, Heat, Snowy, Freezy, Foggy), each with distinct solar/wind/hydro production effects
-  - Season temperature mechanic with 3 stages (Cold, Neutral, Warm): on season change there is a 50% chance the temperature stays, otherwise it shifts towards Neutral (from Cold/Warm) or randomly towards Cold/Warm (from Neutral); weather rarity depends on the current season temperature
-- Reworked factory progression: output is now composed of 4 independent parts each simulation cycle
-  - Base output (always produced)
-  - Solar output (chance depends on weather)
-  - Wind turbine output (chance depends on wind strength and weather)
-  - Hydro turbine output (chance depends on weather)
-- `/factory/progress` endpoint now also returns the current solar panel, wind turbine and hydro turbine efficiency (chance to produce) alongside the factory progress
-- Factory page now displays solar/wind/hydro efficiency meters in addition to the factory progress bar
-- Added a weather card to the dashboard, next to the date card
-  - Displays the current weather as a pictogram with its name underneath
-  - Displays the current wind strength as a small efficiency-style gauge with a "Wind" label underneath
-  - On mobile, the weather name and "Wind" label are hidden and shown instead via a tap-to-open tooltip
-- Added season-temperature-based theme color variants: the app's color palette now changes towards shades of blue when the season temperature is Cold, green/yellow when Neutral and red/orange when Warm, for both light and dark mode; falls back to the previous default color when the season temperature has not loaded yet
-  - The current season temperature is cached in local storage so the seasonal color is available immediately on subsequent visits
-
-### 5.4.1 - Technical excellence update
-
-- Fixed weather card refresh issue on dashboard
-- Replaced npm with pnpm as the package manager for the frontend
-  - `package-lock.json` replaced by `pnpm-lock.yaml`
-  - Updated `setup.sh`/`setup.bat`, `start.sh`, the frontend `Dockerfile` and documentation to use pnpm commands
-  - Removed obsolete `debug.bat`/`debug.sh` files
-- Migrated frontend ESLint setup to ESLint 10 with flat config (`eslint.config.js` replaces `.eslintrc.cjs`/`.eslintignore`)
-- Merged `setup.sh`/`setup.bat` into `start.sh`/`start.bat`: the start scripts now create the virtual environment, install backend/frontend dependencies and build the frontend (if not already built) before starting the application
-  - `setup.sh`/`setup.bat` removed; `deploy.sh`/`deploy.bat` continue to work unchanged since they only invoke the start scripts
-  - Updated `README.md` accordingly
-- `start.sh`/`start.bat` now run the backend in the background and store its PID in `.backend.pid`
-  - On the next run, the script looks up the PID in `.backend.pid` and kills the previously started backend process before starting a new one, so re-running (or `deploy.sh`/`deploy.bat` restarting on new commits) does not leave orphaned backend processes behind
-
-### 5.4.2
-
-- Added missing translation for overclocking device on blob details dialog inventory section
-
-### 5.5
-
-- Added `lastSeasonStandingsPosition` field to `BlobStatsDto`: when a blob has no current-season standings snippet yet (e.g. at the start of a new season), the blob details dialog now shows the blob's standings position from the previous season instead of an empty snippet widget
-- Blob details dialog inventory section now shows the remaining charge count for unconsumable items (Cache, Power Bank, Processor Paste, Overclocking Device, External Storage) in their tooltip label
-- Unconsumable item icons turn grey when depleted (0 charges), except the Overclocking Device which turns red instead
-- Fixed bug of processor paste not loosing durability during usage
-- Adventure activity is no longer blocked purely because a blob's inventory is full: it is now also allowed when the blob owns a depleted unconsumable item (Cache, Power Bank, Processor Paste, Overclocking Device with 0 charges), since that item can be sold to make room for a new one
-- Added new "Maintenance" dashboard option card, showing blobs currently doing the maintenance activity
-
-### 5.5.1
-
-- Retired blobs now automatically sell competition-related items (Cookie, Cache, Cache Cleaner, Power Bank, Energy Cell, Overclocking Device) for money instead of adding them to their inventory when received, since these items are only useful for competing blobs
-- Retired blobs sell their competition related items if they already possess some
-- The "News" dashboard option card shows a red exclamation mark badge when new news has appeared since the news modal was last opened; the last-viewed news date is remembered across visits
-
-### 5.6
-
-- Blobs receive an element on creation (None, Fire, Wind, Water, Ice, Beast), chosen at random based on daily-generated element tokens influenced by the weather (e.g. sunny/hot weather grants Fire tokens, rain grants Water tokens, wind grants Wind tokens, snow/freezing weather grants Ice tokens, fog grants Beast tokens, and a Neutral token is always granted each day)
-- Elements grant passive skill modifiers depending on weather, wind and season temperature: Fire boosts strength in most weather (except cold season temperature, where it always gets +2% strength), Wind's bonus scales directly with the day's wind value, Ice slightly boosts speed always and boosts/reduces strength depending on season temperature, Beast always boosts strength and speed
-- Detailed modifiers of elementy by weather type (wind excluded):
-
-|       | Sunny | Sunny-Cloudy | Cloudy | Sunny-Rain | Rain | Heavy-Rain | Storm | Heat | Snowy | Freezy | Foggy |
-| ----- | ----- | ------------ | ------ | ---------- | ---- | ---------- | ----- | ---- | ----- | ------ | ----- |
-| Fire  | +5%   | +1%          | 0%     | 0%         | -2%  | -3%        | -4%   | +10% | -6%   | -10%   | 0%    |
-| Water | -5%   | -1%          | 0%     | +2%        | +5%  | +10%       | +6%   | -10% | -5%   | -10%   | 0%    |
-| Ice   | -6%   | -2%          | 0%     | 0%         | 0%   | 0%         | 0%    | -12% | +6%   | +12%   | 0%    |
-| Beast | 0%    | 0%           | 0%     | -2%        | -5%  | -8%        | -10%  | -3%  | 0%    | 0%     | +4%   |
-
-- Blob visuals now reflect their element: eye color changes (Fire: light orange, Wind: light cyan, Water: faded dark blue, Ice: light blue), and Beast blobs additionally grow cat ears
-- Blob details dialog shows an element icon with a tooltip naming the blob's element
-
-### 5.7 - Event UI update
-
-- Reworked the event UI (live and replay) into a shared 5-stage pipeline: Introduction, Standings before the round, Competition, Results, Standings after the round; every stage transition slides in from the right / out to the left
-- The `/standings/championship/{league_id}/{season}` endpoint now accepts an optional `round` query parameter to return standings truncated as of that round
-- The old gold/silver/bronze row-coloring shown on event tables once an event finished has been replaced by a dedicated Results stage reusing the existing results table
-- On live events, the step back/forward buttons now also walk between the introduction, standings and results stages once the tick range is exhausted, as if those stages were extra ticks
-- Replay tick controls are now rendered by the same stage pipeline as live events (instead of separately by the replay page), and their step back/forward buttons get the same stage-walking behavior
-- The current pipeline stage (introduction, standings, competition, results) is now persisted in local storage together with the replay tick (one combined entry per event), instead of a separate storage entry, so reopening an event resumes on the stage last viewed
-- The current pipeline stage (introduction, standings, competition, results) is now persisted per event in local storage, the same way the replay tick already was, so reopening an event resumes on the stage last viewed
-- Blobs with no element now suffer small weather-based penalties: rain reduces speed by 1%, heavy rain reduces speed by 2%, and heat or freezing weather reduces both speed and strength by 2%
-- Fixed news refresh issue when user navigates back to dashboard after event concludes
-- Blob detail dialogs opened from replay event views now show the standings/position as of that event's round instead of the current standings (via a new optional `event_id` query parameter on `/blobs/{blob_id}` and `/standings/snippet/{blob_id}`)
-
-### 5.7.1
-
-- Fixed display of standing snippets at start of season on replay and current standings on event pages
-
-### 5.7.2
-
-- When a blob has a repair kit they more likely do intense practice, because if they get injured the repair kit used up instantly
-  - This can avoid cases when a blob has a full inventory of repair kits
-- Slightly modified weather card for better responsivity and user friendly
-
-### 5.8.0
-
-- Added multi-language support for league names (issue #81): league names are now stored as a set of per-language translations (English, Hungarian) in the database instead of a single fixed name
-- Every place in the app displaying a league name (standings, results, calendar, blob details, hall of fame, news, event pages, replay pages) now shows the name in the currently selected UI language, falling back to English if a translation is missing
-- Added a Wiki page that gives a general introduction to Blob Championship System and its core concepts
-  - For now only available in english
-- Name and position columns are now sticky on the standings table
-- Improved hungarian translations to be grammatically correct and more straightforward
-
-### 5.8.1
-
-- Fixed bug of simulation not progressing when blobs use repair kit immedietly after getting injured
-
-### 5.8.2
-
-- Free premium practice is no longer available for blobs with ending contract if their finishing position last season was under the 50% threshold but are currently inside the top 50% in the current season
+### 1.2.2
+
+- Fixed the contract problem in inactive leagues at the end of season
+- Fixed calendar creation at the end of season
+- Debug mode window title extended with "_debug mode_"
+- Started removing types of the typing library from the code as newer python versions provide native list and dict types
+
+### 1.2.1
+
+- App crash at the end of the last league event of season fixed
+
+### 1.2
+
+- New main menu option: "_Add blob name suggestion_"
+  - Here the user can add a name to the name suggestions list
+  - When a new blob is created and the name suggestions list is not empty, it takes the oldest record of the list and applies the name to the blob thus the simulation is not blobked
+  - If the name suggestions list is empty the blob creation is the same as in previous versions
+- Enhanced prompt for entering blob name: a dialog window appears with a textbox

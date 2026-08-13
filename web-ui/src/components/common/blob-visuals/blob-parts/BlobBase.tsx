@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+import { useState } from 'react';
 import { CatEars } from './CatEars';
 import { Crown } from './Crown';
 
@@ -23,6 +24,15 @@ export const BlobBase = ({
   toolSlot,
   bruiseSlot,
 }: BlobBaseProps) => {
+  const [anim] = useState(() => {
+    const duration = 2.6 + Math.random() * 0.9;
+    const delay = -Math.random() * duration;
+    return { duration: `${duration}s`, delay: `${delay}s` };
+  });
+  const animStyle = doSquash
+    ? { animationDuration: anim.duration, animationDelay: anim.delay }
+    : undefined;
+
   return (
     <svg
       width={size}
@@ -34,16 +44,7 @@ export const BlobBase = ({
     >
       <g id="layer1">
         <g id="g12632">
-          <g id="scaleGroup" style={{ transformBox: 'fill-box', transformOrigin: '0% 100%' }}>
-            {doSquash && (
-              <animateTransform
-                attributeName="transform"
-                type="scale"
-                values="1 1.02; 1 0.96; 1 1.02"
-                dur="3s"
-                repeatCount="indefinite"
-              />
-            )}
+          <g id="scaleGroup" className={doSquash ? 'blob-squash' : undefined} style={animStyle}>
             {hasCatEars && <CatEars color={color} />}
             <path
               id="path56"
@@ -65,30 +66,12 @@ export const BlobBase = ({
               For sy: 1.02 -> dy = -1.74, 0.96 -> dy = 3.48, back to -1.74.
           */}
           {hasCrown && (
-            <g id="crownGroup">
-              {doSquash && (
-                <animateTransform
-                  attributeName="transform"
-                  type="translate"
-                  values="0 -1.74; 0 3.48; 0 -1.74"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              )}
+            <g id="crownGroup" className={doSquash ? 'blob-bob' : undefined} style={animStyle}>
               <Crown />
             </g>
           )}
           {toolSlot && (
-            <g id="toolGroup">
-              {doSquash && (
-                <animateTransform
-                  attributeName="transform"
-                  type="translate"
-                  values="0 -1.74; 0 3.48; 0 -1.74"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              )}
+            <g id="toolGroup" className={doSquash ? 'blob-bob' : undefined} style={animStyle}>
               {toolSlot}
             </g>
           )}

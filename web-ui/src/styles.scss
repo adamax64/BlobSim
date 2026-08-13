@@ -1,3 +1,37 @@
+@keyframes blob-squash {
+  0% {
+    transform: scaleY(1.02);
+  }
+  50% {
+    transform: scaleY(0.96);
+  }
+  100% {
+    transform: scaleY(1.02);
+  }
+}
+
+@keyframes blob-bob {
+  0% {
+    transform: translateY(-1.74px);
+  }
+  50% {
+    transform: translateY(3.48px);
+  }
+  100% {
+    transform: translateY(-1.74px);
+  }
+}
+
+.blob-squash {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  animation: blob-squash 3s linear infinite;
+}
+
+.blob-bob {
+  animation: blob-bob 3s linear infinite;
+}
+
 body {
   background-color: '#f9f9f9';
 }

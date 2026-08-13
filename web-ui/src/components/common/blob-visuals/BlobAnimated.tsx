@@ -30,45 +30,41 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
 
   useEffect(() => {
     const timeouts: number[] = [];
+    let cancelled = false;
 
-    const runBlinkSequence = () => {
-      timeouts.push(
-        window.setTimeout(() => {
-          toggleEyes();
-        }, 4000),
-      );
-      timeouts.push(
-        window.setTimeout(() => {
-          toggleEyes();
-        }, 4250),
-      );
-      timeouts.push(
-        window.setTimeout(() => {
-          toggleEyes();
-        }, 8250),
-      );
-      timeouts.push(
-        window.setTimeout(() => {
-          toggleEyes();
-        }, 8500),
-      );
-      timeouts.push(
-        window.setTimeout(() => {
-          toggleEyes();
-        }, 8750),
-      );
-      timeouts.push(
-        window.setTimeout(() => {
-          toggleEyes();
-        }, 9000),
-      );
+    const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+    const scheduleNextBlink = () => {
+      if (cancelled) return;
+      const gap = rand(2500, 5500);
+      const id = window.setTimeout(() => {
+        blinkOnce();
+      }, gap);
+      timeouts.push(id);
     };
 
-    runBlinkSequence();
-    const interval = window.setInterval(runBlinkSequence, 9000);
+    const blinkOnce = (followUpsLeft = Math.random() < 0.3 ? 1 : 0) => {
+      if (cancelled) return;
+      const blinkDuration = rand(90, 180);
+      const closeId = window.setTimeout(() => {
+        toggleEyes();
+        const openId = window.setTimeout(() => {
+          toggleEyes();
+          if (followUpsLeft > 0) {
+            blinkOnce(followUpsLeft - 1);
+          } else {
+            scheduleNextBlink();
+          }
+        }, blinkDuration);
+        timeouts.push(openId);
+      }, 0);
+      timeouts.push(closeId);
+    };
+
+    scheduleNextBlink();
 
     return () => {
-      clearInterval(interval);
+      cancelled = true;
       timeouts.forEach((id) => clearTimeout(id));
     };
   }, [toggleEyes]);
