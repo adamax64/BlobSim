@@ -1,7 +1,11 @@
 # Version changelog
 
-### 5.8.3
+### 5.9.0 - Quartered event UI & blob animations update
 
+- Reworked the quartered event UI: a MUI scatter chart is now displayed next to the event table, plotting each blob's latest score as a blob-shaped point in the blob's color
+  - The scatter chart hides the x axis ticks and labels; the y axis shows the score rounded to at most three decimals
+  - Hovering a blob point shows a tooltip with the blob's name and score, similarly to the elimination scoring chart
+  - On mobile only the chart is shown by default, with a button to toggle the table open over the chart
 - Switched the blob squash/breathing animation from SVG SMIL (`<animateTransform>`) to CSS keyframe animations so the animation starts reliably on mount instead of lagging on the first frames
 - Blob blinking now uses randomized per-blob durations instead of a fixed 9 s schedule, so multiple blobs on screen no longer blink in sync
 - Blob squash/breathing animation now uses a randomized per-blob duration and starting phase so multiple blobs no longer breathe in lockstep

@@ -1,21 +1,13 @@
-import {
-  Box,
-  CircularProgress,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Box, IconButton, Paper, useMediaQuery, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type { QuarteredEventRecordDto as EventRecordDto, EventType } from '../../../../generated';
-import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
-import { roundToThreeDecimals } from '../event-utils';
-import { useCallback } from 'react';
+import { useState } from 'react';
 import { EventCardFrame } from '../shared/EventCardFrame';
-import { EventTable } from '../shared/EventTable';
-import SkeletonRows from '../shared/SkeletonRows';
+import { QuarteredEventTable } from './quartered-event-components/QuarteredEventTable';
+import { QuarteredEventChart } from './quartered-event-components/QuarteredEventChart';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import CloseIcon from '@mui/icons-material/Close';
+import DynamicTooltip from '../../common/DynamicTooltip';
 
 type QuarteredEventUIProps = {
   eventRecords: EventRecordDto[];
@@ -37,147 +29,75 @@ export const QuarteredEventUI = ({
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const highlighByQuarter = useCallback((index: number) => (quarter === index ? 'column-actual' : ''), [quarter]);
-
-  const shouldShowQuarter = useCallback(
-    (quarterNum: number) => {
-      if (!isMobile) return true;
-
-      switch (quarterNum) {
-        case 1: // Q1 shows in quarters 1 and 2
-          return quarter <= 2;
-        case 2: // Q2 shows in quarters 1, 2 and 3
-          return quarter <= 3;
-        case 3: // Q3 shows in quarters 3 and 4
-          return quarter >= 3;
-        case 4: // Q4 shows only in quarter 4
-          return quarter >= 4;
-        default:
-          return true;
-      }
-    },
-    [isMobile, quarter],
-  );
-
-  const renderCellContent = useCallback(
-    (record: EventRecordDto, quarterIndex: number) => {
-      if (record.next && isPerforming && quarterIndex === quarter - 1) {
-        return <CircularProgress size={26} />;
-      }
-
-      const currentScore = record.quarters[quarterIndex];
-
-      // If someone is performing, no need to color the scores
-      if (isPerforming) {
-        return roundToThreeDecimals(currentScore.score) ?? '-';
-      }
-
-      const cellClasses = [];
-      if (currentScore.best) {
-        cellClasses.push('cell-best');
-      }
-      if (currentScore.personalBest) {
-        cellClasses.push('cell-personal-best');
-      }
-      if (currentScore.latestScore) {
-        cellClasses.push('cell-not-improved');
-      }
-
-      return (
-        <Box className={cellClasses.join(' ')}>
-          {currentScore.latestScore
-            ? roundToThreeDecimals(currentScore.latestScore)
-            : (roundToThreeDecimals(currentScore.score) ?? '-')}
-        </Box>
-      );
-    },
-    [quarter, isPerforming],
-  );
-
-  const getRowClass = useCallback(
-    (record: EventRecordDto, index: number) => {
-      if (quarter <= 4 && record.eliminated) {
-        return 'row-inactive';
-      }
-      return index === currentBlobIndex ? 'row-current' : '';
-    },
-    [currentBlobIndex, quarter],
-  );
+  const [showTable, setShowTable] = useState(false);
 
   return (
     <EventCardFrame eventType={eventType}>
-      <EventTable>
-        <TableHead>
-          <TableRow>
-            <TableCell width={30}>#</TableCell>
-            <TableCell>{t('quartered_event.name')}</TableCell>
-            {shouldShowQuarter(1) && (
-              <TableCell align="center" className={highlighByQuarter(1)}>
-                Q1
-              </TableCell>
-            )}
-            {shouldShowQuarter(2) && (
-              <TableCell align="center" className={highlighByQuarter(2)}>
-                Q2
-              </TableCell>
-            )}
-            {shouldShowQuarter(3) && (
-              <TableCell align="center" className={highlighByQuarter(3)}>
-                Q3
-              </TableCell>
-            )}
-            {shouldShowQuarter(4) && (
-              <TableCell align="center" className={highlighByQuarter(4)}>
-                Q4
-              </TableCell>
-            )}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {eventRecords.length > 0 ? (
-            eventRecords.map((record, index) => (
-              <TableRow key={index} className={getRowClass(record, index)}>
-                <TableCell padding="checkbox" align="center">
-                  {index + 1}
-                </TableCell>
-                <TableCell sx={isMobile ? { paddingX: 1 } : {}}>
-                  <IconNameWithDetailsModal
-                    blobId={record.blob.id}
-                    name={record.blob.name}
-                    color={record.blob.color}
-                    renderFullName={!isMobile}
-                    detailsDialogVariant="event"
-                    eventId={eventId}
-                  />
-                </TableCell>
-                {shouldShowQuarter(1) && (
-                  <TableCell padding="none" align="center" className={highlighByQuarter(1)}>
-                    {renderCellContent(record, 0)}
-                  </TableCell>
-                )}
-                {shouldShowQuarter(2) && (
-                  <TableCell padding="none" align="center" className={highlighByQuarter(2)}>
-                    {renderCellContent(record, 1)}
-                  </TableCell>
-                )}
-                {shouldShowQuarter(3) && (
-                  <TableCell padding="none" align="center" className={highlighByQuarter(3)}>
-                    {renderCellContent(record, 2)}
-                  </TableCell>
-                )}
-                {shouldShowQuarter(4) && (
-                  <TableCell padding="none" align="center" className={highlighByQuarter(4)}>
-                    {renderCellContent(record, 3)}
-                  </TableCell>
-                )}
-              </TableRow>
-            ))
-          ) : (
-            <SkeletonRows columnCount={isMobile ? 4 : 6} />
+      {isMobile ? (
+        <Box flexDirection="column" gap={1} position="relative" height="calc(90vh - 150px)" display="flex">
+          <DynamicTooltip title={showTable ? t('quartered_event.hide_table') : t('quartered_event.show_table')}>
+            <IconButton
+              onClick={() => setShowTable((prev) => !prev)}
+              sx={{ alignSelf: 'flex-start' }}
+              aria-label={showTable ? t('quartered_event.hide_table') : t('quartered_event.show_table')}
+            >
+              {showTable ? <CloseIcon /> : <TableChartIcon />}
+            </IconButton>
+          </DynamicTooltip>
+          {showTable && (
+            <Paper
+              elevation={8}
+              sx={{
+                position: 'absolute',
+                top: 48,
+                left: 0,
+                right: 0,
+                zIndex: theme.zIndex.modal,
+                overflowY: 'auto',
+                '&::-webkit-scrollbar': { display: 'none' },
+                scrollbarWidth: 'none',
+              }}
+            >
+              <QuarteredEventTable
+                eventRecords={eventRecords}
+                quarter={quarter}
+                currentBlobIndex={currentBlobIndex}
+                isPerforming={isPerforming}
+                isMobile={isMobile}
+                eventId={eventId}
+              />
+            </Paper>
           )}
-        </TableBody>
-      </EventTable>
+          <Box sx={{ flex: 1, minHeight: 0 }}>
+            <QuarteredEventChart eventRecords={eventRecords} />
+          </Box>
+        </Box>
+      ) : (
+        <Box display="flex" flexDirection="row" height="calc(90vh - 150px)">
+          <Box
+            flex={1}
+            sx={{
+              overflowY: 'auto',
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              scrollbarWidth: 'none',
+            }}
+          >
+            <QuarteredEventTable
+              eventRecords={eventRecords}
+              quarter={quarter}
+              currentBlobIndex={currentBlobIndex}
+              isPerforming={isPerforming}
+              isMobile={isMobile}
+              eventId={eventId}
+            />
+          </Box>
+          <Box sx={{ minWidth: 0, height: '100%' }}>
+            <QuarteredEventChart eventRecords={eventRecords} />
+          </Box>
+        </Box>
+      )}
     </EventCardFrame>
   );
 };

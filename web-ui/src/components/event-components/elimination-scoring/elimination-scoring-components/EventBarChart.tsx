@@ -1,9 +1,9 @@
-import { Box, Card, Typography } from '@mui/material';
-import { BarChart, ChartsText, ChartsTextProps, ChartsTooltipContainer, useAxesTooltip } from '@mui/x-charts';
-import { IconName } from '../../../common/IconName';
+import { Box } from '@mui/material';
+import { BarChart, ChartsText, ChartsTextProps, useAxesTooltip } from '@mui/x-charts';
 import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../../generated/models/EliminationEventRecordDtoOutput';
 import { BlobIcon } from '../../../icons/BlobIcon';
 import { BlobCompetitorDto } from '../../../../../generated';
+import { EventChartTooltipContent } from '../../shared/EventChartTooltipContent';
 
 interface EventBarChartProps {
   eventRecords: EventRecordDto[];
@@ -74,16 +74,5 @@ const CustomTooltip = () => {
   const color = axisTooltip?.[0].seriesItems[0].color ?? '';
   const value = Number.parseFloat(axisTooltip?.[0].seriesItems[0].formattedValue ?? '');
 
-  return (
-    <ChartsTooltipContainer>
-      <Card>
-        <Box padding={1} display="flex" justifyContent="space-between" width={210}>
-          <IconName name={name} color={color} />
-          <Typography variant="body2" align="right">
-            {value > 0 ? value : '-'}
-          </Typography>
-        </Box>
-      </Card>
-    </ChartsTooltipContainer>
-  );
+  return <EventChartTooltipContent name={name} color={color} score={Number.isFinite(value) ? value : null} />;
 };

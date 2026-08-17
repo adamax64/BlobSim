@@ -255,7 +255,9 @@
   "quartered_event": {
     "name": "Név",
     "best": "Legjobb",
-    "new_record": "Új rekord: {{name}}, {{score}}!"
+    "new_record": "Új rekord: {{name}}, {{score}}!",
+    "show_table": "Táblázat megjelenítése",
+    "hide_table": "Táblázat elrejtése"
   },
   "race_event": {
     "new_record": "Új rekord: {{name}}, {{score}}!"
@@ -268,7 +270,9 @@
     "eliminated": "Kiesett",
     "tick": "Tick",
     "tab_table": "Táblázat",
-    "tab_chart": "Diagram"
+    "tab_chart": "Diagram",
+    "show_table": "Táblázat megjelenítése",
+    "hide_table": "Táblázat elrejtése"
   },
   "factory": {
     "factory_progress": "Gyártás előrehaladás",

@@ -254,7 +254,9 @@
   "quartered_event": {
     "name": "Name",
     "best": "Best",
-    "new_record": "New record by {{name}} with score {{score}}!"
+    "new_record": "New record by {{name}} with score {{score}}!",
+    "show_table": "Show table",
+    "hide_table": "Hide table"
   },
   "race_event": {
     "new_record": "New record by {{name}} with score {{score}}!"
@@ -267,7 +269,9 @@
     "eliminated": "Eliminated",
     "tick": "Tick",
     "tab_table": "Table",
-    "tab_chart": "Chart"
+    "tab_chart": "Chart",
+    "show_table": "Show table",
+    "hide_table": "Hide table"
   },
   "factory": {
     "factory_progress": "Factory Progress",
