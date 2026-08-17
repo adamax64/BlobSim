@@ -1,16 +1,18 @@
-import { Snackbar, Alert } from '@mui/material';
 import { ActionDto, ActionsApi, CompetitionApi, EventDto, EventRecordsApi } from '../../../../generated';
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/RaceEventRecordDtoOutput';
 import { getRaceDurationBySize } from '../event-utils';
 import defaultConfig from '../../../default-config';
 import { useTranslation } from 'react-i18next';
-import { SnackbarState } from '../snackbar-state';
 import { EnduranceRaceUI } from './EnduranceRaceUI';
 import { useReplayState } from '../../../hooks/useReplayState';
 import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventStagePipeline } from '../shared/EventStagePipeline';
+import { useEventSnackbar } from '../shared/useEventSnackbar';
+import { EventResultSnackbar } from '../shared/EventResultSnackbar';
+import { useEventRecordsQuery } from '../shared/useEventRecordsQuery';
+import { useFinishEventMutation } from '../shared/useFinishEventMutation';
+import { useMutation } from '@tanstack/react-query';
 
 interface EnduranceRaceEventFrameProps {
   event: EventDto;
@@ -28,13 +30,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const [tick, setTick] = useState(Math.max(...event.actions.map((action: ActionDto) => action.scores.length), 0));
   const { replayTick, setReplayTick, stageIndex, setStageIndex } = useReplayState(event.id);
   const [loadingNextTick, setLoadingNextTick] = useState(false);
-  const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
-    message: null,
-    severity: 'error',
-    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-  });
+  const { snackbarOpen, snackbarState, showError, showSuccess, closeSnackbar } = useEventSnackbar();
 
   const raceDuration = useMemo(() => getRaceDurationBySize(event.competitors.length), [event.competitors.length]);
 
@@ -42,26 +38,13 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
   const actionsApi = new ActionsApi(defaultConfig);
   const competitionApi = new CompetitionApi(defaultConfig);
 
-  const { data: eventRecords, mutate: getEventRecords } = useMutation<
-    EventRecordDto[],
-    Error,
-    { eventId: number; playbackTick?: number }
-  >({
-    mutationFn: ({ eventId, playbackTick }) =>
+  const { eventRecords, getEventRecords } = useEventRecordsQuery<EventRecordDto>({
+    fetchEventRecords: ({ eventId, playbackTick }) =>
       eventRecordsApi.getEnduranceEventRecordsEnduranceGet({ eventId, playbackTick }),
-    onSuccess: (data) => {
-      setLoadingNextTick(false);
-      setEventRecordsCache(data);
-      return data;
-    },
+    onSuccess: () => setLoadingNextTick(false),
     onError: (error) => {
       setLoadingNextTick(false);
-      setSnackbarState({
-        message: error.message || 'An error occurred',
-        severity: 'error',
-        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-      });
-      setSnackbarOpen(true);
+      showError(error.message || t('error.generic'));
     },
   });
 
@@ -69,12 +52,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
     mutationFn: () => actionsApi.raceActionsCreateRacePost({ eventId: event.id, tick: tick }),
     onSuccess: (data) => {
       if (data) {
-        setSnackbarState({
-          message: t('race_event.new_record', { name: data.name, score: data.score.toFixed(3) }),
-          severity: 'success',
-          anchorOrigin: { vertical: 'top', horizontal: 'center' },
-        });
-        setSnackbarOpen(true);
+        showSuccess(t('race_event.new_record', { name: data.name, score: data.score.toFixed(3) }));
       }
       setTick((prev) => prev + 1);
       setReplayTick((prev) => prev + 1);
@@ -82,23 +60,16 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
     },
     onError: (error) => {
       setLoadingNextTick(false);
-      setSnackbarState({
-        message: error.message || 'An error occurred',
-        severity: 'error',
-        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-      });
-      setSnackbarOpen(true);
+      showError(error.message || t('error.generic'));
     },
   });
 
-  const { mutate: finishEvent } = useMutation<void, Error>({
-    mutationFn: () =>
+  const { mutate: finishEvent } = useFinishEventMutation({
+    saveResults: () =>
       competitionApi.saveEnduranceCompetitionEnduranceEventResultsPost({
         bodySaveEnduranceCompetitionEnduranceEventResultsPost: { event, eventRecords: eventRecords ?? [] },
       }),
-    onSuccess: () => {
-      setIsEventFinished(true);
-    },
+    onFinished: () => setIsEventFinished(true),
   });
 
   useReplayTickDelay(
@@ -136,7 +107,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
         }}
         competitionContent={
           <EnduranceRaceUI
-            eventRecords={eventRecords ?? eventRecordsCache}
+            eventRecords={eventRecords}
             tick={replayTick}
             loadingNextTick={loadingNextTick}
             eventType={event.type}
@@ -144,17 +115,7 @@ export const EnduranceRaceEventFrame: React.FC<EnduranceRaceEventFrameProps> = (
           />
         }
       />
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={snackbarState.anchorOrigin}
-        color="error"
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarState.severity} variant="filled">
-          {snackbarState.message}
-        </Alert>
-      </Snackbar>
+      <EventResultSnackbar open={snackbarOpen} state={snackbarState} onClose={closeSnackbar} />
     </>
   );
 };

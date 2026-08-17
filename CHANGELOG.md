@@ -1,5 +1,12 @@
 # Version changelog
 
+### 5.8.4
+
+- Refactored the event frame components (Quartered, Sprint Race, Endurance Race, Elimination Scoring) to share common logic via new hooks/components: `useEventSnackbar`/`EventResultSnackbar` for the new-record/error toast, `useEventRecordsQuery` for the tick-scoped event records fetch + cache, and `useFinishEventMutation` for saving final results. This fixed the following issues:
+  - News refresh issue after event concluded by admin
+  - Event progress button appearing in wrong states
+  - Event progress button appears duplicated for multiple states (e.g. start and next button appears at the same type)
+
 ### 5.8.3
 
 - Switched the blob squash/breathing animation from SVG SMIL (`<animateTransform>`) to CSS keyframe animations so the animation starts reliably on mount instead of lagging on the first frames

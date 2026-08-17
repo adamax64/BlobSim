@@ -1,4 +1,3 @@
-import { Snackbar, Alert } from '@mui/material';
 import {
   ActionsApi,
   BlobCompetitorDto,
@@ -10,13 +9,16 @@ import {
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { getCurrentQuarter, getQuarterEnds } from '../event-utils';
 import defaultConfig from '../../../default-config';
-import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { SnackbarState } from '../snackbar-state';
 import { QuarteredEventUI } from './QuarteredEventUI';
 import { useReplayState } from '../../../hooks/useReplayState';
 import { useReplayTickDelay } from '../../../hooks/useReplayTickDelay';
 import { EventStagePipeline } from '../shared/EventStagePipeline';
+import { useEventSnackbar } from '../shared/useEventSnackbar';
+import { EventResultSnackbar } from '../shared/EventResultSnackbar';
+import { useEventRecordsQuery } from '../shared/useEventRecordsQuery';
+import { useFinishEventMutation } from '../shared/useFinishEventMutation';
+import { useMutation } from '@tanstack/react-query';
 
 interface QuarteredEventFrameProps {
   event: EventDto;
@@ -37,13 +39,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   const [quarter, setQuarter] = useState(0);
   const [currentBlobIndex, setCurrentBlobIndex] = useState(-1);
   const [nextBlobIndex, setNextBlobIndex] = useState(-1);
-  const [eventRecordsCache, setEventRecordsCache] = useState<EventRecordDto[]>([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
-    message: null,
-    severity: 'error',
-    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-  });
+  const { snackbarOpen, snackbarState, showError, showSuccess, closeSnackbar } = useEventSnackbar();
 
   const quarterEnds = useMemo(
     () => getQuarterEnds(event.competitors.length, event.type),
@@ -54,27 +50,16 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
   const eventRecordsApi = new EventRecordsApi(defaultConfig);
   const competitionApi = new CompetitionApi(defaultConfig);
 
-  const { data: eventRecords, mutate: getEventRecords } = useMutation<
-    EventRecordDto[],
-    Error,
-    { eventId: number; playbackTick?: number }
-  >({
-    mutationFn: ({ eventId, playbackTick }) =>
+  const { eventRecords, getEventRecords } = useEventRecordsQuery<EventRecordDto>({
+    fetchEventRecords: ({ eventId, playbackTick }) =>
       eventRecordsApi.getQuarteredEventRecordsQuarteredGet({ eventId, playbackTick }),
-    onSuccess: (data, { playbackTick }) => {
+    onSuccess: (_data, playbackTick) => {
       setIsPerforming(false);
       setQuarter(getCurrentQuarter(quarterEnds, playbackTick ?? tick));
-      setEventRecordsCache(data);
-      return data;
     },
     onError: (error) => {
       setIsPerforming(false);
-      setSnackbarState({
-        message: error.message || t('error.generic'),
-        severity: 'error',
-        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-      });
-      setSnackbarOpen(true);
+      showError(error.message || t('error.generic'));
     },
   });
 
@@ -90,12 +75,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
       }),
     onSuccess: (data) => {
       if (data) {
-        setSnackbarState({
-          message: t('quartered_event.new_record', { name: data.name, score: data.score.toFixed(3) }),
-          severity: 'success',
-          anchorOrigin: { vertical: 'top', horizontal: 'center' },
-        });
-        setSnackbarOpen(true);
+        showSuccess(t('quartered_event.new_record', { name: data.name, score: data.score.toFixed(3) }));
       }
       setTick((prev: number) => prev + 1);
       setReplayTick((prev) => prev + 1);
@@ -103,31 +83,17 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
     },
     onError: (error) => {
       setIsPerforming(false);
-      setSnackbarState({
-        message: error.message || t('error.generic'),
-        severity: 'error',
-        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-      });
-      setSnackbarOpen(true);
+      showError(error.message || t('error.generic'));
     },
   });
 
-  const { mutate: finishEvent } = useMutation<void, Error>({
-    mutationFn: () =>
+  const { mutate: finishEvent } = useFinishEventMutation({
+    saveResults: () =>
       competitionApi.saveQuarteredCompetitionQuarteredEventResultsPost({
         bodySaveQuarteredCompetitionQuarteredEventResultsPost: { event, eventRecords: eventRecords ?? [] },
       }),
-    onSuccess: () => {
-      setIsEventFinished(true);
-    },
-    onError: (error) => {
-      setSnackbarState({
-        message: error.message || t('error.generic'),
-        severity: 'error',
-        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-      });
-      setSnackbarOpen(true);
-    },
+    onFinished: () => setIsEventFinished(true),
+    onError: (error) => showError(error.message || t('error.generic')),
   });
 
   useReplayTickDelay(
@@ -173,7 +139,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
         }}
         competitionContent={
           <QuarteredEventUI
-            eventRecords={eventRecords ?? eventRecordsCache}
+            eventRecords={eventRecords}
             quarter={quarter}
             isPerforming={isPerforming}
             eventType={event.type}
@@ -181,16 +147,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
           />
         }
       />
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={snackbarState.anchorOrigin}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarState.severity} variant="filled">
-          {snackbarState.message}
-        </Alert>
-      </Snackbar>
+      <EventResultSnackbar open={snackbarOpen} state={snackbarState} onClose={closeSnackbar} />
     </>
   );
 };
