@@ -13,6 +13,7 @@ import DynamicTooltip from '../../DynamicTooltip';
 import Inventory from './Inventory';
 import StandingSnippetWidget from './StandingSnippetWidget';
 import { getLocalizedText } from '../../../../utils/translation-utils';
+import { formatToShort } from '../../../../utils/sim-time-utils';
 
 type BlobDetailsDialogContentProps = {
   blob: BlobStatsDto;
@@ -83,7 +84,7 @@ const BlobDetailsDialogContent = ({
                 <Box display="flex" width="fit-content" gap={1}>
                   <Cake />
                   <Typography variant="body1" sx={{ transform: 'translateY(2px)' }}>
-                    {blob.born}
+                    {formatToShort(blob.born)}
                   </Typography>
                 </Box>
               </DynamicTooltip>
@@ -167,7 +168,8 @@ const BlobDetailsDialogContent = ({
                     {includeCurrentLeague && (
                       <Grid size={12}>
                         <Typography variant="body1">
-                          <strong>{t('blob_details.current_league')}:</strong> {getLocalizedText(blob.leagueName, i18n.language)}
+                          <strong>{t('blob_details.current_league')}:</strong>{' '}
+                          {getLocalizedText(blob.leagueName, i18n.language)}
                         </Typography>
                       </Grid>
                     )}

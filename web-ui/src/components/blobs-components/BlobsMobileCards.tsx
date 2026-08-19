@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { BlobStateBadge } from '../common/BlobStateBadge';
 import { DeadBlobIcon } from '../icons/DeadBlobIcon';
 import { getLocalizedText } from '../../utils/translation-utils';
+import { formatToShort } from '../../utils/sim-time-utils';
 
 interface BlobsMobileCardsProps {
   blobs: BlobStatsDto[] | undefined;
@@ -57,7 +58,7 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
                       </Typography>
                     </BlobStateBadge>
                     <Typography variant="body2" color="text.secondary">
-                      {t('blobs_grid.born')}: {blob.born}
+                      {t('blobs_grid.born')}: {formatToShort(blob.born)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {t('blobs_grid.league')}: {getLocalizedText(blob.leagueName, i18n.language)}
