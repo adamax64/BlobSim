@@ -10,8 +10,8 @@ This is a simulation software that simulates the life of fictional entities call
 
 The following requirements should be met to run the application on your device:
 
-- Python 3.10 or newer
-- Node 20.17.0 or newer
+- Python 3.13 or newer
+- Node 24.14.0 or newer
 - pnpm 11.0.0 or newer
 - Java 11 or newer
 - Postgres 17
@@ -35,7 +35,6 @@ Run `start.bat` on Windows systems or `start.sh` on Linux systems to setup and s
    ```
 
 3. Activate the environment
-
    - Windows:
 
    ```sh
@@ -130,7 +129,6 @@ At the end of the event the top three are highlighted by colors resemble bronze,
 - The "_View Blobs_" option navigate to a table that lists all currently living blobs and their carreer stats
 
 - The "_View standings_" option navigates to a menu where the user can choose which league standings do they want to view
-
   - After choosing a league a table is shown with the standings of the current season. Here the user can navigate to other season standings by pressing the left and right arrow buttons
 
 - The "_View Calendar_" option navigates to a screen that lists all of the championship events in the current season, where the next event is highlighted
