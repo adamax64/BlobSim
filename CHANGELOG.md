@@ -1,5 +1,12 @@
 # Version changelog
 
+### 5.9.1
+
+- Fixed stuck simulation time because of incorrect news generation on new season
+- Fixed queue not showing on league filter on blobs page
+- Fixed born field sorting on blobs desktop grid
+- Fixed translations cache stuck
+
 ### 5.9.0
 
 - Added a "Mine Winners" section to the mine modal showing the winners in a table:
