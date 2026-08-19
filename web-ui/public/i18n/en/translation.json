@@ -57,7 +57,15 @@
   "mine": {
     "title": "Mine",
     "subtitle": "The following blobs work in the mine right now:",
-    "empty": "No one is in the mine right now."
+    "empty": "No one is in the mine right now.",
+    "winners": {
+      "title": "Mine Winners",
+      "date": "Date",
+      "blob": "Blob",
+      "amount": "Amount",
+      "loading": "Loading mine winners...",
+      "empty": "No mine winners yet."
+    }
   },
   "anchient_ruins": {
     "title": "Anchient Ruins",

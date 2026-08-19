@@ -1,5 +1,12 @@
 # Version changelog
 
+### 5.9.0
+
+- Added a "Mine Winners" section to the mine modal showing the winners in a table:
+  - On desktop it appears on the left side, next to the current "blobs in the mine" content
+  - On tablet and mobile it appears above the current content inside a collapsible accordion
+- Raised maximum chance of loosing integrity while getting injured to 30%
+
 ### 5.8.4
 
 - Refactored the event frame components (Quartered, Sprint Race, Endurance Race, Elimination Scoring) to share common logic via new hooks/components: `useEventSnackbar`/`EventResultSnackbar` for the new-record/error toast, `useEventRecordsQuery` for the tick-scoped event records fetch + cache, and `useFinishEventMutation` for saving final results. This fixed the following issues:

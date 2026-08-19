@@ -57,7 +57,15 @@
   "mine": {
     "title": "Bánya",
     "subtitle": "Az alábbi blobok jelenleg a bányában dolgoznak:",
-    "empty": "Jelenleg senki sincs a bányában."
+    "empty": "Jelenleg senki sincs a bányában.",
+    "winners": {
+      "title": "Bányagyőztesek",
+      "date": "Dátum",
+      "blob": "Blob",
+      "amount": "Összeg",
+      "loading": "Bányagyőztesek betöltése...",
+      "empty": "Még nincsenek bányagyőztesek."
+    }
   },
   "anchient_ruins": {
     "title": "Ősi romok",
