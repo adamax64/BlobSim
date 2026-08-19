@@ -5,6 +5,8 @@ from domain import sim_data_service, progression_service
 from domain.blob_services.blob_service import update_blobs
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.dtos.weather_info_dto import WeatherInfoDto
+from domain.dtos.mine_winners_dto import MineWinnersDto
+from domain.mine_winners_service import get_mine_winners
 from domain.utils.sim_time_utils import convert_to_sim_time
 from .auth_dependency import require_auth
 
@@ -29,6 +31,15 @@ async def get_weather_info() -> WeatherInfoDto:
             wind=sim_data_service.get_wind(),
             season_temperature=sim_data_service.get_season_temperature(),
         )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")
+
+
+@router.get("/mine_winners")
+async def get_mine_winners_endpoint() -> MineWinnersDto:
+    try:
+        return get_mine_winners()
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"{e.with_traceback(None)}")

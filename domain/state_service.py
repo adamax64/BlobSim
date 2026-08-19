@@ -24,6 +24,6 @@ def apply_injury(blob_id: int, session: Session):
         return
 
     effect_until = get_sim_time(session) + INJURED_STATE_DURATION
-    if random.random() < max(0, (1 - blob.integrity / INITIAL_INTEGRITY) * 0.2):
+    if random.random() < max(0, (1 - blob.integrity / INITIAL_INTEGRITY) * 0.3):
         blob.integrity -= 1
     create_state(session, blob.id, StateType.INJURED, effect_until)

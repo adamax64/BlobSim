@@ -47,6 +47,27 @@
         }
       }
     },
+    "/sim_data/mine_winners": {
+      "get": {
+        "tags": [
+          "sim_data"
+        ],
+        "summary": "Get Mine Winners Endpoint",
+        "operationId": "get_mine_winners_endpoint_sim_data_mine_winners_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MineWinnersDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sim_data/can_progress": {
       "get": {
         "tags": [
@@ -2191,17 +2212,10 @@
             "$ref": "#/components/schemas/SimTimeDto"
           },
           "league_name": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/TranslationsDto"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "items": {
+              "$ref": "#/components/schemas/TranslationsDto"
+            },
+            "type": "array",
             "title": "League Name"
           },
           "league_level": {
@@ -2602,6 +2616,43 @@
           "password"
         ],
         "title": "LoginRequest"
+      },
+      "MineWinnerDto": {
+        "properties": {
+          "date": {
+            "$ref": "#/components/schemas/SimTimeDto"
+          },
+          "blob": {
+            "$ref": "#/components/schemas/BlobStatsDto"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "blob",
+          "amount"
+        ],
+        "title": "MineWinnerDto"
+      },
+      "MineWinnersDto": {
+        "properties": {
+          "winners": {
+            "items": {
+              "$ref": "#/components/schemas/MineWinnerDto"
+            },
+            "type": "array",
+            "title": "Winners"
+          }
+        },
+        "type": "object",
+        "required": [
+          "winners"
+        ],
+        "title": "MineWinnersDto"
       },
       "NameSuggestionDto": {
         "properties": {

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Enum, Float, Integer, BigInteger
+from sqlalchemy import Column, Enum, Float, Integer, BigInteger, JSON
 
 from data.db.db_engine import Base
 from data.model.weather_type import WeatherType
@@ -21,3 +21,4 @@ class SimData(Base):
     ice_tokens = Column(Integer, nullable=False, default=0)
     beast_tokens = Column(Integer, nullable=False, default=0)
     neutral_tokens = Column(Integer, nullable=False, default=0)
+    mine_winners = Column(JSON, nullable=False, default=list)

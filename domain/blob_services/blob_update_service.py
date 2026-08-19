@@ -59,7 +59,13 @@ from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
 from domain.item_service import grant_item_to_blob, has_depleted_unconsumable, is_inventory_full
-from domain.utils.item_utils import COMPETITION_ITEM_TYPES, choose_random_item_type, get_item_from_list_by_type, get_item_sell_value
+from domain.mine_winners_service import record_mine_winner
+from domain.utils.item_utils import (
+    COMPETITION_ITEM_TYPES,
+    choose_random_item_type,
+    get_item_from_list_by_type,
+    get_item_sell_value
+)
 from domain.utils.constants import (
     ADVENTURE_EFFECT,
     COMPETITION_EFFECT,
@@ -140,6 +146,9 @@ def update_all_blobs(session: Session):
         # Ensure the chosen blob is included in saved blobs
         if chosen not in modified_blobs:
             modified_blobs.append(chosen)
+
+        # Record the winner in the sim_data.mine_winners history (capped at the last 5 days)
+        record_mine_winner(session, chosen.id, reward)
 
     save_all_blobs(session, modified_blobs)
 
@@ -581,7 +590,8 @@ def _collect_catchup_train_ids(session: Session) -> set:
         if last_place_id is not None:
             train_ids.add(last_place_id)
 
-    # blobs that were demoted to the dropout league: present in dropout (level 0) but had a most recent real-league result elsewhere
+    # blobs that were demoted to the dropout league:
+    # present in dropout (level 0) but had a most recent real-league result elsewhere
     dropout_league = leagues[0] if leagues and leagues[0].level == 0 else None
     if dropout_league is not None:
         for b in dropout_league.players:
