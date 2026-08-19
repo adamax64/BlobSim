@@ -8,21 +8,27 @@ from data.model.blob import Blob
 
 @transactional
 def get_all_blobs_by_name(
-    session: Session, name_search: str = None, show_dead: bool = False
+    session: Session,
+    name_search: str = None,
+    show_dead: bool = False,
+    league_id: int | None = None,
 ) -> list[Blob]:
+    filters = [
+        name_search is None
+        or or_(
+            Blob.first_name.contains(name_search),
+            Blob.last_name.contains(name_search),
+        ),
+        or_(show_dead, Blob.integrity > 0),
+    ]
+    if league_id is not None:
+        # league_id == -1 is a sentinel meaning "blobs without a league"
+        if league_id == -1:
+            filters.append(Blob.league_id.is_(None))
+        else:
+            filters.append(Blob.league_id == league_id)
     result = (
-        session.query(Blob)
-        .filter(
-            and_(
-                name_search is None
-                or or_(
-                    Blob.first_name.contains(name_search),
-                    Blob.last_name.contains(name_search),
-                ),
-                or_(show_dead, Blob.integrity > 0),
-            )
-        )
-        .all()
+        session.query(Blob).filter(and_(*filters)).all()
     )
     return result
 

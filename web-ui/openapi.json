@@ -153,6 +153,22 @@
               "default": false,
               "title": "Show Dead"
             }
+          },
+          {
+            "name": "league_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "League Id"
+            }
           }
         ],
         "responses": {

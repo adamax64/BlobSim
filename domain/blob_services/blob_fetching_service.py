@@ -26,12 +26,18 @@ from domain.utils.sim_time_utils import get_season
 
 @transactional
 def fetch_all_blobs(
-    session: Session, name_search: str = None, show_dead: bool = False
+    session: Session,
+    name_search: str = None,
+    show_dead: bool = False,
+    league_id: int | None = None,
 ) -> list[BlobStatsDto]:
     """Get all living blobs and return them as a list of BlobStatsDto."""
 
     blobs: list[Blob] = get_all_blobs_by_name(
-        session=session, name_search=name_search, show_dead=show_dead
+        session=session,
+        name_search=name_search,
+        show_dead=show_dead,
+        league_id=league_id,
     )
 
     current_season = get_season(get_sim_time(session))

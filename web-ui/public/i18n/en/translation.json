@@ -79,7 +79,10 @@
   },
   "blobs": {
     "search_by_name": "Search by name",
-    "show_dead": "Show dead"
+    "show_dead": "Show dead",
+    "filter_by_league": "League",
+    "all_leagues": "All",
+    "no_league": "None"
   },
   "blobs_grid": {
     "name": "Name",

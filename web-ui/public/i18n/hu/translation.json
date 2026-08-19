@@ -79,7 +79,10 @@
   },
   "blobs": {
     "search_by_name": "Keresés név alapján",
-    "show_dead": "Termináltak megjelenítése"
+    "show_dead": "Termináltak megjelenítése",
+    "filter_by_league": "Liga",
+    "all_leagues": "Összes",
+    "no_league": "Nincs"
   },
   "blobs_grid": {
     "name": "Név",

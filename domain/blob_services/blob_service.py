@@ -16,11 +16,11 @@ class StatMultiplyers:
 
 @transactional
 def get_all_blobs(
-    session, name_search: str = None, show_dead: bool = False
+    session, name_search: str = None, show_dead: bool = False, league_id: int | None = None
 ) -> list[BlobStatsDto]:
     """Get all blobs and return them as a list of BlobStatsDto."""
     return fetch_all_blobs(
-        session=session, name_search=name_search, show_dead=show_dead
+        session=session, name_search=name_search, show_dead=show_dead, league_id=league_id
     )
 
 

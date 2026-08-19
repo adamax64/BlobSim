@@ -5,6 +5,7 @@
 - Added a "Mine Winners" section to the mine modal showing the winners in a table:
   - On desktop it appears on the left side, next to the current "blobs in the mine" content
   - On tablet and mobile it appears above the current content inside a collapsible accordion
+- Added new field to blobs page to list blobs by league
 - Raised maximum chance of loosing integrity while getting injured to 30%
 
 ### 5.8.4

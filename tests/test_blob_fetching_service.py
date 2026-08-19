@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 from sqlalchemy.orm import Session
 
-from domain.blob_services.blob_fetching_service import fetch_blob_by_id
+from domain.blob_services.blob_fetching_service import fetch_blob_by_id, fetch_all_blobs
 
 
 class TestFetchBlobByIdEventAware(unittest.TestCase):
@@ -81,6 +81,50 @@ class TestFetchBlobByIdEventAware(unittest.TestCase):
         mock_get_standings.assert_called_once_with(
             session=session, league_id=5, season=7, current_season=7, through_round=None
         )
+
+
+class TestFetchAllBlobsLeagueFilter(unittest.TestCase):
+    @patch("domain.blob_services.blob_fetching_service.map_to_blob_state_dto")
+    @patch("domain.blob_services.blob_fetching_service.get_standings_by_league", return_value={})
+    @patch("domain.blob_services.blob_fetching_service.get_current_grandmaster_id", return_value=None)
+    @patch("domain.blob_services.blob_fetching_service.get_all_blobs_by_name")
+    @patch("domain.blob_services.blob_fetching_service.get_season", return_value=7)
+    def test_league_id_is_forwarded_to_repository(
+        self,
+        _mock_get_season,
+        mock_get_all_blobs_by_name,
+        _mock_gm_id,
+        _mock_standings_by_league,
+        _mock_map_dto,
+    ):
+        mock_get_all_blobs_by_name.return_value = []
+        session = MagicMock(spec=Session)
+
+        fetch_all_blobs(session, league_id=3)
+
+        _, kwargs = mock_get_all_blobs_by_name.call_args
+        self.assertEqual(kwargs["league_id"], 3)
+
+    @patch("domain.blob_services.blob_fetching_service.map_to_blob_state_dto")
+    @patch("domain.blob_services.blob_fetching_service.get_standings_by_league", return_value={})
+    @patch("domain.blob_services.blob_fetching_service.get_current_grandmaster_id", return_value=None)
+    @patch("domain.blob_services.blob_fetching_service.get_all_blobs_by_name")
+    @patch("domain.blob_services.blob_fetching_service.get_season", return_value=7)
+    def test_league_id_defaults_to_none_when_omitted(
+        self,
+        _mock_get_season,
+        mock_get_all_blobs_by_name,
+        _mock_gm_id,
+        _mock_standings_by_league,
+        _mock_map_dto,
+    ):
+        mock_get_all_blobs_by_name.return_value = []
+        session = MagicMock(spec=Session)
+
+        fetch_all_blobs(session)
+
+        _, kwargs = mock_get_all_blobs_by_name.call_args
+        self.assertIsNone(kwargs["league_id"])
 
 
 if __name__ == "__main__":
