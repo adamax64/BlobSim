@@ -15,7 +15,7 @@ i18n
       caches: ['cookie'],
     },
     backend: {
-      loadPath: '/i18n/{{lng}}/{{ns}}.json',
+      loadPath: `/i18n/{{lng}}/{{ns}}.json?v=${import.meta.env.VITE_BUILD_VERSION ?? 'dev'}`,
     },
     react: {
       useSuspense: false,

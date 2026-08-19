@@ -22,6 +22,7 @@
     "@eslint/js": "^10.0.1",
     "@mui/material": "^7.3.2",
     "@tanstack/router-plugin": "^1.109.2",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.2",
