@@ -18,13 +18,7 @@ import {
 import { PageFrame } from '../common/PageFrame';
 import Search from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
-import {
-  BlobStatsDto,
-  BlobsApi,
-  LeagueDto,
-  LeaguesApi,
-  TranslationsDto,
-} from '../../../generated';
+import { BlobStatsDto, BlobsApi, LeagueDto, LeaguesApi, TranslationsDto } from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { BlobDetailsDialog } from '../common/BlobDetailsDialog/BlobDetailsDialog';
@@ -72,7 +66,7 @@ export function BlobsPage() {
     isPending: loadingLeagues,
     mutate: loadLeagues,
   } = useMutation<LeagueDto[], Error>({
-    mutationFn: () => leaguesApi.getLeaguesLeaguesAllGet(),
+    mutationFn: () => leaguesApi.getLeaguesWithQueueLeaguesAllWithQueueGet(),
   });
 
   useEffect(() => {
@@ -81,9 +75,7 @@ export function BlobsPage() {
 
   useEffect(() => {
     if (leagues) {
-      setLeagueOptions(
-        leagues.map((league) => ({ id: league.id, translations: league.name })),
-      );
+      setLeagueOptions(leagues.map((league) => ({ id: league.id, translations: league.name })));
     }
   }, [leagues]);
 

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from random import choices, random
 
 from data.db.db_engine import transactional
+from data.model import league
 from data.model.blob import Blob
 from data.model.league import League
 from data.model.retirement_focus_type import RetirementFocusType
@@ -42,6 +43,14 @@ def get_all_real_leagues(session) -> list[LeagueDto]:
         key=lambda x: x.level if x.level != 0 else float('inf')
     )
 
+
+@transactional
+def get_all_with_queue(session) -> list[LeagueDto]:
+    """Get the queue league."""
+
+    leagues = league_repository.get_all_leagues_ordered_by_level(session)
+    return [map_league_to_dto(league, league.players) for league in leagues]
+    
 
 @transactional
 def manage_league_transfers(session: Session, current_season: int):

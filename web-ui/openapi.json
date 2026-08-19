@@ -576,6 +576,33 @@
         }
       }
     },
+    "/leagues/all-with-queue": {
+      "get": {
+        "tags": [
+          "Leagues",
+          "Leagues"
+        ],
+        "summary": "Get Leagues With Queue",
+        "description": "Fetch all leagues including the queue.",
+        "operationId": "get_leagues_with_queue_leagues_all_with_queue_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LeagueDto"
+                  },
+                  "type": "array",
+                  "title": "Response Get Leagues With Queue Leagues All With Queue Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/standings/championship/{league_id}/{season}": {
       "get": {
         "tags": [
