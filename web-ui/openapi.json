@@ -1908,8 +1908,7 @@
             "title": "Name"
           },
           "born": {
-            "type": "string",
-            "title": "Born"
+            "$ref": "#/components/schemas/SimTimeDto"
           },
           "terminated": {
             "anyOf": [

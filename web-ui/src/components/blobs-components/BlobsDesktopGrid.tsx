@@ -5,6 +5,7 @@ import { BlobState } from '../../utils/blob-state-utils';
 import { IconName } from '../common/IconName';
 import { useTranslation } from 'react-i18next';
 import { getLocalizedText } from '../../utils/translation-utils';
+import { compareSimTime, formatToShort } from '../../utils/sim-time-utils';
 
 const desktopColumns = (t: (key: string) => string, language: string): GridColDef[] => [
   {
@@ -27,7 +28,14 @@ const desktopColumns = (t: (key: string) => string, language: string): GridColDe
     },
     flex: 1.5,
   },
-  { field: 'born', headerName: t('blobs_grid.born'), resizable: false, flex: 1 },
+  {
+    field: 'born',
+    headerName: t('blobs_grid.born'),
+    resizable: false,
+    flex: 1,
+    valueFormatter: (_, row: BlobStatsDto) => formatToShort(row.born),
+    sortComparator: (v1, v2) => compareSimTime(v1, v2),
+  },
   { field: 'debut', headerName: t('blobs_grid.debut'), resizable: false, flex: 0.6 },
   { field: 'contract', headerName: t('blobs_grid.contract'), resizable: false, flex: 0.6 },
   { field: 'podiums', headerName: t('blobs_grid.podiums'), resizable: false, flex: 0.6 },

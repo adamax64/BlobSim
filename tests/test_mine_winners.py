@@ -15,7 +15,7 @@ def _blob_stats_dto(blob_id: int) -> BlobStatsDto:
     return BlobStatsDto(
         id=blob_id,
         name=f"Blob {blob_id}",
-        born="1. 0 - 0",
+        born=SimTimeDto(eon=0, season=1, epoch=0, cycle=0),
         podiums=0,
         wins=0,
         championships=0,

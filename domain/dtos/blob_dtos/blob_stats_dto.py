@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from domain.dtos.item_dto import ItemDto
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.retirement_focus_type_dto import RetirementFocusTypeDto
+from domain.dtos.sim_time_dto import SimTimeDto
 from domain.dtos.state_dto import StateDto
 from domain.dtos.translations_dto import TranslationsDto
 from domain.enums.activity_type import ActivityType
@@ -20,7 +21,7 @@ class IntegrityState(enum.Enum):
 class BlobStatsDto(BaseModel):
     id: int
     name: str
-    born: str
+    born: SimTimeDto
     terminated: str | None = None
     debut: int | None = None
     contract: int | None = None
