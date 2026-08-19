@@ -49,7 +49,7 @@ def manage_league_transfers(session: Session, current_season: int):
     """ Manage league transfers at the end of the season. """
 
     leagues = league_repository.get_all_leagues_ordered_by_level(session)
-    transfers = {league.name: [] for league in leagues}
+    transfers = {league.name.en: [] for league in leagues}
 
     _correct_contract_of_inactive_leagues(session, leagues)
     _retire_blobs(session, leagues, current_season)
