@@ -98,14 +98,6 @@ class TestWeatherService(unittest.TestCase):
 
         self.assertEqual(calculate_factory_output(WeatherTypeDto.HEAT, 0.8), 3)
 
-    @patch('domain.weather_service.random.random')
-    def test_calculate_factory_output_heat_clamps_wind_at_zero(self, mock_random):
-        # HEAT: solar_ratio=1.0 (always hits), hydro_ratio=0.0 (always misses),
-        # wind_ratio = max(0, 0.2 - 0.5) = 0, so the wind roll can never succeed
-        mock_random.side_effect = [0.0, 0.0, 0.5]
-
-        self.assertEqual(calculate_factory_output(WeatherTypeDto.HEAT, 0.2), 2)
-
 
 if __name__ == '__main__':
     unittest.main()

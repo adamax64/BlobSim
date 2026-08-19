@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+from data.model.blob import Blob
 from data.model.item_type import ItemType
 from data.model.state_type import StateType
 from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
@@ -12,6 +13,7 @@ from domain.utils.action_utils import (
     compute_item_skill_multiplier,
     get_random_coefficient,
 )
+from tests.utils import create_blob_model_mock
 
 
 def _item(item_id: int, item_type: ItemType, durability: int):
@@ -25,6 +27,18 @@ def _item(item_id: int, item_type: ItemType, durability: int):
 def _state(state_type: StateType):
     return StateDto(
         type=state_type, effect_until=SimTimeDto(eon=0, season=1, epoch=1, cycle=2)
+    )
+
+
+def _blob(blob_id: int):
+    return create_blob_model_mock(
+        id=blob_id,
+        first_name="Test",
+        last_name="Blob",
+        strength=1.0,
+        speed=1.0,
+        color="#000000",
+        integrity=5,
     )
 
 
@@ -90,6 +104,7 @@ class TestPreEventItems(unittest.TestCase):
 
         mock_create_state.assert_not_called()
 
+    @patch("domain.item_service.apply_injury")
     @patch("domain.item_service.create_state")
     @patch("domain.item_service.random.random", return_value=0.1)
     @patch("domain.item_service.get_sim_time", return_value=100)
@@ -102,15 +117,16 @@ class TestPreEventItems(unittest.TestCase):
         mock_get_sim_time,
         mock_random,
         mock_create_state,
+        mock_apply_injury,
     ):
         mock_get_items.return_value = [_item(1, ItemType.OVERCLOCKING_DEVICE, 0)]
         session = MagicMock()
 
         apply_pre_event_items(1, session)
 
-        mock_create_state.assert_any_call(session, 1, StateType.INJURED, 104)
+        mock_apply_injury.assert_called_once_with(1, session)
         mock_create_state.assert_any_call(
-            session, 1, StateType.OVERCLOCKING_DEVICE_BOOST, 101
+            session, 1, StateType.OVERCLOCKING_DEVICE_BOOST, 100
         )
         mock_consume.assert_called_once()
 

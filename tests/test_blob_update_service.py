@@ -38,11 +38,12 @@ class TestBlobUpdateService(unittest.TestCase):
 
         mock_grant_item.assert_not_called()
 
+    @patch('domain.blob_services.blob_update_service.record_mine_winner')
     @patch('domain.blob_services.blob_update_service.save_all_blobs')
     @patch('domain.blob_services.blob_update_service.get_all_blobs_by_name')
+    @patch('domain.blob_services.blob_update_service.get_current_grandmaster_id')
     @patch('domain.blob_services.blob_update_service.get_event_next_day')
     @patch('domain.blob_services.blob_update_service.get_sim_time')
-    @patch('domain.blob_services.blob_update_service.get_current_grandmaster_id')
     def test_mining_reward_distributed_to_single_random_miner(
         self,
         mock_get_sim_time,
@@ -50,6 +51,7 @@ class TestBlobUpdateService(unittest.TestCase):
         mock_get_current_grandmaster_id,
         mock_get_all_blobs_by_name,
         mock_save_all_blobs,
+        mock_record_mine_winner,
     ):
         # Create three blobs that choose mining
         b1 = create_blob_model_mock(id=1, money=0, current_activity=ActivityType.MINING)
@@ -60,6 +62,7 @@ class TestBlobUpdateService(unittest.TestCase):
         mock_get_event_next_day.return_value = None
         mock_get_sim_time.return_value = 0
         mock_get_current_grandmaster_id.return_value = None
+        mock_record_mine_winner.side_effect = lambda session, blob_id, amount: None  # Do nothing
 
         session = MagicMock()
 
@@ -71,6 +74,9 @@ class TestBlobUpdateService(unittest.TestCase):
         self.assertEqual(b1.money, 0)
         self.assertEqual(b2.money, 1 + 3)
         self.assertEqual(b3.money, 2)
+
+        # The winner should be recorded via the mine winners service
+        mock_record_mine_winner.assert_called_once_with(session, 2, 3)
 
         # Ensure save_all_blobs was called at least once
         self.assertTrue(mock_save_all_blobs.called)

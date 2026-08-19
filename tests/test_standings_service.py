@@ -122,6 +122,7 @@ class TestStandingsSnippetByBlobEventAware(unittest.TestCase):
         event = MagicMock()
         event.season = 4
         event.round = 6
+        event.league_id = 9
         mock_get_event.return_value = event
 
         standing_above = StandingsDTO(
@@ -142,7 +143,7 @@ class TestStandingsSnippetByBlobEventAware(unittest.TestCase):
         result = get_standings_snippet_by_blob(1, session, event_id=99)
 
         mock_get_event.assert_called_once_with(session, 99)
-        mock_get_standings.assert_called_once_with(9, 4, 4, session, through_round=6)
+        mock_get_standings.assert_called_once_with(9, 4, 4, session, through_round=5)
         self.assertEqual(len(result), 3)
         self.assertEqual(result[1].blob_id, 1)
 

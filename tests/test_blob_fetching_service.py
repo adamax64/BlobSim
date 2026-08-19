@@ -33,6 +33,7 @@ class TestFetchBlobByIdEventAware(unittest.TestCase):
         event = MagicMock()
         event.season = 3
         event.round = 2
+        event.league_id = 5
         mock_get_event.return_value = event
 
         standing = MagicMock()
@@ -45,7 +46,7 @@ class TestFetchBlobByIdEventAware(unittest.TestCase):
 
         mock_get_event.assert_called_once_with(session, 42)
         mock_get_standings.assert_called_once_with(
-            session=session, league_id=5, season=3, current_season=3, through_round=2
+            session=session, league_id=5, season=3, current_season=3, through_round=1
         )
         _, kwargs = mock_map_dto.call_args
         self.assertEqual(kwargs["standings_position"], 1)

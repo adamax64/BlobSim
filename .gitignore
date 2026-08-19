@@ -6,6 +6,7 @@
 **/node_modules/*
 /.pytest_cache
 /venv
+.venv*/
 **/generated/*
 .env
 /backups/*
