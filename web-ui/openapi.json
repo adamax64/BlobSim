@@ -2253,17 +2253,6 @@
           "date": {
             "$ref": "#/components/schemas/SimTimeDto"
           },
-          "league_name": {
-            "items": {
-              "$ref": "#/components/schemas/TranslationsDto"
-            },
-            "type": "array",
-            "title": "League Name"
-          },
-          "league_level": {
-            "type": "integer",
-            "title": "League Level"
-          },
           "round": {
             "type": "integer",
             "title": "Round"
@@ -2283,6 +2272,31 @@
             "type": "boolean",
             "title": "Is Current"
           },
+          "league_name": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TranslationsDto"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Name"
+          },
+          "league_level": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Level"
+          },
           "event_id": {
             "anyOf": [
               {
@@ -2298,13 +2312,12 @@
         "type": "object",
         "required": [
           "date",
-          "league_name",
-          "league_level",
           "round",
           "is_concluded",
           "event_type",
           "is_next",
-          "is_current"
+          "is_current",
+          "league_name"
         ],
         "title": "CalendarDto"
       },

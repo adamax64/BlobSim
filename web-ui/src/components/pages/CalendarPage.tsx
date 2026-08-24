@@ -13,6 +13,9 @@ export const CalendarPage = () => {
     isPending: isCalendarLoading,
   } = useMutation<CalendarDto[], Error>({
     mutationFn: () => calendarApi.getSeasonCalendarCalendarGet(),
+    onError: (error) => {
+      console.error('Error loading calendar:', error);
+    },
   });
 
   useEffect(() => {

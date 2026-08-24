@@ -1,5 +1,9 @@
 # Version changelog
 
+### 5.9.2
+
+- Fixed calendar events not showing op on calendar page
+
 ### 5.9.1
 
 - Fixed stuck simulation time because of incorrect news generation on new season

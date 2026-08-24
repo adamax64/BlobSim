@@ -8,11 +8,11 @@ from domain.dtos.translations_dto import TranslationsDto
 @dataclass
 class CalendarDto:
     date: SimTimeDto
-    league_name: list[TranslationsDto]
-    league_level: int
     round: int
     is_concluded: bool
     event_type: EventTypeDto
     is_next: bool
     is_current: bool
+    league_name: list[TranslationsDto] | None = None
+    league_level: int | None = None
     event_id: int | None = None
