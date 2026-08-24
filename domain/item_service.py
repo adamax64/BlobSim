@@ -36,6 +36,7 @@ from domain.utils.item_utils import (
 from domain.utils.sim_time_utils import get_season
 
 OVERCLOCK_DEPLETED_INJURY_CHANCE = 0.3
+DEPLETED_OVERCLOCK_USAGE_CHANCE = 0.1
 
 MONEY_REWARDS: dict[ItemType, int] = {
     ItemType.COIN: 1,
@@ -123,7 +124,7 @@ def _can_use_pre_event_item(item: Item) -> bool:
         return True
     if item.type == ItemType.OVERCLOCKING_DEVICE:
         # If Durability is 0 blobs don't always use because it is dangerous
-        return item.durability > 0 or random.random() < OVERCLOCK_DEPLETED_INJURY_CHANCE
+        return item.durability > 0 or random.random() < DEPLETED_OVERCLOCK_USAGE_CHANCE
     return item.durability > 0
 
 

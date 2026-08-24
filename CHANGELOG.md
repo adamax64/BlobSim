@@ -1,5 +1,11 @@
 # Version changelog
 
+### 5.9.3
+
+- Fixed scheduler starting event at 12:03 instead of 12:00
+- Heir cost increased by 64 (320 -> 384)
+- Chance of blobs using depleted overclocking devices set to 10%
+
 ### 5.9.2
 
 - Fixed calendar events not showing op on calendar page

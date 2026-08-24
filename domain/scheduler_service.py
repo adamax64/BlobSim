@@ -25,7 +25,7 @@ def start_scheduler():
         )  # Run daily at 6 AM
         _scheduler_instance.add_job(
             progress_competition,
-            CronTrigger(minute="*/3", hour="12-17"),
+            CronTrigger(minute="0,*/3", hour="12-17"),
         )  # Run every 3 minutes from 12:00 to 17:57
 
     if not _scheduler_instance.running:

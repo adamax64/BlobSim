@@ -104,7 +104,7 @@ export const EventStagePipeline = ({
             transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
-          <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0}}>
+          <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0 }}>
             <EventIntroductionStage
               active={currentStage === 'introduction'}
               leagueName={leagueName}
@@ -125,10 +125,7 @@ export const EventStagePipeline = ({
           </Box>
           <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0 }}>{competitionContent}</Box>
           <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0 }}>
-            <EventResultsStage
-              active={currentStage === 'results'}
-              eventId={event.id}
-            />
+            <EventResultsStage active={currentStage === 'results'} eventId={event.id} />
           </Box>
           <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0 }}>
             <EventStandingsStage
@@ -146,7 +143,9 @@ export const EventStagePipeline = ({
         <EventControls
           {...eventControls}
           isEventFinished={isEventFinished}
-          showProgressButton={isCompetitionStage}
+          showProgressButton={
+            (isCompetitionStage && !isEventFinished) || (isEventFinished && currentStage === 'post-standings')
+          }
           isCompetitionStage={isCompetitionStage}
           canStepStageBack={canStepStageBack}
           canStepStageForward={canStepStageForward}
@@ -169,4 +168,3 @@ export const EventStagePipeline = ({
 };
 
 export default EventStagePipeline;
-
