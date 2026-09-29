@@ -58,7 +58,7 @@ from domain.utils.blob_utils import has_state, has_trait, compute_state_multipli
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
-from domain.item_service import grant_item_to_blob, has_depleted_unconsumable, is_inventory_full
+from domain.item_service import grant_item_to_blob, has_depleted_unconsumable, has_unusable_support_items, is_inventory_full
 from domain.mine_winners_service import record_mine_winner
 from domain.utils.item_utils import (
     COMPETITION_ITEM_TYPES,
@@ -529,7 +529,8 @@ def _choose_activity_for_blob(
                 extra_activities,
                 free_premium_practice,
                 adventure_blocked=is_inventory_full(blob, session)
-                and not has_depleted_unconsumable(blob, session),
+                and not has_depleted_unconsumable(blob, session)
+                and not has_unusable_support_items(blob, session),
             )
 
 

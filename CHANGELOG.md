@@ -2,6 +2,8 @@
 
 ### 5.9.4
 
+- Fixed blobs being blocked from adventures when inventory is full of unusable support items (e.g., CACHE_CLEANER without depleted CACHE)
+- Added logic to sell unusable support items when inventory is full and a new item is acquired
 - Fixed event page jumping to results stage on reload when event is already finished on server
 - Fixed replay page jumping to results stage on reload when event is already finished
 

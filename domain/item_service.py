@@ -83,9 +83,28 @@ def _is_retired(blob: Blob, session: Session) -> bool:
 def has_depleted_unconsumable(blob: Blob, session: Session) -> bool:
     """Return True if `blob` owns an unconsumable item that has run out of durability."""
     items = get_items_of_blob(session, blob.id)
-    return any(
-        not is_consumable(item.type) and item.durability == 0 for item in items
+    return any(not is_consumable(item.type) and item.durability == 0 for item in items)
+
+
+def has_unusable_support_items(blob: Blob, session: Session) -> bool:
+    """Return True if `blob` owns support items that cannot be used because no target is depleted."""
+    items = get_items_of_blob(session, blob.id)
+    return len(_get_unusable_support_items(items)) > 0
+
+
+def _get_unusable_support_items(items: list[Item]) -> list[Item]:
+    """Return a list of support items that cannot be used because no target is depleted."""
+    unusable = []
+
+    # Check for CACHE_CLEANER without depleted CACHE
+    has_cache_cleaner = any(item.type == ItemType.CACHE_CLEANER for item in items)
+    has_depleted_cache = any(
+        item.type == ItemType.CACHE and item.durability == 0 for item in items
     )
+    if has_cache_cleaner and not has_depleted_cache:
+        unusable.extend(item for item in items if item.type == ItemType.CACHE_CLEANER)
+
+    return unusable
 
 
 @transactional
@@ -172,6 +191,23 @@ def _add_item_to_inventory(blob: Blob, item_type: ItemType, session: Session) ->
     if depleted_unconsumables:
         to_sell = min(
             depleted_unconsumables, key=lambda item: get_item_rarity_rank(item.type)
+        )
+        _sell_item(blob, to_sell, session)
+        save_item(
+            session,
+            Item(
+                blob_id=blob.id,
+                type=item_type,
+                durability=get_item_durability(item_type),
+            ),
+        )
+        return
+
+    # Sell unusable support items (e.g., CACHE_CLEANER without depleted CACHE)
+    unusable_support_items = _get_unusable_support_items(items)
+    if unusable_support_items:
+        to_sell = min(
+            unusable_support_items, key=lambda item: get_item_rarity_rank(item.type)
         )
         _sell_item(blob, to_sell, session)
         save_item(

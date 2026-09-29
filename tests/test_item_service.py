@@ -205,7 +205,11 @@ class TestItemService(unittest.TestCase):
         self, mock_get_items, mock_delete_item, mock_save_item
     ):
         depleted_cache = _item(1, ItemType.CACHE, 0)
-        mock_get_items.return_value = [depleted_cache, _item(2, ItemType.COOKIE, 1), _item(3, ItemType.COOKIE, 1)]
+        mock_get_items.return_value = [
+            depleted_cache,
+            _item(2, ItemType.COOKIE, 1),
+            _item(3, ItemType.COOKIE, 1),
+        ]
         blob = create_blob_model_mock(id=1, money=0)
         session = MagicMock()
 
@@ -269,6 +273,59 @@ class TestItemService(unittest.TestCase):
         from domain.item_service import is_inventory_full
 
         self.assertTrue(is_inventory_full(blob, session))
+
+    @patch("domain.item_service.get_items_of_blob")
+    def test_has_unusable_support_items_cache_cleaner_without_depleted_cache(
+        self, mock_get_items
+    ):
+        mock_get_items.return_value = [
+            _item(1, ItemType.CACHE_CLEANER, 1),
+            _item(2, ItemType.COOKIE, 1),
+            _item(3, ItemType.COOKIE, 1),
+        ]
+        blob = create_blob_model_mock(id=1)
+        session = MagicMock()
+
+        from domain.item_service import has_unusable_support_items
+
+        self.assertTrue(has_unusable_support_items(blob, session))
+
+    @patch("domain.item_service.get_items_of_blob")
+    def test_has_unusable_support_items_cache_cleaner_with_depleted_cache(
+        self, mock_get_items
+    ):
+        mock_get_items.return_value = [
+            _item(1, ItemType.CACHE_CLEANER, 1),
+            _item(2, ItemType.CACHE, 0),
+            _item(3, ItemType.COOKIE, 1),
+        ]
+        blob = create_blob_model_mock(id=1)
+        session = MagicMock()
+
+        from domain.item_service import has_unusable_support_items
+
+        self.assertFalse(has_unusable_support_items(blob, session))
+
+    @patch("domain.item_service.save_item")
+    @patch("domain.item_service.delete_item")
+    @patch("domain.item_service.get_items_of_blob")
+    def test_sells_unusable_support_item_to_make_space(
+        self, mock_get_items, mock_delete_item, mock_save_item
+    ):
+        cache_cleaner = _item(1, ItemType.CACHE_CLEANER, 1)
+        mock_get_items.return_value = [
+            cache_cleaner,
+            _item(2, ItemType.COOKIE, 1),
+            _item(3, ItemType.COOKIE, 1),
+        ]
+        blob = create_blob_model_mock(id=1, money=0)
+        session = MagicMock()
+
+        grant_item_to_blob(blob, ItemType.REPAIR_KIT, session)
+
+        mock_delete_item.assert_called_once_with(session, 1)
+        self.assertEqual(blob.money, 1)  # CACHE_CLEANER is rare, sells for 5
+        mock_save_item.assert_called_once()
 
 
 if __name__ == "__main__":
