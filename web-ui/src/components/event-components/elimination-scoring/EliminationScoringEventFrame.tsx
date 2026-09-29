@@ -3,7 +3,7 @@ import type { ActionDto, BlobCompetitorDto, EventDto } from '../../../../generat
 import { ActionsApi, CompetitionApi, EventRecordsApi } from '../../../../generated';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useState } from 'react';
-import type { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
+import type { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { EliminationScoringUI } from './EliminationScoringUI';

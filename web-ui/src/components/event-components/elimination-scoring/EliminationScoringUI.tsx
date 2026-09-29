@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
-import type { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDtoOutput';
+import type { EliminationEventRecordDto as EventRecordDto } from '../../../../generated/models/EliminationEventRecordDto';
 import { EventType } from '../../../../generated';
 import { EventBarChart } from './elimination-scoring-components/EventBarChart';
 import { EliminationEventTable } from './elimination-scoring-components/EliminationEventTable';

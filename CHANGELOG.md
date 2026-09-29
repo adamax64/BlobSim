@@ -1,5 +1,10 @@
 # Version changelog
 
+### 5.9.4
+
+- Fixed event page jumping to results stage on reload when event is already finished on server
+- Fixed replay page jumping to results stage on reload when event is already finished
+
 ### 5.9.3
 
 - Fixed scheduler starting event at 12:03 instead of 12:00

@@ -1,4 +1,4 @@
-import { Box, Zoom } from '@mui/material';
+import { Box } from '@mui/material';
 import { Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { EventDto } from '../../../../generated';
@@ -76,13 +76,13 @@ export const EventStagePipeline = ({
   replayControls,
 }: EventStagePipelineProps) => {
   const { t, i18n } = useTranslation();
+  const initialEventFinishedRef = useRef(event.isFinished);
   const wasFinishedRef = useRef(isEventFinished);
 
   const leagueName = getLocalizedText(event.league.name, i18n.language);
 
-  // Auto-advance to the results stage the moment a live event finishes.
   useEffect(() => {
-    if (isEventFinished && !wasFinishedRef.current) {
+    if (isEventFinished && !wasFinishedRef.current && !initialEventFinishedRef.current) {
       setStageIndex(STAGES.indexOf('results'));
     }
     wasFinishedRef.current = isEventFinished;
