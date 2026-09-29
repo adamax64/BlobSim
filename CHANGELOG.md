@@ -1,5 +1,9 @@
 # Version changelog
 
+### 5.9.5
+
+- Fixed event started snackbar not appearing when an event starts in the same cycle as a new blob is created
+
 ### 5.9.4
 
 - Fixed blobs being blocked from adventures when inventory is full of unusable support items (e.g., CACHE_CLEANER without depleted CACHE)

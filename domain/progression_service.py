@@ -74,8 +74,8 @@ def progress_simulation(session: Session) -> str:
 
     _hand_out_pensions(session, sim_data.sim_time)
 
-    _check_and_add_event_news(sim_data.sim_time, session)
     check_factory_and_create_blob(session)
+    _check_and_add_event_news(sim_data.sim_time, session)
 
     return format_sim_time_short(sim_data.sim_time)
 
