@@ -1,52 +1,53 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, TypeDecorator
 from sqlalchemy.orm import relationship
-from sqlalchemy_utils import CompositeType
 
 from data.db.db_engine import Base
 from data.model.translation import Translation
 
 
-class _TranslationCompositeType(CompositeType):
-    """Maps the "BCS".translation Postgres composite type to/from the Translation dataclass."""
+class TranslationType(TypeDecorator):
+    """Custom type for PostgreSQL translation composite type."""
 
-    def bind_processor(self, dialect):
-        parent = super().bind_processor(dialect)
+    impl = String
+    cache_ok = True
 
-        def process(value):
+    def process_result_value(self, value, dialect):
+        """Convert psycopg2 namedtuple to Translation object."""
+        if value is not None:
+            # psycopg2 returns namedtuple with .en, .hu attributes
+            return Translation(en=getattr(value, "en", ""), hu=getattr(value, "hu", ""))
+        return Translation(en="", hu="")
+
+    def process_bind_param(self, value, dialect):
+        """Convert Translation object to tuple for PostgreSQL composite type."""
+        if value is not None:
             if isinstance(value, Translation):
-                value = {'en': value.en, 'hu': value.hu}
-            return parent(value)
-
-        return process
-
-    def result_processor(self, dialect, coltype):
-        parent = super().result_processor(dialect, coltype)
-
-        def process(value):
-            result = parent(value)
-            return None if result is None else Translation(en=result.en, hu=result.hu)
-
-        return process
-
-
-# Kept unqualified: sqlalchemy_utils builds a namedtuple from this name, which must be a valid
-# Python identifier. The schema needed to register this type with psycopg2 (since it doesn't
-# live in 'public') is tracked separately, see TRANSLATION_TYPE_QUALIFIED_NAME below.
-TRANSLATION_TYPE = _TranslationCompositeType(
-    'translation',
-    [
-        Column('en', String),
-        Column('hu', String),
-    ],
-)
-TRANSLATION_TYPE_QUALIFIED_NAME = 'BCS.translation'
+                return (value.en, value.hu)
+            elif isinstance(value, dict):
+                return (value.get("en", ""), value.get("hu", ""))
+        return ("", "")
 
 
 class League(Base):
-    __tablename__ = 'leagues'
-    __table_args__ = {'schema': 'BCS'}
+    __tablename__ = "leagues"
+    __table_args__ = {"schema": "BCS"}
 
     id = Column(Integer, primary_key=True)
-    name = Column(TRANSLATION_TYPE, nullable=False)
+    name = Column(TranslationType, nullable=False)
     level = Column(Integer, unique=True)
-    players = relationship('Blob', backref='leagues', overlaps='blobs,league')
+    players = relationship("Blob", backref="leagues", overlaps="blobs,league")
+
+    def __init__(self, *args, **kwargs):
+        # Handle Translation object in name parameter
+        if "name" in kwargs and isinstance(kwargs["name"], Translation):
+            translation = kwargs.pop("name")
+            kwargs["name"] = translation
+        super().__init__(*args, **kwargs)
+
+    def get_translation(self) -> Translation:
+        """Return name as Translation object."""
+        return self.name
+
+    def set_translation(self, translation: Translation) -> None:
+        """Set name from Translation object."""
+        self.name = translation

@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from random import choices, random
 
 from data.db.db_engine import transactional
-from data.model import league
 from data.model.blob import Blob
 from data.model.league import League
 from data.model.retirement_focus_type import RetirementFocusType
@@ -27,7 +26,6 @@ from domain.utils.constants import (
 )
 from domain.utils.league_utils import map_league_to_dto
 
-
 retirees: list[int] = []
 transfers: dict[str, list[int]] = {}
 debuts: list[int] = []
@@ -40,7 +38,7 @@ def get_all_real_leagues(session) -> list[LeagueDto]:
     leagues = league_repository.get_all_real_leagues(session)
     return sorted(
         [map_league_to_dto(league, league.players) for league in leagues],
-        key=lambda x: x.level if x.level != 0 else float('inf')
+        key=lambda x: x.level if x.level != 0 else float("inf"),
     )
 
 
@@ -50,7 +48,7 @@ def get_all_with_queue(session) -> list[LeagueDto]:
 
     leagues = league_repository.get_all_leagues_ordered_by_level(session)
     return [map_league_to_dto(league, league.players) for league in leagues]
-    
+
 
 @transactional
 def manage_league_transfers(session: Session, current_season: int):
@@ -112,7 +110,7 @@ def _promote_blobs_to_leagues(session, leagues: list[League], current_season: in
                     blob.contract = current_season + 3
                     debuts.append(blob.id)
                 else:
-                    transfers[next_league.name].append(blob.id)
+                    transfers[next_league.name.en].append(blob.id)
         session.commit()
         session.refresh(next_league)
         session.refresh(league)
@@ -173,7 +171,7 @@ def _promote_dropout_winner_if_possibble(
             session.commit()
             session.refresh(dropout_league)
             session.refresh(promotee_league)
-            transfers[promotee_league.name].append(dropout_winner.id)
+            transfers[promotee_league.name.en].append(dropout_winner.id)
 
 
 def _get_dropout_winner(
@@ -202,7 +200,7 @@ def _demote_blobs_to_dropout(
                     session.refresh(
                         dropout_league
                     )  # Refresh the dropout league to get the new player
-                    transfers[dropout_league.name].append(blob.id)
+                    transfers[dropout_league.name.en].append(blob.id)
                 else:
                     blob.league_id = None  # If there are no free spaces in the dropout league, retire the blob
                     _determine_retirement_focus(session, blob)

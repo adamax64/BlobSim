@@ -24,8 +24,8 @@ def fetch_all_news(session: Session) -> list[NewsDto]:
         rookies = None
 
         if news.news_type == NewsTypeDto.NEW_SEASON:
-            (index, transfers) = _get_transfers(news.news_data, session)
-            (index, retired) = _get_retired(index, news.news_data, session)
+            index, transfers = _get_transfers(news.news_data, session)
+            index, retired = _get_retired(index, news.news_data, session)
             rookies = _get_rookies(index, news.news_data, session)
 
         result.append(
@@ -68,7 +68,8 @@ def _get_league_translations_by_name(name: str, session) -> list[TranslationsDto
 def _get_league_name(news: News, session) -> list[TranslationsDto] | None:
     return (
         _get_league_translations_by_name(news.news_data[0], session)
-        if news.news_type in [
+        if news.news_type
+        in [
             NewsTypeDto.EVENT_STARTED,
             NewsTypeDto.ONGOING_EVENT,
             NewsTypeDto.EVENT_ENDED,
@@ -81,7 +82,8 @@ def _get_league_name(news: News, session) -> list[TranslationsDto] | None:
 def _get_round(news: News) -> int | None:
     return (
         int(news.news_data[1])
-        if news.news_type in [
+        if news.news_type
+        in [
             NewsTypeDto.EVENT_STARTED,
             NewsTypeDto.ONGOING_EVENT,
             NewsTypeDto.EVENT_ENDED,
@@ -99,7 +101,11 @@ def _get_season(news: News) -> int | None:
 
 
 def _get_event_type(news: News) -> EventTypeDto | None:
-    return news.news_data[2] if news.news_type in [NewsTypeDto.EVENT_STARTED, NewsTypeDto.ONGOING_EVENT] else None
+    return (
+        news.news_data[2]
+        if news.news_type in [NewsTypeDto.EVENT_STARTED, NewsTypeDto.ONGOING_EVENT]
+        else None
+    )
 
 
 def _get_winner(news: News, session) -> BlobStatsDto | None:
@@ -115,7 +121,11 @@ def _get_winner(news: News, session) -> BlobStatsDto | None:
 
 def _get_grandmaster(news: News, session) -> BlobStatsDto | None:
     try:
-        return fetch_blob_by_id(int(news.news_data[0]), session) if news.news_type == NewsTypeDto.NEW_GRANDMASTER else None
+        return (
+            fetch_blob_by_id(int(news.news_data[0]), session)
+            if news.news_type == NewsTypeDto.NEW_GRANDMASTER
+            else None
+        )
     except Exception:
         return None
 
@@ -127,7 +137,9 @@ def _get_transfers(data: list[str], session) -> tuple[int, list[TransfersDto]]:
     league_num = int(data[index])
     for _ in range(league_num):
         index += 1
-        transfer = TransfersDto(_get_league_translations_by_name(data[index], session), [])
+        transfer = TransfersDto(
+            league_name=_get_league_translations_by_name(data[index], session), blobs=[]
+        )
         index += 1
         blobs_num = int(data[index])
         for _ in range(blobs_num):
@@ -142,7 +154,9 @@ def _get_transfers(data: list[str], session) -> tuple[int, list[TransfersDto]]:
     return (index, result)
 
 
-def _get_retired(index: int, data: list[str], session) -> tuple[int, list[BlobStatsDto]]:
+def _get_retired(
+    index: int, data: list[str], session
+) -> tuple[int, list[BlobStatsDto]]:
     result: list[BlobStatsDto] = []
 
     index += 1

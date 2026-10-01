@@ -10,7 +10,7 @@ This is a simulation software that simulates the life of fictional entities call
 
 The following requirements should be met to run the application on your device:
 
-- Python 3.13 or newer
+- Python 3.14 or newer
 - Node 24.14.0 or newer
 - pnpm 11.0.0 or newer
 - Java 11 or newer
@@ -38,13 +38,13 @@ Run `start.bat` on Windows systems or `start.sh` on Linux systems to setup and s
    - Windows:
 
    ```sh
-   call venv\Scripts\activate
+   call .venv\Scripts\activate
    ```
 
    -Linux
 
    ```sh
-   source venv/bin/activate
+   source .venv/bin/activate
    ```
 
 4. Install the required packages:
