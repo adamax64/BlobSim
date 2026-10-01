@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 from data.model.policy_type import PolicyType
 from domain.dtos.sim_time_dto import SimTimeDto
@@ -7,7 +7,8 @@ from domain.dtos.sim_time_dto import SimTimeDto
 PolicyTypeDto = PolicyType
 
 
-@dataclass
-class PolicyDto():
+class PolicyDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     type: PolicyTypeDto
     effect_until: SimTimeDto

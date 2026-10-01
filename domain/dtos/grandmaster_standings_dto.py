@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
-class GrandmasterStandingsDTO:
+class GrandmasterStandingsDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     blob_id: int
     name: str
     color: str

@@ -2,6 +2,7 @@
 
 ### 5.9.5
 
+- Fixed quartered event action generation race condition: when admin clicks "Next" while scheduler already generated the action, the simulation now returns an error asking the admin to refresh the page instead of generating duplicate scores causing out-of-bounds errors
 - Fixed event started snackbar not appearing when an event starts in the same cycle as a new blob is created
 
 ### 5.9.4

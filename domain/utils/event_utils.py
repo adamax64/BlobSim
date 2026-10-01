@@ -1,5 +1,7 @@
 import random
 from data.model.event_type import EventType
+from domain.dtos.event_dto import EventTypeDto
+from domain.event_record_services.event_type_checks import is_quartered_event_v1
 
 EXCLUDED_EVENT_TYPES: frozenset[EventType] = frozenset(
     {
@@ -11,7 +13,9 @@ EXCLUDED_EVENT_TYPES: frozenset[EventType] = frozenset(
 
 
 def get_allowed_event_types() -> list[EventType]:
-    return [event_type for event_type in EventType if event_type not in EXCLUDED_EVENT_TYPES]
+    return [
+        event_type for event_type in EventType if event_type not in EXCLUDED_EVENT_TYPES
+    ]
 
 
 def build_random_event_type_sequence(count: int) -> list[EventType]:
@@ -24,3 +28,10 @@ def build_random_event_type_sequence(count: int) -> list[EventType]:
         random.shuffle(sequence)
         return sequence
     return random.sample(allowed, count)
+
+
+def get_eliminations(field_size: int, event_type: EventTypeDto) -> int:
+    if is_quartered_event_v1(event_type):
+        return int((field_size - 3) / 3) if field_size < 15 else int(field_size / 4)
+    # For V2 events, we want to eliminate slightly more aggressively to keep the event time inside the 120 tick timeframe
+    return int((field_size - 3) / 3) if field_size < 15 else round(field_size / 4)

@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
-class SimTimeDto:
+class SimTimeDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     eon: int
     season: int
     epoch: int

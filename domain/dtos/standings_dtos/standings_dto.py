@@ -1,10 +1,11 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 from domain.dtos.standings_dtos.standings_result_dto import StandingsResultDTO
 
 
-@dataclass
-class StandingsDTO:
+class StandingsDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     blob_id: int
     name: str
     color: str

@@ -1128,7 +1128,7 @@
           "actions"
         ],
         "summary": "Quartered",
-        "description": "Generate score for contender and save the action for given event.\nReturns: {\"name\": str, \"score\": float} if new record, None otherwise",
+        "description": "Generate score for the next contender and save the action for given event.\nReturns: {\"name\": str, \"score\": float} if new record, None otherwise",
         "operationId": "quartered_actions_create_quartered_post",
         "security": [
           {
@@ -1146,16 +1146,6 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BlobCompetitorDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2316,8 +2306,7 @@
           "is_concluded",
           "event_type",
           "is_next",
-          "is_current",
-          "league_name"
+          "is_current"
         ],
         "title": "CalendarDto"
       },

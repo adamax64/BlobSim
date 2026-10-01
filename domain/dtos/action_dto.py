@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
-class ActionDto():
+class ActionDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     blob_id: int
     scores: list[float]

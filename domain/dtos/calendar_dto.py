@@ -1,12 +1,13 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 from domain.dtos.event_dto import EventTypeDto
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.dtos.translations_dto import TranslationsDto
 
 
-@dataclass
-class CalendarDto:
+class CalendarDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     date: SimTimeDto
     round: int
     is_concluded: bool

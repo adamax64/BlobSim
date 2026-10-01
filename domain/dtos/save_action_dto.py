@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
-class SaveActionDto():
+class SaveActionDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     event_id: int
     tick: int
     blob_id: int

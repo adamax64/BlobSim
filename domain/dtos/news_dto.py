@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 from data.model.news_type import NewsType
 from domain.dtos.event_dto import EventTypeDto
@@ -10,14 +10,16 @@ from domain.dtos.translations_dto import TranslationsDto
 NewsTypeDto = NewsType
 
 
-@dataclass
-class TransfersDto():
+class TransfersDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     league_name: list[TranslationsDto]
     blobs: list[BlobStatsDto]
 
 
-@dataclass
-class NewsDto():
+class NewsDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     date: SimTimeDto
     type: NewsTypeDto
     blob: BlobStatsDto | None = None

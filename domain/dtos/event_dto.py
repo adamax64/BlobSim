@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import List
+from pydantic import BaseModel, ConfigDict
 
 from data.model.event_type import EventType
 from domain.dtos.action_dto import ActionDto
@@ -10,11 +9,12 @@ from domain.dtos.league_dto import LeagueDto
 EventTypeDto = EventType
 
 
-@dataclass
-class EventDto:
+class EventDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
-    competitors: List[BlobCompetitorDto]
-    actions: List[ActionDto]
+    competitors: list[BlobCompetitorDto]
+    actions: list[ActionDto]
     league: LeagueDto
     season: int
     round: int

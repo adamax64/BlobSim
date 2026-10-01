@@ -6,7 +6,6 @@ import jwt
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
-from typing import Optional
 
 
 # Load environment variables
@@ -36,7 +35,7 @@ class Token(BaseModel):
     token: str
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[str]:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> str | None:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

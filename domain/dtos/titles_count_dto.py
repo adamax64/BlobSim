@@ -1,16 +1,18 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 from domain.dtos.blob_dtos.blob_stats_dto import BlobStatsDto
 
 
-@dataclass
-class TitleCountDto:
+class TitleCountDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     blob: BlobStatsDto
     count: int
 
 
-@dataclass
-class TitlesCountSummaryDto:
+class TitlesCountSummaryDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     grandmasters: list[TitleCountDto]
     championships: list[TitleCountDto]
     top_wins: list[TitleCountDto]

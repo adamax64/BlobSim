@@ -1,10 +1,10 @@
 import {
   ActionsApi,
-  BlobCompetitorDto,
   EventDto,
   QuarteredEventRecordDto as EventRecordDto,
   CompetitionApi,
   EventRecordsApi,
+  ResponseError,
 } from '../../../../generated';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { getCurrentQuarter, getQuarterEnds } from '../event-utils';
@@ -63,14 +63,9 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
     },
   });
 
-  const { mutate: createAction } = useMutation<
-    { name: string; score: number } | null,
-    Error,
-    { contender: BlobCompetitorDto }
-  >({
-    mutationFn: (params) =>
+  const { mutate: createAction } = useMutation<{ name: string; score: number } | null, ResponseError, void>({
+    mutationFn: () =>
       actionApi.quarteredActionsCreateQuarteredPost({
-        blobCompetitorDto: params.contender,
         eventId: event.id,
       }),
     onSuccess: (data) => {
@@ -81,7 +76,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
       setReplayTick((prev) => prev + 1);
       getEventRecords({ eventId: event.id });
     },
-    onError: (error) => {
+    onError: (error: ResponseError) => {
       setIsPerforming(false);
       showError(error.message || t('error.generic'));
     },
@@ -114,7 +109,7 @@ export const QuarteredEventFrame: React.FC<QuarteredEventFrameProps> = ({
       setCurrentBlobIndex(nextBlobIndex);
       setIsPerforming(true);
       setTimeout(() => {
-        createAction({ contender: eventRecords[nextBlobIndex].blob });
+        createAction();
       }, 1000);
     }
   }, [createAction, eventRecords, nextBlobIndex]);

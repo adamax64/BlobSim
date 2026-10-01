@@ -9,7 +9,12 @@ from data.persistence.action_repository import (
 from data.persistence.event_repository import get_event_by_id
 from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 from domain.record_service import check_and_update_record
-from domain.sim_data_service import get_season_temperature, get_sim_time, get_weather, get_wind
+from domain.sim_data_service import (
+    get_season_temperature,
+    get_sim_time,
+    get_weather,
+    get_wind,
+)
 from domain.utils.action_utils import (
     compute_event_multiplier_from_contender,
     compute_item_min_score_boost,
@@ -38,14 +43,20 @@ def create_action_for_quartered_event(
     )
     skill_multiplier = compute_item_skill_multiplier(contender, current_time)
     min_score_boost = compute_item_min_score_boost(contender, current_time)
-    element_strength_multiplier, element_speed_multiplier = compute_element_skill_multipliers(
-        contender.element,
-        get_weather(session),
-        get_wind(session),
-        get_season_temperature(session),
+    element_strength_multiplier, element_speed_multiplier = (
+        compute_element_skill_multipliers(
+            contender.element,
+            get_weather(session),
+            get_wind(session),
+            get_season_temperature(session),
+        )
     )
-    adj_strength = contender.strength * multiplier * skill_multiplier * element_strength_multiplier
-    adj_speed = contender.speed * multiplier * skill_multiplier * element_speed_multiplier
+    adj_strength = (
+        contender.strength * multiplier * skill_multiplier * element_strength_multiplier
+    )
+    adj_speed = (
+        contender.speed * multiplier * skill_multiplier * element_speed_multiplier
+    )
 
     score = (
         adj_strength * get_random_coefficient(focused, min_score_boost) * 0.7
@@ -196,7 +207,12 @@ def create_actions_for_elimination_event(
             get_wind(session),
             get_season_temperature(session),
         )
-        adj_strength = contender.strength * multiplier * skill_multiplier * element_strength_multiplier
+        adj_strength = (
+            contender.strength
+            * multiplier
+            * skill_multiplier
+            * element_strength_multiplier
+        )
 
         score = adj_strength * get_random_coefficient(focused, min_score_boost)
         actions[contender.id].scores = actions[contender.id].scores + [score]

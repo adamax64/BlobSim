@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
-class StandingsResultDTO:
+class StandingsResultDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     position: int
     points: int

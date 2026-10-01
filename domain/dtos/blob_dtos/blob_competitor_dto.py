@@ -1,15 +1,16 @@
-from dataclasses import dataclass, field
+from pydantic import BaseModel, ConfigDict
 
 from domain.dtos.state_dto import StateDto
 from domain.enums.element_dto import ElementDto
 
 
-@dataclass
-class BlobCompetitorDto:
+class BlobCompetitorDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     strength: float
     speed: float
     color: str
     states: list[StateDto]
-    element: ElementDto = field(default=ElementDto.NONE)
+    element: ElementDto = ElementDto.NONE

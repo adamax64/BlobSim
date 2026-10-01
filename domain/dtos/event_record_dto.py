@@ -1,22 +1,23 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict
 
 from domain.dtos.blob_dtos.blob_competitor_dto import BlobCompetitorDto
 
 
-@dataclass
-class ScoreDto():
+class ScoreDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     score: float | None = None
     best: bool = False
     personal_best: bool = False
     latest_score: float | None = None
 
 
-@dataclass
-class EventRecordDto():
+class EventRecordDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     blob: BlobCompetitorDto
 
 
-@dataclass
 class QuarteredEventRecordDto(EventRecordDto):
     quarters: list[ScoreDto]
     eliminated: bool = False
@@ -24,19 +25,16 @@ class QuarteredEventRecordDto(EventRecordDto):
     next: bool = False
 
 
-@dataclass
 class RaceEventRecordDto(EventRecordDto):
     distance_records: list[float]
     previous_position: int = 1
 
 
-@dataclass
 class SprintEventRecordDto(RaceEventRecordDto):
     is_finished: bool = False
     time: float | None = None
 
 
-@dataclass
 class EliminationEventRecordDto(EventRecordDto):
     last_score: float | None = None
     eliminated: bool = False
