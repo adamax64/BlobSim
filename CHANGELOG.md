@@ -1,5 +1,9 @@
 # Version changelog
 
+### 5.9.6
+
+- Fixed backend error on event creation
+
 ### 5.9.5
 
 - Fixed quartered event action generation race condition: when admin clicks "Next" while scheduler already generated the action, the backend now gets the next performing blob without requiring the frontend to give it as a parameter. This prevents the admin to accidentally generate extra scores for blobs thus breaking the simulation

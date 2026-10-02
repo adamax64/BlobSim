@@ -122,7 +122,7 @@ def get_event_by_id(
         season=event.season,
         round=event.round,
         type=event.type,
-        isFinished=None,
+        isFinished=False,
     )
 
 
