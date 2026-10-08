@@ -1,7 +1,11 @@
-import { BlobIconProps } from './BlobIcon';
 import { useTheme } from '@mui/material/styles';
 
-export function BlobPiktogram({ size, color }: BlobIconProps) {
+interface BlobPiktogramProps {
+  size: number;
+  color: string;
+}
+
+export function BlobPiktogram({ size, color }: BlobPiktogramProps) {
   const theme = useTheme();
   const eyeColor = theme.palette.mode === 'dark' ? '#000000' : '#ffffff';
   return (

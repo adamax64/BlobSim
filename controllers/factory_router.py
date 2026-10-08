@@ -5,12 +5,12 @@ import traceback
 from domain.dtos.factory_progress_dto import FactoryProgressDto
 from domain.dtos.name_suggestion_dto import NameSuggestionDto
 from domain.exceptions.name_occupied_exception import NameOccupiedException
+from domain.factory_service import get_output_chances
 from domain.sim_data_service import (
     get_factory_progress as service_get_factory_progress,
     get_weather as service_get_weather,
     get_wind as service_get_wind,
 )
-from domain.weather_service import get_output_chances
 from domain.naming_service import (
     get_name_suggestions as service_get_name_suggestions,
     save_name_suggestion as service_save_name_suggestion,
@@ -18,7 +18,6 @@ from domain.naming_service import (
 )
 from domain.utils.constants import BLOB_CREATION_RESOURCES
 from .auth_dependency import require_auth
-
 
 router = APIRouter(prefix="/factory", tags=["factory"])
 
@@ -28,12 +27,18 @@ def get_factory_progress() -> FactoryProgressDto:
     try:
         weather = service_get_weather()
         wind = service_get_wind()
-        solar_efficiency, wind_efficiency, hydro_efficiency = get_output_chances(weather, wind)
+        (
+            solar_efficiency,
+            wind_efficiency,
+            hydro_efficiency,
+            labour_efficiency,
+        ) = get_output_chances(weather, wind)
         return FactoryProgressDto(
             progress=service_get_factory_progress() / BLOB_CREATION_RESOURCES,
             solar_efficiency=solar_efficiency,
             wind_efficiency=wind_efficiency,
             hydro_efficiency=hydro_efficiency,
+            labour_efficiency=labour_efficiency,
         )
     except Exception as e:
         traceback.print_exc()
@@ -50,7 +55,9 @@ def get_name_suggestions() -> list[NameSuggestionDto]:
 
 
 @router.post("/save-name-suggestion")
-def save_name_suggestion(first_name: str, last_name: str, _=Depends(require_auth)) -> Response:
+def save_name_suggestion(
+    first_name: str, last_name: str, _=Depends(require_auth)
+) -> Response:
     if first_name is None or first_name == "" or last_name is None or last_name == "":
         raise HTTPException(status_code=400, detail="FIRST_NAME_AND_LAST_NAME_REQUIRED")
     try:
@@ -64,8 +71,10 @@ def save_name_suggestion(first_name: str, last_name: str, _=Depends(require_auth
 
 
 @router.post("/update-name-suggestion")
-def update_name_suggestion(id: int, first_name: str, _=Depends(require_auth)) -> Response:
-    """ Updates the first name of a child name suggestion """
+def update_name_suggestion(
+    id: int, first_name: str, _=Depends(require_auth)
+) -> Response:
+    """Updates the first name of a child name suggestion"""
     try:
         service_update_name_suggestion(id=id, first_name=first_name)
         return Response(status_code=status.HTTP_204_NO_CONTENT)

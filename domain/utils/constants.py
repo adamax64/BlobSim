@@ -33,9 +33,10 @@ INITIAL_INTEGRITY = CYCLES_PER_SEASON * 32
 
 BLOB_CREATION_RESOURCES = CYCLES_PER_SEASON
 
-# Factory production is split into 4 parts: a constant base output plus solar,
-# wind and hydro outputs which depend on the current weather and wind strength.
+# Factory production is split into 5 parts: a constant base output plus solar,
+# wind, hydro, and labour outputs.
 BASE_FACTORY_OUTPUT = 1
 SOLAR_MAX_OUTPUT = 1
 WIND_MAX_OUTPUT = 1
 HYDRO_MAX_OUTPUT = 1
+LABOUR_MAX_OUTPUT = 1

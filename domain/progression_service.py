@@ -12,6 +12,7 @@ from data.persistence.policy_repository import get_active_policy_by_type
 from data.persistence.blob_repository import get_all_retired, save_all_blobs
 from domain.calendar_service import recreate_calendar_for_next_season
 from domain.element_service import generate_daily_element_tokens
+from domain.factory_service import calculate_factory_output
 from domain.league_service import manage_league_transfers
 from domain.news_services.news_service import (
     add_event_starting_news,
@@ -22,7 +23,6 @@ from domain.standings_service import get_grandmaster_standings
 from domain.utils.sim_time_utils import format_sim_time_short, get_season, is_season_end
 from domain.utils.translation_utils import build_translations_dto, get_translation_text
 from domain.weather_service import (
-    calculate_factory_output,
     choose_weather,
     choose_wind,
     get_next_season_temperature,
@@ -53,7 +53,9 @@ def progress_simulation(session: Session) -> str:
         manage_league_transfers(session, get_season(sim_data.sim_time))
         recreate_calendar_for_next_season(session, get_season(sim_data.sim_time) + 1)
         _inagruate_grandmaster(get_season(sim_data.sim_time), session)
-        sim_data.season_temperature = get_next_season_temperature(sim_data.season_temperature)
+        sim_data.season_temperature = get_next_season_temperature(
+            sim_data.season_temperature
+        )
 
     sim_data.weather = choose_weather(sim_data.season_temperature)
     sim_data.wind = choose_wind()
@@ -66,7 +68,9 @@ def progress_simulation(session: Session) -> str:
     )
     if factory_level:
         extra = factory_level.applied_level
-    sim_data.factory_progress += calculate_factory_output(sim_data.weather, sim_data.wind) + extra
+    sim_data.factory_progress += (
+        calculate_factory_output(sim_data.weather, sim_data.wind) + extra
+    )
     sim_data.sim_time += 1
     save_sim_data(session, sim_data)
 
@@ -95,7 +99,9 @@ def _check_and_add_event_news(sim_time: int, session: Session):
         calendar_event = calendar.get(sim_time)
         if calendar_event.league is not None:
             add_event_starting_news(
-                get_translation_text(build_translations_dto(calendar_event.league.name)),
+                get_translation_text(
+                    build_translations_dto(calendar_event.league.name)
+                ),
                 sum(
                     1
                     for x in calendar.values()

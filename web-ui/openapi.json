@@ -2490,6 +2490,10 @@
           "hydro_efficiency": {
             "type": "number",
             "title": "Hydro Efficiency"
+          },
+          "labour_efficiency": {
+            "type": "number",
+            "title": "Labour Efficiency"
           }
         },
         "type": "object",
@@ -2497,7 +2501,8 @@
           "progress",
           "solar_efficiency",
           "wind_efficiency",
-          "hydro_efficiency"
+          "hydro_efficiency",
+          "labour_efficiency"
         ],
         "title": "FactoryProgressDto"
       },

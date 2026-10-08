@@ -3,7 +3,7 @@ import random
 from data.model.sim_data import SimData
 from domain.enums.element_dto import ElementDto
 from domain.enums.weather_type import WeatherTypeDto
-from domain.weather_service import WEATHER_EFFECTS
+from domain.factory_service import WEATHER_EFFECTS
 
 
 def generate_daily_element_tokens(sim_data: SimData) -> None:

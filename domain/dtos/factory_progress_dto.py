@@ -6,3 +6,4 @@ class FactoryProgressDto(BaseModel):
     solar_efficiency: float
     wind_efficiency: float
     hydro_efficiency: float
+    labour_efficiency: float

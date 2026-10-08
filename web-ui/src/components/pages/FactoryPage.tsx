@@ -90,6 +90,7 @@ export function FactoryPage() {
             <EfficiencyMeter label={t('factory.solar_efficiency')} value={factoryProgress?.solarEfficiency ?? 0} />
             <EfficiencyMeter label={t('factory.wind_efficiency')} value={factoryProgress?.windEfficiency ?? 0} />
             <EfficiencyMeter label={t('factory.hydro_efficiency')} value={factoryProgress?.hydroEfficiency ?? 0} />
+            <EfficiencyMeter label={t('factory.labour_efficiency')} value={factoryProgress?.labourEfficiency ?? 0} />
           </Box>
         </CardContent>
       </Paper>

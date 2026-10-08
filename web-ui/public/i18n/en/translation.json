@@ -285,6 +285,7 @@
     "solar_efficiency": "Solar Panel Efficiency",
     "wind_efficiency": "Wind Turbine Efficiency",
     "hydro_efficiency": "Hydro Turbine Efficiency",
+    "labour_efficiency": "Labour Efficiency",
     "name_suggestions": "Blob name suggestions",
     "add_name_suggestion": "Add name suggestion",
     "add_first_name": "Add first name"

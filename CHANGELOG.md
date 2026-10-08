@@ -1,7 +1,8 @@
 # Version changelog
 
-### 5.10.0
+### 5.10
 
+- Added a factory output bonus chance of 1% per living blob currently doing labour, capped at 100%, and exposed it in factory progress.
 - **Enhanced blob appearance (part 1) - Issue #88**: Added support for multiple visual types for blobs:
   - New `blob_visuals` database table with visual type, colors, and parameters
   - Three visual types: **Solid** (single color, existing behavior), **Bicolor** (two colors with rotation parameter), **Tricolor** (three colors with color boundary percentages and a rotation parameter)

@@ -51,6 +51,20 @@ def get_by_activities(
 
 
 @transactional
+def get_labouring_blob_count(session: Session) -> int:
+    return (
+        session.query(Blob)
+        .filter(
+            and_(
+                Blob.current_activity == ActivityTypeDbo.LABOUR,
+                Blob.integrity > 0,
+            )
+        )
+        .count()
+    )
+
+
+@transactional
 def get_all_by_ids(session: Session, blob_ids) -> list[Blob]:
     result = session.query(Blob).filter(Blob.id.in_(blob_ids)).all()
     return result
