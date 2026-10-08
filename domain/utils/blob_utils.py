@@ -9,8 +9,10 @@ from domain.dtos.item_dto import ItemDto
 from domain.dtos.parent_dto import ParentDto
 from domain.dtos.state_dto import StateDto
 from domain.dtos.translations_dto import TranslationsDto
-from domain.utils.translation_utils import build_translations_dto
 from domain.dtos.trait_type_dto import TraitTypeDto
+from domain.dtos.blob_appearance_dto import BlobAppearanceDto
+from domain.enums.appearance_type_dto import AppearanceTypeDto
+from domain.utils.translation_utils import build_translations_dto
 from domain.utils.constants import INITIAL_INTEGRITY
 from domain.utils.sim_time_utils import format_sim_time_short, convert_to_sim_time
 from data.model.trait_type import TraitType
@@ -66,6 +68,24 @@ def format_blob_name(blob) -> str:
     return f"{first} {last}".strip()
 
 
+def get_blob_appearance(blob: Blob) -> BlobAppearanceDto:
+    """Extract appearance from blob. Every blob should have an appearance."""
+    if hasattr(blob, "appearance") and blob.appearance is not None:
+        return BlobAppearanceDto(
+            appearance_type=blob.appearance.appearance_type,
+            colors=blob.appearance.colors,
+            params=blob.appearance.params,
+        )
+
+    # Should not happen - every blob should have appearance
+    # But provide a safe default just in case
+    return BlobAppearanceDto(
+        appearance_type=AppearanceTypeDto.SOLID,
+        colors=["#888888"],
+        params=[],
+    )
+
+
 def map_to_blob_state_dto(
     blob: Blob,
     current_season: int,
@@ -99,16 +119,21 @@ def map_to_blob_state_dto(
         league_name=(
             build_translations_dto(blob.league.name)
             if blob.league
-            else [TranslationsDto(language="en", text="None"), TranslationsDto(language="hu", text="Nincs")]
+            else [
+                TranslationsDto(language="en", text="None"),
+                TranslationsDto(language="hu", text="Nincs"),
+            ]
         ),
         is_rookie=blob.debut == current_season,
         at_risk=blob.contract == current_season,
         is_dead=blob.terminated is not None,
         is_retired=blob.contract is not None and blob.contract < current_season,
         is_grandmaster=grandmaster_id == blob.id,
-        color=blob.color,
         parent=(
-            ParentDto(name=format_blob_name(blob.parent), color=blob.parent.color)
+            ParentDto(
+                name=format_blob_name(blob.parent),
+                appearance=get_blob_appearance(blob.parent),
+            )
             if blob.parent
             else None
         ),
@@ -152,6 +177,7 @@ def map_to_blob_state_dto(
             else None
         ),
         element=blob.element,
+        appearance=get_blob_appearance(blob),
     )
 
 

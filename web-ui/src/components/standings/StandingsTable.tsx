@@ -87,9 +87,7 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
             <TableCell width={POSITION_COLUMN_WIDTH} sx={stickyColumnSx(0)}>
               #
             </TableCell>
-            <TableCell sx={stickyLastColumnSx(POSITION_COLUMN_WIDTH)}>
-              {t('standings_table.name')}
-            </TableCell>
+            <TableCell sx={stickyLastColumnSx(POSITION_COLUMN_WIDTH)}>{t('standings_table.name')}</TableCell>
             {!isMobile &&
               standings[0]?.results.map((_, index) => (
                 <TableCell key={index} align="center">
@@ -111,14 +109,17 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
         <TableBody>
           {standings.map((standing, index) => (
             <TableRow key={index}>
-              <TableCell className={getThresholdClassName(index + 1)} sx={{...stickyColumnSx(0), minWidth: POSITION_COLUMN_WIDTH}}>
+              <TableCell
+                className={getThresholdClassName(index + 1)}
+                sx={{ ...stickyColumnSx(0), minWidth: POSITION_COLUMN_WIDTH }}
+              >
                 {index + 1}
               </TableCell>
               <TableCell className={getThresholdClassName(index + 1)} sx={stickyLastColumnSx(POSITION_COLUMN_WIDTH)}>
                 <IconNameWithDetailsModal
                   blobId={standing.blobId}
                   name={standing.name}
-                  color={standing.color}
+                  appearance={standing.appearance}
                   renderFullName={!isMobile}
                   atRisk={standing.isContractEnding}
                   isRookie={standing.isRookie}

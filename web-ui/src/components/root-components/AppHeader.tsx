@@ -24,11 +24,11 @@ const DesktopTitle = ({ currentPage, pageTitle }: TitleProps) => {
   const blobIconColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   return (
     <Box display="flex" justifyContent="space-between" flexGrow={1}>
-      <BlobIcon size={32} color={blobIconColor} />
+      <BlobIcon size={32} appearance={{ appearanceType: 'SOLID', colors: [blobIconColor], params: [] }} />
       <Typography variant="h5" noWrap component="div">
         {pageTitle ?? t(`page_titles.${currentPage}`)}
       </Typography>
-      <BlobIcon size={32} color={blobIconColor} />
+      <BlobIcon size={32} appearance={{ appearanceType: 'SOLID', colors: [blobIconColor], params: [] }} />
     </Box>
   );
 };

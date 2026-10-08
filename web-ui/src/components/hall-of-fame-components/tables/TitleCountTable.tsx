@@ -5,7 +5,6 @@ import {
   Skeleton,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
@@ -64,7 +63,7 @@ export const TitleCountTable = ({ title, data }: TitleCountTableProps) => {
                   <NarrowCell>
                     <IconNameWithDetailsModal
                       blob={item.blob}
-                      color={item.blob.color}
+                      appearance={item.blob.appearance}
                       name={item.blob.name}
                       renderFullName={!isMobile}
                     />

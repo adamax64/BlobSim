@@ -52,7 +52,7 @@ const MineWinnersTable = ({ winners }: MineWinnersTableProps) => {
                 <IconNameWithDetailsModal
                   blob={winner.blob}
                   name={winner.blob.name}
-                  color={winner.blob.color}
+                  appearance={winner.blob.appearance}
                   renderFullName={renderFullName}
                 />
               </TableCell>

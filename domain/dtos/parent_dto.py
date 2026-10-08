@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 
+from domain.dtos.blob_appearance_dto import BlobAppearanceDto
+
 
 class ParentDto(BaseModel):
     name: str
-    color: str
+    appearance: BlobAppearanceDto

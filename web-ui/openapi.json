@@ -1842,6 +1842,42 @@
         "title": "ActivityTypeDbo",
         "description": "Enum for Activity Type"
       },
+      "AppearanceType": {
+        "type": "string",
+        "enum": [
+          "SOLID",
+          "BICOLOR",
+          "TRICOLOR"
+        ],
+        "title": "AppearanceType",
+        "description": "Enum for Blob Visual Type"
+      },
+      "BlobAppearanceDto": {
+        "properties": {
+          "appearance_type": {
+            "$ref": "#/components/schemas/AppearanceType",
+            "default": "SOLID"
+          },
+          "colors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Colors",
+            "default": []
+          },
+          "params": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Params",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "BlobAppearanceDto"
+      },
       "BlobCompetitorDto": {
         "properties": {
           "id": {
@@ -1860,9 +1896,8 @@
             "type": "number",
             "title": "Speed"
           },
-          "color": {
-            "type": "string",
-            "title": "Color"
+          "appearance": {
+            "$ref": "#/components/schemas/BlobAppearanceDto"
           },
           "states": {
             "items": {
@@ -1882,7 +1917,7 @@
           "name",
           "strength",
           "speed",
-          "color",
+          "appearance",
           "states"
         ],
         "title": "BlobCompetitorDto"
@@ -2018,9 +2053,8 @@
             "title": "Is Grandmaster",
             "default": false
           },
-          "color": {
-            "type": "string",
-            "title": "Color"
+          "appearance": {
+            "$ref": "#/components/schemas/BlobAppearanceDto"
           },
           "parent": {
             "anyOf": [
@@ -2136,7 +2170,7 @@
           "grandmasters",
           "inventory",
           "league_name",
-          "color",
+          "appearance",
           "states",
           "traits"
         ],
@@ -2409,7 +2443,8 @@
           },
           "isFinished": {
             "type": "boolean",
-            "title": "Isfinished"
+            "title": "Isfinished",
+            "default": false
           }
         },
         "type": "object",
@@ -2420,8 +2455,7 @@
           "league",
           "season",
           "round",
-          "type",
-          "isFinished"
+          "type"
         ],
         "title": "EventDto"
       },
@@ -2494,9 +2528,8 @@
             "type": "string",
             "title": "Name"
           },
-          "color": {
-            "type": "string",
-            "title": "Color"
+          "appearance": {
+            "$ref": "#/components/schemas/BlobAppearanceDto"
           },
           "championships": {
             "type": "integer",
@@ -2523,7 +2556,7 @@
         "required": [
           "blob_id",
           "name",
-          "color",
+          "appearance",
           "championships",
           "gold",
           "silver",
@@ -2911,15 +2944,14 @@
             "type": "string",
             "title": "Name"
           },
-          "color": {
-            "type": "string",
-            "title": "Color"
+          "appearance": {
+            "$ref": "#/components/schemas/BlobAppearanceDto"
           }
         },
         "type": "object",
         "required": [
           "name",
-          "color"
+          "appearance"
         ],
         "title": "ParentDto"
       },
@@ -3274,9 +3306,8 @@
             "type": "string",
             "title": "Name"
           },
-          "color": {
-            "type": "string",
-            "title": "Color"
+          "appearance": {
+            "$ref": "#/components/schemas/BlobAppearanceDto"
           },
           "is_contract_ending": {
             "type": "boolean",
@@ -3306,7 +3337,7 @@
         "required": [
           "blob_id",
           "name",
-          "color",
+          "appearance",
           "is_contract_ending",
           "is_rookie",
           "results",
@@ -3343,9 +3374,8 @@
             "type": "string",
             "title": "Blob Name"
           },
-          "blob_color": {
-            "type": "string",
-            "title": "Blob Color"
+          "appearance": {
+            "$ref": "#/components/schemas/BlobAppearanceDto"
           },
           "position": {
             "type": "integer",
@@ -3360,7 +3390,7 @@
         "required": [
           "blob_id",
           "blob_name",
-          "blob_color",
+          "appearance",
           "position",
           "points"
         ],

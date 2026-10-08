@@ -22,7 +22,7 @@ from domain.exceptions.no_current_event_exception import NoCurrentEventException
 from domain.item_service import apply_pre_event_items
 from domain.news_services.news_service import add_ongoing_event_news
 from domain.sim_data_service import get_current_calendar, get_sim_time
-from domain.utils.blob_utils import format_blob_name
+from domain.utils.blob_utils import format_blob_name, get_blob_appearance
 from domain.utils.league_utils import map_league_to_dto
 from domain.utils.sim_time_utils import get_season, convert_to_sim_time
 from domain.utils.translation_utils import build_translations_dto, get_translation_text
@@ -75,7 +75,12 @@ def get_or_start_event(
         random.shuffle(actions)
         save_all_actions(session, actions)
         session.refresh(event)
-        add_ongoing_event_news(get_translation_text(build_translations_dto(event.league.name)), event.round, event.type, session)
+        add_ongoing_event_news(
+            get_translation_text(build_translations_dto(event.league.name)),
+            event.round,
+            event.type,
+            session,
+        )
 
     actions = [
         ActionDto(blob_id=action.blob_id, scores=action.scores)
@@ -130,10 +135,7 @@ def _get_competitors(
     session: Session, event: Event, is_event_concluded: bool
 ) -> List[BlobCompetitorDto]:
     if not is_event_concluded:
-        return [
-            _map_competitor(player)
-            for player in event.league.players
-        ]
+        return [_map_competitor(player) for player in event.league.players]
 
     blob_ids = set([action.blob_id for action in event.actions])
     blobs = get_all_by_ids(session, blob_ids)
@@ -146,7 +148,7 @@ def _map_competitor(blob) -> BlobCompetitorDto:
         name=format_blob_name(blob),
         strength=blob.strength,
         speed=blob.speed,
-        color=blob.color,
+        appearance=get_blob_appearance(blob),
         states=[
             StateDto(
                 type=state.type,

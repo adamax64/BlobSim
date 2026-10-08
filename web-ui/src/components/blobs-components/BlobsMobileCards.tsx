@@ -1,4 +1,4 @@
-import { Badge, Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { BlobStatsDto } from '../../../generated';
 import { BlobState } from '../../utils/blob-state-utils';
 import { BlobIcon } from '../icons/BlobIcon';
@@ -46,9 +46,9 @@ export function BlobsMobileCards({ blobs, onBlobSelect }: BlobsMobileCardsProps)
                 <Box display="flex" alignItems="center" gap={2}>
                   <Box paddingX={1}>
                     {blob.isDead ? (
-                      <DeadBlobIcon size={72} color={blob.color} />
+                      <DeadBlobIcon size={72} appearance={blob.appearance} />
                     ) : (
-                      <BlobIcon size={72} color={blob.color} />
+                      <BlobIcon size={72} appearance={blob.appearance} />
                     )}
                   </Box>
                   <Box>

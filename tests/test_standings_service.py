@@ -6,12 +6,15 @@ from sqlalchemy.orm import Session
 from data.model.blob import Blob
 from data.model.event import Event
 from data.model.result import Result
+from data.model.appearance_type import AppearanceType
+from data.model.blob_appearance import BlobAppearance
 from domain.dtos.standings_dtos.standings_dto import StandingsDTO
 from domain.standings_service import (
     get_standings,
     get_standings_snippet_by_blob,
     invalidate_standings_cache,
 )
+import json
 
 
 def _mock_result(blob, date, position, points):
@@ -19,12 +22,26 @@ def _mock_result(blob, date, position, points):
     return result
 
 
+def _create_test_blob(id, first_name, last_name, color="#888888"):
+    """Create a test blob with visuals."""
+    blob = Blob(id=id, first_name=first_name, last_name=last_name)
+    # Add mock visuals
+    visuals = BlobAppearance(
+        blob_id=id,
+        visual_type=AppearanceType.SOLID,
+        colors=json.dumps([color]),
+        params=json.dumps({}),
+    )
+    blob.appearance = visuals
+    return blob
+
+
 class TestStandingsServiceThroughRound(unittest.TestCase):
     def setUp(self):
         invalidate_standings_cache()
 
-        self.blob_a = Blob(id=1, first_name="A", last_name="Blob", color="red")
-        self.blob_b = Blob(id=2, first_name="B", last_name="Blob", color="blue")
+        self.blob_a = _create_test_blob(1, "A", "Blob", "red")
+        self.blob_b = _create_test_blob(2, "B", "Blob", "blue")
 
         # Blob A: leads after round 1, but Blob B overtakes by round 2.
         self.results = [
@@ -126,18 +143,40 @@ class TestStandingsSnippetByBlobEventAware(unittest.TestCase):
         mock_get_event.return_value = event
 
         standing_above = StandingsDTO(
-            blob_id=10, name="A", color="red", is_contract_ending=False, is_rookie=False,
-            results=[], num_of_rounds=8, total_points=5,
+            blob_id=10,
+            name="A",
+            color="red",
+            is_contract_ending=False,
+            is_rookie=False,
+            results=[],
+            num_of_rounds=8,
+            total_points=5,
         )
         standing_self = StandingsDTO(
-            blob_id=1, name="Me", color="blue", is_contract_ending=False, is_rookie=False,
-            results=[], num_of_rounds=8, total_points=3,
+            blob_id=1,
+            name="Me",
+            color="blue",
+            is_contract_ending=False,
+            is_rookie=False,
+            results=[],
+            num_of_rounds=8,
+            total_points=3,
         )
         standing_below = StandingsDTO(
-            blob_id=11, name="B", color="green", is_contract_ending=False, is_rookie=False,
-            results=[], num_of_rounds=8, total_points=1,
+            blob_id=11,
+            name="B",
+            color="green",
+            is_contract_ending=False,
+            is_rookie=False,
+            results=[],
+            num_of_rounds=8,
+            total_points=1,
         )
-        mock_get_standings.return_value = [standing_above, standing_self, standing_below]
+        mock_get_standings.return_value = [
+            standing_above,
+            standing_self,
+            standing_below,
+        ]
 
         session = MagicMock(spec=Session)
         result = get_standings_snippet_by_blob(1, session, event_id=99)
@@ -153,7 +192,12 @@ class TestStandingsSnippetByBlobEventAware(unittest.TestCase):
     @patch("domain.standings_service.get_event_by_id")
     @patch("domain.standings_service.get_blob_by_id")
     def test_without_event_id_uses_current_season_and_no_truncation(
-        self, mock_get_blob, mock_get_event, mock_get_standings, _mock_get_season, _mock_get_sim_time
+        self,
+        mock_get_blob,
+        mock_get_event,
+        mock_get_standings,
+        _mock_get_season,
+        _mock_get_sim_time,
     ):
         blob = MagicMock()
         blob.league = MagicMock(id=9)

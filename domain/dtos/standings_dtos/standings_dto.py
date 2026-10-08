@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
+from domain.dtos.blob_appearance_dto import BlobAppearanceDto
 from domain.dtos.standings_dtos.standings_result_dto import StandingsResultDTO
 
 
@@ -8,7 +9,7 @@ class StandingsDTO(BaseModel):
 
     blob_id: int
     name: str
-    color: str
+    appearance: BlobAppearanceDto
     is_contract_ending: bool
     is_rookie: bool
     results: list[StandingsResultDTO]

@@ -7,6 +7,7 @@ from domain.dtos.retirement_focus_type_dto import RetirementFocusTypeDto
 from domain.dtos.sim_time_dto import SimTimeDto
 from domain.dtos.state_dto import StateDto
 from domain.dtos.translations_dto import TranslationsDto
+from domain.dtos.blob_appearance_dto import BlobAppearanceDto
 from domain.enums.activity_type import ActivityType
 from domain.enums.element_dto import ElementDto
 from domain.enums.trait_type import TraitTypeDto
@@ -42,7 +43,7 @@ class BlobStatsDto(BaseModel):
     is_dead: bool = False
     is_retired: bool = False
     is_grandmaster: bool = False
-    color: str
+    appearance: BlobAppearanceDto
     parent: ParentDto | None = None
     money: int | None = None
     integrity_state: IntegrityState | None = None

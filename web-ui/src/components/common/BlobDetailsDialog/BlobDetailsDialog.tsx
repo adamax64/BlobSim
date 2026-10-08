@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { BlobDetailsDialogUi } from './BlobDetailsDialogUi';
 import defaultConfig from '../../../default-config';
 import { useMutation } from '@tanstack/react-query';
-import { BlobAnimated } from '../blob-visuals/BlobAnimated';
 
 interface BlobDetailsDialogProps {
   open: boolean;

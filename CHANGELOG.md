@@ -1,5 +1,14 @@
 # Version changelog
 
+### 5.10.0
+
+- **Enhanced blob appearance (part 1) - Issue #88**: Added support for multiple visual types for blobs:
+  - New `blob_visuals` database table with visual type, colors, and parameters
+  - Three visual types: **Solid** (single color, existing behavior), **Bicolor** (two colors with rotation parameter), **Tricolor** (three colors with color boundary percentages and a rotation parameter)
+  - Migration creates default SOLID visuals for all existing blobs using their current color
+  - Updated blob creation to automatically create default SOLID visuals
+  - Frontend rendering updated to support all three visual types using SVG gradients
+
 ### 5.9.6
 
 - Fixed backend error on event creation

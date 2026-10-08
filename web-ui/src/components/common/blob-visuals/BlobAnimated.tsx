@@ -78,17 +78,13 @@ export const BlobAnimated = ({ blob, size }: BlobAnimatedProps) => {
     if (blob.currentActivity === ActivityTypeDbo.Idle) {
       return <ClosedEyes />;
     }
-    return eyesOpen ? (
-      <OpenedEyes blobStates={blob.states.map((s) => s.type)} eyeColor={eyeColor} />
-    ) : (
-      <Blink />
-    );
+    return eyesOpen ? <OpenedEyes blobStates={blob.states.map((s) => s.type)} eyeColor={eyeColor} /> : <Blink />;
   }, [eyesOpen, blob.isDead, blob.currentActivity, blob.states, eyeColor]);
 
   return (
     <BlobBase
       size={size}
-      color={blob.color}
+      appearance={blob.appearance}
       eyeSlot={eyeSlot}
       doSquash={!blob.isDead}
       hasCrown={blob.isGrandmaster ?? false}

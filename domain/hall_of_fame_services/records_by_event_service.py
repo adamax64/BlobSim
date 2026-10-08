@@ -91,6 +91,8 @@ def _get_wins_by_event(session) -> list[WinsByEventDto]:
         blob_dto = map_to_blob_state_dto(
             blob, current_season, grandmaster_id, standings_position
         )
-        result.append(WinsByEventDto(event_type, blob_dto, wins))
+        result.append(
+            WinsByEventDto(event_type=event_type, blob=blob_dto, win_count=wins)
+        )
 
     return result

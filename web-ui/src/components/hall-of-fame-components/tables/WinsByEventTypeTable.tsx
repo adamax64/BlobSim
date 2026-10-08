@@ -61,7 +61,7 @@ export const WinsByEventTypeTable = ({ data, title }: WinsByEventTypeTableProps)
                   <NarrowCell>
                     <IconNameWithDetailsModal
                       blob={record.blob}
-                      color={record.blob.color}
+                      appearance={record.blob.appearance}
                       name={record.blob.name}
                       renderFullName={!isMobile}
                     />

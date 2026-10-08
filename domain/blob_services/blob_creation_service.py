@@ -4,7 +4,10 @@ import random
 from psycopg2 import IntegrityError
 from data.db.db_engine import transactional
 from data.model.blob import Blob
+from data.model.blob_appearance import BlobAppearance
+from data.model.appearance_type import AppearanceType
 from data.persistence.blob_repository import get_blob_by_id, save_blob
+from data.persistence.blob_appearance_repository import save_blob_appearance
 from data.persistence.league_repository import get_queue
 from data.persistence.name_suggestion_repository import (
     delete_suggestion,
@@ -28,7 +31,7 @@ from domain.utils.constants import INITIAL_INTEGRITY
 from data.model.trait import Trait
 from data.model.trait_type import TraitType
 from data.persistence.trait_repository import save_trait
-
+import json
 
 POSITIVE_TRAITS = [TraitType.HARD_WORKING, TraitType.DETERMINED, TraitType.ADVENTUROUS]
 
@@ -58,6 +61,9 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         strength += parent.grandmasters * 0.01
         speed += parent.grandmasters * 0.01
 
+    # Generate color for the blob's visuals
+    blob_color = generate_random_color()
+
     try:
         blob_obj = Blob(
             first_name=first_name,
@@ -69,10 +75,19 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
             born=current_time,
             league_id=queue.id,
             parent_id=parent_id,
-            color=generate_random_color(),
             element=element,
         )
         saved_blob = save_blob(session, blob_obj)
+
+        # Create default visuals for the new blob (SOLID type with the blob's color)
+        blob_appearance = BlobAppearance(
+            blob_id=saved_blob.id,
+            visual_type=AppearanceType.SOLID,
+            colors=json.dumps([blob_color]),
+            params=json.dumps({}),
+        )
+        save_blob_appearance(session, blob_appearance)
+
         reset_factory_progress(session)
         add_blob_created_news(saved_blob.id, session)
 

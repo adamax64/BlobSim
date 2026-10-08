@@ -1,11 +1,13 @@
 import { JSX } from 'react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { CatEars } from './CatEars';
 import { Crown } from './Crown';
+import { AppearanceType, BlobAppearanceDto } from '../../../../../generated';
+import { createGradientDefs, getFillValue } from '../../../../utils/blob-appearance-utils';
 
 type BlobBaseProps = {
   size: number;
-  color: string;
+  appearance?: BlobAppearanceDto;
   doSquash: boolean;
   hasCrown: boolean;
   hasCatEars?: boolean;
@@ -16,11 +18,11 @@ type BlobBaseProps = {
 
 export const BlobBase = ({
   size,
-  color,
-  eyeSlot,
+  appearance,
   doSquash,
   hasCrown,
   hasCatEars,
+  eyeSlot,
   toolSlot,
   bruiseSlot,
 }: BlobBaseProps) => {
@@ -29,9 +31,27 @@ export const BlobBase = ({
     const delay = -Math.random() * duration;
     return { duration: `${duration}s`, delay: `${delay}s` };
   });
-  const animStyle = doSquash
-    ? { animationDuration: anim.duration, animationDelay: anim.delay }
-    : undefined;
+  const animStyle = doSquash ? { animationDuration: anim.duration, animationDelay: anim.delay } : undefined;
+
+  // Determine effective colors array (fallback to single color)
+  const effectiveColors = useMemo(() => {
+    if (appearance?.colors && appearance.colors.length > 0) return appearance.colors;
+    return [];
+  }, [appearance?.colors]);
+
+  // Determine effective visual type (default to SOLID)
+  const effectiveVisualType = useMemo(() => {
+    if (appearance?.appearanceType) return appearance.appearanceType;
+    return effectiveColors.length > 2
+      ? AppearanceType.Tricolor
+      : effectiveColors.length > 1
+        ? AppearanceType.Bicolor
+        : AppearanceType.Solid;
+  }, [appearance?.appearanceType, effectiveColors.length]);
+
+  const gradientId = useMemo(() => `blob-gradient-${size}-${Math.random().toString(36).substr(2, 9)}`, [size]);
+  const fillValue = getFillValue(effectiveVisualType, effectiveColors, gradientId);
+  const gradientDefs = createGradientDefs(effectiveVisualType, effectiveColors, appearance?.params, gradientId);
 
   return (
     <svg
@@ -42,13 +62,14 @@ export const BlobBase = ({
       id="svg5"
       xmlns="http://www.w3.org/2000/svg"
     >
+      {gradientDefs}
       <g id="layer1">
         <g id="g12632">
           <g id="scaleGroup" className={doSquash ? 'blob-squash' : undefined} style={animStyle}>
-            {hasCatEars && <CatEars color={color} />}
+            {hasCatEars && <CatEars color={effectiveColors[0]} />}
             <path
               id="path56"
-              fill={color}
+              fill={fillValue}
               stroke="#000000"
               strokeWidth={1}
               d="m 129.5089,59.689952 c 0,27.20034 -28.7716,34.818936 -64.263171,34.818937 -35.491565,0 -64.7546185,-7.618596 -64.7546185,-34.818937 C 0.49111025,32.48961 29.754163,0.4911092 65.245729,0.49110935 100.7373,0.49111061 129.5089,32.489611 129.5089,59.689952 Z"

@@ -1,16 +1,7 @@
-import {
-  Box,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  useTheme,
-  useMediaQuery,
-  Tooltip,
-} from '@mui/material';
+import { Box, TableBody, TableCell, TableHead, TableRow, useTheme, useMediaQuery, Tooltip } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { useTranslation } from 'react-i18next';
-import type { RaceEventRecordDtoOutput as EventRecordDto } from '../../../../generated/models/RaceEventRecordDtoOutput';
+import type { RaceEventRecordDto as EventRecordDto } from '../../../../generated/models/RaceEventRecordDto';
 import { EventType } from '../../../../generated';
 import { IconNameWithDetailsModal } from '../../common/IconNameWithDetailsModal';
 import Straighten from '@mui/icons-material/Straighten';
@@ -116,7 +107,7 @@ export const EnduranceRaceUI = ({
                   <IconNameWithDetailsModal
                     blobId={record.blob.id}
                     name={record.blob.name}
-                    color={record.blob.color}
+                    appearance={record.blob.appearance}
                     renderFullName={!isMobile}
                     detailsDialogVariant="event"
                     eventId={eventId}

@@ -61,7 +61,7 @@ export const ResultsTable = ({ results }: ResultsTableProps) => {
               <TableCell>
                 <IconNameWithDetailsModal
                   blob={r.blob}
-                  color={r.blob.color}
+                  appearance={r.blob.appearance}
                   name={r.blob.name}
                   renderFullName={!isMobile}
                 />

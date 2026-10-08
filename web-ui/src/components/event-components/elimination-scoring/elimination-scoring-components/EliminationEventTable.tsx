@@ -2,7 +2,7 @@ import { TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useCallback } from 'react';
 import { roundToThreeDecimals } from '../../event-utils';
 import { useTranslation } from 'react-i18next';
-import { EliminationEventRecordDtoOutput as EventRecordDto } from '../../../../../generated/models/EliminationEventRecordDtoOutput';
+import { EliminationEventRecordDto as EventRecordDto } from '../../../../../generated/models/EliminationEventRecordDto';
 import { NarrowCell } from '../../../common/StyledComponents';
 import { IconNameWithDetailsModal } from '../../../common/IconNameWithDetailsModal';
 import { EventTable } from '../../shared/EventTable';
@@ -44,7 +44,7 @@ export const EliminationEventTable = ({ eventRecords, isMobile, eventId }: Elimi
                 <IconNameWithDetailsModal
                   blobId={record.blob.id}
                   name={record.blob.name}
-                  color={record.blob.color}
+                  appearance={record.blob.appearance}
                   renderFullName={!isMobile}
                   detailsDialogVariant="event"
                   eventId={eventId}

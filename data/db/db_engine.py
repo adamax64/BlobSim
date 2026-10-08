@@ -28,6 +28,7 @@ def _register_composite_types(dbapi_connection, connection_record):
 
     register_composite("BCS.translation", dbapi_connection, globally=True)
 
+
 # Create the base class for declarative models
 Base = declarative_base()
 
@@ -47,7 +48,9 @@ class User(Base):
 
 from data.model import (
     action,
+    appearance_type,
     blob,
+    blob_appearance,
     calendar,
     event,
     event_type,

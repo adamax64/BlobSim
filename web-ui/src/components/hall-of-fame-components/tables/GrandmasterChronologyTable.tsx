@@ -42,7 +42,7 @@ export const GrandmasterChronologyTable = ({ grandmasters }: GrandmasterChronolo
               <TableCell>
                 <IconNameWithDetailsModal
                   blob={grandmaster.blob}
-                  color={grandmaster.blob.color}
+                  appearance={grandmaster.blob.appearance}
                   name={grandmaster.blob.name}
                   renderFullName={!isMobile}
                 />

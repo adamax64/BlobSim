@@ -22,7 +22,7 @@ export const InlineTranslatedBlob = ({
 
   const blobComponent = blob && (
     <Box component="span" display="inline-flex" px="2px" sx={{ verticalAlign: 'text-bottom' }}>
-      <IconNameWithDetailsModal blob={blob} name={blob?.name ?? ''} color={blob?.color ?? '#888888'} />
+      <IconNameWithDetailsModal blob={blob} name={blob?.name ?? ''} appearance={blob.appearance} />
     </Box>
   );
 

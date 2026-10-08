@@ -145,7 +145,7 @@ export const QuarteredEventUI = ({
                   <IconNameWithDetailsModal
                     blobId={record.blob.id}
                     name={record.blob.name}
-                    color={record.blob.color}
+                    appearance={record.blob.appearance}
                     renderFullName={!isMobile}
                     detailsDialogVariant="event"
                     eventId={eventId}

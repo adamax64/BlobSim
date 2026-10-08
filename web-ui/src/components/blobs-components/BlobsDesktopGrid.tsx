@@ -17,7 +17,7 @@ const desktopColumns = (t: (key: string) => string, language: string): GridColDe
         <Box padding={2} sx={{ cursor: 'pointer' }}>
           <IconName
             name={params.row.name}
-            color={params.row.color}
+            appearance={params.row.appearance}
             atRisk={params.row.atRisk}
             isRookie={params.row.isRookie}
             isDead={params.row.isDead}

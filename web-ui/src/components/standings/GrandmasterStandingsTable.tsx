@@ -88,7 +88,7 @@ export function GrandmasterStandingsTable({ loading, standings, eon, hasEonEnded
                 <IconNameWithDetailsModal
                   blobId={standing.blobId}
                   name={standing.name}
-                  color={standing.color}
+                  appearance={standing.appearance}
                   renderFullName={!isMobile}
                 />
               </TableCell>

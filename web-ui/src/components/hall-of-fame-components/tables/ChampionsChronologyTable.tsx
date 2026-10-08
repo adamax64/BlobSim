@@ -26,7 +26,9 @@ export const ChampionsChronologyTable = ({ leagueChampions }: ChampionsChronolog
 
   return (
     <TableContainer component={Paper} sx={{ padding: 2, width: isMobile ? 'auto' : '100%' }}>
-      {!isMobile && <Typography variant="h6">{getLocalizedText(leagueChampions?.league.name, i18n.language)}</Typography>}
+      {!isMobile && (
+        <Typography variant="h6">{getLocalizedText(leagueChampions?.league.name, i18n.language)}</Typography>
+      )}
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -41,7 +43,7 @@ export const ChampionsChronologyTable = ({ leagueChampions }: ChampionsChronolog
               <TableCell>
                 <IconNameWithDetailsModal
                   blob={champion.blob}
-                  color={champion.blob.color}
+                  appearance={champion.blob.appearance}
                   name={champion.blob.name}
                   renderFullName={!isMobile}
                 />

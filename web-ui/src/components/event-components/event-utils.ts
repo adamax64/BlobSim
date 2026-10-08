@@ -1,4 +1,4 @@
-import { EventType } from '../../../generated';
+import { AppearanceType, EventType, SprintEventRecordDto } from '../../../generated';
 
 /**
  * Determines the number of contenders eliminated in each quarter based on the field size.
@@ -72,3 +72,20 @@ export function getRaceDurationBySize(fieldSize: number): number {
   if (fieldSize >= TINY_FIELD) return 60;
   return 0;
 }
+
+export const getStripedBackgroundImage = (record: SprintEventRecordDto): string | undefined => {
+  const appearance = record.blob.appearance;
+  const colors = appearance?.colors;
+  const stripeColors =
+    appearance?.appearanceType === AppearanceType.Bicolor && colors && colors.length >= 2
+      ? colors.slice(0, 2)
+      : appearance?.appearanceType === AppearanceType.Tricolor && colors && colors.length >= 3
+        ? colors.slice(0, 3)
+        : undefined;
+  const stripeWidth = 8;
+  return stripeColors
+    ? `repeating-linear-gradient(90deg, ${stripeColors
+        .map((color, stripeIndex) => `${color} ${stripeIndex * stripeWidth}px ${(stripeIndex + 1) * stripeWidth}px`)
+        .join(', ')})`
+    : undefined;
+};

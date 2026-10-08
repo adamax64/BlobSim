@@ -157,12 +157,12 @@ const BlobDetailsDialogContent = ({
                 <Grid size={12}>
                   <Typography variant="body1" component="div">
                     <strong>{t('blob_details.parent')}:</strong>{' '}
-                    <IconName name={blob.parent.name} color={blob.parent.color} size={24} />
+                    <IconName name={blob.parent.name} appearance={blob.parent.appearance} size={24} />
                   </Typography>
                 </Grid>
               )}
 
-              {!!blob.debut ? (
+              {blob.debut ? (
                 !blob.isRetired && (
                   <>
                     {includeCurrentLeague && (

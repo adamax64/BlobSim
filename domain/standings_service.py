@@ -13,6 +13,7 @@ from domain.dtos.standings_dtos.standings_dto import StandingsDTO
 from domain.dtos.standings_dtos.standings_result_dto import StandingsResultDTO
 from domain.dtos.standings_dtos.standings_snippet_dto import StandingsSnippetDto
 from domain.sim_data_service import get_sim_time
+from domain.utils.blob_utils import get_blob_appearance
 from domain.utils.league_utils import get_number_of_rounds_by_size
 from domain.utils.sim_time_utils import get_season
 
@@ -74,13 +75,15 @@ def get_standings(
                     StandingsResultDTO(position=result.position, points=result.points)
                 )
 
-            contract_ending = season == current_season and blob.contract == current_season
+            contract_ending = (
+                season == current_season and blob.contract == current_season
+            )
             is_rookie = blob.debut == current_season and season == current_season
             standings.append(
                 StandingsDTO(
                     blob_id=blob.id,
                     name=f"{blob.first_name} {blob.last_name}",
-                    color=blob.color,
+                    appearance=get_blob_appearance(blob),
                     results=standing_results,
                     num_of_rounds=num_of_rounds,
                     total_points=total_points,
@@ -108,7 +111,7 @@ def _truncate_standings_through_round(
             StandingsDTO(
                 blob_id=standing.blob_id,
                 name=standing.name,
-                color=standing.color,
+                appearance=standing.appearance,
                 is_contract_ending=standing.is_contract_ending,
                 is_rookie=standing.is_rookie,
                 results=results,
@@ -187,7 +190,7 @@ def get_grandmaster_standings(
             GrandmasterStandingsDTO(
                 blob_id=champion[1],
                 name=champion[0],
-                color=standings_by_name[champion][0].color,
+                appearance=standings_by_name[champion][0].appearance,
                 championships=championships_by_name[champion],
                 gold=golds,
                 silver=silvers,
@@ -220,12 +223,18 @@ def get_standings_snippet_by_blob(
     through_round = event.round - 1 if event is not None else None
 
     blob = get_blob_by_id(session, blob_id)
-    if not blob or not blob.league or (through_round is not None and through_round == 0):
+    if (
+        not blob
+        or not blob.league
+        or (through_round is not None and through_round == 0)
+    ):
         return []
 
     league_id = event.league_id if event is not None else blob.league.id
 
-    standings = get_standings(league_id, season, season, session, through_round=through_round)
+    standings = get_standings(
+        league_id, season, season, session, through_round=through_round
+    )
     snippet = []
     for i, standing in enumerate(standings):
         if standing.blob_id == blob_id:
@@ -234,7 +243,7 @@ def get_standings_snippet_by_blob(
                     StandingsSnippetDto(
                         blob_id=standings[i - 1].blob_id,
                         blob_name=standings[i - 1].name,
-                        blob_color=standings[i - 1].color,
+                        appearance=standings[i - 1].appearance,
                         position=i,
                         points=standings[i - 1].total_points,
                     )
@@ -243,7 +252,7 @@ def get_standings_snippet_by_blob(
                 StandingsSnippetDto(
                     blob_id=standing.blob_id,
                     blob_name=standing.name,
-                    blob_color=standing.color,
+                    appearance=standing.appearance,
                     position=i + 1,
                     points=standing.total_points,
                 )
@@ -253,7 +262,7 @@ def get_standings_snippet_by_blob(
                     StandingsSnippetDto(
                         blob_id=standings[i + 1].blob_id,
                         blob_name=standings[i + 1].name,
-                        blob_color=standings[i + 1].color,
+                        appearance=standings[i + 1].appearance,
                         position=i + 2,
                         points=standings[i + 1].total_points,
                     )

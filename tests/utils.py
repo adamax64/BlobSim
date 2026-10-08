@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock
+import json
 
 
 def create_blob_model_mock(
@@ -54,8 +55,13 @@ def create_blob_model_mock(
     blob.grandmasters = grandmasters
     blob.league_id = league_id
     blob.parent_id = parent_id
-    blob.color = color
     blob.current_activity = current_activity
+    # Create mock visuals instead of color column
+    visuals = MagicMock()
+    visuals.colors = json.dumps([color])
+    visuals.params = json.dumps({})
+    visuals.visual_type = "SOLID"
+    blob.visuals = visuals
     return blob
 
 

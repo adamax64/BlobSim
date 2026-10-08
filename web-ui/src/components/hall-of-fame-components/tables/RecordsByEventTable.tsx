@@ -6,7 +6,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
@@ -60,7 +59,7 @@ export const RecordsByLeagueTable = ({ data }: RecordsByEventTableProps) => {
                   <NarrowCell>
                     <IconNameWithDetailsModal
                       blob={record.blob}
-                      color={record.blob.color}
+                      appearance={record.blob.appearance}
                       name={record.blob.name}
                       renderFullName={!isMobile}
                     />

@@ -8,14 +8,13 @@ import { getShortName } from '../../utils/blob-name-utils';
 
 export interface IconNameProps extends Partial<BlobStatsDto> {
   name: string;
-  color: string;
   size?: number;
   renderFullName?: boolean;
 }
 
 export const IconName = ({
   name,
-  color,
+  appearance,
   atRisk,
   isRookie,
   isDead,
@@ -30,7 +29,11 @@ export const IconName = ({
 
   return (
     <Box display="flex" alignItems="center" gap={1}>
-      {isDead ? <DeadBlobIcon size={size} color={color} /> : <BlobIcon size={size} color={color} />}
+      {isDead ? (
+        <DeadBlobIcon size={size} appearance={appearance!} />
+      ) : (
+        <BlobIcon size={size} appearance={appearance!} />
+      )}
       <BlobStateBadge atRisk={atRisk} isRookie={isRookie}>
         <Typography variant="body2" component="span" noWrap>
           {formattedName}

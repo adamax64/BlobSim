@@ -1,4 +1,4 @@
-import { Box, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, useMediaQuery } from '@mui/material';
 import { StandingsSnippetDto } from '../../../../../generated';
 import { getShortName } from '../../../../utils/blob-name-utils';
 import { BlobIcon } from '../../../icons/BlobIcon';
@@ -8,34 +8,37 @@ import { useCallback } from 'react';
 const StandingSnippetWidget = ({ standingsData }: { standingsData: StandingsSnippetDto[] }) => {
   const onlyIcon = useMediaQuery('(max-width:425px)');
 
-  const blobName = useCallback((standing: StandingsSnippetDto) => {
-    if (onlyIcon) {
-      return (
-        <DynamicTooltip title={standing.blobName}>
-          <Box display="flex" width="100%" height="100%" justifyContent="center" alignItems="center">
-            <BlobIcon size={16} color={standing.blobColor} />
-          </Box>
-        </DynamicTooltip>
-      );
-    }
+  const blobName = useCallback(
+    (standing: StandingsSnippetDto) => {
+      if (onlyIcon) {
+        return (
+          <DynamicTooltip title={standing.blobName}>
+            <Box display="flex" width="100%" height="100%" justifyContent="center" alignItems="center">
+              <BlobIcon size={16} appearance={standing.appearance} />
+            </Box>
+          </DynamicTooltip>
+        );
+      }
 
-    return (
-      <Box
-        display="flex"
-        width="100%"
-        alignItems="center"
-        gap={0.5}
-        textOverflow="ellipsis"
-        overflow="hidden"
-        whiteSpace="nowrap"
-      >
-        <Box>
-          <BlobIcon size={16} color={standing.blobColor} />
+      return (
+        <Box
+          display="flex"
+          width="100%"
+          alignItems="center"
+          gap={0.5}
+          textOverflow="ellipsis"
+          overflow="hidden"
+          whiteSpace="nowrap"
+        >
+          <Box>
+            <BlobIcon size={16} appearance={standing.appearance} />
+          </Box>
+          {getShortName(standing.blobName)}
         </Box>
-        {getShortName(standing.blobName)}
-      </Box>
-    );
-  }, []);
+      );
+    },
+    [onlyIcon],
+  );
 
   return (
     <Grid

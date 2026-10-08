@@ -118,7 +118,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               <ul>
                 {newsItem.retired?.map((b) => (
                   <li key={`${b.name}-retired`}>
-                    <IconNameWithDetailsModal blob={b} name={b.name} color={b.color} />
+                    <IconNameWithDetailsModal blob={b} name={b.name} appearance={b.appearance} />
                   </li>
                 ))}
               </ul>
@@ -137,7 +137,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
                   <ul>
                     {league.blobs.map((b) => (
                       <li key={`${b.name}-transfers`}>
-                        <IconNameWithDetailsModal blob={b} name={b.name} color={b.color} />
+                        <IconNameWithDetailsModal blob={b} name={b.name} appearance={b.appearance} />
                       </li>
                     ))}
                   </ul>
@@ -149,7 +149,7 @@ export const NewsContent = ({ newsItem }: NewsContentProps) => {
               <ul>
                 {newsItem.rookies?.map((b) => (
                   <li key={`${b.name}-rookies`}>
-                    <IconNameWithDetailsModal blob={b} name={b.name} color={b.color} />
+                    <IconNameWithDetailsModal blob={b} name={b.name} appearance={b.appearance} />
                   </li>
                 ))}
               </ul>

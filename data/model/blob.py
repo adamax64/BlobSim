@@ -50,7 +50,6 @@ class Blob(Base):
     )
     parent_id = Column(Integer, ForeignKey("BCS.blobs.id"))
     parent = relationship("Blob", remote_side=[id], backref="children")
-    color = Column(String, nullable=False, default="#888888")
     current_activity = Column(Enum(ActivityTypeDbo), default=ActivityTypeDbo.IDLE)
     element = Column(Enum(Element), nullable=False, default=Element.NONE)
     traits = relationship("Trait", viewonly=True)
@@ -59,3 +58,6 @@ class Blob(Base):
         "RetirementFocus", uselist=False, backref="blob", viewonly=True
     )
     items = relationship("Item", viewonly=True)
+    appearance = relationship(
+        "BlobAppearance", uselist=False, overlaps="blob,appearance", viewonly=True
+    )
