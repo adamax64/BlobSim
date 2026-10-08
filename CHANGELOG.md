@@ -6,7 +6,10 @@
   - New `blob_visuals` database table with visual type, colors, and parameters
   - Three visual types: **Solid** (single color, existing behavior), **Bicolor** (two colors with rotation parameter), **Tricolor** (three colors with color boundary percentages and a rotation parameter)
   - Migration creates default SOLID visuals for all existing blobs using their current color
-  - Updated blob creation to automatically create default SOLID visuals
+  - Updated blob creation to automatically create random appearances:
+    - Solid (single color): one random color with no parameters
+    - Bicolor: two random colors with a random angle (0 - 179°) as parameter
+    - Tricolor: three random colors with two gradient points (percentage point where two colors change) and a random angle
   - Frontend rendering updated to support all three visual types using SVG gradients
 
 ### 5.9.6

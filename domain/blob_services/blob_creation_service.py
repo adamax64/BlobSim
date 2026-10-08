@@ -31,7 +31,6 @@ from domain.utils.constants import INITIAL_INTEGRITY
 from data.model.trait import Trait
 from data.model.trait_type import TraitType
 from data.persistence.trait_repository import save_trait
-import json
 
 POSITIVE_TRAITS = [TraitType.HARD_WORKING, TraitType.DETERMINED, TraitType.ADVENTUROUS]
 
@@ -61,9 +60,6 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         strength += parent.grandmasters * 0.01
         speed += parent.grandmasters * 0.01
 
-    # Generate color for the blob's visuals
-    blob_color = generate_random_color()
-
     try:
         blob_obj = Blob(
             first_name=first_name,
@@ -80,12 +76,7 @@ def create_blob(session, first_name: str, last_name: str, parent_id: int | None 
         saved_blob = save_blob(session, blob_obj)
 
         # Create default visuals for the new blob (SOLID type with the blob's color)
-        blob_appearance = BlobAppearance(
-            blob_id=saved_blob.id,
-            visual_type=AppearanceType.SOLID,
-            colors=json.dumps([blob_color]),
-            params=json.dumps({}),
-        )
+        blob_appearance = _create_blob_appearance(saved_blob.id)
         save_blob_appearance(session, blob_appearance)
 
         reset_factory_progress(session)
@@ -132,3 +123,41 @@ def _create_with_name_suggestion(session):
         )
         delete_suggestion(session, name_suggestion)
         _create_with_name_suggestion()
+
+
+def _create_blob_appearance(blob_id: int) -> BlobAppearance:
+    """Create a default blob appearance with SOLID type and random color."""
+
+    appearance_type = random.choice(list(AppearanceType))
+
+    if appearance_type == AppearanceType.SOLID:
+        return BlobAppearance(
+            blob_id=blob_id,
+            appearance_type=appearance_type,
+            colors=[generate_random_color()],
+            params=[],
+        )
+    elif appearance_type == AppearanceType.BICOLOR:
+        # Two colors and one rotation angle (0-179)
+        return BlobAppearance(
+            blob_id=blob_id,
+            appearance_type=appearance_type,
+            colors=[generate_random_color(), generate_random_color()],
+            params=[random.randint(0, 179)],
+        )
+    elif appearance_type == AppearanceType.TRICOLOR:
+        # Three colors, two gradient points, and one rotation angle (0-179)
+        gradient_point1 = random.randint(2, 94)
+        gradient_point2 = random.randint(gradient_point1 + 3, 97)
+        return BlobAppearance(
+            blob_id=blob_id,
+            appearance_type=appearance_type,
+            colors=[
+                generate_random_color(),
+                generate_random_color(),
+                generate_random_color(),
+            ],
+            params=[gradient_point1, gradient_point2, random.randint(0, 179)],
+        )
+    else:
+        raise ValueError(f"Unsupported appearance type: {appearance_type}")
