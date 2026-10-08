@@ -138,12 +138,12 @@ def _create_blob_appearance(blob_id: int) -> BlobAppearance:
             params=[],
         )
     elif appearance_type == AppearanceType.BICOLOR:
-        # Two colors and one rotation angle (0-179)
+        # Two colors, one gradient point, and one rotation angle (0-179)
         return BlobAppearance(
             blob_id=blob_id,
             appearance_type=appearance_type,
             colors=[generate_random_color(), generate_random_color()],
-            params=[random.randint(0, 179)],
+            params=[random.randint(2, 97), random.randint(0, 179)],
         )
     elif appearance_type == AppearanceType.TRICOLOR:
         # Three colors, two gradient points, and one rotation angle (0-179)
