@@ -1,9 +1,15 @@
 # Version changelog
 
+### 5.10.1
+
+- Raised practice and competition effects on skills
+- Raised heir cost to 400
+- Raised maintenance cost to 56
+
 ### 5.10
 
 - Added a factory output bonus chance of 1% per living blob currently doing labour, capped at 100%, and exposed it in factory progress.
-- **Enhanced blob appearance (part 1) - Issue #88**: Added support for multiple visual types for blobs:
+- **Enhanced blob appearance (part 1)**: Added support for multiple visual types for blobs:
   - New `blob_visuals` database table with visual type, colors, and parameters
   - Three visual types: **Solid** (single color, existing behavior), **Bicolor** (two colors with rotation parameter), **Tricolor** (three colors with color boundary percentages and a rotation parameter)
   - Migration creates default SOLID visuals for all existing blobs using their current color
