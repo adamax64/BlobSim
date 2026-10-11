@@ -58,13 +58,18 @@ from domain.utils.blob_utils import has_state, has_trait, compute_state_multipli
 from domain.utils.policy_utils import choose_random_policy_type
 from domain.utils.sim_time_utils import get_season
 from domain.utils.activity_utils import choose_activity
-from domain.item_service import grant_item_to_blob, has_depleted_unconsumable, has_unusable_support_items, is_inventory_full
+from domain.item_service import (
+    grant_item_to_blob,
+    has_depleted_unconsumable,
+    has_unusable_support_items,
+    is_inventory_full,
+)
 from domain.mine_winners_service import record_mine_winner
 from domain.utils.item_utils import (
     COMPETITION_ITEM_TYPES,
     choose_random_item_type,
     get_item_from_list_by_type,
-    get_item_sell_value
+    get_item_sell_value,
 )
 from domain.utils.constants import (
     ADVENTURE_EFFECT,
@@ -297,9 +302,15 @@ def _is_premium_practice_free(blob: Blob, session: Session) -> bool:
         return True
 
     current_season = get_season(get_sim_time(session))
-    current_standings = get_standings(blob.league_id, current_season, current_season, session)
-    current_position = next((i for i, s in enumerate(current_standings) if s.blob_id == blob.id), None)
-    if current_position is not None and current_position < math.ceil(len(current_standings) / 2):
+    current_standings = get_standings(
+        blob.league_id, current_season, current_season, session
+    )
+    current_position = next(
+        (i for i, s in enumerate(current_standings) if s.blob_id == blob.id), None
+    )
+    if current_position is not None and current_position < math.ceil(
+        len(current_standings) / 2
+    ):
         return False
 
     if blob.contract == current_season and blob.league_id is not None:
@@ -373,8 +384,8 @@ def _refresh_tired_state(blob: Blob, current_time: int, session: Session):
 
 def _apply_intense_practice_state_changes(blob: Blob, session: Session):
     determined = has_trait(blob, TraitType.DETERMINED)
-    tired_chance = 0.4 if not determined else 0.2
-    injured_chance = 0.1 if not determined else 0.05
+    tired_chance = 0.4 if not determined else 0.25
+    injured_chance = 0.1 if not determined else 0.07
 
     if random.random() < tired_chance:
         if has_state(blob, StateType.TIRED):
@@ -445,7 +456,9 @@ def _apply_random_traits(blob: Blob, session: Session):
         if random.random() < 0.001:
             # Currently the LAZY trait counters every other trait so it can only be lost
             # If this changes, the LAZY condition should be removed
-            if blob.traits and (has_trait(blob, TraitType.LAZY) or len(blob.traits) == 3):
+            if blob.traits and (
+                has_trait(blob, TraitType.LAZY) or len(blob.traits) == 3
+            ):
                 lost_trait = random.choice(blob.traits)
                 delete_trait(session, lost_trait.id)
                 session.refresh(blob)
@@ -468,7 +481,12 @@ def _apply_random_traits(blob: Blob, session: Session):
                     available_traits = [
                         t
                         for t in available_traits
-                        if t not in (TraitType.HARD_WORKING, TraitType.DETERMINED, TraitType.ADVENTUROUS)
+                        if t
+                        not in (
+                            TraitType.HARD_WORKING,
+                            TraitType.DETERMINED,
+                            TraitType.ADVENTUROUS,
+                        )
                     ]
                 elif has_hardworking or has_determined or has_adventorous:
                     # Remove LAZY if blob has HARD_WORKING or DETERMINED

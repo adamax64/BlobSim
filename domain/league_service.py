@@ -107,7 +107,7 @@ def _promote_blobs_to_leagues(session, leagues: list[League], current_season: in
                 blob.league_id = next_league.id
                 if league.level == QUEUE_LEVEL:
                     blob.debut = current_season + 1
-                    blob.contract = current_season + 3
+                    blob.contract = current_season + 4
                     debuts.append(blob.id)
                 else:
                     transfers[next_league.name.en].append(blob.id)
@@ -140,7 +140,7 @@ def _create_new_league_if_necessary(
                 blob = blobs[blob_index]
                 blob.league_id = new_league.id
                 blob.debut = current_season + 1
-                blob.contract = current_season + 3
+                blob.contract = current_season + 4
         session.commit()
 
 

@@ -5,6 +5,10 @@
 - Raised practice and competition effects on skills
 - Raised heir cost to 400
 - Raised maintenance cost to 56
+- Changed the minimum width of bicolor and tricolor appearance stripes to 4
+- Increased risk for determined blobs to gain injured and tired trait on intense practice by to 7% and 25% respectively
+- Raised the initial contract length of new debuting blobs to 4 seasons
+  - Dropout league demotees and dropout winner's initial contract length remains at 3 seasons
 
 ### 5.10
 
