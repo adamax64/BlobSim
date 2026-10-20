@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from random import choices, random
+from sqlalchemy.exc import IntegrityError
 
 from data.db.db_engine import transactional
 from data.model.blob import Blob
@@ -13,10 +14,14 @@ from data.persistence.result_repository import (
     get_most_recent_real_league_result_of_blob,
 )
 from data.persistence.retirement_focus_repository import set_retirement_focus
-from domain.dtos.league_dto import LeagueDto
+from domain.dtos.league_dto import LeagueDto, LeagueNameUpdateDto
+from domain.exceptions.invalid_league_name_exception import InvalidLeagueNameException
+from domain.exceptions.league_not_found_exception import LeagueNotFoundException
+from domain.exceptions.name_occupied_exception import NameOccupiedException
 from domain.news_services.news_service import add_new_season_news
 from domain.standings_service import get_standings
 from domain.utils.blob_utils import has_trait
+from domain.utils.translation_utils import translations_dto_to_translation
 from domain.utils.constants import (
     CYCLES_PER_SEASON,
     MAX_FIELD_SIZE,
@@ -75,6 +80,28 @@ def get_league_by_id(league_id: int, session) -> LeagueDto | None:
     if league is None:
         return None
     return map_league_to_dto(league, league.players)
+
+
+@transactional
+def update_league_names(
+    updates: list[LeagueNameUpdateDto], session
+) -> list[LeagueDto]:
+    """Update English and Hungarian names for the given leagues."""
+
+    updated: list[LeagueDto] = []
+    try:
+        for update in updates:
+            translation = translations_dto_to_translation(update.name)
+            if not translation.en.strip() or not translation.hu.strip():
+                raise InvalidLeagueNameException()
+            league = league_repository.get_league_by_id(session, update.id)
+            if league is None:
+                raise LeagueNotFoundException(update.id)
+            league.set_translation(translation)
+            updated.append(map_league_to_dto(league, league.players or []))
+        return updated
+    except IntegrityError as exc:
+        raise NameOccupiedException() from exc
 
 
 def _correct_contract_of_inactive_leagues(session, leagues: list[League]):

@@ -6,6 +6,11 @@ import shutil
 from datetime import datetime
 from .auth_dependency import require_auth
 from domain.admin_service import get_enabled_cronjobs, set_enabled_cronjobs
+from domain.dtos.league_dto import LeagueDto, LeagueNameUpdateDto
+from domain.exceptions.invalid_league_name_exception import InvalidLeagueNameException
+from domain.exceptions.league_not_found_exception import LeagueNotFoundException
+from domain.exceptions.name_occupied_exception import NameOccupiedException
+from domain.league_service import update_league_names
 from domain.scheduler_service import start_scheduler, stop_scheduler
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -144,4 +149,26 @@ async def set_cronjobs_enabled(enabled: bool, _: str = Depends(require_auth)):
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Failed to set cronjobs status: {str(e)}"
+        )
+
+
+@router.post("/leagues/names")
+def update_admin_league_names(
+    updates: list[LeagueNameUpdateDto], _: str = Depends(require_auth)
+) -> list[LeagueDto]:
+    """
+    Update the English and Hungarian names of leagues.
+    Requires admin authentication.
+    """
+    try:
+        return update_league_names(updates)
+    except InvalidLeagueNameException as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    except LeagueNotFoundException as e:
+        raise HTTPException(status_code=404, detail=e.message)
+    except NameOccupiedException as e:
+        raise HTTPException(status_code=409, detail=e.message)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to update league names: {str(e)}"
         )

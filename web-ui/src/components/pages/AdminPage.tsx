@@ -9,6 +9,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { LeaguesAdminCard } from '../admin-components/LeaguesAdminCard';
 
 export function AdminPage() {
   const { t } = useTranslation();
@@ -157,6 +158,8 @@ export function AdminPage() {
             />
           </CardContent>
         </Card>
+
+        <LeaguesAdminCard isAuthenticated={isAuthenticated} />
       </Box>
     </PageFrame>
   );

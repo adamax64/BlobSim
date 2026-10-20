@@ -1,5 +1,9 @@
 # Version changelog
 
+### 5.11
+
+- Admin page can now list current leagues and edit their English and Hungarian names, saving the changes through a new authenticated backend endpoint
+
 ### 5.10.1
 
 - Raised practice and competition effects on skills

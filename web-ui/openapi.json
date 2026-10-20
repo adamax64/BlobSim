@@ -1749,6 +1749,61 @@
         }
       }
     },
+    "/admin/leagues/names": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Update Admin League Names",
+        "description": "Update the English and Hungarian names of leagues.\nRequires admin authentication.",
+        "operationId": "update_admin_league_names_admin_leagues_names_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/LeagueNameUpdateDto"
+                },
+                "type": "array",
+                "title": "Updates"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LeagueDto"
+                  },
+                  "type": "array",
+                  "title": "Response Update Admin League Names Admin Leagues Names Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
     "/news/": {
       "get": {
         "tags": [
@@ -2680,6 +2735,27 @@
           "level"
         ],
         "title": "LeagueDto"
+      },
+      "LeagueNameUpdateDto": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "items": {
+              "$ref": "#/components/schemas/TranslationsDto"
+            },
+            "type": "array",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "LeagueNameUpdateDto"
       },
       "LoginRequest": {
         "properties": {

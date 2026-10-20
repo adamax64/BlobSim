@@ -508,6 +508,16 @@
     "cronjobs_enabled_success": "Cronjobs have been enabled",
     "cronjobs_disabled_success": "Cronjobs have been disabled",
     "cronjobs_toggle_failed": "Failed to toggle cronjobs",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "leagues_management": "League Names",
+    "leagues_description": "Edit the English and Hungarian names of the current leagues.",
+    "leagues_id": "ID",
+    "leagues_level": "Level",
+    "leagues_name_en": "Name (English)",
+    "leagues_name_hu": "Name (Hungarian)",
+    "leagues_save": "Save league names",
+    "leagues_save_success": "League names saved successfully",
+    "leagues_save_failed": "Failed to save league names",
+    "leagues_fetch_failed": "Failed to load leagues"
   }
 }

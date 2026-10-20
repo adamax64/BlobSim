@@ -10,3 +10,8 @@ class LeagueDto(BaseModel):
     name: list[TranslationsDto]
     field_size: int
     level: int
+
+
+class LeagueNameUpdateDto(BaseModel):
+    id: int
+    name: list[TranslationsDto]

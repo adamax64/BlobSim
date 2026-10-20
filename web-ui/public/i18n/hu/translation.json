@@ -509,6 +509,16 @@
     "cronjobs_enabled_success": "Háttérfeladatok engedélyezve",
     "cronjobs_disabled_success": "Háttérfeladatok letiltva",
     "cronjobs_toggle_failed": "Nem sikerült átváltani a cronjobs állapotát",
-    "loading": "Betöltés..."
+    "loading": "Betöltés...",
+    "leagues_management": "Liga nevek",
+    "leagues_description": "A jelenlegi ligák angol és magyar neveinek szerkesztése.",
+    "leagues_id": "Azonosító",
+    "leagues_level": "Szint",
+    "leagues_name_en": "Név (angol)",
+    "leagues_name_hu": "Név (magyar)",
+    "leagues_save": "Liga nevek mentése",
+    "leagues_save_success": "A liga nevek mentése sikeres",
+    "leagues_save_failed": "A liga nevek mentése sikertelen",
+    "leagues_fetch_failed": "Nem sikerült betölteni a ligákat"
   }
 }

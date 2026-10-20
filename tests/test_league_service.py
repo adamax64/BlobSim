@@ -16,9 +16,12 @@ from domain.league_service import (
     _get_blobs_by_standings_order,
     _get_most_recent_standings,
     _retire_blobs,
+    update_league_names,
 )
-from domain.dtos.league_dto import LeagueDto
+from domain.dtos.league_dto import LeagueDto, LeagueNameUpdateDto
 from domain.dtos.translations_dto import TranslationsDto
+from domain.exceptions.invalid_league_name_exception import InvalidLeagueNameException
+from domain.exceptions.league_not_found_exception import LeagueNotFoundException
 from data.model.league import League
 from data.model.blob import Blob
 from data.model.translation import Translation
@@ -312,6 +315,78 @@ class TestLeagueService(unittest.TestCase):
 
         for blob in league.players:
             self.assertIsNone(blob.league_id)
+
+    @patch("domain.league_service.league_repository.get_league_by_id")
+    def test_update_league_names(self, mock_get_league_by_id):
+        session = MagicMock(spec=Session)
+        league = League(
+            id=1,
+            name=Translation(en="League 1", hu="Liga 1"),
+            players=[Blob(), Blob()],
+            level=1,
+        )
+        mock_get_league_by_id.return_value = league
+
+        result = update_league_names(
+            [
+                LeagueNameUpdateDto(
+                    id=1,
+                    name=[
+                        TranslationsDto(language="en", text="Top League"),
+                        TranslationsDto(language="hu", text="Csúcs Liga"),
+                    ],
+                )
+            ],
+            session,
+        )
+
+        self.assertEqual(league.name.en, "Top League")
+        self.assertEqual(league.name.hu, "Csúcs Liga")
+        self.assertEqual(len(result), 1)
+        self.assertEqual(
+            result[0].name,
+            [
+                TranslationsDto(language="en", text="Top League"),
+                TranslationsDto(language="hu", text="Csúcs Liga"),
+            ],
+        )
+
+    @patch("domain.league_service.league_repository.get_league_by_id")
+    def test_update_league_names_rejects_empty_name(self, mock_get_league_by_id):
+        session = MagicMock(spec=Session)
+
+        with self.assertRaises(InvalidLeagueNameException):
+            update_league_names(
+                [
+                    LeagueNameUpdateDto(
+                        id=1,
+                        name=[
+                            TranslationsDto(language="en", text="  "),
+                            TranslationsDto(language="hu", text="Liga"),
+                        ],
+                    )
+                ],
+                session,
+            )
+        mock_get_league_by_id.assert_not_called()
+
+    @patch("domain.league_service.league_repository.get_league_by_id", return_value=None)
+    def test_update_league_names_league_not_found(self, _mock_get_league_by_id):
+        session = MagicMock(spec=Session)
+
+        with self.assertRaises(LeagueNotFoundException):
+            update_league_names(
+                [
+                    LeagueNameUpdateDto(
+                        id=99,
+                        name=[
+                            TranslationsDto(language="en", text="Missing"),
+                            TranslationsDto(language="hu", text="Hiányzó"),
+                        ],
+                    )
+                ],
+                session,
+            )
 
 
 if __name__ == "__main__":

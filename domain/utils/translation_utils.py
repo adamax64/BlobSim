@@ -23,3 +23,10 @@ def get_translation_text(translations: list[TranslationsDto], language: str = DE
         if translation.language == DEFAULT_LANGUAGE:
             return translation.text
     return translations[0].text if translations else ""
+
+
+def translations_dto_to_translation(translations: list[TranslationsDto]) -> Translation:
+    """Map a list of per-language TranslationsDto entries into a Translation composite."""
+    en = get_translation_text(translations, "en")
+    hu = get_translation_text(translations, "hu")
+    return Translation(en=en, hu=hu)
