@@ -141,10 +141,10 @@ def map_to_blob_state_dto(
         integrity_state=(
             (
                 IntegrityState.GOOD
-                if blob.integrity > 0.7
+                if blob.integrity > 0.7 * INITIAL_INTEGRITY
                 else (
                     IntegrityState.AVERAGE
-                    if blob.integrity > 0.4
+                    if blob.integrity > 0.4 * INITIAL_INTEGRITY
                     else IntegrityState.POOR
                 )
             )
