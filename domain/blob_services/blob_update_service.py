@@ -168,6 +168,16 @@ def update_blob_speed_by_id(blob_id: int, multiplyer: float, session: Session):
         save_blob(session, blob)
 
 
+@transactional
+def update_blob_strength_by_id(blob_id: int, multiplyer: float, session: Session):
+    blob = get_blob_by_id(session, blob_id)
+    if blob:
+        blob.strength = _update_stat(
+            blob.strength, multiplyer, blob.learning, blob.integrity, 0
+        )
+        save_blob(session, blob)
+
+
 def _update_blob_integrity(blob: Blob, session: Session):
     processor_paste = get_item_from_list_by_type(blob.items, ItemType.PROCESSOR_PASTE)
     if processor_paste:

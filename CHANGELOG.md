@@ -1,5 +1,9 @@
 # Version changelog
 
+### 5.12
+
+- Side-by-side blobs receive the same speed increase as for overtakes, plus a strength increase of 50% of the speed increase amount
+
 ### 5.11.1
 
 - Fixed integrity chip titles on blob details modal

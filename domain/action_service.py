@@ -24,8 +24,11 @@ from domain.utils.action_utils import (
 )
 from domain.utils.element_utils import compute_element_skill_multipliers
 from domain.utils.league_utils import get_race_duration_by_size
-from domain.blob_services.blob_update_service import update_blob_speed_by_id
-from domain.utils.constants import OVERTAKE_EFFECT
+from domain.blob_services.blob_update_service import (
+    update_blob_speed_by_id,
+    update_blob_strength_by_id,
+)
+from domain.utils.constants import OVERTAKE_EFFECT, SIDE_BY_SIDE_DISTANCE_THRESHOLD
 
 
 @transactional
@@ -171,6 +174,26 @@ def create_actions_for_race(
                 update_blob_speed_by_id(contender.id, overtakes * OVERTAKE_EFFECT)
             elif overtakes < 0:
                 update_blob_speed_by_id(contender.id, overtakes * OVERTAKE_EFFECT)
+            else:
+                # Checking if the blob is side-by-side with the blob ahead or behind
+                ahead = current_sorted[i - 1] if i > 0 else None
+                behind = current_sorted[i + 1] if i < len(current_sorted) - 1 else None
+                if ahead:
+                    distance = (
+                        current_sums_after[ahead.id] - current_sums_after[contender.id]
+                    )
+                    if distance <= SIDE_BY_SIDE_DISTANCE_THRESHOLD:
+                        update_blob_speed_by_id(contender.id, OVERTAKE_EFFECT)
+                        update_blob_strength_by_id(contender.id, OVERTAKE_EFFECT * 0.5)
+                        continue  # Skip checking behind if already side-by-side with ahead
+
+                if behind:
+                    distance = (
+                        current_sums_after[contender.id] - current_sums_after[behind.id]
+                    )
+                    if distance <= SIDE_BY_SIDE_DISTANCE_THRESHOLD:
+                        update_blob_speed_by_id(contender.id, OVERTAKE_EFFECT)
+                        update_blob_strength_by_id(contender.id, OVERTAKE_EFFECT * 0.5)
 
     if event and max_scorer_id:
         is_new_record = check_and_update_record(
