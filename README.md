@@ -67,6 +67,10 @@ Run `start.bat` on Windows systems or `start.sh` on Linux systems to setup and s
 
 3. If you want to run the app in production mode, run `pnpm run build` to build the production app
 
+### Code formatting
+
+For backend in VS Code use the Black Formatter extension, and besides the default formatting add the `--line-length=140` argument in the extension settings.
+
 ## Running the application
 
 To start the app, just run `start.bat` on Windows systems or `start.sh` on Linux systems. This activates the virtual python environment and starts the backend (which also serves the built frontend) in the background. The backend process ID is stored in `.backend.pid`; running the start script again looks up this file and stops the previously started backend before starting a new one, so the script can safely be re-run (e.g. by `deploy.bat`/`deploy.sh`) without leaving old backend processes running.
