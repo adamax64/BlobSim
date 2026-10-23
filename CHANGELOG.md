@@ -3,6 +3,9 @@
 ### 5.12
 
 - Side-by-side blobs receive the same speed increase as for overtakes, plus a strength increase of 50% of the speed increase amount
+- If the dropout winner cannot be promoted to their former main league because of lack of free space, they still can be promoted the next (and only next) season along with the then actual dropout winner if there is enough free space.
+  - If there are only one space for the two dropout winners, the newer has the precedence
+  - Former dropout winners can only be promoted if they won one season prior to the last.
 
 ### 5.11.1
 

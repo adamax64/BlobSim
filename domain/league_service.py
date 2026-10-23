@@ -83,9 +83,7 @@ def get_league_by_id(league_id: int, session) -> LeagueDto | None:
 
 
 @transactional
-def update_league_names(
-    updates: list[LeagueNameUpdateDto], session
-) -> list[LeagueDto]:
+def update_league_names(updates: list[LeagueNameUpdateDto], session) -> list[LeagueDto]:
     """Update English and Hungarian names for the given leagues."""
 
     updated: list[LeagueDto] = []
@@ -106,11 +104,7 @@ def update_league_names(
 
 def _correct_contract_of_inactive_leagues(session, leagues: list[League]):
     for league in leagues:
-        if (
-            league.level == QUEUE_LEVEL
-            or league.players is None
-            or len(league.players) >= 5
-        ):
+        if league.level == QUEUE_LEVEL or league.players is None or len(league.players) >= 5:
             continue
         blobs: list[Blob] = league.players
         for blob in blobs:
@@ -125,9 +119,7 @@ def _promote_blobs_to_leagues(session, leagues: list[League], current_season: in
     for league_index in range(1, len(leagues)):
         league = leagues[league_index]
         next_league = leagues[league_index - 1]
-        blobs: list[Blob] = _get_blobs_by_standings_order(
-            session, league, current_season
-        )
+        blobs: list[Blob] = _get_blobs_by_standings_order(session, league, current_season)
         for blob_index in range(_get_free_spaces(next_league)):
             if blob_index < len(blobs):
                 blob = blobs[blob_index]
@@ -146,9 +138,7 @@ def _promote_blobs_to_leagues(session, leagues: list[League], current_season: in
     _create_new_league_if_necessary(session, leagues, current_season)
 
 
-def _create_new_league_if_necessary(
-    session, leagues: list[League], current_season: int
-):
+def _create_new_league_if_necessary(session, leagues: list[League], current_season: int):
     """Create a new league if the queue is not empty and there are not too many leagues."""
 
     queue = leagues[-1]
@@ -159,9 +149,7 @@ def _create_new_league_if_necessary(
             level=last_league.level + 1,
         )
         new_league = league_repository.save_league(session, new_league)
-        blobs: list[Blob] = _get_blobs_by_standings_order(
-            session, queue, current_season
-        )
+        blobs: list[Blob] = _get_blobs_by_standings_order(session, queue, current_season)
         for blob_index in range(_get_free_spaces(new_league)):
             if blob_index < len(blobs):
                 blob = blobs[blob_index]
@@ -171,52 +159,50 @@ def _create_new_league_if_necessary(
         session.commit()
 
 
-def _manage_dropout_league(
-    session, leagues: list[League], dropout_league: League, current_season: int
-):
-    _promote_dropout_winner_if_possibble(
-        session, leagues, dropout_league, current_season
-    )
+def _manage_dropout_league(session, leagues: list[League], dropout_league: League, current_season: int):
+    _promote_dropout_winners_if_possibble(session, leagues, dropout_league, current_season)
     _demote_blobs_to_dropout(session, leagues, dropout_league, current_season)
 
 
-def _promote_dropout_winner_if_possibble(
-    session, leagues: list[League], dropout_league: League, current_season: int
-):
+def _promote_dropout_winners_if_possibble(session, leagues: list[League], dropout_league: League, current_season: int):
     dropout_winner = _get_dropout_winner(session, dropout_league, current_season)
     if dropout_winner is not None:
-        leagues_by_id = {league.id: league for league in leagues}
-        result_record = get_most_recent_real_league_result_of_blob(
-            dropout_winner.id, session
-        )
-        promotee_league = leagues_by_id[int(result_record.event.league.id)]
-        if len(promotee_league.players) < MAX_FIELD_SIZE or any(
-            [player.contract == current_season for player in promotee_league.players]
-        ):
-            dropout_winner.league_id = promotee_league.id
-            dropout_winner.contract = current_season + 3
-            session.commit()
-            session.refresh(dropout_league)
-            session.refresh(promotee_league)
-            transfers[promotee_league.name.en].append(dropout_winner.id)
+        _do_dropout_winner_promotion(session, leagues, dropout_league, current_season, dropout_winner)
+
+    previous_dropout_winner = _get_dropout_winner(session, dropout_league, current_season - 1)
+    if previous_dropout_winner is not None and previous_dropout_winner.league.level == 0:
+        _do_dropout_winner_promotion(session, leagues, dropout_league, current_season, previous_dropout_winner)
 
 
-def _get_dropout_winner(
-    session, dropout_league: League, current_season: int
-) -> Blob | None:
+def _do_dropout_winner_promotion(
+    session,
+    leagues: list[League],
+    dropout_league: League,
+    current_season: int,
+    dropout_winner: Blob,
+):
+    leagues_by_id = {league.id: league for league in leagues}
+    result_record = get_most_recent_real_league_result_of_blob(dropout_winner.id, session)
+    promotee_league = leagues_by_id[int(result_record.event.league.id)]
+    if len(promotee_league.players) < MAX_FIELD_SIZE or any([player.contract == current_season for player in promotee_league.players]):
+        dropout_winner.league_id = promotee_league.id
+        dropout_winner.contract = current_season + 3
+        session.commit()
+        session.refresh(dropout_league)
+        session.refresh(promotee_league)
+        transfers[promotee_league.name.en].append(dropout_winner.id)
+
+
+def _get_dropout_winner(session, dropout_league: League, current_season: int) -> Blob | None:
     dropouts = _get_blobs_by_standings_order(session, dropout_league, current_season)
     return dropouts[0] if len(dropouts) > 0 else None
 
 
-def _demote_blobs_to_dropout(
-    session, leagues: list[League], dropout_league: League, current_season: int
-):
+def _demote_blobs_to_dropout(session, leagues: list[League], dropout_league: League, current_season: int):
     """Demote blobs to the Dropout League if they have reached the end of their contract."""
 
     for league in leagues:
-        blobs: list[Blob] = _get_blobs_by_standings_order(
-            session, league, current_season
-        )
+        blobs: list[Blob] = _get_blobs_by_standings_order(session, league, current_season)
         for blob in blobs:
             if blob.contract == current_season:
                 if _get_free_spaces(dropout_league) > 0:
@@ -224,9 +210,7 @@ def _demote_blobs_to_dropout(
                     blob.contract = current_season + 3
 
                     session.commit()
-                    session.refresh(
-                        dropout_league
-                    )  # Refresh the dropout league to get the new player
+                    session.refresh(dropout_league)  # Refresh the dropout league to get the new player
                     transfers[dropout_league.name.en].append(blob.id)
                 else:
                     blob.league_id = None  # If there are no free spaces in the dropout league, retire the blob
@@ -243,9 +227,7 @@ def _get_free_spaces(league: League):
     return MAX_FIELD_SIZE - len(league.players)
 
 
-def _get_blobs_by_standings_order(
-    session, league: League, current_season: int
-) -> list[Blob]:
+def _get_blobs_by_standings_order(session, league: League, current_season: int) -> list[Blob]:
     """Get blobs in a league ordered by their standings."""
 
     if league.level == QUEUE_LEVEL:
@@ -264,11 +246,7 @@ def _get_blobs_by_standings_order(
     standings_by_blob = {standing.blob_id: standing for standing in standings}
     return sorted(
         league.players,
-        key=lambda x: (
-            standings_by_blob.get(x.id, 0).total_points
-            if x.id in standings_by_blob
-            else -1
-        ),
+        key=lambda x: (standings_by_blob.get(x.id, 0).total_points if x.id in standings_by_blob else -1),
         reverse=True,
     )
 
@@ -289,9 +267,7 @@ def _retire_blobs(session, leagues: list[League], current_season: int):
     for league in leagues:
         blobs: list[Blob] = league.players
         for blob in blobs:
-            if (
-                blob.contract == current_season and league.level == 0
-            ) or blob.integrity < CYCLES_PER_SEASON:
+            if (blob.contract == current_season and league.level == 0) or blob.integrity < CYCLES_PER_SEASON:
                 blob.league_id = None
                 _determine_retirement_focus(session, blob)
                 retirees.append(blob.id)
@@ -304,20 +280,12 @@ def _retire_blobs(session, leagues: list[League], current_season: int):
 def _determine_retirement_focus(session, blob: Blob):
     """Determine the retirement focus of a blob based on their traits."""
 
-    focus_chance = (
-        0.6
-        if has_trait(blob, TraitType.DETERMINED)
-        else 0.4 if has_trait(blob, TraitType.LAZY) else 0.5
-    )
+    focus_chance = 0.6 if has_trait(blob, TraitType.DETERMINED) else 0.4 if has_trait(blob, TraitType.LAZY) else 0.5
 
     if random() < focus_chance:
         focus_weights = []
         # legacy focus weight
-        focus_weights.append(
-            0
-            if blob.grandmasters > 0
-            else 2 if has_trait(blob, TraitType.DETERMINED) else 1
-        )
+        focus_weights.append(0 if blob.grandmasters > 0 else 2 if has_trait(blob, TraitType.DETERMINED) else 1)
         # prolonged life focus weight
         focus_weights.append(2 if has_trait(blob, TraitType.HARD_WORKING) else 1)
 

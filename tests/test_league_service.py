@@ -9,7 +9,7 @@ from domain.league_service import (
     _correct_contract_of_inactive_leagues,
     _promote_blobs_to_leagues,
     _create_new_league_if_necessary,
-    _promote_dropout_winner_if_possibble,
+    _promote_dropout_winners_if_possibble,
     _get_dropout_winner,
     _demote_blobs_to_dropout,
     _get_free_spaces,
@@ -187,7 +187,7 @@ class TestLeagueService(unittest.TestCase):
         ]
         mock_get_blob_event.return_value = Result(event=Event(league=league1))
 
-        _promote_dropout_winner_if_possibble(session, leagues, dropout_league, 5)
+        _promote_dropout_winners_if_possibble(session, leagues, dropout_league, 5)
 
         for blob in dropout_league.players:
             self.assertEqual(blob.league_id, 1)
@@ -370,7 +370,9 @@ class TestLeagueService(unittest.TestCase):
             )
         mock_get_league_by_id.assert_not_called()
 
-    @patch("domain.league_service.league_repository.get_league_by_id", return_value=None)
+    @patch(
+        "domain.league_service.league_repository.get_league_by_id", return_value=None
+    )
     def test_update_league_names_league_not_found(self, _mock_get_league_by_id):
         session = MagicMock(spec=Session)
 
