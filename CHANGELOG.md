@@ -10,6 +10,7 @@
     - Before round (pre-standings): not shown
     - Standings page: toggleable via switch
     - After round (post-standings): always shown
+- Fixed issue of empty standings table appearing on first event on the replay page
 
 ### 5.12
 

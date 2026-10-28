@@ -49,7 +49,7 @@ export const EventStandingsStage = ({
     <EventCardFrame title={title}>
       <StandingsTable
         loading={isPending && !standings}
-        standings={standings ?? []}
+        standings={standings && standings.every((item) => item.results.length) ? standings : []}
         leagueName={leagueName}
         season={season}
         showPositionChange={showPositionChange}
