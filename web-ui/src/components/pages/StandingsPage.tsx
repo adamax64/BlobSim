@@ -1,5 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
-import { GrandmasterStandingsDTO, LeagueDto, LeaguesApi, StandingsApi, StandingsDTO, TranslationsDto } from '../../../generated';
+import {
+  GrandmasterStandingsDTO,
+  LeagueDto,
+  LeaguesApi,
+  StandingsApi,
+  StandingsDTO,
+  TranslationsDto,
+} from '../../../generated';
 import defaultConfig from '../../default-config';
 import { useMutation } from '@tanstack/react-query';
 import { PageFrame } from '../common/PageFrame';
@@ -8,11 +15,13 @@ import {
   Box,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Paper,
   Select,
   SelectChangeEvent,
+  Switch,
   TextField,
 } from '@mui/material';
 import { StandingsTable } from '../standings/StandingsTable';
@@ -32,6 +41,7 @@ export function StandingsPage() {
   const [selectedLeague, setSelectedLeague] = useState<LeagueOption>();
   const [seasonOrEon, setSeasonOrEon] = useState<number>();
   const [isGrandmasters, setIsGrandmasters] = useState(false);
+  const [showPositionChange, setShowPositionChange] = useState(false);
   const { t, i18n } = useTranslation();
 
   const getLeagueLabel = (league: LeagueOption) =>
@@ -175,6 +185,15 @@ export function StandingsPage() {
                 <TextField {...params} label={isGrandmasters ? t('standings.eon') : t('standings.season')} />
               )}
             />
+            {!isGrandmasters && (
+              <FormControlLabel
+                control={
+                  <Switch checked={showPositionChange} onChange={(e) => setShowPositionChange(e.target.checked)} />
+                }
+                label={t('standings_table.show_position_changes')}
+                sx={{ mt: 1.5, alignSelf: 'flex-end' }}
+              />
+            )}
           </Box>
         )}
         {isGrandmasters ? (
@@ -190,6 +209,7 @@ export function StandingsPage() {
             standings={standings ?? []}
             leagueName={selectedLeague && getLeagueLabel(selectedLeague)}
             season={seasonOrEon}
+            showPositionChange={showPositionChange}
           />
         )}
       </Paper>

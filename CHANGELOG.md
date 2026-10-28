@@ -1,5 +1,16 @@
 # Version changelog
 
+### 5.12.1
+
+- Added standings position change markers (Issue #99)
+  - New `position_change` field added to `StandingsResultDTO` showing position change from previous round
+  - New `standings_position` field added to `StandingsResultDTO` showing overall standings position after each round
+  - Position change displayed with chevron-up (green) for positive changes, chevron-down (red) for negative changes
+  - Display logic:
+    - Before round (pre-standings): not shown
+    - Standings page: toggleable via switch
+    - After round (post-standings): always shown
+
 ### 5.12
 
 - Side-by-side blobs receive the same speed increase as for overtakes, plus a strength increase of 50% of the speed increase amount

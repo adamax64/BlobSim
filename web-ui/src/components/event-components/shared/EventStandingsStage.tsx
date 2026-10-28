@@ -12,6 +12,7 @@ type EventStandingsStageProps = {
   leagueName: string;
   season: number;
   throughRound: number;
+  showPositionChange?: boolean;
 };
 
 export const EventStandingsStage = ({
@@ -21,6 +22,7 @@ export const EventStandingsStage = ({
   leagueName,
   season,
   throughRound,
+  showPositionChange,
 }: EventStandingsStageProps) => {
   const standingsApi = useMemo(() => new StandingsApi(defaultConfig), []);
 
@@ -50,6 +52,7 @@ export const EventStandingsStage = ({
         standings={standings ?? []}
         leagueName={leagueName}
         season={season}
+        showPositionChange={showPositionChange}
       />
     </EventCardFrame>
   );

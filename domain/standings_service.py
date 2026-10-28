@@ -20,18 +20,14 @@ from domain.utils.sim_time_utils import get_season
 _standings_cache: dict[tuple[int, int, int], list[StandingsDTO]] = {}
 
 
-def invalidate_standings_cache(
-    league_id: int | None = None, season: int | None = None
-) -> None:
+def invalidate_standings_cache(league_id: int | None = None, season: int | None = None) -> None:
     """Drop cached standings. Omit both args to clear the entire cache."""
     if league_id is None and season is None:
         _standings_cache.clear()
         return
 
     for key in list(_standings_cache):
-        if (league_id is None or key[0] == league_id) and (
-            season is None or key[1] == season
-        ):
+        if (league_id is None or key[0] == league_id) and (season is None or key[1] == season):
             del _standings_cache[key]
 
 
@@ -71,13 +67,9 @@ def get_standings(
             standing_results: list[StandingsResultDTO] = []
             for result in sorted(results, key=lambda x: x.event.date):
                 total_points += result.points
-                standing_results.append(
-                    StandingsResultDTO(position=result.position, points=result.points)
-                )
+                standing_results.append(StandingsResultDTO(position=result.position, points=result.points))
 
-            contract_ending = (
-                season == current_season and blob.contract == current_season
-            )
+            contract_ending = season == current_season and blob.contract == current_season
             is_rookie = blob.debut == current_season and season == current_season
             standings.append(
                 StandingsDTO(
@@ -93,6 +85,10 @@ def get_standings(
             )
 
         standings.sort(key=_sort_by_position(len(standings)), reverse=True)
+
+        # Calculate standings positions after each round and position changes
+        _calculate_position_changes(standings)
+
         _standings_cache[cache_key] = standings
 
     if through_round is None:
@@ -100,9 +96,7 @@ def get_standings(
     return _truncate_standings_through_round(standings, through_round)
 
 
-def _truncate_standings_through_round(
-    standings: list[StandingsDTO], through_round: int
-) -> list[StandingsDTO]:
+def _truncate_standings_through_round(standings: list[StandingsDTO], through_round: int) -> list[StandingsDTO]:
     bounded_round = max(0, through_round)
     truncated = []
     for standing in standings:
@@ -120,13 +114,12 @@ def _truncate_standings_through_round(
             )
         )
     truncated.sort(key=_sort_by_position(len(truncated)), reverse=True)
+    _calculate_position_changes(truncated)
     return truncated
 
 
 @transactional
-def get_last_season_standings_position(
-    league_id: int, blob_id: int, season: int, session: Session
-) -> int | None:
+def get_last_season_standings_position(league_id: int, blob_id: int, season: int, session: Session) -> int | None:
     """Return the blob's standings position from the previous season, or None if unavailable."""
     if season <= 1:
         return None
@@ -139,9 +132,7 @@ def get_last_season_standings_position(
 
 
 @transactional
-def get_last_place_from_season_by_league(
-    league_id: int, season: int, session: Session
-) -> int | None:
+def get_last_place_from_season_by_league(league_id: int, season: int, session: Session) -> int | None:
     """Return the blob id of the last place in the standings for a given league and season.
 
     Returns None if no standings are available for that league/season.
@@ -153,29 +144,17 @@ def get_last_place_from_season_by_league(
 
 
 @transactional
-def get_grandmaster_standings(
-    start_season: int, current_season: int, session: Session
-) -> list[GrandmasterStandingsDTO]:
-    end_season = (
-        current_season if start_season + 4 > current_season else start_season + 3
-    )
-    standings = [
-        get_standings(1, season, session)
-        for season in range(start_season, end_season + 1)
-    ]
+def get_grandmaster_standings(start_season: int, current_season: int, session: Session) -> list[GrandmasterStandingsDTO]:
+    end_season = current_season if start_season + 4 > current_season else start_season + 3
+    standings = [get_standings(1, season, session) for season in range(start_season, end_season + 1)]
 
-    is_end_season_over = (
-        list(get_calendar(session).values())[-1].concluded
-        or current_season != end_season
-    )
+    is_end_season_over = list(get_calendar(session).values())[-1].concluded or current_season != end_season
 
     championships_by_name = defaultdict(int)
     for i, season_standings in enumerate(standings):
         if i == len(standings) - 1 and not is_end_season_over:
             continue
-        championships_by_name[
-            (season_standings[0].name, season_standings[0].blob_id)
-        ] += 1
+        championships_by_name[(season_standings[0].name, season_standings[0].blob_id)] += 1
     standings_by_name = _get_standings_by_name(standings, championships_by_name.keys())
 
     grandmaster_standings = []
@@ -206,9 +185,7 @@ def get_grandmaster_standings(
 
 
 @transactional
-def get_standings_snippet_by_blob(
-    blob_id: int, session: Session, event_id: int | None = None
-) -> list[StandingsSnippetDto]:
+def get_standings_snippet_by_blob(blob_id: int, session: Session, event_id: int | None = None) -> list[StandingsSnippetDto]:
     """Fetch the standings of the referenced blob and the competitors before and after them.
 
     Returns a list of three StandingsSnippetDto objects, ordered by position.
@@ -223,18 +200,12 @@ def get_standings_snippet_by_blob(
     through_round = event.round - 1 if event is not None else None
 
     blob = get_blob_by_id(session, blob_id)
-    if (
-        not blob
-        or not blob.league
-        or (through_round is not None and through_round == 0)
-    ):
+    if not blob or not blob.league or (through_round is not None and through_round == 0):
         return []
 
     league_id = event.league_id if event is not None else blob.league.id
 
-    standings = get_standings(
-        league_id, season, season, session, through_round=through_round
-    )
+    standings = get_standings(league_id, season, season, session, through_round=through_round)
     snippet = []
     for i, standing in enumerate(standings):
         if standing.blob_id == blob_id:
@@ -272,9 +243,7 @@ def get_standings_snippet_by_blob(
 
 
 @transactional
-def get_standings_by_league(
-    session: Session, blobs: list[Blob], season: int
-) -> dict[int, dict[int, int]]:
+def get_standings_by_league(session: Session, blobs: list[Blob], season: int) -> dict[int, dict[int, int]]:
     """
     Fetch standings for all leagues of the given blobs.
 
@@ -291,15 +260,11 @@ def get_standings_by_league(
                 season=season,
                 current_season=season,
             )
-            standings_by_league[blob.league.id] = {
-                standing.blob_id: idx + 1 for idx, standing in enumerate(standings)
-            }
+            standings_by_league[blob.league.id] = {standing.blob_id: idx + 1 for idx, standing in enumerate(standings)}
     return standings_by_league
 
 
-def _get_standings_by_name(
-    standings: list[list[StandingsDTO]], champions: list[tuple[str, int]]
-) -> dict[str, list[StandingsDTO]]:
+def _get_standings_by_name(standings: list[list[StandingsDTO]], champions: list[tuple[str, int]]) -> dict[str, list[StandingsDTO]]:
     standings_by_name = {}
     for standing_record in standings:
         for standing in standing_record:
@@ -324,3 +289,39 @@ def _sort_by_position(field_size: int):
         x.total_points,
         *(_count_by_position(x.results, i + 1) for i in range(field_size)),
     )
+
+
+def _calculate_position_changes(standings: list[StandingsDTO]) -> None:
+    """
+    Calculate the position change from the previous round to the current overall position.
+
+    Modifies the standings in-place by adding position_change to each standing.
+    """
+    if not standings or not standings[0].results:
+        return
+
+    num_rounds = len(standings[0].results)
+    field_size = len(standings)
+
+    # If less than 2 rounds completed, no previous round to compare
+    if num_rounds < 2:
+        for standing in standings:
+            standing.position_change = None
+        return
+
+    prev_round_idx = num_rounds - 1
+
+    round_standings = []
+    for standing in standings:
+        accumulated_points = sum(r.points for r in standing.results[:prev_round_idx])
+        tiebreaker = tuple(sum(1 for r in standing.results[:prev_round_idx] if r.position == pos) for pos in range(1, field_size + 1))
+        round_standings.append((standing.blob_id, accumulated_points, tiebreaker))
+
+    round_standings.sort(key=lambda x: (x[1], *x[2]), reverse=True)
+    positions_prev_round = {blob_id: idx + 1 for idx, (blob_id, _, _) in enumerate(round_standings)}
+
+    # Current overall positions are the index in the sorted standings list
+    for idx, standing in enumerate(standings):
+        current_position = idx + 1
+        prev_position = positions_prev_round.get(standing.blob_id, current_position)
+        standing.position_change = prev_position - current_position

@@ -15,3 +15,4 @@ class StandingsDTO(BaseModel):
     results: list[StandingsResultDTO]
     num_of_rounds: int
     total_points: int
+    position_change: int | None = None

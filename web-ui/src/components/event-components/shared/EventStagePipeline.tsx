@@ -121,6 +121,7 @@ export const EventStagePipeline = ({
               leagueName={leagueName}
               season={event.season}
               throughRound={event.round - 1}
+              showPositionChange={false}
             />
           </Box>
           <Box sx={{ width: `${100 / STAGES.length}%`, flexShrink: 0, minWidth: 0 }}>{competitionContent}</Box>
@@ -135,6 +136,7 @@ export const EventStagePipeline = ({
               leagueName={leagueName}
               season={event.season}
               throughRound={event.round}
+              showPositionChange={true}
             />
           </Box>
         </Box>

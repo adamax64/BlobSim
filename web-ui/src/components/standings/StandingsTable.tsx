@@ -1,4 +1,5 @@
 import {
+  Box,
   CircularProgress,
   Paper,
   Table,
@@ -15,15 +16,19 @@ import { useCallback } from 'react';
 import { useSimTime } from '../../context/SimTimeContext';
 import { useTranslation } from 'react-i18next';
 import { IconNameWithDetailsModal } from '../common/IconNameWithDetailsModal';
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import Remove from '@mui/icons-material/Remove';
 
 interface StandingsTableProps {
   standings: StandingsDTO[];
   loading: boolean;
   leagueName?: string;
   season?: number;
+  showPositionChange?: boolean;
 }
 
-export const StandingsTable = ({ loading, standings, leagueName, season }: StandingsTableProps) => {
+export const StandingsTable = ({ loading, standings, leagueName, season, showPositionChange }: StandingsTableProps) => {
   const { simTime } = useSimTime();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -43,7 +48,7 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
     return '';
   };
 
-  const POSITION_COLUMN_WIDTH = 48;
+  const POSITION_COLUMN_WIDTH = 49;
 
   const stickyColumnSx = (left: number) => ({
     position: 'sticky' as const,
@@ -111,9 +116,39 @@ export const StandingsTable = ({ loading, standings, leagueName, season }: Stand
             <TableRow key={index}>
               <TableCell
                 className={getThresholdClassName(index + 1)}
-                sx={{ ...stickyColumnSx(0), minWidth: POSITION_COLUMN_WIDTH }}
+                sx={{
+                  ...stickyColumnSx(0),
+                  minWidth: POSITION_COLUMN_WIDTH,
+                  textAlign: 'center',
+                  paddingX: 1,
+                  letterSpacing: '0.75px',
+                }}
               >
                 {index + 1}
+                {standing.positionChange !== undefined && standing.positionChange !== null && (
+                  <Box
+                    sx={{
+                      display: 'inline',
+                      color:
+                        standing.positionChange > 0
+                          ? 'success.main'
+                          : standing.positionChange < 0
+                            ? 'error.main'
+                            : 'text.secondary',
+                      fontWeight: 600,
+                      fontSize: '15.9px',
+                    }}
+                  >
+                    {showPositionChange &&
+                      (standing.positionChange > 0 ? (
+                        <KeyboardArrowUp fontSize="inherit" />
+                      ) : standing.positionChange < 0 ? (
+                        <KeyboardArrowDown fontSize="inherit" />
+                      ) : (
+                        <Remove fontSize="inherit" />
+                      ))}
+                  </Box>
+                )}
               </TableCell>
               <TableCell className={getThresholdClassName(index + 1)} sx={stickyLastColumnSx(POSITION_COLUMN_WIDTH)}>
                 <IconNameWithDetailsModal

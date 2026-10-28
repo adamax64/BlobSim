@@ -322,7 +322,9 @@
     "no_data": "Nincs adat a(z) {{leagueName}} liga {{season}}. szezonjához",
     "name": "Név",
     "sum": "Össz.",
-    "round": "{{round}}. F"
+    "round": "{{round}}. F",
+    "position_change": "Helyezés változás",
+    "show_position_changes": "Helyezmény változás megjelenítése"
   },
   "grandmaster_standings_table": {
     "no_data": "Nincs adat a(z) {{eon}}. éonhoz",

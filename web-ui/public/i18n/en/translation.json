@@ -321,7 +321,9 @@
     "no_data": "No data found for {{leagueName}} season {{season}}",
     "name": "Name",
     "sum": "Sum",
-    "round": "R{{round}}"
+    "round": "R{{round}}",
+    "position_change": "Position change",
+    "show_position_changes": "Show position changes"
   },
   "grandmaster_standings_table": {
     "no_data": "No data found for eon {{eon}}",

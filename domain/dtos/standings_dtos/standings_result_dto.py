@@ -6,3 +6,5 @@ class StandingsResultDTO(BaseModel):
 
     position: int
     points: int
+    standings_position: int | None = None
+    position_change: int | None = None

@@ -1,15 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Box,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Tooltip,
-} from '@mui/material';
+import { Box, TableBody, TableCell, TableHead, TableRow, Typography, useTheme, useMediaQuery } from '@mui/material';
 import Straighten from '@mui/icons-material/Straighten';
 import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
@@ -27,6 +17,7 @@ import { DistanceProgress, NarrowCell } from '../../common/StyledComponents';
 import { EventCardFrame } from '../shared/EventCardFrame';
 import { EventTable } from '../shared/EventTable';
 import SkeletonRows from '../shared/SkeletonRows';
+import DynamicTooltip from '../../common/DynamicTooltip';
 
 type SprintRaceUIProps = {
   eventRecords: EventRecordDto[];
@@ -124,9 +115,9 @@ export const SprintRaceUI = ({
             <NarrowCell>{t('sprint_race.name')}</NarrowCell>
             {isMobile ? (
               <NarrowCell align="center">
-                <Tooltip title={t('sprint_race.progress')}>
+                <DynamicTooltip title={t('sprint_race.progress')}>
                   <Straighten />
-                </Tooltip>
+                </DynamicTooltip>
               </NarrowCell>
             ) : (
               <TableCell width="100%" align="center">
@@ -136,11 +127,11 @@ export const SprintRaceUI = ({
             {!isMobile && <TableCell align="center">{t('sprint_race.delta_leader')}</TableCell>}
             {isMobile ? (
               <NarrowCell align="center">
-                <Tooltip title={t('sprint_race.delta_time')}>
+                <DynamicTooltip title={t('sprint_race.delta_time')}>
                   <>
                     <ChangeHistoryIcon />/<AccessAlarmIcon />
                   </>
-                </Tooltip>
+                </DynamicTooltip>
               </NarrowCell>
             ) : (
               <NarrowCell align="center">{t('sprint_race.delta_time')}</NarrowCell>
