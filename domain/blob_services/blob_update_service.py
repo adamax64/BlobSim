@@ -648,6 +648,8 @@ def _collect_catchup_train_ids(session: Session) -> set:
         standings = get_standings(
             league.id, current_season - 1, current_season, session
         )
+        if len(standings) == 0:
+            continue
         top_50_points_treshold = standings[-(len(standings) // 2)].total_points
         standings_by_blob = {standing.blob_id: standing for standing in standings}
         for blob in blobs_in_danger:

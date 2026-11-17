@@ -54,7 +54,7 @@ export const EliminationScoringEventFrame = ({
     { contenders: BlobCompetitorDto[] }
   >({
     mutationFn: ({ contenders }) =>
-      actionApi.eliminationActionsCreateEliminationPost({ eventId: event.id, blobCompetitorDto: contenders }),
+      actionApi.eliminationActionsCreateEliminationPost({ eventId: event.id, blobCompetitorDtoInput: contenders }),
     onSuccess: (data) => {
       if (data) {
         showSuccess(t('elimination_event.new_record', { name: data.name, score: data.score.toFixed(3) }));
